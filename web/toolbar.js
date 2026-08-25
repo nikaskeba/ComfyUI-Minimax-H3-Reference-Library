@@ -5,18 +5,28 @@ const openReferenceLibrary = () => {
     window.open(`${window.location.origin}/h3-references`, "_blank");
 };
 
+const openBuiltInCharacters = () => {
+    window.open(`${window.location.origin}/h3-built-in-references`, "_blank");
+};
+
 
 app.registerExtension({
     name: "H3ReferenceLibrary.Toolbar",
     beforeRegisterNodeDef(nodeType, nodeData) {
-        if (nodeData.name !== "H3TaggedReferencePrompt") {
+        if (!["H3TaggedReferencePrompt", "H3BuiltInReference"].includes(nodeData.name)) {
             return;
         }
 
         const onNodeCreated = nodeType.prototype.onNodeCreated;
         nodeType.prototype.onNodeCreated = function () {
             const result = onNodeCreated?.apply(this, arguments);
-            this.addWidget("button", "Open Reference Library", null, openReferenceLibrary);
+            const builtInNode = nodeData.name === "H3BuiltInReference";
+            this.addWidget(
+                "button",
+                builtInNode ? "Open Built-In Characters" : "Open Reference Library",
+                null,
+                builtInNode ? openBuiltInCharacters : openReferenceLibrary,
+            );
             return result;
         };
     },

@@ -19,6 +19,7 @@ from .library import (
     remove_media,
     update_record,
 )
+from .built_in_references import catalog_revision, list_built_in_references
 
 
 WEB_DIRECTORY_PATH = Path(__file__).parent / "manager"
@@ -37,6 +38,10 @@ def register_routes():
     async def manager_page(request):
         return web.FileResponse(WEB_DIRECTORY_PATH / "index.html")
 
+    @routes.get("/h3-built-in-references")
+    async def built_in_page(request):
+        return web.FileResponse(WEB_DIRECTORY_PATH / "built-ins.html")
+
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
@@ -44,10 +49,34 @@ def register_routes():
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 
+    @routes.get("/h3-built-in-references/static/{filename}")
+    async def built_in_asset(request):
+        filename = request.match_info["filename"]
+        if filename not in {"built-ins.css", "built-ins.js"}:
+            raise web.HTTPNotFound()
+        return web.FileResponse(WEB_DIRECTORY_PATH / filename)
+
     @routes.get("/api/h3-references/records")
     async def get_records(request):
         records = sorted(list_records(), key=lambda record: record["tag"].lower())
         return web.json_response({"records": [_public_record(record) for record in records]})
+
+    @routes.get("/api/h3-built-in-references/records")
+    async def get_built_ins(request):
+        try:
+            records = sorted(
+                list_built_in_references(),
+                key=lambda record: (record["folder"], record["name"].lower()),
+            )
+            return web.json_response({
+                "revision": catalog_revision(),
+                "records": [
+                    {key: value for key, value in record.items() if key != "clips"}
+                    for record in records
+                ],
+            })
+        except (OSError, ValueError) as error:
+            return web.json_response({"error": str(error)}, status=500)
 
     @routes.post("/api/h3-references/records")
     async def add_record(request):

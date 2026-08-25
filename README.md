@@ -7,10 +7,13 @@ H3 Reference Library replaces a large set of manually connected reference widget
 ## Features
 
 - Local manager at `/h3-references` with a toolbar launcher and an **Open Reference Library** button on the node
+- Separate known-character catalog at `/h3-built-in-references`
 - Image, audio, and paired image-and-audio records
 - Drag-and-drop bulk import with automatic pairing by filename stem
 - Reusable tags, descriptions, searchable categories, previews, and audio playback
 - Category-grouped reference selection guide for prompt building
+- Bundled MiniMax H3 character catalog sourced from an editable Markdown file
+- Searchable built-in character browser with individual and multi-tag copy
 - Automatic MiniMax H3 subject, image, and audio reference ordering
 - Nine image outputs and three audio outputs, matching the H3 node limits
 - Graceful voice-description fallback when a prompt uses more than three voiced characters
@@ -60,6 +63,34 @@ When more than three paired voices are used, later characters retain their image
 <Subject 4> (S4) is defined by the fourth reference image: a reporter wearing a gray suit. <Subject 4> (S4) speaks with a calm American voice.
 ```
 
+## Built-In Characters
+
+Add **Built-In Reference** from `video/text` for characters already known by
+MiniMax H3. Copy a caret tag from the separate character database, then use it
+in the node prompt. The node's **Open Built-In Characters** button opens that
+standalone page, which has no image or audio management controls:
+
+```text
+[Shot 1] ^Abby Sciuto^ works at her desk.
+```
+
+The node expands it to:
+
+```text
+[Shot 1] **Abby Sciuto** played by Pauley Perrette featured on NCIS works at her desk.
+```
+
+Built-in characters are prompt-only and do not consume image or audio reference
+sockets. The catalog lives in `built_in_references.md`. Add or update Markdown
+table rows there, then refresh the character catalog. Node execution tracks the
+file revision automatically.
+
+When a character has multiple portrayals, the catalog supplies an actor-specific
+tag such as `^Bruce Wayne / Batman | Christian Bale | The Dark Knight^`.
+The character page can search and sort by character, actor, or show in either
+alphabetical direction. Clip filenames remain in the Markdown source but are not
+displayed or returned by the character browser API.
+
 ## Reference Library
 
 ![H3 Reference Library manager with categories, filters, and managed references](media/reference-manager.png)
@@ -93,6 +124,7 @@ Updating or reinstalling the custom node does not remove this library.
 - A prompt with no tags passes through unchanged and loads no media.
 - Missing tags, files, or more than nine referenced images produce a clear node error.
 - Tags may contain letters, numbers, underscores, and hyphens.
+- Built-in tags use the separate `^Character Name^` syntax.
 
 ## Updating
 

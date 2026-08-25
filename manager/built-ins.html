@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>H3 Built-In Characters</title>
+    <link rel="stylesheet" href="/h3-built-in-references/static/built-ins.css">
+</head>
+<body>
+    <header class="topbar">
+        <div>
+            <h1>H3 Built-In Characters</h1>
+            <p>Known characters that work as prompt references in MiniMax H3</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="built-in-panel" aria-labelledby="built-in-title">
+            <div class="section-heading">
+                <div>
+                    <h2 id="built-in-title">Character database</h2>
+                    <p>Select characters and copy their caret tags into the Built-In Reference node.</p>
+                </div>
+                <div class="built-in-actions">
+                    <span id="built-in-selection-count">No characters selected</span>
+                    <button id="refresh-built-ins" class="secondary" type="button">Refresh catalog</button>
+                    <button id="copy-built-in-selection" class="primary" type="button" disabled>Copy selected tags</button>
+                </div>
+            </div>
+            <div class="built-in-filters">
+                <label>
+                    <span>Status</span>
+                    <select id="built-in-folder">
+                        <option value="">All statuses</option>
+                    </select>
+                </label>
+                <label class="built-in-search">
+                    <span>Search characters</span>
+                    <input id="built-in-search" type="search" placeholder="Character, actor, or franchise">
+                </label>
+                <label>
+                    <span>Sort by</span>
+                    <select id="built-in-sort-field">
+                        <option value="name">Character</option>
+                        <option value="actor">Actor</option>
+                        <option value="franchise">Show / franchise</option>
+                    </select>
+                </label>
+                <label>
+                    <span>Order</span>
+                    <select id="built-in-sort-direction">
+                        <option value="asc">A to Z</option>
+                        <option value="desc">Z to A</option>
+                    </select>
+                </label>
+                <span id="built-in-count">Loading characters...</span>
+            </div>
+            <div id="built-in-empty" class="empty-state" hidden>No characters match this view.</div>
+            <div id="built-in-records" class="built-in-groups"></div>
+        </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/h3-built-in-references/static/built-ins.js"></script>
+</body>
+</html>
