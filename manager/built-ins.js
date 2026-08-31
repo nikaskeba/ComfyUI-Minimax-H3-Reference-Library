@@ -3,7 +3,8 @@ const state = { records: [], selected: new Set() };
 const elements = Object.fromEntries([
     "built-in-folder", "built-in-search", "built-in-count", "built-in-empty",
     "built-in-records", "built-in-selection-count", "refresh-built-ins",
-    "copy-built-in-selection", "built-in-sort-field", "built-in-sort-direction", "toast",
+    "copy-built-in-selection", "copy-built-in-voice-selection",
+    "built-in-sort-field", "built-in-sort-direction", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
 async function request(url) {
@@ -31,6 +32,10 @@ async function loadRecords() {
 
 function referenceTag(record) {
     return `^${record.tag}^`;
+}
+
+function voiceTag(record) {
+    return `~${record.tag}~`;
 }
 
 function renderFolderFilter() {
@@ -121,7 +126,10 @@ function recordRow(record) {
     name.textContent = record.name;
     const tag = document.createElement("code");
     tag.textContent = referenceTag(record);
-    identity.append(name, tag);
+    const voice = document.createElement("code");
+    voice.className = "voice-tag";
+    voice.textContent = `Voice: ${voiceTag(record)}`;
+    identity.append(name, tag, voice);
 
     const details = document.createElement("div");
     details.className = "built-in-details";
@@ -131,7 +139,10 @@ function recordRow(record) {
 
     const actions = document.createElement("div");
     actions.className = "built-in-meta";
-    actions.append(button("Copy tag", () => copyTags([record])));
+    actions.append(
+        button("Copy character tag", () => copyTags([record])),
+        button("Copy voice tag", () => copyTags([record], voiceTag, "Voice tag")),
+    );
     row.append(checkLabel, identity, details, actions);
     return row;
 }
@@ -151,12 +162,13 @@ function renderSelectionState() {
         ? `${count} character${count === 1 ? "" : "s"} selected`
         : "No characters selected";
     elements["copy-built-in-selection"].disabled = count === 0;
+    elements["copy-built-in-voice-selection"].disabled = count === 0;
 }
 
-async function copyTags(records) {
+async function copyTags(records, formatTag = referenceTag, label = "Tag") {
     try {
-        await navigator.clipboard.writeText(records.map(referenceTag).join("\n"));
-        toast(`${records.length === 1 ? "Tag" : "Tags"} copied.`);
+        await navigator.clipboard.writeText(records.map(formatTag).join("\n"));
+        toast(`${records.length === 1 ? label : `${label}s`} copied.`);
     } catch (error) {
         toast("Could not copy character tags.", true);
     }
@@ -164,6 +176,14 @@ async function copyTags(records) {
 
 function copySelection() {
     return copyTags(state.records.filter((record) => state.selected.has(record.tag)));
+}
+
+function copyVoiceSelection() {
+    return copyTags(
+        state.records.filter((record) => state.selected.has(record.tag)),
+        voiceTag,
+        "Voice tag",
+    );
 }
 
 let toastTimer;
@@ -180,5 +200,6 @@ elements["built-in-sort-field"].addEventListener("change", renderRecords);
 elements["built-in-sort-direction"].addEventListener("change", renderRecords);
 elements["refresh-built-ins"].addEventListener("click", loadRecords);
 elements["copy-built-in-selection"].addEventListener("click", copySelection);
+elements["copy-built-in-voice-selection"].addEventListener("click", copyVoiceSelection);
 
 loadRecords();

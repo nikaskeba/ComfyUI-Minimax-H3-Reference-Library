@@ -39,7 +39,7 @@ class BuiltInReferenceTests(unittest.TestCase):
 
         self.assertEqual(
             prompt,
-            "**Bruce Wayne / Batman** played by Christian Bale featured on The Dark Knight enters.",
+            "Bruce Wayne / Batman played by Christian Bale featured on The Dark Knight enters.",
         )
         self.assertIn("Christian Bale | The Dark Knight^ ->", mapping)
         with self.assertRaisesRegex(ValueError, "multiple portrayals"):
@@ -52,11 +52,11 @@ class BuiltInReferenceTests(unittest.TestCase):
 
         self.assertEqual(
             prompt,
-            "[Shot 1] **Abby Sciuto** played by Pauley Perrette featured on NCIS "
-            "meets **Achilles** played by Brad Pitt featured on Troy.",
+            "[Shot 1] Abby Sciuto played by Pauley Perrette featured on NCIS "
+            "meets Achilles played by Brad Pitt featured on Troy.",
         )
-        self.assertIn("^Abby Sciuto^ -> **Abby Sciuto** played by Pauley Perrette featured on NCIS", mapping)
-        self.assertIn("^Achilles^ -> **Achilles** played by Brad Pitt featured on Troy", mapping)
+        self.assertIn("^Abby Sciuto^ -> Abby Sciuto played by Pauley Perrette featured on NCIS", mapping)
+        self.assertIn("^Achilles^ -> Achilles played by Brad Pitt featured on Troy", mapping)
 
     def test_repeated_tag_maps_once(self):
         prompt, mapping = MODULE.resolve_built_in_prompt(
@@ -64,6 +64,31 @@ class BuiltInReferenceTests(unittest.TestCase):
         )
         self.assertEqual(prompt.count("played by Jim Carrey"), 2)
         self.assertEqual(len(mapping.splitlines()), 1)
+
+    def test_voice_tag_expands_without_franchise(self):
+        prompt, mapping = MODULE.resolve_built_in_prompt(
+            "<d>[English ~George Costanza~] Damn, Jerry.</d>"
+        )
+
+        self.assertEqual(
+            prompt,
+            "<d>[English in George Costanza's voice as played by Jason Alexander] "
+            "Damn, Jerry.</d>",
+        )
+        self.assertEqual(
+            mapping,
+            "~George Costanza~ -> in George Costanza's voice as played by Jason Alexander",
+        )
+        self.assertNotIn("Seinfeld", prompt + mapping)
+
+    def test_character_and_voice_variants_are_both_mapped(self):
+        prompt, mapping = MODULE.resolve_built_in_prompt(
+            "^George Costanza^ speaks. ~George Costanza~ replies."
+        )
+
+        self.assertIn("featured on Seinfeld speaks", prompt)
+        self.assertIn("in George Costanza's voice as played by Jason Alexander replies", prompt)
+        self.assertEqual(len(mapping.splitlines()), 2)
 
     def test_no_tags_passes_through(self):
         source = "[Shot 1] An unknown person walks into frame."

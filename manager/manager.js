@@ -2,13 +2,14 @@ const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
 const categoryPriority = ["character", "narrator", "location", "voice", "object", "style", "other"];
+const referenceTypes = ["character", "location", "object", "music", "uncategorized"];
 const state = { records: [], drafts: [], selected: new Set() };
 
 const elements = Object.fromEntries([
-    "library-count", "category-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
+    "library-count", "category-filter", "type-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
     "drafts", "draft-actions", "draft-summary", "import-drafts", "refresh", "empty-state",
     "records", "record-dialog", "record-form", "dialog-title", "close-dialog", "cancel-dialog",
-    "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category",
+    "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
     "image-file", "image-description", "audio-file", "audio-description",
     "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "save-record", "toast",
@@ -59,10 +60,12 @@ async function loadRecords() {
 function renderRecords() {
     const query = elements.search.value.trim().toLowerCase();
     const category = elements["category-filter"].value;
+    const referenceType = elements["type-filter"].value;
     const media = elements["media-filter"].value;
     const records = state.records.filter((record) => (!category || record.category === category)
+        && (!referenceType || normalizedReferenceType(record) === referenceType)
         && matchesMediaFilter(record, media)
-        && [record.tag, record.category, record.image_description, record.audio_description]
+        && [record.tag, record.category, normalizedReferenceType(record), record.image_description, record.audio_description]
             .some((value) => (value || "").toLowerCase().includes(query)));
     elements["library-count"].textContent = `${state.records.length} managed reference${state.records.length === 1 ? "" : "s"}`;
     elements.records.replaceChildren(...groupedRecordCards(records));
@@ -94,13 +97,44 @@ function groupedRecordCards(records) {
             title.textContent = categoryHeading(category);
             const count = document.createElement("span");
             count.textContent = `${categoryRecords.length} reference${categoryRecords.length === 1 ? "" : "s"}`;
-            const grid = document.createElement("div");
-            grid.className = "record-grid";
-            grid.append(...categoryRecords.map(recordCard));
+            const typeGroups = document.createElement("div");
+            typeGroups.className = "reference-type-groups";
+            typeGroups.append(...groupByReferenceType(categoryRecords).map(([referenceType, typeRecords]) => {
+                const typeGroup = document.createElement("section");
+                typeGroup.className = "reference-type-group";
+                const typeHeading = document.createElement("div");
+                typeHeading.className = "reference-type-heading";
+                const typeTitle = document.createElement("h4");
+                typeTitle.textContent = referenceTypeHeading(referenceType);
+                const typeCount = document.createElement("span");
+                typeCount.textContent = `${typeRecords.length}`;
+                const grid = document.createElement("div");
+                grid.className = "record-grid";
+                grid.append(...typeRecords.map(recordCard));
+                typeHeading.append(typeTitle, typeCount);
+                typeGroup.append(typeHeading, grid);
+                return typeGroup;
+            }));
             heading.append(title, count);
-            group.append(heading, grid);
+            group.append(heading, typeGroups);
             return group;
         });
+}
+
+function normalizedReferenceType(record) {
+    return referenceTypes.includes(record?.reference_type) ? record.reference_type : "uncategorized";
+}
+
+function groupByReferenceType(records) {
+    const groups = new Map();
+    for (const record of records) {
+        const referenceType = normalizedReferenceType(record);
+        if (!groups.has(referenceType)) groups.set(referenceType, []);
+        groups.get(referenceType).push(record);
+    }
+    return [...groups.entries()].sort(
+        ([left], [right]) => referenceTypes.indexOf(left) - referenceTypes.indexOf(right),
+    );
 }
 
 function renderCategoryFilter() {
@@ -157,6 +191,10 @@ function selectedCategory() {
     return value.trim().toLowerCase().replace(/\s+/g, "_");
 }
 
+function suggestedCategory(referenceType) {
+    return referenceType === "uncategorized" ? "other" : referenceType;
+}
+
 function recordCard(record) {
     const card = document.createElement("article");
     card.className = "record-card";
@@ -181,12 +219,18 @@ function recordCard(record) {
     title.className = "record-title";
     const code = document.createElement("code");
     code.textContent = `{${record.tag}}`;
+    const voiceCode = document.createElement("code");
+    voiceCode.className = "voice-tag";
+    voiceCode.textContent = `Voice: §${record.tag}§`;
     const badges = document.createElement("div");
     badges.className = "media-badges";
     badges.append(badge(categoryLabel(record.category || "other"), "category"));
+    badges.append(badge(referenceTypeLabel(normalizedReferenceType(record)), "reference-type"));
     if (record.has_image) badges.append(badge("Image", ""));
     if (record.has_audio) badges.append(badge("Audio", "audio"));
-    title.append(code, badges);
+    title.append(code);
+    if (record.has_audio || record.audio_description) title.append(voiceCode);
+    title.append(badges);
 
     const description = document.createElement("div");
     description.className = "description";
@@ -204,9 +248,12 @@ function recordCard(record) {
     actions.className = "card-actions";
     const selected = state.selected.has(record.id);
     const select = button(selected ? "Selected" : "Select", `select-reference${selected ? " selected" : ""}`, () => toggleSelection(record.id));
+    const copyVoice = button("Copy voice", "secondary", () => copyVoiceTag(record));
     const edit = button("Edit", "secondary", () => openEditor(record));
     const remove = button("Delete", "danger", () => removeRecord(record));
-    actions.append(select, edit, remove);
+    actions.append(select);
+    if (record.has_audio || record.audio_description) actions.append(copyVoice);
+    actions.append(edit, remove);
     body.append(actions);
     card.append(preview, body);
     return card;
@@ -236,6 +283,21 @@ function categoryHeading(category) {
     return plurals[category] || categoryLabel(category);
 }
 
+function referenceTypeLabel(referenceType) {
+    return categoryLabel(referenceType || "uncategorized");
+}
+
+function referenceTypeHeading(referenceType) {
+    const plurals = {
+        character: "Characters",
+        location: "Locations",
+        object: "Objects",
+        music: "Music",
+        uncategorized: "Uncategorized",
+    };
+    return plurals[referenceType] || referenceTypeLabel(referenceType);
+}
+
 function compareCategories(left, right) {
     const leftIndex = categoryPriority.indexOf(left);
     const rightIndex = categoryPriority.indexOf(right);
@@ -259,7 +321,14 @@ function addDraftFiles(files) {
         const kind = mediaKind(file);
         if (!kind) continue;
         const key = stem(file.name).toLowerCase();
-        const draft = groups.get(key) || { key, tag: tagFromName(file.name), category: "other", image: null, audio: null };
+        const draft = groups.get(key) || {
+            key,
+            tag: tagFromName(file.name),
+            category: "other",
+            reference_type: "uncategorized",
+            image: null,
+            audio: null,
+        };
         draft[kind] = file;
         groups.set(key, draft);
     }
@@ -286,7 +355,19 @@ function renderDrafts() {
         categoryInput.pattern = "[A-Za-z0-9_-]+";
         categoryInput.addEventListener("input", () => { draft.category = categoryInput.value.trim().toLowerCase().replace(/\s+/g, "_"); });
         categoryLabelElement.append(categoryInput);
-        row.append(tagLabel, categoryLabelElement, draftMedia("Image", draft.image), draftMedia("Audio", draft.audio));
+        const typeLabel = document.createElement("label");
+        typeLabel.textContent = "Reference type";
+        const typeSelect = document.createElement("select");
+        typeSelect.append(...referenceTypes.map((referenceType) => {
+            const option = document.createElement("option");
+            option.value = referenceType;
+            option.textContent = referenceTypeLabel(referenceType);
+            return option;
+        }));
+        typeSelect.value = draft.reference_type || "uncategorized";
+        typeSelect.addEventListener("change", () => { draft.reference_type = typeSelect.value; });
+        typeLabel.append(typeSelect);
+        row.append(tagLabel, categoryLabelElement, typeLabel, draftMedia("Image", draft.image), draftMedia("Audio", draft.audio));
         row.dataset.index = index;
         return row;
     }));
@@ -317,6 +398,7 @@ async function importDrafts() {
             const data = new FormData();
             data.append("tag", draft.tag);
             data.append("category", draft.category);
+            data.append("reference_type", draft.reference_type || "uncategorized");
             if (draft.image) data.append("image", draft.image);
             if (draft.audio) data.append("audio", draft.audio);
             await request(apiRoot, { method: "POST", body: data });
@@ -345,6 +427,7 @@ function openEditor(record = null) {
     elements["dialog-title"].textContent = record ? "Edit reference" : "Add reference";
     elements.tag.value = record?.tag || "";
     renderCategoryChoices(record?.category || "other");
+    elements["reference-type"].value = normalizedReferenceType(record);
     elements["image-description"].value = record?.image_description || "";
     elements["audio-description"].value = record?.audio_description || "";
     elements["remove-image-row"].hidden = !record?.has_image;
@@ -360,6 +443,7 @@ async function saveRecord(event) {
     const data = new FormData();
     data.append("tag", elements.tag.value.trim());
     data.append("category", category);
+    data.append("reference_type", elements["reference-type"].value);
     data.append("image_description", elements["image-description"].value.trim());
     data.append("audio_description", elements["audio-description"].value.trim());
     if (elements["image-file"].files[0]) data.append("image", elements["image-file"].files[0]);
@@ -409,7 +493,13 @@ function selectedGroups() {
     }
     return [...groups.entries()]
         .sort(([left], [right]) => compareCategories(left, right))
-        .map(([category, records]) => [category, records.sort((left, right) => left.tag.localeCompare(right.tag))]);
+        .map(([category, records]) => [
+            category,
+            groupByReferenceType(records).map(([referenceType, typeRecords]) => [
+                referenceType,
+                typeRecords.sort((left, right) => left.tag.localeCompare(right.tag)),
+            ]),
+        ]);
 }
 
 function renderSelectionGuide() {
@@ -419,12 +509,19 @@ function renderSelectionGuide() {
     elements["selection-guide"].hidden = !hasSelection;
     elements["clear-selection"].disabled = !hasSelection;
     elements["copy-selection"].disabled = !hasSelection;
-    elements["selection-guide"].replaceChildren(...groups.map(([category, records]) => {
+    elements["selection-guide"].replaceChildren(...groups.map(([category, typeGroups]) => {
         const group = document.createElement("div");
         group.className = "selection-group";
         const heading = document.createElement("h3");
         heading.textContent = categoryHeading(category);
-        group.append(heading, ...records.map(selectionItem));
+        group.append(heading, ...typeGroups.map(([referenceType, records]) => {
+            const typeGroup = document.createElement("div");
+            typeGroup.className = "selection-type-group";
+            const typeHeading = document.createElement("h4");
+            typeHeading.textContent = referenceTypeHeading(referenceType);
+            typeGroup.append(typeHeading, ...records.map(selectionItem));
+            return typeGroup;
+        }));
         return group;
     }));
 }
@@ -435,6 +532,12 @@ function selectionItem(record) {
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     item.append(tag);
+    if (record.has_audio || record.audio_description) {
+        const voiceTag = document.createElement("code");
+        voiceTag.className = "voice-tag";
+        voiceTag.textContent = `Voice: §${record.tag}§`;
+        item.append(voiceTag);
+    }
     if (record.image_description) item.append(descriptionLine("Image", record.image_description));
     if (record.audio_description) item.append(descriptionLine("Voice", record.audio_description));
     if (!record.image_description && !record.audio_description) item.append(descriptionLine("Description", "None"));
@@ -449,14 +552,18 @@ function descriptionLine(label, description) {
 }
 
 function selectionGuideText() {
-    return selectedGroups().map(([category, records]) => {
+    return selectedGroups().map(([category, typeGroups]) => {
         const lines = [categoryHeading(category).toUpperCase()];
-        for (const record of records) {
-            lines.push(`{${record.tag}}`);
-            if (record.image_description) lines.push(`Image: ${record.image_description}`);
-            if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
-            if (!record.image_description && !record.audio_description) lines.push("Description: None");
-            lines.push("");
+        for (const [referenceType, records] of typeGroups) {
+            lines.push("", referenceTypeHeading(referenceType).toUpperCase());
+            for (const record of records) {
+                lines.push(`{${record.tag}}`);
+                if (record.has_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
+                if (record.image_description) lines.push(`Image: ${record.image_description}`);
+                if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
+                if (!record.image_description && !record.audio_description) lines.push("Description: None");
+                lines.push("");
+            }
         }
         return lines.join("\n").trimEnd();
     }).join("\n\n");
@@ -471,6 +578,15 @@ async function copySelectionGuide() {
     }
 }
 
+async function copyVoiceTag(record) {
+    try {
+        await navigator.clipboard.writeText(`§${record.tag}§`);
+        toast("Voice tag copied.");
+    } catch (error) {
+        toast("Could not copy the voice tag.", true);
+    }
+}
+
 let toastTimer;
 function toast(message, isError = false) {
     clearTimeout(toastTimer);
@@ -481,6 +597,7 @@ function toast(message, isError = false) {
 
 elements.search.addEventListener("input", renderRecords);
 elements["category-filter"].addEventListener("change", renderRecords);
+elements["type-filter"].addEventListener("change", renderRecords);
 elements["media-filter"].addEventListener("change", renderRecords);
 elements.refresh.addEventListener("click", loadRecords);
 elements["clear-selection"].addEventListener("click", () => {
@@ -495,6 +612,10 @@ elements.category.addEventListener("change", () => {
     elements["new-category-row"].hidden = !creating;
     elements["new-category"].required = creating;
     if (creating) elements["new-category"].focus();
+});
+elements["reference-type"].addEventListener("change", () => {
+    if (elements["record-id"].value) return;
+    renderCategoryChoices(suggestedCategory(elements["reference-type"].value));
 });
 elements["close-dialog"].addEventListener("click", () => elements["record-dialog"].close());
 elements["cancel-dialog"].addEventListener("click", () => elements["record-dialog"].close());

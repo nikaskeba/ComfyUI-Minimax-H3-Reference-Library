@@ -10,6 +10,7 @@ import folder_paths
 
 
 TAG_RE = re.compile(r"^[A-Za-z0-9_-]+$")
+REFERENCE_TYPES = ("character", "location", "object", "music", "uncategorized")
 LIBRARY_LOCK = threading.RLock()
 
 
@@ -52,6 +53,14 @@ def clean_category(category):
     return category
 
 
+def clean_reference_type(reference_type):
+    reference_type = (reference_type or "uncategorized").strip().lower()
+    if reference_type not in REFERENCE_TYPES:
+        choices = ", ".join(REFERENCE_TYPES)
+        raise ValueError(f"Reference type must be one of: {choices}.")
+    return reference_type
+
+
 def read_manifest():
     with LIBRARY_LOCK:
         ensure_library()
@@ -65,6 +74,11 @@ def read_manifest():
             raise RuntimeError("H3 reference library manifest is invalid.")
         manifest.setdefault("version", 1)
         manifest.setdefault("revision", 0)
+        for record in manifest["records"]:
+            if not isinstance(record, dict):
+                raise RuntimeError("H3 reference library manifest contains an invalid record.")
+            if record.get("reference_type") not in REFERENCE_TYPES:
+                record["reference_type"] = "uncategorized"
         return manifest
 
 
@@ -87,9 +101,11 @@ def get_record(record_id):
     raise KeyError(record_id)
 
 
-def create_record(tag, category="other", image_description="", audio_description="", image_file=None, audio_file=None):
+def create_record(tag, category="other", image_description="", audio_description="", image_file=None,
+                  audio_file=None, reference_type="uncategorized"):
     tag = clean_tag(tag)
     category = clean_category(category)
+    reference_type = clean_reference_type(reference_type)
     if image_file is None and audio_file is None:
         raise ValueError("A reference record needs an image, audio clip, or both.")
 
@@ -101,6 +117,7 @@ def create_record(tag, category="other", image_description="", audio_description
             "id": uuid.uuid4().hex,
             "tag": tag,
             "category": category,
+            "reference_type": reference_type,
             "image_description": (image_description or "").strip(),
             "audio_description": (audio_description or "").strip(),
             "image_file": image_file,
@@ -114,9 +131,11 @@ def create_record(tag, category="other", image_description="", audio_description
 
 
 def update_record(record_id, tag, category="other", image_description="", audio_description="", image_file=None,
-                  audio_file=None, remove_image=False, remove_audio=False):
+                  audio_file=None, remove_image=False, remove_audio=False,
+                  reference_type="uncategorized"):
     tag = clean_tag(tag)
     category = clean_category(category)
+    reference_type = clean_reference_type(reference_type)
     with LIBRARY_LOCK:
         manifest = read_manifest()
         record = next((item for item in manifest["records"] if item["id"] == record_id), None)
@@ -134,6 +153,7 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         record.update({
             "tag": tag,
             "category": category,
+            "reference_type": reference_type,
             "image_description": (image_description or "").strip(),
             "audio_description": (audio_description or "").strip(),
             "image_file": next_image,

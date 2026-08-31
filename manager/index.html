@@ -11,12 +11,24 @@
         <div>
             <h1>H3 Reference Library</h1>
             <p id="library-count">Loading references...</p>
+            <a class="patreon-link" href="https://www.patreon.com/skeba/" target="_blank" rel="noopener noreferrer">Built by Skeba AI - Follow Me for More</a>
         </div>
         <div class="topbar-actions">
             <label class="category-filter">
                 <span>Category</span>
                 <select id="category-filter">
                     <option value="">All categories</option>
+                </select>
+            </label>
+            <label class="type-filter">
+                <span>Reference type</span>
+                <select id="type-filter">
+                    <option value="">All types</option>
+                    <option value="character">Character</option>
+                    <option value="location">Location</option>
+                    <option value="object">Object</option>
+                    <option value="music">Music</option>
+                    <option value="uncategorized">Uncategorized</option>
                 </select>
             </label>
             <label class="media-filter">
@@ -61,7 +73,7 @@
             <div class="section-heading">
                 <div>
                     <h2 id="creator-title">Reference creator</h2>
-                    <p>Select references below to build a category-grouped guide for writing your prompt.</p>
+                    <p>Select references below to build a guide grouped by category, then reference type.</p>
                 </div>
                 <div class="creator-actions">
                     <button id="clear-selection" class="secondary" type="button" disabled>Clear selection</button>
@@ -96,7 +108,16 @@
             </div>
             <input id="record-id" type="hidden">
             <label>Tag<input id="tag" name="tag" required pattern="[A-Za-z0-9_-]+" placeholder="news_anchor"></label>
-            <label>Library category
+            <label>Reference type
+                <select id="reference-type" name="reference_type" required>
+                    <option value="character">Character</option>
+                    <option value="location">Location</option>
+                    <option value="object">Object</option>
+                    <option value="music">Music</option>
+                    <option value="uncategorized" selected>Uncategorized</option>
+                </select>
+            </label>
+            <label>Library category / collection
                 <select id="category" name="category" required></select>
             </label>
             <label id="new-category-row" hidden>New category

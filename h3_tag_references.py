@@ -12,102 +12,112 @@ from .library import library_revision, media_path, records_by_tag
 
 MAX_IMAGES = 9
 MAX_AUDIO = 3
-TAG_RE = re.compile(r"\{([A-Za-z0-9_-]+)\}")
-ORDINALS = ("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth")
-
-
-def _subject_reference(tag, records, image_indexes):
-    number = image_indexes[tag] + 1
-    subject = f"<Subject {number}>"
-    if records[tag].get("category", "").startswith("character"):
-        subject += f" (S{number})"
-    return subject
+REFERENCE_RE = re.compile(
+    r"\{(?P<reference>[A-Za-z0-9_-]+)\}|§(?P<voice>[A-Za-z0-9_-]+)§")
 
 
 def _description(record, kind, tag):
     return (record.get(f"{kind}_description") or tag).strip().rstrip(".")
 
 
-def resolve_prompt(prompt_template, records):
-    ordered_tags = []
-    seen = set()
-    for match in TAG_RE.finditer(prompt_template):
-        tag = match.group(1)
-        if tag not in seen:
-            seen.add(tag)
-            ordered_tags.append(tag)
+def _replacement_description(record, tag):
+    if record.get("image_description"):
+        return _description(record, "image", tag)
+    return _description(record, "audio", tag)
 
-    if not ordered_tags:
+
+def _picture_replacement(record, tag, image_index=None, audio_index=None):
+    if image_index is not None:
+        picture = f"<Picture {image_index + 1}>"
+        description = (record.get("image_description") or "").strip().rstrip(".")
+        return f"{picture} ({description})" if description else picture
+    if record.get("audio_file") or record.get("audio_description"):
+        return _voice_replacement(record, tag, audio_index)
+    return _replacement_description(record, tag)
+
+
+def _voice_replacement(record, tag, audio_index=None):
+    description = (record.get("audio_description") or "").strip().rstrip(".")
+    if audio_index is not None:
+        audio = f"<Audio {audio_index + 1}>"
+        return f"{audio} ({description})" if description else audio
+    return description or tag
+
+
+def _format_tag(kind, tag):
+    return f"§{tag}§" if kind == "voice" else f"{{{tag}}}"
+
+
+def resolve_prompt(prompt_template, records):
+    references = []
+    reference_tags = []
+    seen_references = set()
+    seen_reference_tags = set()
+    for match in REFERENCE_RE.finditer(prompt_template):
+        kind = "voice" if match.group("voice") else "reference"
+        tag = match.group(kind)
+        reference = (kind, tag)
+        if reference not in seen_references:
+            seen_references.add(reference)
+            references.append(reference)
+        if kind == "reference" and tag not in seen_reference_tags:
+            seen_reference_tags.add(tag)
+            reference_tags.append(tag)
+
+    if not references:
         return prompt_template, "", [], []
 
-    missing = [tag for tag in ordered_tags if tag not in records]
+    missing = next(((kind, tag) for kind, tag in references if tag not in records), None)
     if missing:
-        raise ValueError(f"H3 reference library has no record for tag '{{{missing[0]}}}'.")
+        kind, tag = missing
+        raise ValueError(
+            f"H3 reference library has no record for tag '{_format_tag(kind, tag)}'.")
 
     paired_tags = [
-        tag for tag in ordered_tags
+        tag for tag in reference_tags
         if records[tag].get("image_file") and records[tag].get("audio_file")
     ]
     image_tags = paired_tags + [
-        tag for tag in ordered_tags
+        tag for tag in reference_tags
         if records[tag].get("image_file") and not records[tag].get("audio_file")
     ]
-    audio_candidates = paired_tags + [
-        tag for tag in ordered_tags
-        if records[tag].get("audio_file") and not records[tag].get("image_file")
+    voice_tags = [tag for kind, tag in references if kind == "voice"]
+    voice_audio_tags = [
+        tag for tag in voice_tags if records[tag].get("audio_file")
     ]
+    paired_audio_tags = [
+        tag for tag in reference_tags
+        if records[tag].get("image_file") and records[tag].get("audio_file")
+        and tag not in voice_audio_tags
+    ]
+    standalone_audio_tags = [
+        tag for tag in reference_tags
+        if records[tag].get("audio_file") and not records[tag].get("image_file")
+        and tag not in voice_audio_tags
+    ]
+    audio_candidates = voice_audio_tags + paired_audio_tags + standalone_audio_tags
     audio_tags = audio_candidates[:MAX_AUDIO]
-    if len(image_tags) > MAX_IMAGES:
-        raise ValueError(f"H3 supports at most {MAX_IMAGES} reference images; this prompt uses {len(image_tags)}.")
     image_indexes = {tag: index for index, tag in enumerate(image_tags)}
     audio_indexes = {tag: index for index, tag in enumerate(audio_tags)}
+    if len(image_tags) > MAX_IMAGES:
+        raise ValueError(f"H3 supports at most {MAX_IMAGES} reference images; this prompt uses {len(image_tags)}.")
+
+    def replacement(kind, tag):
+        if kind == "voice":
+            return _voice_replacement(records[tag], tag, audio_indexes.get(tag))
+        return _picture_replacement(
+            records[tag], tag, image_indexes.get(tag), audio_indexes.get(tag))
 
     def replace_tag(match):
-        tag = match.group(1)
-        if tag in image_indexes:
-            return _subject_reference(tag, records, image_indexes)
-        if tag in audio_indexes:
-            return f"<Audio {audio_indexes[tag] + 1}>"
-        return _description(records[tag], "audio", tag)
+        kind = "voice" if match.group("voice") else "reference"
+        return replacement(kind, match.group(kind))
 
-    rewritten = TAG_RE.sub(replace_tag, prompt_template).strip()
-    legends = []
-    mapping = []
-    for tag in image_tags:
-        record = records[tag]
-        image_index = image_indexes[tag]
-        subject = _subject_reference(tag, records, image_indexes)
-        legend = (
-            f"{subject} is defined by the {ORDINALS[image_index]} reference image: "
-            f"{_description(record, 'image', tag)}."
-        )
-        mapping_line = f"{{{tag}}} -> {subject}"
-        if tag in audio_indexes:
-            audio = f"<Audio {audio_indexes[tag] + 1}>"
-            legend += (
-                f" {audio} is the voice-timbre reference for {subject}: "
-                f"{_description(record, 'audio', tag)}."
-            )
-            mapping_line += f", voice {audio}"
-        elif record.get("audio_file"):
-            legend += f" {subject} speaks with {_description(record, 'audio', tag)}."
-            mapping_line += ", voice described in prompt"
-        legends.append(legend)
-        mapping.append(mapping_line)
-
-    for tag in audio_candidates:
-        if tag in image_indexes:
-            continue
-        if tag in audio_indexes:
-            audio = f"<Audio {audio_indexes[tag] + 1}>"
-            legends.append(f"{audio} is the standalone voice or sound reference: {_description(records[tag], 'audio', tag)}.")
-            mapping.append(f"{{{tag}}} -> {audio}")
-        else:
-            description = _description(records[tag], "audio", tag)
-            legends.append(f"The standalone voice or sound for {{{tag}}} is described as {description}.")
-            mapping.append(f"{{{tag}}} -> {description} (described in prompt)")
-
-    return "\n".join(legends) + "\n\n" + rewritten, "\n".join(mapping), image_tags, audio_tags
+    rewritten = REFERENCE_RE.sub(replace_tag, prompt_template).strip()
+    mapping = [
+        f"{_format_tag(kind, tag)} -> {replacement(kind, tag)}"
+        for kind, tag in references
+    ]
+    return rewritten, "\n".join(mapping), image_tags, audio_tags
 
 
 def load_image(path):
@@ -134,7 +144,7 @@ class H3TaggedReferencePrompt:
                 "prompt_template": ("STRING", {
                     "multiline": True,
                     "default": "[Shot 1] {news_anchor} is sitting at {news_desk}.",
-                    "tooltip": "Prompt text using tags managed in the H3 Reference Library, such as {news_anchor}.",
+                    "tooltip": "Use reference tags such as {news_anchor} or voice tags such as §news_anchor§.",
                 }),
             },
         }
@@ -146,7 +156,7 @@ class H3TaggedReferencePrompt:
         + tuple(f"audio_{i}" for i in range(1, MAX_AUDIO + 1))
     )
     FUNCTION = "build"
-    CATEGORY = "video/text"
+    CATEGORY = "Skeba AI Nodes - Reference"
 
     @classmethod
     def IS_CHANGED(cls, prompt_template):

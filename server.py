@@ -94,6 +94,7 @@ def register_routes():
                 fields.get("audio_description"),
                 image_filename,
                 audio_filename,
+                reference_type=fields.get("reference_type", "uncategorized"),
             )
             return web.json_response({"record": _public_record(record)}, status=201)
         except Exception as error:
@@ -122,6 +123,8 @@ def register_routes():
                 audio_filename,
                 fields.get("remove_image") == "true",
                 fields.get("remove_audio") == "true",
+                reference_type=fields.get(
+                    "reference_type", current.get("reference_type", "uncategorized")),
             )
             remove_media(old_image, "image")
             remove_media(old_audio, "audio")
@@ -220,6 +223,7 @@ def _public_record(record):
         "id": record_id,
         "tag": record["tag"],
         "category": record.get("category", "other"),
+        "reference_type": record.get("reference_type", "uncategorized"),
         "image_description": record.get("image_description", ""),
         "audio_description": record.get("audio_description", ""),
         "has_image": bool(record.get("image_file")),

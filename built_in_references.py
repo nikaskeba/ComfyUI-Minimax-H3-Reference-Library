@@ -7,7 +7,7 @@ from pathlib import Path
 CATALOG_PATH = Path(__file__).with_name("built_in_references.md")
 FOLDER_RE = re.compile(r"^##\s+Folder:\s+`([^`]+)`(?:\s+\((.*?)\))?")
 CLIP_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
-TAG_RE = re.compile(r"\^([^\^\r\n]+?)\^")
+TAG_RE = re.compile(r"(?P<marker>[\^~])(?P<value>[^\^~\r\n]+?)(?P=marker)")
 
 
 def catalog_revision():
@@ -101,13 +101,25 @@ def built_in_tag(record):
     return f"^{value}^"
 
 
+def built_in_voice_tag(record):
+    value = record.get("tag", record["name"]) if isinstance(record, dict) else record
+    return f"~{value}~"
+
+
 def _description(record):
-    parts = [f"**{record['name']}**"]
+    parts = [record["name"]]
     if record["actor"]:
         parts.append(f"played by {record['actor']}")
     if record["franchise"]:
         parts.append(f"featured on {record['franchise']}")
     return " ".join(parts)
+
+
+def _voice_description(record):
+    description = f"in {record['name']}'s voice"
+    if record["actor"]:
+        description += f" as played by {record['actor']}"
+    return description
 
 
 def resolve_built_in_prompt(prompt_template, records=None):
@@ -120,7 +132,8 @@ def resolve_built_in_prompt(prompt_template, records=None):
     seen = set()
 
     def replace(match):
-        requested = match.group(1).strip()
+        marker = match.group("marker")
+        requested = match.group("value").strip()
         record = by_tag.get(requested.casefold())
         if record is None:
             matches = by_name.get(requested.casefold(), [])
@@ -130,16 +143,17 @@ def resolve_built_in_prompt(prompt_template, records=None):
                     "Copy the actor-specific tag from the character database.")
             raise ValueError(
                 f"Built-in H3 reference catalog has no character '{requested}'.")
-        key = record["tag"].casefold()
+        key = (marker, record["tag"].casefold())
         if key not in seen:
             seen.add(key)
-            used.append(record)
-        return _description(record)
+            used.append((marker, record))
+        return _voice_description(record) if marker == "~" else _description(record)
 
     prompt = TAG_RE.sub(replace, prompt_template)
     mapping = "\n".join(
-        f"{built_in_tag(record)} -> {_description(record)}"
-        for record in used
+        f"{built_in_voice_tag(record) if marker == '~' else built_in_tag(record)} -> "
+        f"{_voice_description(record) if marker == '~' else _description(record)}"
+        for marker, record in used
     )
     return prompt, mapping
 
@@ -152,7 +166,7 @@ class H3BuiltInReference:
                 "prompt_template": ("STRING", {
                     "multiline": True,
                     "default": "[Shot 1] ^Abby Sciuto^ works at her desk.",
-                    "tooltip": "Use caret tags copied from the Built-In Characters catalog, such as ^Abby Sciuto^.",
+                    "tooltip": "Use character tags such as ^Abby Sciuto^ or voice tags such as ~Abby Sciuto~.",
                 }),
             },
         }
@@ -160,8 +174,8 @@ class H3BuiltInReference:
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("prompt", "mapping")
     FUNCTION = "build"
-    CATEGORY = "video/text"
-    DESCRIPTION = "Expand bundled MiniMax H3 character tags into actor and franchise descriptions."
+    CATEGORY = "Skeba AI Nodes - Reference"
+    DESCRIPTION = "Expand bundled MiniMax H3 character and voice tags into prompt descriptions."
 
     @classmethod
     def IS_CHANGED(cls, prompt_template):

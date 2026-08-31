@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import "./universal_bypass.js";
 
 
 const openReferenceLibrary = () => {

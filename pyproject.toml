@@ -1,11 +1,12 @@
 [project]
 name = "h3-reference-library"
-version = "1.1.0"
-description = "Reusable tagged image and audio references for MiniMax H3 video workflows in ComfyUI"
+version = "2.0.0"
+description = "Consolidated Skeba reference, batching, bypass, and H3 Motion Context nodes for ComfyUI"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []
 classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
 
@@ -16,4 +17,4 @@ Documentation = "https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Libra
 
 [tool.comfy]
 PublisherId = "nicholasskeba"
-DisplayName = "H3 Reference Library"
+DisplayName = "Skeba AI Nodes"
