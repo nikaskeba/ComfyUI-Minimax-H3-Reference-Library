@@ -1,7 +1,7 @@
 {
   "id": "d7960709-d859-4468-81ae-1a036f2d93ce",
   "revision": 0,
-  "last_node_id": 393,
+  "last_node_id": 397,
   "last_link_id": 797,
   "nodes": [
     {
@@ -16,7 +16,7 @@
         30
       ],
       "flags": {},
-      "order": 45,
+      "order": 46,
       "mode": 0,
       "inputs": [
         {
@@ -146,7 +146,7 @@
         150
       ],
       "flags": {},
-      "order": 95,
+      "order": 96,
       "mode": 0,
       "inputs": [
         {
@@ -245,7 +245,7 @@
         106
       ],
       "flags": {},
-      "order": 90,
+      "order": 91,
       "mode": 4,
       "inputs": [
         {
@@ -385,7 +385,7 @@
         250
       ],
       "flags": {},
-      "order": 84,
+      "order": 85,
       "mode": 0,
       "inputs": [
         {
@@ -470,7 +470,7 @@
         90
       ],
       "flags": {},
-      "order": 59,
+      "order": 60,
       "mode": 0,
       "inputs": [
         {
@@ -536,7 +536,7 @@
         90
       ],
       "flags": {},
-      "order": 64,
+      "order": 65,
       "mode": 0,
       "inputs": [
         {
@@ -602,7 +602,7 @@
         150
       ],
       "flags": {},
-      "order": 65,
+      "order": 66,
       "mode": 0,
       "inputs": [
         {
@@ -691,7 +691,7 @@
         82
       ],
       "flags": {},
-      "order": 87,
+      "order": 88,
       "mode": 0,
       "inputs": [
         {
@@ -769,7 +769,7 @@
         50
       ],
       "flags": {},
-      "order": 86,
+      "order": 87,
       "mode": 0,
       "inputs": [
         {
@@ -832,7 +832,7 @@
         110
       ],
       "flags": {},
-      "order": 94,
+      "order": 95,
       "mode": 0,
       "inputs": [
         {
@@ -897,7 +897,7 @@
         126
       ],
       "flags": {},
-      "order": 92,
+      "order": 93,
       "mode": 0,
       "inputs": [
         {
@@ -973,7 +973,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 85,
+      "order": 86,
       "mode": 0,
       "inputs": [
         {
@@ -1254,7 +1254,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 97,
+      "order": 98,
       "mode": 0,
       "inputs": [
         {
@@ -1321,7 +1321,7 @@
         166
       ],
       "flags": {},
-      "order": 89,
+      "order": 90,
       "mode": 0,
       "inputs": [
         {
@@ -1419,8 +1419,8 @@
       "outputs": [
         {
           "label": "OBJ",
-          "name": "INT",
-          "type": "INT",
+          "name": "OBJ",
+          "type": "*",
           "links": [
             768
           ]
@@ -1548,7 +1548,7 @@
         673.0012137934964
       ],
       "flags": {},
-      "order": 67,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -1630,7 +1630,7 @@
         200
       ],
       "flags": {},
-      "order": 43,
+      "order": 44,
       "mode": 0,
       "inputs": [
         {
@@ -1920,7 +1920,7 @@
         200
       ],
       "flags": {},
-      "order": 49,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -2005,7 +2005,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 78,
+      "order": 79,
       "mode": 0,
       "inputs": [
         {
@@ -2214,7 +2214,7 @@
         226
       ],
       "flags": {},
-      "order": 81,
+      "order": 82,
       "mode": 0,
       "inputs": [
         {
@@ -2481,7 +2481,7 @@
         106
       ],
       "flags": {},
-      "order": 61,
+      "order": 62,
       "mode": 0,
       "inputs": [
         {
@@ -2565,7 +2565,7 @@
         40
       ],
       "flags": {},
-      "order": 82,
+      "order": 83,
       "mode": 0,
       "inputs": [
         {
@@ -2623,7 +2623,7 @@
         110
       ],
       "flags": {},
-      "order": 83,
+      "order": 84,
       "mode": 0,
       "inputs": [
         {
@@ -2697,7 +2697,7 @@
         106
       ],
       "flags": {},
-      "order": 60,
+      "order": 61,
       "mode": 0,
       "inputs": [
         {
@@ -2781,7 +2781,7 @@
         226
       ],
       "flags": {},
-      "order": 66,
+      "order": 67,
       "mode": 0,
       "inputs": [
         {
@@ -2902,7 +2902,7 @@
         40
       ],
       "flags": {},
-      "order": 69,
+      "order": 70,
       "mode": 0,
       "inputs": [
         {
@@ -2960,7 +2960,7 @@
         110
       ],
       "flags": {},
-      "order": 74,
+      "order": 75,
       "mode": 0,
       "inputs": [
         {
@@ -3023,78 +3023,6 @@
       }
     },
     {
-      "id": 255,
-      "type": "SaveVideo",
-      "pos": [
-        1697.062457599493,
-        4101.668220694214
-      ],
-      "size": [
-        1214,
-        2208.5625
-      ],
-      "flags": {},
-      "order": 93,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "link": 616
-        }
-      ],
-      "outputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "links": [
-            558
-          ]
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
-        "Node name for S&R": "SaveVideo",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "video/ComfyUI",
-        "mp4",
-        "h264",
-        "auto",
-        "auto"
-      ],
-      "widgets_values_named": {
-        "filename_prefix": "video/ComfyUI",
-        "format": "mp4",
-        "format.codec": "h264",
-        "format.codec.encoding": "auto",
-        "codec": "auto"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 326,
       "type": "LTXVConcatAVLatent",
       "pos": [
@@ -3108,7 +3036,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 80,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -3172,7 +3100,7 @@
         120
       ],
       "flags": {},
-      "order": 42,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -3504,7 +3432,7 @@
         110
       ],
       "flags": {},
-      "order": 76,
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
@@ -3591,7 +3519,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 77,
+      "order": 78,
       "mode": 0,
       "inputs": [
         {
@@ -3743,8 +3671,8 @@
       "outputs": [
         {
           "label": "OBJ",
-          "name": "INT",
-          "type": "INT",
+          "name": "OBJ",
+          "type": "*",
           "links": [
             767
           ]
@@ -3802,7 +3730,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 47,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
@@ -3869,7 +3797,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 49,
       "mode": 0,
       "inputs": [
         {
@@ -3936,7 +3864,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 72,
+      "order": 73,
       "mode": 0,
       "inputs": [
         {
@@ -4099,7 +4027,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 46,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -4166,7 +4094,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 57,
+      "order": 58,
       "mode": 0,
       "inputs": [
         {
@@ -4275,7 +4203,7 @@
         82
       ],
       "flags": {},
-      "order": 44,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
@@ -4353,7 +4281,7 @@
         150
       ],
       "flags": {},
-      "order": 88,
+      "order": 89,
       "mode": 0,
       "inputs": [
         {
@@ -4457,7 +4385,7 @@
         126
       ],
       "flags": {},
-      "order": 91,
+      "order": 92,
       "mode": 0,
       "inputs": [
         {
@@ -4533,10 +4461,10 @@
       ],
       "size": [
         370,
-        130
+        769.5
       ],
       "flags": {},
-      "order": 98,
+      "order": 99,
       "mode": 0,
       "inputs": [
         {
@@ -4609,7 +4537,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 96,
+      "order": 97,
       "mode": 0,
       "inputs": [
         {
@@ -4692,7 +4620,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 70,
+      "order": 71,
       "mode": 0,
       "inputs": [
         {
@@ -4772,8 +4700,8 @@
       "outputs": [
         {
           "label": "OBJ",
-          "name": "INT",
-          "type": "INT",
+          "name": "OBJ",
+          "type": "*",
           "links": [
             766
           ]
@@ -4809,164 +4737,6 @@
       "widgets_values_named": {
         "key": "current_prompt",
         "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 309,
-      "type": "H3TaggedReferencePrompt",
-      "pos": [
-        -2965.3407283608476,
-        6598.125591598235
-      ],
-      "size": [
-        400,
-        372
-      ],
-      "flags": {},
-      "order": 58,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "prompt_template",
-          "type": "STRING",
-          "widget": {
-            "name": "prompt_template"
-          },
-          "link": 736
-        }
-      ],
-      "outputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "links": [
-            674
-          ]
-        },
-        {
-          "name": "mapping",
-          "type": "STRING",
-          "links": []
-        },
-        {
-          "name": "image_1",
-          "type": "IMAGE",
-          "links": [
-            647
-          ]
-        },
-        {
-          "name": "image_2",
-          "type": "IMAGE",
-          "links": [
-            648
-          ]
-        },
-        {
-          "name": "image_3",
-          "type": "IMAGE",
-          "links": [
-            649
-          ]
-        },
-        {
-          "name": "image_4",
-          "type": "IMAGE",
-          "links": [
-            650
-          ]
-        },
-        {
-          "name": "image_5",
-          "type": "IMAGE",
-          "links": [
-            651
-          ]
-        },
-        {
-          "name": "image_6",
-          "type": "IMAGE",
-          "links": [
-            664
-          ]
-        },
-        {
-          "name": "image_7",
-          "type": "IMAGE",
-          "links": [
-            665
-          ]
-        },
-        {
-          "name": "image_8",
-          "type": "IMAGE",
-          "links": [
-            666
-          ]
-        },
-        {
-          "name": "image_9",
-          "type": "IMAGE",
-          "links": [
-            667
-          ]
-        },
-        {
-          "name": "audio_1",
-          "type": "AUDIO",
-          "links": [
-            644
-          ]
-        },
-        {
-          "name": "audio_2",
-          "type": "AUDIO",
-          "links": [
-            645
-          ]
-        },
-        {
-          "name": "audio_3",
-          "type": "AUDIO",
-          "links": [
-            646
-          ]
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "360fbdee08d4f2cf631a8d146738b9dc4bf98f9f",
-        "Node name for S&R": "H3TaggedReferencePrompt",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "[Shot 1] {news_anchor} is sitting at {news_desk}.",
-        null
-      ],
-      "widgets_values_named": {
-        "prompt_template": "[Shot 1] {news_anchor} is sitting at {news_desk}.",
-        "Open Reference Library": null
       },
       "_meta": {
         "skeba_tags": {
@@ -5063,7 +4833,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 50,
+      "order": 51,
       "mode": 0,
       "inputs": [
         {
@@ -5145,7 +4915,7 @@
         524
       ],
       "flags": {},
-      "order": 63,
+      "order": 64,
       "mode": 0,
       "inputs": [
         {
@@ -5516,7 +5286,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 55,
+      "order": 56,
       "mode": 0,
       "inputs": [
         {
@@ -5583,7 +5353,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 54,
+      "order": 55,
       "mode": 0,
       "inputs": [
         {
@@ -5936,7 +5706,7 @@
         110
       ],
       "flags": {},
-      "order": 51,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
@@ -6162,7 +5932,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 56,
+      "order": 57,
       "mode": 0,
       "inputs": [
         {
@@ -6227,7 +5997,7 @@
         202
       ],
       "flags": {},
-      "order": 79,
+      "order": 80,
       "mode": 0,
       "inputs": [
         {
@@ -6457,7 +6227,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 52,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
@@ -6649,7 +6419,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 53,
+      "order": 54,
       "mode": 0,
       "inputs": [
         {
@@ -6703,80 +6473,6 @@
       }
     },
     {
-      "id": 377,
-      "type": "Note",
-      "pos": [
-        -5028.241611390314,
-        3457.620259788793
-      ],
-      "size": [
-        273.3601480000916,
-        173.39718788902246
-      ],
-      "flags": {},
-      "order": 36,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "How Prompts Works",
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "Set a list of prompts each divided by |. Each prompt will be generated and appended automatically an continued.\n\nPrompt 1\n|\nPrompt 2\n=\nOne final video after processing"
-      ],
-      "widgets_values_named": {
-        "text": "Set a list of prompts each divided by |. Each prompt will be generated and appended automatically an continued.\n\nPrompt 1\n|\nPrompt 2\n=\nOne final video after processing"
-      },
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
-      "id": 118,
-      "type": "MarkdownNote",
-      "pos": [
-        -5348.861842720344,
-        3245.9205215248785
-      ],
-      "size": [
-        290,
-        400
-      ],
-      "flags": {},
-      "order": 37,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Note: Size Settings Reference",
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
-      ],
-      "widgets_values_named": {
-        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
-      },
-      "color": "rgba(0,0,0,.8)",
-      "bgcolor": "rgba(24,24,27,.9)"
-    },
-    {
       "id": 217,
       "type": "ResolutionSelector",
       "pos": [
@@ -6788,7 +6484,7 @@
         130
       ],
       "flags": {},
-      "order": 38,
+      "order": 36,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6861,7 +6557,7 @@
         82
       ],
       "flags": {},
-      "order": 39,
+      "order": 37,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6928,7 +6624,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 40,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -6941,8 +6637,8 @@
       "outputs": [
         {
           "label": "OBJ",
-          "name": "INT",
-          "type": "INT",
+          "name": "OBJ",
+          "type": "*",
           "links": [
             764
           ]
@@ -7000,7 +6696,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 75,
+      "order": 76,
       "mode": 0,
       "inputs": [
         {
@@ -7067,7 +6763,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 71,
+      "order": 72,
       "mode": 0,
       "inputs": [
         {
@@ -7132,7 +6828,7 @@
         190
       ],
       "flags": {},
-      "order": 62,
+      "order": 63,
       "mode": 0,
       "inputs": [
         {
@@ -7258,7 +6954,7 @@
         86
       ],
       "flags": {},
-      "order": 68,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -7349,7 +7045,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 73,
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
@@ -7374,14 +7070,15 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
         "cnr_id": "komojini-comfyui-nodes",
         "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
         "__skeba_tags": {
           "inputs": [],
           "outputs": []
@@ -7402,6 +7099,236 @@
       }
     },
     {
+      "id": 255,
+      "type": "SaveVideo",
+      "pos": [
+        1697.062457599493,
+        4101.668220694214
+      ],
+      "size": [
+        1214,
+        2246.5
+      ],
+      "flags": {},
+      "order": 94,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 616
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            558
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "SaveVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "video/ComfyUI",
+        "mp4",
+        "h264",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/ComfyUI",
+        "format": "mp4",
+        "format.codec": "h264",
+        "format.codec.encoding": "auto",
+        "codec": "auto"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 309,
+      "type": "H3TaggedReferencePrompt",
+      "pos": [
+        -2965.3407283608476,
+        6598.125591598235
+      ],
+      "size": [
+        400,
+        372
+      ],
+      "flags": {},
+      "order": 59,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt_template",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt_template"
+          },
+          "link": 736
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            674
+          ]
+        },
+        {
+          "name": "mapping",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "image_1",
+          "type": "IMAGE",
+          "links": [
+            647
+          ]
+        },
+        {
+          "name": "image_2",
+          "type": "IMAGE",
+          "links": [
+            648
+          ]
+        },
+        {
+          "name": "image_3",
+          "type": "IMAGE",
+          "links": [
+            649
+          ]
+        },
+        {
+          "name": "image_4",
+          "type": "IMAGE",
+          "links": [
+            650
+          ]
+        },
+        {
+          "name": "image_5",
+          "type": "IMAGE",
+          "links": [
+            651
+          ]
+        },
+        {
+          "name": "image_6",
+          "type": "IMAGE",
+          "links": [
+            664
+          ]
+        },
+        {
+          "name": "image_7",
+          "type": "IMAGE",
+          "links": [
+            665
+          ]
+        },
+        {
+          "name": "image_8",
+          "type": "IMAGE",
+          "links": [
+            666
+          ]
+        },
+        {
+          "name": "image_9",
+          "type": "IMAGE",
+          "links": [
+            667
+          ]
+        },
+        {
+          "name": "audio_1",
+          "type": "AUDIO",
+          "links": [
+            644
+          ]
+        },
+        {
+          "name": "audio_2",
+          "type": "AUDIO",
+          "links": [
+            645
+          ]
+        },
+        {
+          "name": "audio_3",
+          "type": "AUDIO",
+          "links": [
+            646
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "360fbdee08d4f2cf631a8d146738b9dc4bf98f9f",
+        "Node name for S&R": "H3TaggedReferencePrompt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "[Shot 1] {news_anchor} is sitting at {news_desk}.",
+        null
+      ],
+      "widgets_values_named": {
+        "prompt_template": "[Shot 1] {news_anchor} is sitting at {news_desk}.",
+        "Open Reference Library": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
       "id": 292,
       "type": "String",
       "pos": [
@@ -7413,7 +7340,7 @@
         666.8624514724397
       ],
       "flags": {},
-      "order": 41,
+      "order": 39,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7449,10 +7376,10 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "subject_definitions:\n\n<Subject 1> is {femesole_rachael}, an adult woman with long brown hair, initially wearing a plain white shirt. She stands completely still facing directly toward the camera. Her hairstyle, shirt design and color, skin color, and lipstick color undergo abrupt visual transformations at exact two-second intervals while her facial identity and body proportions remain recognizable.\n\n<Subject 2> is a simple neutral indoor studio with a plain light-colored wall and soft frontal lighting.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {femesole_rachael} continuously stares directly into the lens without speaking. Only the specifically scheduled hair, shirt, skin color, and lip color changes occur. Her facial structure, body proportions, position, and identity remain recognizable.\n\n<Subject 2> (appears throughout): fully_preserved - the neutral studio, camera position, framing, and lighting remain fixed.\n\ndetailed_description:\n\n[Shot 1] ONE continuous locked-off medium portrait shot. No cuts and no camera movement. {femesole_rachael} stands centered, shoulders squared toward the lens, staring directly into the camera with a completely neutral expression. She does not speak, gesture, smile, or look away. Initial appearance: long straight brown hair, plain white shirt, natural skin tone, neutral lips.\n\nAt 00:02.000, instantaneous transformation: her hair becomes a short platinum-blonde bob. Everything else remains unchanged.\n\nAt 00:04.000, instantaneous transformation: her shirt becomes a bright red fitted T-shirt. Hair remains the platinum-blonde bob.\n\nAt 00:06.000, instantaneous transformation: her skin becomes deep blue. Hair and shirt remain unchanged.\n\nAt 00:08.000, instantaneous transformation: her lips become vivid metallic gold. Skin, hair, and shirt remain unchanged.\n\nAt 00:10.000, instantaneous transformation: her hair becomes enormous curly black 1980s-style hair. Other transformed features remain unchanged.\n\nAt 00:12.000, instantaneous transformation: her shirt becomes a shiny purple shirt. Hair, blue skin, and metallic-gold lips remain unchanged.\n\nAt 00:14.000, {femesole_rachael} remains perfectly still and silently stares directly into the lens with the final combination of enormous curly black hair, shiny purple shirt, deep-blue skin, and metallic-gold lips. Hold through the final frame.\n\noverall_soundscape:\n\nNearly silent studio room tone. No dialogue, breathing emphasis, transformation sound effects, or background voices.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\nsubject_definitions:\n\n<Subject 1> is {femesole_rachael}, an adult woman with long brown hair, initially wearing a plain black shirt. She stands completely still facing directly toward the camera. Her hairstyle, shirt design and color, skin color, and lipstick color undergo abrupt visual transformations at exact two-second intervals while her facial identity and body proportions remain recognizable.\n\n<Subject 2> is a simple neutral indoor studio with a plain light-colored wall and soft frontal lighting.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {femesole_rachael} continuously stares directly into the lens without speaking. Only the specifically scheduled hair, shirt, skin color, and lip color changes occur. Her facial structure, body proportions, position, and identity remain recognizable.\n\n<Subject 2> (appears throughout): fully_preserved - the neutral studio, camera position, framing, and lighting remain fixed.\n\ndetailed_description:\n\n[Shot 1] ONE continuous locked-off medium portrait shot. No cuts and no camera movement. {femesole_rachael} stands centered, shoulders squared toward the lens, staring directly into the camera with a completely neutral expression. She does not speak, gesture, smile, or look away. Initial appearance: long straight brown hair, plain black shirt, natural skin tone, neutral lips.\n\nAt 00:02.000, instantaneous transformation: her hair becomes extremely long bright-pink hair reaching below her waist. Everything else remains unchanged.\n\nAt 00:04.000, instantaneous transformation: her shirt becomes a neon-green sleeveless top. Hair remains extremely long and bright pink.\n\nAt 00:06.000, instantaneous transformation: her skin becomes vivid purple. Hair and shirt remain unchanged.\n\nAt 00:08.000, instantaneous transformation: her lips become glossy electric blue. Skin, hair, and shirt remain unchanged.\n\nAt 00:10.000, instantaneous transformation: her hair becomes a huge bright-red beehive hairstyle. Other transformed features remain unchanged.\n\nAt 00:12.000, instantaneous transformation: her shirt becomes a metallic silver shirt. Hair, purple skin, and electric-blue lips remain unchanged.\n\nAt 00:14.000, {femesole_rachael} remains perfectly still and silently stares directly into the lens with the final combination of huge bright-red beehive hair, metallic silver shirt, vivid-purple skin, and glossy electric-blue lips. Hold through the final frame.\n\noverall_soundscape:\n\nNearly silent studio room tone. No dialogue, breathing emphasis, transformation sound effects, or background voices.\n\nnon_diegetic_music:\n\nN/A"
+        "subject_definitions:\n\n<Subject 1> is {eva_snu_snu_witch}, an adult woman with red hair, black glasses, and a dark witch outfit. She speaks with voice §eva_snu_snu_witch§. She sits directly facing the camera as though personally reading the viewer's fortune.\n\n<Subject 2> is a mysterious fortune-telling room filled with candles, dark purple fabric, crystals, mystical decorations, and a small round table.\n\n<Subject 3> is a deck of mystical fortune cards. One card is unexpectedly a bright pink \"BARBIE\" card decorated with a glamorous blonde Barbie-like silhouette, hearts, sparkles, and pink accessories.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {eva_snu_snu_witch} begins with red hair, black glasses, and witch clothing. Drawing the Barbie card triggers a magical transformation affecting her appearance, personality, and environment.\n\n<Subject 2> (appears throughout): transformation_required - the dark fortune-telling room transforms into an overwhelmingly pink Barbie-inspired fantasy environment.\n\n<Subject 3> (appears throughout): fully_preserved - the Barbie card remains physically in {eva_snu_snu_witch}'s hand after being drawn.\n\ndetailed_description:\n\n[Shot 1] Vertical 9:16 intimate fortune-teller framing. {eva_snu_snu_witch} sits behind the small table, staring intensely DIRECTLY INTO THE CAMERA as though the VIEWER is sitting across from her. Candlelight reflects from her black glasses. She slowly shuffles the fortune cards.\n\n{eva_snu_snu_witch} (S1) says mysteriously, <d>[English §eva_snu_snu_witch§]I see something approaching you... something powerful.</d>\n\n[Shot 2] At 00:04.000, without breaking eye contact with the viewer, {eva_snu_snu_witch} slowly pulls ONE card from the deck and dramatically turns it toward the camera.\n\nIt is an absurdly bright pink BARBIE card covered with hearts, sparkles, and a glamorous blonde Barbie-like silhouette.\n\nHer confident expression immediately collapses into absolute terror.\n\n{eva_snu_snu_witch} (S1) says, <d>[English §eva_snu_snu_witch§]Oh no. Oh no!</d>\n\n[Shot 3] At 00:08.000, explosive pink magical energy erupts FROM THE BARBIE CARD. Pink sparkles race across the table, walls, furniture, candles, and {eva_snu_snu_witch}. The transformation spreads physically outward from the card rather than appearing through a scene cut.\n\nHer red hair rapidly becomes extremely long, voluminous platinum-blonde Barbie-style hair. Her dark witch outfit transforms into an outrageously glamorous hot-pink Barbie-inspired dress with sparkling accessories. Her black glasses transform into oversized pink fashion glasses.\n\n[Shot 4] At 00:12.000, the transformation consumes the entire room. Dark purple fabrics become bright pink. Crystals become glittering heart decorations. The fortune table becomes glossy pink. Everything is cheerful, glamorous, sparkling, and overwhelmingly Barbie-inspired.\n\n{eva_snu_snu_witch} now sits in the center looking completely delighted. Her posture changes from mysterious fortune teller to exaggerated bubbly blonde fashion-girl energy. She plays with her enormous blonde hair and gives the camera a vacant cheerful smile.\n\nHuge sparkling text appears:\n\n\"💖 BARBIE CURSE ACTIVATED 💖\"\n\nHold on her delighted expression through the final frame.\n\noverall_soundscape:\n\nQuiet mystical room ambience, cards shuffling, candle crackling, magical chimes building into an enormous sparkling transformation sound, glittery pops, and {eva_snu_snu_witch}'s clearly audible dialogue.\n\nnon_diegetic_music:\n\nMysterious fortune-telling music abruptly transforms into ridiculously cheerful bubblegum-pop music when the Barbie card activates.\n\n|\n\nsubject_definitions:\n\n<Subject 1> is {eva_snu_snu_witch}, an adult woman transformed by a magical Barbie curse. She has extremely long voluminous platinum-blonde hair, glamorous pink Barbie-inspired clothing, oversized pink fashion glasses, sparkling accessories, and an exaggerated bubbly, ditsy personality. Her original form is a red-haired woman wearing black glasses and a dark witch outfit. She speaks with voice §eva_snu_snu_witch§ in either form.\n\n<Subject 2> is an overwhelmingly pink Barbie-inspired fortune-telling room containing glossy pink furniture, heart decorations, sparkling crystals, pink candles, fluffy accessories, and a glossy pink fortune table.\n\n<Subject 3> is a magical bright-pink Barbie fortune card sitting prominently on the table.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {eva_snu_snu_witch} begins fully transformed with platinum-blonde hair and pink Barbie-inspired clothing. For one brief moment she breaks through the magical transformation and partially returns to her red-haired witch identity before the Barbie curse immediately overwhelms her again.\n\n<Subject 2> (appears throughout): fully_preserved - the overwhelmingly pink Barbie-inspired environment remains visible throughout.\n\n<Subject 3> (appears throughout): fully_preserved - the magical Barbie card remains prominently visible on the table and acts as the apparent source of the curse.\n\ndetailed_description:\n\n[Shot 1] Vertical 9:16 locked frontal framing. {eva_snu_snu_witch} sits directly facing the camera in the overwhelmingly pink fortune room. She has enormous platinum-blonde Barbie-style hair, sparkling pink clothing, oversized pink glasses, and glossy pink makeup.\n\nShe stares directly at the VIEWER, twirls a strand of blonde hair around one finger, giggles, and gives an exaggerated bubbly vacant smile.\n\n{eva_snu_snu_witch} (S1) says brightly, <d>[English §eva_snu_snu_witch§]Oh my gosh! Your future is, like... totally pink!</d>\n\nShe giggles and enthusiastically claps her hands.\n\n[Shot 2] At 00:05.000, her expression suddenly freezes.\n\nFor ONE brief instant the Barbie personality loses control.\n\nHer platinum-blonde hair rapidly flickers RED. Her pink outfit partially flickers back into the DARK WITCH OUTFIT. Her oversized pink glasses flicker into her original BLACK GLASSES.\n\nHer original frightened witch personality suddenly surfaces.\n\nShe desperately leans toward the camera.\n\n{eva_snu_snu_witch} (S1) yelps, <d>[English §eva_snu_snu_witch§]HELP ME!</d>\n\n[Shot 3] At 00:08.000, the Barbie card flashes intensely pink.\n\nWHOOSH.\n\nHer hair instantly snaps back to enormous platinum blonde. Her clothing becomes sparkling hot pink again. Her glasses become oversized pink fashion glasses.\n\nHer terrified expression instantly disappears.\n\nShe blinks twice, completely forgets what happened, tosses her blonde hair over one shoulder and resumes the exaggerated bubbly personality.\n\n[Shot 4] At 00:11.000, {eva_snu_snu_witch} looks directly into the camera, cheerfully examining the viewer's imaginary fortune. She picks up the Barbie card, looks at it upside down for a moment, turns it around, then giggles at her mistake.\n\n{eva_snu_snu_witch} (S1) says, <d>[English §eva_snu_snu_witch§]Wait... what were we talking about?</d>\n\nShe shrugs, plays with her blonde hair, and gives the viewer an enormous cheerful smile.\n\nPink hearts and sparkles erupt around her.\n\nHuge text appears:\n\n\"💖 FOREVER BARBIE 💖\"\n\nHold on her bubbly, completely oblivious expression through the final frame.\n\noverall_soundscape:\n\nSparkling magical ambience, bubbly transformation chimes, exaggerated magical WHOOSH when her witch identity briefly returns and disappears, playful giggling, glitter pops, and {eva_snu_snu_witch}'s clearly audible dialogue. No other voices.\n\nnon_diegetic_music:\n\nExtremely cheerful bubblegum-pop music. The music briefly distorts and slows when her original witch personality breaks through, then instantly returns to energetic sugary pop when the Barbie transformation regains control."
       ],
       "widgets_values_named": {
-        "String": "subject_definitions:\n\n<Subject 1> is {femesole_rachael}, an adult woman with long brown hair, initially wearing a plain white shirt. She stands completely still facing directly toward the camera. Her hairstyle, shirt design and color, skin color, and lipstick color undergo abrupt visual transformations at exact two-second intervals while her facial identity and body proportions remain recognizable.\n\n<Subject 2> is a simple neutral indoor studio with a plain light-colored wall and soft frontal lighting.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {femesole_rachael} continuously stares directly into the lens without speaking. Only the specifically scheduled hair, shirt, skin color, and lip color changes occur. Her facial structure, body proportions, position, and identity remain recognizable.\n\n<Subject 2> (appears throughout): fully_preserved - the neutral studio, camera position, framing, and lighting remain fixed.\n\ndetailed_description:\n\n[Shot 1] ONE continuous locked-off medium portrait shot. No cuts and no camera movement. {femesole_rachael} stands centered, shoulders squared toward the lens, staring directly into the camera with a completely neutral expression. She does not speak, gesture, smile, or look away. Initial appearance: long straight brown hair, plain white shirt, natural skin tone, neutral lips.\n\nAt 00:02.000, instantaneous transformation: her hair becomes a short platinum-blonde bob. Everything else remains unchanged.\n\nAt 00:04.000, instantaneous transformation: her shirt becomes a bright red fitted T-shirt. Hair remains the platinum-blonde bob.\n\nAt 00:06.000, instantaneous transformation: her skin becomes deep blue. Hair and shirt remain unchanged.\n\nAt 00:08.000, instantaneous transformation: her lips become vivid metallic gold. Skin, hair, and shirt remain unchanged.\n\nAt 00:10.000, instantaneous transformation: her hair becomes enormous curly black 1980s-style hair. Other transformed features remain unchanged.\n\nAt 00:12.000, instantaneous transformation: her shirt becomes a shiny purple shirt. Hair, blue skin, and metallic-gold lips remain unchanged.\n\nAt 00:14.000, {femesole_rachael} remains perfectly still and silently stares directly into the lens with the final combination of enormous curly black hair, shiny purple shirt, deep-blue skin, and metallic-gold lips. Hold through the final frame.\n\noverall_soundscape:\n\nNearly silent studio room tone. No dialogue, breathing emphasis, transformation sound effects, or background voices.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\nsubject_definitions:\n\n<Subject 1> is {femesole_rachael}, an adult woman with long brown hair, initially wearing a plain black shirt. She stands completely still facing directly toward the camera. Her hairstyle, shirt design and color, skin color, and lipstick color undergo abrupt visual transformations at exact two-second intervals while her facial identity and body proportions remain recognizable.\n\n<Subject 2> is a simple neutral indoor studio with a plain light-colored wall and soft frontal lighting.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {femesole_rachael} continuously stares directly into the lens without speaking. Only the specifically scheduled hair, shirt, skin color, and lip color changes occur. Her facial structure, body proportions, position, and identity remain recognizable.\n\n<Subject 2> (appears throughout): fully_preserved - the neutral studio, camera position, framing, and lighting remain fixed.\n\ndetailed_description:\n\n[Shot 1] ONE continuous locked-off medium portrait shot. No cuts and no camera movement. {femesole_rachael} stands centered, shoulders squared toward the lens, staring directly into the camera with a completely neutral expression. She does not speak, gesture, smile, or look away. Initial appearance: long straight brown hair, plain black shirt, natural skin tone, neutral lips.\n\nAt 00:02.000, instantaneous transformation: her hair becomes extremely long bright-pink hair reaching below her waist. Everything else remains unchanged.\n\nAt 00:04.000, instantaneous transformation: her shirt becomes a neon-green sleeveless top. Hair remains extremely long and bright pink.\n\nAt 00:06.000, instantaneous transformation: her skin becomes vivid purple. Hair and shirt remain unchanged.\n\nAt 00:08.000, instantaneous transformation: her lips become glossy electric blue. Skin, hair, and shirt remain unchanged.\n\nAt 00:10.000, instantaneous transformation: her hair becomes a huge bright-red beehive hairstyle. Other transformed features remain unchanged.\n\nAt 00:12.000, instantaneous transformation: her shirt becomes a metallic silver shirt. Hair, purple skin, and electric-blue lips remain unchanged.\n\nAt 00:14.000, {femesole_rachael} remains perfectly still and silently stares directly into the lens with the final combination of huge bright-red beehive hair, metallic silver shirt, vivid-purple skin, and glossy electric-blue lips. Hold through the final frame.\n\noverall_soundscape:\n\nNearly silent studio room tone. No dialogue, breathing emphasis, transformation sound effects, or background voices.\n\nnon_diegetic_music:\n\nN/A"
+        "String": "subject_definitions:\n\n<Subject 1> is {eva_snu_snu_witch}, an adult woman with red hair, black glasses, and a dark witch outfit. She speaks with voice §eva_snu_snu_witch§. She sits directly facing the camera as though personally reading the viewer's fortune.\n\n<Subject 2> is a mysterious fortune-telling room filled with candles, dark purple fabric, crystals, mystical decorations, and a small round table.\n\n<Subject 3> is a deck of mystical fortune cards. One card is unexpectedly a bright pink \"BARBIE\" card decorated with a glamorous blonde Barbie-like silhouette, hearts, sparkles, and pink accessories.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {eva_snu_snu_witch} begins with red hair, black glasses, and witch clothing. Drawing the Barbie card triggers a magical transformation affecting her appearance, personality, and environment.\n\n<Subject 2> (appears throughout): transformation_required - the dark fortune-telling room transforms into an overwhelmingly pink Barbie-inspired fantasy environment.\n\n<Subject 3> (appears throughout): fully_preserved - the Barbie card remains physically in {eva_snu_snu_witch}'s hand after being drawn.\n\ndetailed_description:\n\n[Shot 1] Vertical 9:16 intimate fortune-teller framing. {eva_snu_snu_witch} sits behind the small table, staring intensely DIRECTLY INTO THE CAMERA as though the VIEWER is sitting across from her. Candlelight reflects from her black glasses. She slowly shuffles the fortune cards.\n\n{eva_snu_snu_witch} (S1) says mysteriously, <d>[English §eva_snu_snu_witch§]I see something approaching you... something powerful.</d>\n\n[Shot 2] At 00:04.000, without breaking eye contact with the viewer, {eva_snu_snu_witch} slowly pulls ONE card from the deck and dramatically turns it toward the camera.\n\nIt is an absurdly bright pink BARBIE card covered with hearts, sparkles, and a glamorous blonde Barbie-like silhouette.\n\nHer confident expression immediately collapses into absolute terror.\n\n{eva_snu_snu_witch} (S1) says, <d>[English §eva_snu_snu_witch§]Oh no. Oh no!</d>\n\n[Shot 3] At 00:08.000, explosive pink magical energy erupts FROM THE BARBIE CARD. Pink sparkles race across the table, walls, furniture, candles, and {eva_snu_snu_witch}. The transformation spreads physically outward from the card rather than appearing through a scene cut.\n\nHer red hair rapidly becomes extremely long, voluminous platinum-blonde Barbie-style hair. Her dark witch outfit transforms into an outrageously glamorous hot-pink Barbie-inspired dress with sparkling accessories. Her black glasses transform into oversized pink fashion glasses.\n\n[Shot 4] At 00:12.000, the transformation consumes the entire room. Dark purple fabrics become bright pink. Crystals become glittering heart decorations. The fortune table becomes glossy pink. Everything is cheerful, glamorous, sparkling, and overwhelmingly Barbie-inspired.\n\n{eva_snu_snu_witch} now sits in the center looking completely delighted. Her posture changes from mysterious fortune teller to exaggerated bubbly blonde fashion-girl energy. She plays with her enormous blonde hair and gives the camera a vacant cheerful smile.\n\nHuge sparkling text appears:\n\n\"💖 BARBIE CURSE ACTIVATED 💖\"\n\nHold on her delighted expression through the final frame.\n\noverall_soundscape:\n\nQuiet mystical room ambience, cards shuffling, candle crackling, magical chimes building into an enormous sparkling transformation sound, glittery pops, and {eva_snu_snu_witch}'s clearly audible dialogue.\n\nnon_diegetic_music:\n\nMysterious fortune-telling music abruptly transforms into ridiculously cheerful bubblegum-pop music when the Barbie card activates.\n\n|\n\nsubject_definitions:\n\n<Subject 1> is {eva_snu_snu_witch}, an adult woman transformed by a magical Barbie curse. She has extremely long voluminous platinum-blonde hair, glamorous pink Barbie-inspired clothing, oversized pink fashion glasses, sparkling accessories, and an exaggerated bubbly, ditsy personality. Her original form is a red-haired woman wearing black glasses and a dark witch outfit. She speaks with voice §eva_snu_snu_witch§ in either form.\n\n<Subject 2> is an overwhelmingly pink Barbie-inspired fortune-telling room containing glossy pink furniture, heart decorations, sparkling crystals, pink candles, fluffy accessories, and a glossy pink fortune table.\n\n<Subject 3> is a magical bright-pink Barbie fortune card sitting prominently on the table.\n\nretention_analysis:\n\n<Subject 1> (appears throughout): transformation_required - {eva_snu_snu_witch} begins fully transformed with platinum-blonde hair and pink Barbie-inspired clothing. For one brief moment she breaks through the magical transformation and partially returns to her red-haired witch identity before the Barbie curse immediately overwhelms her again.\n\n<Subject 2> (appears throughout): fully_preserved - the overwhelmingly pink Barbie-inspired environment remains visible throughout.\n\n<Subject 3> (appears throughout): fully_preserved - the magical Barbie card remains prominently visible on the table and acts as the apparent source of the curse.\n\ndetailed_description:\n\n[Shot 1] Vertical 9:16 locked frontal framing. {eva_snu_snu_witch} sits directly facing the camera in the overwhelmingly pink fortune room. She has enormous platinum-blonde Barbie-style hair, sparkling pink clothing, oversized pink glasses, and glossy pink makeup.\n\nShe stares directly at the VIEWER, twirls a strand of blonde hair around one finger, giggles, and gives an exaggerated bubbly vacant smile.\n\n{eva_snu_snu_witch} (S1) says brightly, <d>[English §eva_snu_snu_witch§]Oh my gosh! Your future is, like... totally pink!</d>\n\nShe giggles and enthusiastically claps her hands.\n\n[Shot 2] At 00:05.000, her expression suddenly freezes.\n\nFor ONE brief instant the Barbie personality loses control.\n\nHer platinum-blonde hair rapidly flickers RED. Her pink outfit partially flickers back into the DARK WITCH OUTFIT. Her oversized pink glasses flicker into her original BLACK GLASSES.\n\nHer original frightened witch personality suddenly surfaces.\n\nShe desperately leans toward the camera.\n\n{eva_snu_snu_witch} (S1) yelps, <d>[English §eva_snu_snu_witch§]HELP ME!</d>\n\n[Shot 3] At 00:08.000, the Barbie card flashes intensely pink.\n\nWHOOSH.\n\nHer hair instantly snaps back to enormous platinum blonde. Her clothing becomes sparkling hot pink again. Her glasses become oversized pink fashion glasses.\n\nHer terrified expression instantly disappears.\n\nShe blinks twice, completely forgets what happened, tosses her blonde hair over one shoulder and resumes the exaggerated bubbly personality.\n\n[Shot 4] At 00:11.000, {eva_snu_snu_witch} looks directly into the camera, cheerfully examining the viewer's imaginary fortune. She picks up the Barbie card, looks at it upside down for a moment, turns it around, then giggles at her mistake.\n\n{eva_snu_snu_witch} (S1) says, <d>[English §eva_snu_snu_witch§]Wait... what were we talking about?</d>\n\nShe shrugs, plays with her blonde hair, and gives the viewer an enormous cheerful smile.\n\nPink hearts and sparkles erupt around her.\n\nHuge text appears:\n\n\"💖 FOREVER BARBIE 💖\"\n\nHold on her bubbly, completely oblivious expression through the final frame.\n\noverall_soundscape:\n\nSparkling magical ambience, bubbly transformation chimes, exaggerated magical WHOOSH when her witch identity briefly returns and disappears, playful giggling, glitter pops, and {eva_snu_snu_witch}'s clearly audible dialogue. No other voices.\n\nnon_diegetic_music:\n\nExtremely cheerful bubblegum-pop music. The music briefly distorts and slows when her original witch personality breaks through, then instantly returns to energetic sugary pop when the Barbie transformation regains control."
       },
       "color": "#232",
       "bgcolor": "#353",
@@ -7462,6 +7389,112 @@
           "outputs": []
         }
       }
+    },
+    {
+      "id": 377,
+      "type": "Note",
+      "pos": [
+        -5028.241611390314,
+        3457.620259788793
+      ],
+      "size": [
+        273.3601480000916,
+        173.39718788902246
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "How Prompts Works",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Set a list of prompts each divided by |. Each prompt will be generated and appended automatically an continued.\n\nPrompt 1\n|\nPrompt 2\n=\nOne final video after processing"
+      ],
+      "widgets_values_named": {
+        "text": "Set a list of prompts each divided by |. Each prompt will be generated and appended automatically an continued.\n\nPrompt 1\n|\nPrompt 2\n=\nOne final video after processing"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 118,
+      "type": "MarkdownNote",
+      "pos": [
+        -5348.861842720344,
+        3245.9205215248785
+      ],
+      "size": [
+        290,
+        400
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Note: Size Settings Reference",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      ],
+      "widgets_values_named": {
+        "text": "| megapixels | Aspect | Output (multiple=32) |\n|---|---|---|\n| 0.2 | 16:9 | 608 x 352 |\n| 0.3 | 16:9 | 736 x 416 |\n| 0.4 | 16:9 | 864 x 480 |\n| 0.5 | 16:9 | 960 x 544 |\n| 0.6 | 16:9 | 1056 x 608 |\n| 0.7 | 16:9 | 1152 x 640 |\n| 0.8 | 16:9 | 1216 x 672 |\n| 0.9 | 16:9 | 1280 x 736 |\n| 0.98 | 16:9 | 1344 x 768 |\n| 1.0 | 16:9 | 1376 x 768 |\n| 1.2 | 16:9 | 1504 x 832 |\n| 1.5 | 16:9 | 1664 x 928 |\n| 1.8 | 16:9 | 1824 x 1024 |\n| 2.0 | 16:9 | 1920 x 1088 |\n"
+      },
+      "color": "rgba(0,0,0,.8)",
+      "bgcolor": "rgba(24,24,27,.9)"
+    },
+    {
+      "id": 396,
+      "type": "MarkdownNote",
+      "pos": [
+        -5309.394481355243,
+        2912.436586055883
+      ],
+      "size": [
+        473.4610149042437,
+        239.4771053022714
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Visit Us - Get Help - Get Workflows",
+      "properties": {
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★"
+      ],
+      "widgets_values_named": {
+        "text": "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
     }
   ],
   "links": [
@@ -8442,7 +8475,7 @@
         "version": 1,
         "state": {
           "lastGroupId": 13,
-          "lastNodeId": 393,
+          "lastNodeId": 397,
           "lastLinkId": 797,
           "lastRerouteId": 0
         },
@@ -9301,10 +9334,10 @@
     },
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.1,
+      "scale": 0.5564281936874779,
       "offset": [
-        7869.7094168331,
-        -502.0801205179223
+        6530.304459283828,
+        -2461.9269417157607
       ]
     }
   },
