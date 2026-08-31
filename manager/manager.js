@@ -440,10 +440,11 @@ async function saveRecord(event) {
     const category = selectedCategory();
     if (!/^[A-Za-z0-9_-]+$/.test(category)) return toast("Enter a valid category.", true);
     const recordId = elements["record-id"].value;
+    const selectedReferenceType = elements["reference-type"].value;
     const data = new FormData();
     data.append("tag", elements.tag.value.trim());
     data.append("category", category);
-    data.append("reference_type", elements["reference-type"].value);
+    data.append("reference_type", selectedReferenceType);
     data.append("image_description", elements["image-description"].value.trim());
     data.append("audio_description", elements["audio-description"].value.trim());
     if (elements["image-file"].files[0]) data.append("image", elements["image-file"].files[0]);
@@ -452,10 +453,21 @@ async function saveRecord(event) {
     data.append("remove_audio", String(elements["remove-audio"].checked));
     elements["save-record"].disabled = true;
     try {
-        await request(recordId ? `${apiRoot}/${recordId}` : apiRoot, { method: recordId ? "PUT" : "POST", body: data });
+        const payload = await request(recordId ? `${apiRoot}/${recordId}` : apiRoot, {
+            method: recordId ? "PUT" : "POST",
+            body: data,
+        });
+        const savedReferenceType = normalizedReferenceType(payload.record);
+        if (savedReferenceType !== selectedReferenceType) {
+            throw new Error(
+                `The server returned ${referenceTypeLabel(savedReferenceType)} instead of `
+                + `${referenceTypeLabel(selectedReferenceType)}. Reload ComfyUI before trying again.`,
+            );
+        }
         elements["record-dialog"].close();
         await loadRecords();
-        toast(recordId ? "Reference updated." : "Reference added.");
+        const action = recordId ? "updated" : "added";
+        toast(`Reference ${action} as ${referenceTypeLabel(savedReferenceType)}.`);
     } catch (error) {
         toast(error.message, true);
     } finally {
