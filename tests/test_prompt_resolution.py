@@ -359,6 +359,9 @@ class PromptResolutionTests(unittest.TestCase):
             MODULE.resolve_prompt(" ".join(f"{{clip_{i}}}" for i in range(1, 5)), records)
 
         names = MODULE.H3TaggedReferencePrompt.RETURN_NAMES
+        video_fps = MODULE.H3TaggedReferencePrompt.INPUT_TYPES()["required"]["video_fps"]
+        self.assertEqual(video_fps[0], "FLOAT")
+        self.assertEqual(video_fps[1]["default"], 24.0)
         self.assertEqual(names[0:2], ("prompt", "mapping"))
         self.assertEqual(names[2:11], tuple(f"image_{i}" for i in range(1, 10)))
         self.assertEqual(names[11:14], ("audio_1", "audio_2", "audio_3"))
@@ -388,18 +391,19 @@ class PromptResolutionTests(unittest.TestCase):
         try:
             MODULE.records_by_tag = lambda: records
             MODULE.media_path = lambda record, kind: record[f"{kind}_file"]
-            MODULE.load_video = lambda path: (
-                f"frames:{path}",
+            MODULE.load_video = lambda path, fps=24: (
+                f"frames:{path}@{fps}",
                 f"audio:{path}" if path == "voiced.mp4" else None,
             )
-            output = MODULE.H3TaggedReferencePrompt().build("{voiced} {silent}")
+            output = MODULE.H3TaggedReferencePrompt().build(
+                "{voiced} {silent}", video_fps=29.97)
         finally:
             MODULE.records_by_tag = original_records
             MODULE.media_path = original_media_path
             MODULE.load_video = original_load_video
 
         self.assertEqual(output[14:17], (
-            "frames:voiced.mp4", "frames:silent.mp4", None))
+            "frames:voiced.mp4@29.97", "frames:silent.mp4@29.97", None))
         self.assertEqual(output[17:20], ("audio:voiced.mp4", None, None))
 
     def test_unknown_voice_tag_is_clear(self):

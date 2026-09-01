@@ -10,7 +10,7 @@ import folder_paths
 
 
 TAG_RE = re.compile(r"^[A-Za-z0-9_-]+$")
-REFERENCE_TYPES = ("character", "location", "object", "music", "uncategorized")
+REFERENCE_TYPES = ("character", "location", "object", "music", "video", "uncategorized")
 LIBRARY_LOCK = threading.RLock()
 
 

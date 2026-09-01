@@ -87,9 +87,9 @@ def register_routes():
 
     @routes.post("/api/h3-references/records")
     async def add_record(request):
-        fields, files = await _read_multipart(request)
         image_filename = audio_filename = video_filename = None
         try:
+            fields, files = await _read_multipart(request)
             if "image" in files:
                 image_filename = _save_image(*files["image"])
             if "audio" in files:
@@ -119,9 +119,9 @@ def register_routes():
     @routes.put("/api/h3-references/records/{record_id}")
     async def edit_record(request):
         record_id = request.match_info["record_id"]
-        fields, files = await _read_multipart(request)
         image_filename = audio_filename = video_filename = None
         try:
+            fields, files = await _read_multipart(request)
             current = get_record(record_id)
             if "image" in files:
                 image_filename = _save_image(*files["image"])
@@ -293,6 +293,9 @@ def _public_record(record):
 
 
 def _error_response(error):
+    if isinstance(error, web.HTTPException):
+        message = (error.text or error.reason or "Upload request failed.").strip()
+        return web.json_response({"error": message}, status=error.status)
     if isinstance(error, KeyError):
         return web.json_response({"error": "Reference record was not found."}, status=404)
     if isinstance(error, (ValueError, FileNotFoundError)):

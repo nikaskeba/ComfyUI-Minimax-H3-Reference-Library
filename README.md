@@ -9,10 +9,11 @@ H3 Reference Library replaces a large set of manually connected reference widget
 
 - Local manager at `/h3-references` with a toolbar launcher and an **Open Reference Library** button on the node
 - Separate known-character catalog at `/h3-built-in-references`
-- Image, audio, video, and mixed-media records; embedded video soundtracks are detected automatically
-- Drag-and-drop bulk import with automatic pairing by filename stem
+- Image, audio, and video records; embedded video soundtracks are detected automatically
+- Drag-and-drop bulk import with automatic image/audio/video pairing by filename stem
 - Reusable tags, descriptions, searchable categories, previews, and audio playback
-- Category and reference-type organization for characters, locations, objects, and music
+- Category and reference-type organization for characters, locations, objects, music, and video
+- Reference-type-aware media fields for characters, locations, objects, music, and video
 - Category-first, reference-type-second selection guide for prompt building
 - Bundled MiniMax H3 character catalog sourced from an editable Markdown file
 - Searchable built-in character browser with individual and multi-tag copy
@@ -39,7 +40,7 @@ Restart ComfyUI after installation. No additional Python packages are required b
 
 1. Add **H3 Tagged Reference Prompt** from `Skeba AI Nodes - Reference`.
 2. Click **Open Reference Library** on the node or use the library button in the ComfyUI toolbar.
-3. Add a tag such as `creature`, choose a category, and attach an image, audio clip, video, or a combination.
+3. Add a tag such as `creature`, choose its reference type and category, then attach the media allowed by that type.
 4. Enter the tag in braces in the node prompt:
 
 ```text
@@ -49,17 +50,50 @@ Restart ComfyUI after installation. No additional Python packages are required b
 Tags entered with spaces or punctuation are normalized automatically. For
 example, `Simpsons chalkboard` is saved as `Simpsons_chalkboard`.
 
-5. Connect `prompt` to the MiniMax H3 prompt input.
-6. Connect `image_1` through `image_9` and `audio_1` through `audio_3` to the corresponding MiniMax H3 reference inputs. Connect `video_1` through `video_3` to `ref_video_0` through `ref_video_2`, and connect each matching `video_audio_N` to the same-numbered `ref_video_audio` input. Silent videos leave their video-audio output empty.
+5. Set `video_fps` if the scene's video references should use a rate other than the 24 FPS default. This one value applies to every video loaded by that node execution.
+6. Connect `prompt` and the reference outputs to the MiniMax H3 node as described below.
 
 ![H3 Tagged Reference Prompt connected to MiniMax H3 Reference to Video](media/reference-connection.png)
 
 The node replaces each tag in place with its assigned media slot and saved
-description. Image records use `<Picture N>`, video records use `<Video N>`, and audio-only records use
-`<Audio N>`. Video files are decoded to IMAGE frame batches at H3's 24 fps reference rate, while embedded soundtracks are returned independently as AUDIO. Referenced media is still loaded automatically. Explicit voice tags
-receive audio slots first; remaining paired image-and-audio records are
-prioritized afterward. Paired records receive picture slots before image-only
-records, and every generated marker uses the resulting output socket number.
+description. Image records use `<Picture N>`, video records use `<Video N>`, and
+audio-only records use `<Audio N>`. Videos are decoded into IMAGE frame batches.
+The node's single `video_fps` setting resamples every video used in that execution
+to one common rate; it defaults to 24 FPS and accepts values from 1 through 240.
+Embedded video soundtracks are returned independently as AUDIO, while silent
+videos leave their matching audio output empty.
+
+Explicit voice tags receive standalone audio slots first. Remaining paired
+image-and-audio records are prioritized afterward. Paired records receive
+picture slots before image-only records, and every generated marker uses the
+resulting output socket number.
+
+### H3 Tagged Reference Prompt inputs and outputs
+
+| Socket/widget | Type | Behavior |
+| --- | --- | --- |
+| `prompt_template` | STRING | Prompt containing library reference and voice tags. |
+| `video_fps` | FLOAT | One forced frame rate for all videos loaded by this node; default `24`, range `1`–`240`. |
+| `prompt` | STRING | Rewritten prompt containing the assigned H3 slot markers. |
+| `mapping` | STRING | Human-readable tag-to-slot mapping for the current prompt. |
+| `image_1` … `image_9` | IMAGE | Ordered still-image references. |
+| `audio_1` … `audio_3` | AUDIO | Ordered standalone or paired audio references. |
+| `video_1` … `video_3` | IMAGE | Ordered video references decoded as frame batches. |
+| `video_audio_1` … `video_audio_3` | AUDIO | Soundtrack aligned to the corresponding video output, or empty for a silent video. |
+
+The video sockets were appended after the original image and audio sockets so
+saved workflows retain the existing output indices.
+
+Wire the video outputs as follows:
+
+| Reference node output | MiniMax H3 input |
+| --- | --- |
+| `video_1` | `ref_video_0` |
+| `video_2` | `ref_video_1` |
+| `video_3` | `ref_video_2` |
+| `video_audio_1` | `ref_video_audio_0` |
+| `video_audio_2` | `ref_video_audio_1` |
+| `video_audio_3` | `ref_video_audio_2` |
 
 Example generated prompt:
 
@@ -143,18 +177,41 @@ displayed or returned by the character browser API.
 
 The manager supports:
 
-- Single and bulk uploads
+- Single and bulk image, audio, and video uploads
 - Matching image/audio/video pairing by filename stem
+- Bulk-import image thumbnails, first-frame video previews, and playable audio previews
+- Existing-category dropdowns, custom category creation, and per-media descriptions
+- Media-aware reference-type choices that hide unsupported types and media fields
+- A prominent **Add Audio Track** / **Replace Audio Track** control for bulk character and object setup
+- Automatic Video type selection for video-only bulk drafts
+- Automatic normalization of readable tags such as `Simpsons chalkboard` to `Simpsons_chalkboard`
+- Persistent single-record, bulk-banner, and per-draft upload errors with backend or proxy response details
+- Safe partial bulk imports: successfully imported drafts are removed so retrying a failed batch does not duplicate them
 - Image and video preview plus audio playback
 - Search and category/media filters
 - Edit, replace, and delete operations
-- Existing-category dropdowns with custom category creation
-- Fixed Character, Location, Object, Music, and Uncategorized reference types
 - Category-first, reference-type-second library and prompt-guide grouping
 - A grouped reference guide that can be copied while writing prompts
 
-Older library records without a reference type are treated as
-`uncategorized`. Their existing categories and tags remain unchanged.
+Reference type controls which media can be attached:
+
+| Reference type | Allowed library media | Bulk-import behavior |
+| --- | --- | --- |
+| Character | Image and optional audio | Image and voice descriptions are shown; an audio track can be attached directly to an image draft. |
+| Location | Image only | Only the image and its description are shown. |
+| Object | Image and optional audio | Image and audio descriptions are shown; an audio track can be attached directly to an image draft. |
+| Music | Audio only | Only the audio file and audio description are shown. |
+| Video | Video only | Selected automatically for a video-only draft; the first frame is previewed. Embedded audio is detected automatically. |
+
+Bulk reference-type choices are filtered by the files already attached. For
+example, an image draft offers Character, Location, and Object; after audio is
+attached it offers only Character and Object. Unsupported empty rows such as
+`Video: None` are hidden.
+
+Older records without a reference type remain `uncategorized` for backward
+compatibility. Uncategorized stays selected while editing such a record but is
+hidden from new reference-type choices. Existing categories, tags, and media
+remain unchanged until the record is deliberately reclassified.
 
 Library data is stored outside the custom-node repository:
 
@@ -256,10 +313,13 @@ into a LATENT lane.
 - One node execution supports up to nine image references.
 - The first three eligible audio references are loaded; paired image/audio records receive priority.
 - One node execution supports up to three reference videos and their three slot-aligned soundtracks. Videos without audio remain valid.
+- The node-level `video_fps` value applies to every referenced video in that execution; frame rate is not stored per library clip.
+- Reference videos are returned as IMAGE frame batches, and their embedded soundtracks are returned separately as AUDIO.
 - Every tag is replaced once in place with its saved description.
 - A prompt with no tags passes through unchanged and loads no media.
-- Missing tags, files, or more than nine referenced images produce a clear node error.
-- Tags may contain letters, numbers, underscores, and hyphens.
+- Missing tags, files, excessive reference counts, and invalid selected media produce actionable errors.
+- Upload failures remain visible in the editor or affected bulk draft instead of appearing only in the browser console.
+- Stored tags contain letters, numbers, underscores, and hyphens; spaces and punctuation entered in the manager are normalized automatically.
 - Library reference tags use `{tag}`; library voice tags use `§tag§`.
 - Built-in character tags use `^Character Name^`; voice tags use `~Character Name~`.
 

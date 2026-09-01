@@ -102,6 +102,14 @@ class LibraryClassificationTests(unittest.TestCase):
                 reference_type="vehicle",
             )
 
+    def test_video_is_a_supported_reference_type(self):
+        record = MODULE.create_record(
+            "camera_move",
+            video_file="camera_move.mp4",
+            reference_type="video",
+        )
+        self.assertEqual(record["reference_type"], "video")
+
 
 if __name__ == "__main__":
     unittest.main()

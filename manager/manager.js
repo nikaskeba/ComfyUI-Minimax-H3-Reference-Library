@@ -3,17 +3,26 @@ const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "ti
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
 const videoExtensions = new Set(["avi", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "webm"]);
 const categoryPriority = ["character", "narrator", "location", "voice", "object", "style", "other"];
-const referenceTypes = ["character", "location", "object", "music", "uncategorized"];
+const referenceTypes = ["character", "location", "object", "music", "video", "uncategorized"];
+const assignableReferenceTypes = referenceTypes.filter((referenceType) => referenceType !== "uncategorized");
+const mediaByReferenceType = {
+    character: ["image", "audio"],
+    location: ["image"],
+    object: ["image", "audio"],
+    music: ["audio"],
+    video: ["video"],
+    uncategorized: ["image", "audio", "video"],
+};
 const state = { records: [], categories: [], drafts: [], selected: new Set() };
 
 const elements = Object.fromEntries([
     "library-count", "category-filter", "type-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
-    "drafts", "draft-actions", "draft-summary", "import-drafts", "refresh", "empty-state",
+    "drafts", "draft-actions", "draft-summary", "import-drafts", "import-error", "refresh", "empty-state",
     "records", "record-dialog", "record-form", "dialog-title", "close-dialog", "cancel-dialog",
     "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
-    "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
-    "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "save-record", "toast",
+    "image-fields", "audio-fields", "video-fields", "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
+    "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "record-error", "save-record", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
 function extension(name) {
@@ -28,6 +37,29 @@ function normalizeTag(value) {
     let tag = (value || "").trim();
     if (tag.startsWith("{") && tag.endsWith("}")) tag = tag.slice(1, -1).trim();
     return tag.replace(/[^A-Za-z0-9_-]+/g, "_").replace(/_+/g, "_").replace(/^_+|_+$/g, "");
+}
+
+function normalizeCategory(value) {
+    return (value || "").trim().toLowerCase()
+        .replace(/[^A-Za-z0-9_-]+/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_+|_+$/g, "");
+}
+
+function allowedMedia(referenceType) {
+    return mediaByReferenceType[referenceType] || mediaByReferenceType.uncategorized;
+}
+
+function presentMedia(source) {
+    return ["image", "audio", "video"].filter((kind) => source?.[kind] || source?.[`has_${kind}`]);
+}
+
+function supportedReferenceTypes(source) {
+    const media = presentMedia(source);
+    if (!media.length) return [...assignableReferenceTypes];
+    return assignableReferenceTypes.filter(
+        (referenceType) => media.every((kind) => allowedMedia(referenceType).includes(kind)),
+    );
 }
 
 function tagFromName(name) {
@@ -47,9 +79,39 @@ function mediaKind(file) {
 
 async function request(url, options = {}) {
     const response = await fetch(url, options);
-    const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
+    const responseText = await response.text();
+    let payload = {};
+    try {
+        payload = responseText ? JSON.parse(responseText) : {};
+    } catch (error) {
+        payload = {};
+    }
+    if (!response.ok) {
+        const plainText = responseText && !/<(?:!doctype|html|body)\b/i.test(responseText)
+            ? responseText.trim().slice(0, 1000)
+            : "";
+        const message = payload.error || payload.message || plainText
+            || `The server rejected the upload (${response.status} ${response.statusText || "Request failed"}).`;
+        const requestError = new Error(message);
+        requestError.status = response.status;
+        throw requestError;
+    }
     return payload;
+}
+
+function setUploadError(element, message = "") {
+    element.textContent = message;
+    element.hidden = !message;
+}
+
+function referenceTypeErrorMessage(error, usesVideo) {
+    const choices = (error.message.split(":").pop() || "").trim();
+    const staleVideoBackend = usesVideo
+        && /Reference type must be one of:/i.test(error.message)
+        && !/\bvideo\b/i.test(choices);
+    return staleVideoBackend
+        ? "The Video reference type is installed but the ComfyUI backend is still running the previous version. Restart ComfyUI, then retry."
+        : error.message;
 }
 
 async function loadRecords() {
@@ -212,6 +274,14 @@ function suggestedCategory(referenceType) {
     return referenceType === "uncategorized" ? "other" : referenceType;
 }
 
+function updateEditorMediaVisibility() {
+    const selected = elements["reference-type"].value;
+    const permitted = selected ? allowedMedia(selected) : [];
+    for (const kind of ["image", "audio", "video"]) {
+        elements[`${kind}-fields`].hidden = !permitted.includes(kind);
+    }
+}
+
 function recordCard(record) {
     const card = document.createElement("article");
     card.className = "record-card";
@@ -318,6 +388,7 @@ function referenceTypeHeading(referenceType) {
         location: "Locations",
         object: "Objects",
         music: "Music",
+        video: "Videos",
         uncategorized: "Uncategorized",
     };
     return plurals[referenceType] || referenceTypeLabel(referenceType);
@@ -341,6 +412,7 @@ function button(text, className, onClick) {
 }
 
 function addDraftFiles(files) {
+    setUploadError(elements["import-error"]);
     const groups = new Map(state.drafts.map((draft) => [draft.key, draft]));
     for (const file of files) {
         const kind = mediaKind(file);
@@ -350,12 +422,17 @@ function addDraftFiles(files) {
             key,
             tag: tagFromName(file.name),
             category: "other",
-            reference_type: "uncategorized",
+            reference_type: "",
+            image_description: "",
+            audio_description: "",
+            video_description: "",
             image: null,
             audio: null,
             video: null,
         };
+        if (draft[kind] && draft[kind] !== file) releaseDraftPreview(draft, kind);
         draft[kind] = file;
+        delete draft.error;
         groups.set(key, draft);
     }
     state.drafts = [...groups.values()];
@@ -378,32 +455,46 @@ function renderDrafts() {
         tagLabel.append(tagInput);
         const categoryLabelElement = document.createElement("label");
         categoryLabelElement.textContent = "Category";
-        const categoryInput = document.createElement("input");
-        categoryInput.value = draft.category;
-        categoryInput.setAttribute("list", "category-options");
-        categoryInput.pattern = "[A-Za-z0-9_-]+";
-        categoryInput.addEventListener("input", () => { draft.category = categoryInput.value.trim().toLowerCase().replace(/\s+/g, "_"); });
-        categoryLabelElement.append(categoryInput);
+        categoryLabelElement.append(draftCategorySelect(draft));
         const typeLabel = document.createElement("label");
         typeLabel.textContent = "Reference type";
         const typeSelect = document.createElement("select");
-        typeSelect.append(...referenceTypes.map((referenceType) => {
+        const supportedTypes = supportedReferenceTypes(draft);
+        if (!supportedTypes.includes(draft.reference_type)) draft.reference_type = "";
+        if (!draft.reference_type && supportedTypes.length === 1) {
+            draft.reference_type = supportedTypes[0];
+        }
+        const placeholder = document.createElement("option");
+        placeholder.value = "";
+        placeholder.textContent = "Select reference type...";
+        placeholder.disabled = true;
+        typeSelect.append(placeholder, ...supportedTypes.map((referenceType) => {
             const option = document.createElement("option");
             option.value = referenceType;
             option.textContent = referenceTypeLabel(referenceType);
             return option;
         }));
-        typeSelect.value = draft.reference_type || "uncategorized";
-        typeSelect.addEventListener("change", () => { draft.reference_type = typeSelect.value; });
+        typeSelect.value = draft.reference_type;
+        typeSelect.addEventListener("change", () => {
+            draft.reference_type = typeSelect.value;
+            renderDrafts();
+        });
         typeLabel.append(typeSelect);
         row.append(
+            draftPreview(draft),
             tagLabel,
             categoryLabelElement,
             typeLabel,
-            draftMedia("Image", draft.image),
-            draftMedia("Audio", draft.audio),
-            draftMedia("Video", draft.video),
+            draftDescriptions(draft),
+            draftMediaSummary(draft),
         );
+        if (draft.error) {
+            const error = document.createElement("div");
+            error.className = "draft-error";
+            error.setAttribute("role", "alert");
+            error.textContent = `Upload failed: ${draft.error}`;
+            row.append(error);
+        }
         row.dataset.index = index;
         return row;
     }));
@@ -414,58 +505,289 @@ function renderDrafts() {
     elements["draft-summary"].textContent = `${state.drafts.length} reference draft${state.drafts.length === 1 ? "" : "s"}`;
 }
 
-function draftMedia(label, file) {
+function draftDescriptions(draft) {
+    const group = document.createElement("div");
+    group.className = "draft-description-group";
+    const labels = {
+        image: "Image description",
+        audio: draft.reference_type === "character" ? "Voice description" : "Audio description",
+        video: "Video description",
+    };
+    const placeholders = {
+        image: "Describe the visual reference",
+        audio: draft.reference_type === "character" ? "Describe the character's voice" : "Describe the sound",
+        video: "Describe the video reference",
+    };
+    const descriptionKinds = draft.reference_type
+        ? allowedMedia(draft.reference_type)
+        : presentMedia(draft);
+    for (const kind of descriptionKinds) {
+        const label = document.createElement("label");
+        label.className = "draft-description";
+        label.textContent = labels[kind];
+        const description = document.createElement("textarea");
+        description.rows = 2;
+        description.placeholder = placeholders[kind];
+        description.value = draft[`${kind}_description`] || "";
+        description.addEventListener("input", () => {
+            draft[`${kind}_description`] = description.value;
+        });
+        label.append(description);
+        group.append(label);
+    }
+    return group;
+}
+
+function draftCategorySelect(draft) {
+    const select = document.createElement("select");
+    const categories = libraryCategories(draft.category);
+    select.append(...categories.map((category) => {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = categoryLabel(category);
+        return option;
+    }));
+    const create = document.createElement("option");
+    create.value = "__new__";
+    create.textContent = "Create new category...";
+    select.append(create);
+    select.value = categories.includes(draft.category) ? draft.category : "other";
+    select.addEventListener("change", () => {
+        if (select.value !== "__new__") {
+            draft.category = select.value;
+            return;
+        }
+        const entered = window.prompt("New category name:", "");
+        const category = normalizeCategory(entered);
+        if (!category) {
+            select.value = draft.category;
+            return;
+        }
+        draft.category = category;
+        if (!state.categories.includes(category)) state.categories.push(category);
+        renderDrafts();
+    });
+    return select;
+}
+
+function draftObjectUrl(draft, kind, file) {
+    draft.previewUrls ||= {};
+    const current = draft.previewUrls[kind];
+    if (current?.file === file) return current.url;
+    if (current?.url) URL.revokeObjectURL(current.url);
+    const url = URL.createObjectURL(file);
+    draft.previewUrls[kind] = { file, url };
+    return url;
+}
+
+function releaseDraftPreview(draft, kind = null) {
+    if (draft.previewPlayer) {
+        draft.previewPlayer.pause();
+        draft.previewPlayer = null;
+    }
+    const kinds = kind ? [kind] : Object.keys(draft.previewUrls || {});
+    for (const mediaKindName of kinds) {
+        const current = draft.previewUrls?.[mediaKindName];
+        if (current?.url) URL.revokeObjectURL(current.url);
+        if (draft.previewUrls) delete draft.previewUrls[mediaKindName];
+    }
+}
+
+function draftPreview(draft) {
+    if (draft.previewPlayer) {
+        draft.previewPlayer.pause();
+        draft.previewPlayer = null;
+    }
+    const preview = document.createElement("div");
+    preview.className = "draft-preview";
+    const permitted = allowedMedia(draft.reference_type);
+    const previewKind = permitted.find((kind) => draft[kind])
+        || ["video", "image", "audio"].find((kind) => draft[kind]);
+    if (previewKind === "video") {
+        const video = document.createElement("video");
+        video.src = draftObjectUrl(draft, "video", draft.video);
+        video.muted = true;
+        video.playsInline = true;
+        video.preload = "metadata";
+        video.addEventListener("loadedmetadata", () => {
+            if (Number.isFinite(video.duration) && video.duration > 0) {
+                video.currentTime = Math.min(0.05, video.duration / 2);
+            }
+        }, { once: true });
+        preview.title = `Video: ${draft.video.name}`;
+        preview.append(video);
+    } else if (previewKind === "image") {
+        const image = document.createElement("img");
+        image.src = draftObjectUrl(draft, "image", draft.image);
+        image.alt = draft.tag || draft.image.name;
+        preview.title = `Image: ${draft.image.name}`;
+        preview.append(image);
+    } else if (previewKind === "audio") {
+        const wrapper = document.createElement("div");
+        wrapper.className = "draft-audio-preview";
+        const icon = document.createElement("span");
+        icon.textContent = "♫";
+        const play = document.createElement("button");
+        play.type = "button";
+        play.className = "secondary";
+        play.textContent = "Play audio";
+        const audio = document.createElement("audio");
+        audio.src = draftObjectUrl(draft, "audio", draft.audio);
+        audio.preload = "metadata";
+        draft.previewPlayer = audio;
+        play.addEventListener("click", async () => {
+            if (audio.paused) {
+                try {
+                    await audio.play();
+                    play.textContent = "Pause";
+                } catch (error) {
+                    toast(`Could not preview ${draft.audio.name}.`, true);
+                }
+            } else {
+                audio.pause();
+                play.textContent = "Play audio";
+            }
+        });
+        audio.addEventListener("ended", () => { play.textContent = "Play audio"; });
+        wrapper.append(icon, play, audio);
+        preview.title = `Audio: ${draft.audio.name}`;
+        preview.append(wrapper);
+    }
+    return preview;
+}
+
+function draftMediaSummary(draft) {
     const element = document.createElement("div");
     element.className = "draft-media";
-    const strong = document.createElement("strong");
-    strong.textContent = `${label}: `;
-    element.append(strong, document.createTextNode(file ? file.name : "None"));
+    const permitted = draft.reference_type
+        ? allowedMedia(draft.reference_type)
+        : ["image", "audio", "video"];
+    for (const [kind, label, file] of [["image", "Image", draft.image], ["audio", "Audio", draft.audio], ["video", "Video", draft.video]]) {
+        if (draft.reference_type && !permitted.includes(kind)) continue;
+        const line = document.createElement("div");
+        if (file && !permitted.includes(kind)) line.className = "draft-media-ignored";
+        const strong = document.createElement("strong");
+        strong.textContent = `${label}: `;
+        const status = file
+            ? `${file.name}${permitted.includes(kind) ? "" : " (not imported for this type)"}`
+            : "None";
+        line.append(strong, document.createTextNode(status));
+        if (kind === "audio" && draft.image
+            && (!draft.reference_type || ["character", "object"].includes(draft.reference_type))) {
+            line.append(draftAudioUpload(draft));
+        }
+        element.append(line);
+    }
     return element;
 }
 
+function draftAudioUpload(draft) {
+    const label = document.createElement("label");
+    label.className = "draft-upload secondary";
+    label.textContent = draft.audio ? "↻ Replace Audio Track" : "+ Add Audio Track";
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "audio/*,.m4a,.opus,.flac";
+    input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (!file) return;
+        releaseDraftPreview(draft, "audio");
+        draft.audio = file;
+        if (!supportedReferenceTypes(draft).includes(draft.reference_type)) {
+            draft.reference_type = "";
+        }
+        renderDrafts();
+    });
+    label.append(input);
+    return label;
+}
+
 async function importDrafts() {
-    state.drafts.forEach((draft) => { draft.tag = normalizeTag(draft.tag); });
+    setUploadError(elements["import-error"]);
+    state.drafts.forEach((draft) => {
+        draft.tag = normalizeTag(draft.tag);
+        delete draft.error;
+    });
+    const rejectImport = (message, draft = null) => {
+        if (draft) draft.error = message;
+        setUploadError(elements["import-error"], message);
+        renderDrafts();
+        toast(message, true);
+    };
     const tags = state.drafts.map((draft) => draft.tag);
-    if (tags.some((tag) => !/^[A-Za-z0-9_-]+$/.test(tag))) return toast("Every draft needs a valid tag.", true);
-    if (state.drafts.some((draft) => !/^[A-Za-z0-9_-]+$/.test(draft.category))) return toast("Every draft needs a valid category.", true);
-    if (new Set(tags).size !== tags.length) return toast("Draft tags must be unique.", true);
+    if (tags.some((tag) => !/^[A-Za-z0-9_-]+$/.test(tag))) return rejectImport("Every draft needs a valid tag.");
+    if (state.drafts.some((draft) => !/^[A-Za-z0-9_-]+$/.test(draft.category))) return rejectImport("Every draft needs a valid category.");
+    const missingType = state.drafts.find((draft) => !assignableReferenceTypes.includes(draft.reference_type));
+    if (missingType) return rejectImport(`Choose a reference type for {${missingType.tag}}.`, missingType);
+    const missingMedia = state.drafts.find(
+        (draft) => !allowedMedia(draft.reference_type).some((kind) => draft[kind]),
+    );
+    if (missingMedia) {
+        return rejectImport(
+            `{${missingMedia.tag}} needs media allowed for ${referenceTypeLabel(missingMedia.reference_type)}.`,
+            missingMedia,
+        );
+    }
+    if (new Set(tags).size !== tags.length) return rejectImport("Draft tags must be unique.");
     elements["import-drafts"].disabled = true;
+    const importedDrafts = [];
     try {
         for (const draft of state.drafts) {
             const data = new FormData();
             data.append("tag", draft.tag);
             data.append("category", draft.category);
-            data.append("reference_type", draft.reference_type || "uncategorized");
-            if (draft.image) data.append("image", draft.image);
-            if (draft.audio) data.append("audio", draft.audio);
-            if (draft.video) data.append("video", draft.video);
-            await request(apiRoot, { method: "POST", body: data });
+            data.append("reference_type", draft.reference_type);
+            const permitted = allowedMedia(draft.reference_type);
+            if (permitted.includes("image") && draft.image) {
+                data.append("image_description", (draft.image_description || "").trim());
+                data.append("image", draft.image);
+            }
+            if (permitted.includes("audio") && draft.audio) {
+                data.append("audio_description", (draft.audio_description || "").trim());
+                data.append("audio", draft.audio);
+            }
+            if (permitted.includes("video") && draft.video) {
+                data.append("video_description", (draft.video_description || "").trim());
+                data.append("video", draft.video);
+            }
+            try {
+                await request(apiRoot, { method: "POST", body: data });
+                importedDrafts.push(draft);
+            } catch (error) {
+                const message = referenceTypeErrorMessage(error, draft.reference_type === "video");
+                for (const imported of importedDrafts) releaseDraftPreview(imported);
+                state.drafts = state.drafts.filter((item) => !importedDrafts.includes(item));
+                rejectImport(`Could not upload {${draft.tag}}: ${message}`, draft);
+                await loadRecords();
+                return;
+            }
         }
         const count = state.drafts.length;
         clearDrafts();
         await loadRecords();
         toast(`Imported ${count} reference${count === 1 ? "" : "s"}.`);
-    } catch (error) {
-        toast(error.message, true);
-        await loadRecords();
     } finally {
         elements["import-drafts"].disabled = false;
     }
 }
 
 function clearDrafts() {
+    state.drafts.forEach((draft) => releaseDraftPreview(draft));
     state.drafts = [];
     elements["bulk-files"].value = "";
+    setUploadError(elements["import-error"]);
     renderDrafts();
 }
 
 function openEditor(record = null) {
     elements["record-form"].reset();
+    setUploadError(elements["record-error"]);
     elements["record-id"].value = record?.id || "";
     elements["dialog-title"].textContent = record ? "Edit reference" : "Add reference";
     elements.tag.value = record?.tag || "";
     renderCategoryChoices(record?.category || "other");
-    elements["reference-type"].value = normalizedReferenceType(record);
+    renderEditorReferenceTypes(record);
+    updateEditorMediaVisibility();
     elements["image-description"].value = record?.image_description || "";
     elements["audio-description"].value = record?.audio_description || "";
     elements["video-description"].value = record?.video_description || "";
@@ -475,28 +797,71 @@ function openEditor(record = null) {
     elements["record-dialog"].showModal();
 }
 
+function renderEditorReferenceTypes(record = null) {
+    const selected = record ? normalizedReferenceType(record) : "";
+    const supported = record ? supportedReferenceTypes(record) : [...assignableReferenceTypes];
+    if (record && selected !== "uncategorized" && !supported.includes(selected)) {
+        supported.unshift(selected);
+    }
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select reference type...";
+    placeholder.disabled = true;
+    const options = supported.map((referenceType) => {
+        const option = document.createElement("option");
+        option.value = referenceType;
+        option.textContent = referenceTypeLabel(referenceType);
+        return option;
+    });
+    if (selected === "uncategorized") {
+        const legacy = document.createElement("option");
+        legacy.value = "uncategorized";
+        legacy.textContent = "Uncategorized (legacy)";
+        legacy.hidden = true;
+        options.push(legacy);
+    }
+    elements["reference-type"].replaceChildren(placeholder, ...options);
+    elements["reference-type"].value = selected;
+}
+
 async function saveRecord(event) {
     event.preventDefault();
+    setUploadError(elements["record-error"]);
+    const rejectRecord = (message) => {
+        setUploadError(elements["record-error"], message);
+        toast(message, true);
+    };
     const tag = normalizeTag(elements.tag.value);
-    if (!tag) return toast("Enter a tag containing at least one letter or number.", true);
+    if (!tag) return rejectRecord("Enter a tag containing at least one letter or number.");
     elements.tag.value = tag;
     const category = selectedCategory();
-    if (!/^[A-Za-z0-9_-]+$/.test(category)) return toast("Enter a valid category.", true);
+    if (!/^[A-Za-z0-9_-]+$/.test(category)) return rejectRecord("Enter a valid category.");
     const recordId = elements["record-id"].value;
     const selectedReferenceType = elements["reference-type"].value;
+    const permitted = allowedMedia(selectedReferenceType);
+    const hasExistingOrNewMedia = permitted.some((kind) => {
+        const file = elements[`${kind}-file`].files[0];
+        const existing = recordId
+            && !elements[`remove-${kind}-row`].hidden
+            && !elements[`remove-${kind}`].checked;
+        return Boolean(file || existing);
+    });
+    if (!hasExistingOrNewMedia) {
+        return rejectRecord(`${referenceTypeLabel(selectedReferenceType)} needs an allowed media file.`);
+    }
     const data = new FormData();
     data.append("tag", tag);
     data.append("category", category);
     data.append("reference_type", selectedReferenceType);
-    data.append("image_description", elements["image-description"].value.trim());
-    data.append("audio_description", elements["audio-description"].value.trim());
-    data.append("video_description", elements["video-description"].value.trim());
-    if (elements["image-file"].files[0]) data.append("image", elements["image-file"].files[0]);
-    if (elements["audio-file"].files[0]) data.append("audio", elements["audio-file"].files[0]);
-    if (elements["video-file"].files[0]) data.append("video", elements["video-file"].files[0]);
-    data.append("remove_image", String(elements["remove-image"].checked));
-    data.append("remove_audio", String(elements["remove-audio"].checked));
-    data.append("remove_video", String(elements["remove-video"].checked));
+    data.append("image_description", permitted.includes("image") ? elements["image-description"].value.trim() : "");
+    data.append("audio_description", permitted.includes("audio") ? elements["audio-description"].value.trim() : "");
+    data.append("video_description", permitted.includes("video") ? elements["video-description"].value.trim() : "");
+    for (const kind of ["image", "audio", "video"]) {
+        const allowed = permitted.includes(kind);
+        const file = elements[`${kind}-file`].files[0];
+        if (allowed && file) data.append(kind, file);
+        data.append(`remove_${kind}`, String(!allowed || elements[`remove-${kind}`].checked));
+    }
     elements["save-record"].disabled = true;
     try {
         const payload = await request(recordId ? `${apiRoot}/${recordId}` : apiRoot, {
@@ -515,7 +880,7 @@ async function saveRecord(event) {
         const action = recordId ? "updated" : "added";
         toast(`Reference ${action} as ${referenceTypeLabel(savedReferenceType)}.`);
     } catch (error) {
-        toast(error.message, true);
+        rejectRecord(referenceTypeErrorMessage(error, selectedReferenceType === "video"));
     } finally {
         elements["save-record"].disabled = false;
     }
@@ -678,8 +1043,10 @@ elements.category.addEventListener("change", () => {
     if (creating) elements["new-category"].focus();
 });
 elements["reference-type"].addEventListener("change", () => {
-    if (elements["record-id"].value) return;
-    renderCategoryChoices(suggestedCategory(elements["reference-type"].value));
+    updateEditorMediaVisibility();
+    if (!elements["record-id"].value) {
+        renderCategoryChoices(suggestedCategory(elements["reference-type"].value));
+    }
 });
 elements["close-dialog"].addEventListener("click", () => elements["record-dialog"].close());
 elements["cancel-dialog"].addEventListener("click", () => elements["record-dialog"].close());

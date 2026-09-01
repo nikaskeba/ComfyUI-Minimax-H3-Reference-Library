@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>H3 Reference Library</title>
-    <link rel="stylesheet" href="/h3-references/static/manager.css?v=4">
+    <link rel="stylesheet" href="/h3-references/static/manager.css?v=12">
 </head>
 <body>
     <header class="topbar">
@@ -28,6 +28,7 @@
                     <option value="location">Location</option>
                     <option value="object">Object</option>
                     <option value="music">Music</option>
+                    <option value="video">Video</option>
                     <option value="uncategorized">Uncategorized</option>
                 </select>
             </label>
@@ -64,6 +65,7 @@
                 <strong>Drop images, audio, and video here</strong>
                 <span>or choose multiple files</span>
             </label>
+            <div id="import-error" class="upload-error" role="alert" hidden></div>
             <div id="drafts" class="drafts" hidden></div>
             <div id="draft-actions" class="draft-actions" hidden>
                 <span id="draft-summary"></span>
@@ -112,11 +114,13 @@
             <label>Tag<input id="tag" name="tag" required placeholder="Simpsons chalkboard"></label>
             <label>Reference type
                 <select id="reference-type" name="reference_type" required>
+                    <option value="" disabled selected>Select reference type...</option>
                     <option value="character">Character</option>
                     <option value="location">Location</option>
                     <option value="object">Object</option>
                     <option value="music">Music</option>
-                    <option value="uncategorized" selected>Uncategorized</option>
+                    <option value="video">Video</option>
+                    <option value="uncategorized" hidden>Uncategorized (legacy)</option>
                 </select>
             </label>
             <label>Library category / collection
@@ -127,25 +131,26 @@
             </label>
             <datalist id="category-options"></datalist>
             <div class="form-grid">
-                <fieldset>
+                <fieldset id="image-fields">
                     <legend>Image</legend>
                     <label>Image file<input id="image-file" type="file" accept="image/*"></label>
                     <label>Description<textarea id="image-description" rows="3" placeholder="A news anchor wearing a blue blazer"></textarea></label>
                     <label id="remove-image-row" class="check-row" hidden><input id="remove-image" type="checkbox"> Remove current image</label>
                 </fieldset>
-                <fieldset>
+                <fieldset id="audio-fields">
                     <legend>Audio</legend>
                     <label>Audio file<input id="audio-file" type="file" accept="audio/*,.m4a,.opus,.flac"></label>
                     <label>Voice description<textarea id="audio-description" rows="3" placeholder="An American accent with a calm delivery"></textarea></label>
                     <label id="remove-audio-row" class="check-row" hidden><input id="remove-audio" type="checkbox"> Remove current audio</label>
                 </fieldset>
-                <fieldset>
+                <fieldset id="video-fields">
                     <legend>Video</legend>
                     <label>Video file<input id="video-file" type="file" accept="video/*,.mkv,.mov,.webm"></label>
                     <label>Description<textarea id="video-description" rows="3" placeholder="A short reference clip showing the desired motion"></textarea></label>
                     <label id="remove-video-row" class="check-row" hidden><input id="remove-video" type="checkbox"> Remove current video</label>
                 </fieldset>
             </div>
+            <div id="record-error" class="upload-error" role="alert" hidden></div>
             <div class="dialog-actions">
                 <button id="cancel-dialog" class="secondary" type="button">Cancel</button>
                 <button id="save-record" class="primary" type="submit">Save reference</button>
@@ -154,6 +159,6 @@
     </dialog>
 
     <div id="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="/h3-references/static/manager.js?v=4"></script>
+    <script type="module" src="/h3-references/static/manager.js?v=12"></script>
 </body>
 </html>
