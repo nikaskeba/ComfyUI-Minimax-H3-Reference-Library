@@ -3,21 +3,21 @@
 Consolidated tagged references, workflow utilities, batching tools, and MiniMax
 H3 Motion Context nodes for ComfyUI.
 
-H3 Reference Library replaces a large set of manually connected reference widgets with a local media library. Add images, voice clips, descriptions, and categories once, then use semantic tags such as `{news_anchor}` or `{newsroom}` directly in a prompt.
+H3 Reference Library replaces a large set of manually connected reference widgets with a local media library. Add images, videos, voice clips, descriptions, and categories once, then use semantic tags such as `{news_anchor}` or `{newsroom}` directly in a prompt.
 
 ## Features
 
 - Local manager at `/h3-references` with a toolbar launcher and an **Open Reference Library** button on the node
 - Separate known-character catalog at `/h3-built-in-references`
-- Image, audio, and paired image-and-audio records
+- Image, audio, video, and mixed-media records; embedded video soundtracks are detected automatically
 - Drag-and-drop bulk import with automatic pairing by filename stem
 - Reusable tags, descriptions, searchable categories, previews, and audio playback
 - Category and reference-type organization for characters, locations, objects, and music
 - Category-first, reference-type-second selection guide for prompt building
 - Bundled MiniMax H3 character catalog sourced from an editable Markdown file
 - Searchable built-in character browser with individual and multi-tag copy
-- Automatic MiniMax H3 image and audio reference ordering
-- Nine image outputs and three audio outputs, matching the H3 node limits
+- Automatic MiniMax H3 image, video, video-audio, and standalone-audio reference ordering
+- Nine image outputs, three standalone audio outputs, three video frame outputs, and three matching video-audio outputs
 - Direct in-place replacement of tags with their saved descriptions
 - Local-only storage with no downloads, telemetry, or external requests
 - Prompt and image batching, indexed selection, and video clip combining utilities
@@ -39,21 +39,24 @@ Restart ComfyUI after installation. No additional Python packages are required b
 
 1. Add **H3 Tagged Reference Prompt** from `Skeba AI Nodes - Reference`.
 2. Click **Open Reference Library** on the node or use the library button in the ComfyUI toolbar.
-3. Add a tag such as `creature`, choose a category, and attach an image, audio clip, or both.
+3. Add a tag such as `creature`, choose a category, and attach an image, audio clip, video, or a combination.
 4. Enter the tag in braces in the node prompt:
 
 ```text
 [Shot 1] {creature} stands at the bottom of {creepy_stairs}.
 ```
 
+Tags entered with spaces or punctuation are normalized automatically. For
+example, `Simpsons chalkboard` is saved as `Simpsons_chalkboard`.
+
 5. Connect `prompt` to the MiniMax H3 prompt input.
-6. Connect `image_1` through `image_9` and `audio_1` through `audio_3` to the corresponding MiniMax H3 reference inputs.
+6. Connect `image_1` through `image_9` and `audio_1` through `audio_3` to the corresponding MiniMax H3 reference inputs. Connect `video_1` through `video_3` to `ref_video_0` through `ref_video_2`, and connect each matching `video_audio_N` to the same-numbered `ref_video_audio` input. Silent videos leave their video-audio output empty.
 
 ![H3 Tagged Reference Prompt connected to MiniMax H3 Reference to Video](media/reference-connection.png)
 
 The node replaces each tag in place with its assigned media slot and saved
-description. Image records use `<Picture N>` and audio-only records use
-`<Audio N>`. Referenced media is still loaded automatically. Explicit voice tags
+description. Image records use `<Picture N>`, video records use `<Video N>`, and audio-only records use
+`<Audio N>`. Video files are decoded to IMAGE frame batches at H3's 24 fps reference rate, while embedded soundtracks are returned independently as AUDIO. Referenced media is still loaded automatically. Explicit voice tags
 receive audio slots first; remaining paired image-and-audio records are
 prioritized afterward. Paired records receive picture slots before image-only
 records, and every generated marker uses the resulting output socket number.
@@ -141,8 +144,8 @@ displayed or returned by the character browser API.
 The manager supports:
 
 - Single and bulk uploads
-- Matching image/audio pairing by filename stem
-- Image preview and audio playback
+- Matching image/audio/video pairing by filename stem
+- Image and video preview plus audio playback
 - Search and category/media filters
 - Edit, replace, and delete operations
 - Existing-category dropdowns with custom category creation
@@ -160,6 +163,7 @@ ComfyUI/user/h3_reference_library/
   library.json
   images/
   audio/
+  videos/
 ```
 
 Updating or reinstalling the custom node does not remove this library.
@@ -251,6 +255,7 @@ into a LATENT lane.
 
 - One node execution supports up to nine image references.
 - The first three eligible audio references are loaded; paired image/audio records receive priority.
+- One node execution supports up to three reference videos and their three slot-aligned soundtracks. Videos without audio remain valid.
 - Every tag is replaced once in place with its saved description.
 - A prompt with no tags passes through unchanged and loads no media.
 - Missing tags, files, or more than nine referenced images produce a clear node error.

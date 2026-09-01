@@ -1,9 +1,10 @@
 const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
+const videoExtensions = new Set(["avi", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "webm"]);
 const categoryPriority = ["character", "narrator", "location", "voice", "object", "style", "other"];
 const referenceTypes = ["character", "location", "object", "music", "uncategorized"];
-const state = { records: [], drafts: [], selected: new Set() };
+const state = { records: [], categories: [], drafts: [], selected: new Set() };
 
 const elements = Object.fromEntries([
     "library-count", "category-filter", "type-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
@@ -11,8 +12,8 @@ const elements = Object.fromEntries([
     "records", "record-dialog", "record-form", "dialog-title", "close-dialog", "cancel-dialog",
     "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
-    "image-file", "image-description", "audio-file", "audio-description",
-    "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "save-record", "toast",
+    "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
+    "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "save-record", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
 function extension(name) {
@@ -23,15 +24,24 @@ function stem(name) {
     return name.replace(/\.[^.]+$/, "");
 }
 
+function normalizeTag(value) {
+    let tag = (value || "").trim();
+    if (tag.startsWith("{") && tag.endsWith("}")) tag = tag.slice(1, -1).trim();
+    return tag.replace(/[^A-Za-z0-9_-]+/g, "_").replace(/_+/g, "_").replace(/^_+|_+$/g, "");
+}
+
 function tagFromName(name) {
-    const tag = stem(name).trim().replace(/\s+/g, "_").replace(/[^A-Za-z0-9_-]/g, "_").replace(/_+/g, "_");
-    return tag || "reference";
+    return normalizeTag(stem(name)) || "reference";
 }
 
 function mediaKind(file) {
     const ext = extension(file.name);
-    if (file.type.startsWith("image/") || imageExtensions.has(ext)) return "image";
-    if (file.type.startsWith("audio/") || audioExtensions.has(ext)) return "audio";
+    if (file.type.startsWith("image/")) return "image";
+    if (file.type.startsWith("video/")) return "video";
+    if (file.type.startsWith("audio/")) return "audio";
+    if (imageExtensions.has(ext)) return "image";
+    if (videoExtensions.has(ext)) return "video";
+    if (audioExtensions.has(ext)) return "audio";
     return null;
 }
 
@@ -46,6 +56,9 @@ async function loadRecords() {
     try {
         const payload = await request(apiRoot);
         state.records = payload.records;
+        state.categories = Array.isArray(payload.categories)
+            ? payload.categories
+            : state.records.map((record) => record.category || "other");
         const recordIds = new Set(state.records.map((record) => record.id));
         state.selected = new Set([...state.selected].filter((recordId) => recordIds.has(recordId)));
         renderCategoryFilter();
@@ -65,7 +78,7 @@ function renderRecords() {
     const records = state.records.filter((record) => (!category || record.category === category)
         && (!referenceType || normalizedReferenceType(record) === referenceType)
         && matchesMediaFilter(record, media)
-        && [record.tag, record.category, normalizedReferenceType(record), record.image_description, record.audio_description]
+        && [record.tag, record.category, normalizedReferenceType(record), record.image_description, record.audio_description, record.video_description]
             .some((value) => (value || "").toLowerCase().includes(query)));
     elements["library-count"].textContent = `${state.records.length} managed reference${state.records.length === 1 ? "" : "s"}`;
     elements.records.replaceChildren(...groupedRecordCards(records));
@@ -74,8 +87,10 @@ function renderRecords() {
 
 function matchesMediaFilter(record, media) {
     if (media === "paired") return record.has_image && record.has_audio;
-    if (media === "image") return record.has_image && !record.has_audio;
-    if (media === "audio") return record.has_audio && !record.has_image;
+    if (media === "image") return record.has_image && !record.has_audio && !record.has_video;
+    if (media === "audio") return record.has_audio && !record.has_image && !record.has_video;
+    if (media === "video_audio") return record.has_video && record.has_video_audio;
+    if (media === "video") return record.has_video && !record.has_video_audio;
     return true;
 }
 
@@ -156,6 +171,8 @@ function renderCategoryFilter() {
 
 function libraryCategories(extra = "") {
     return [...new Set([
+        ...categoryPriority,
+        ...state.categories,
         ...state.records.map((record) => record.category || "other"),
         extra,
     ].filter(Boolean))].sort(compareCategories);
@@ -200,7 +217,13 @@ function recordCard(record) {
     card.className = "record-card";
     const preview = document.createElement("div");
     preview.className = "record-preview";
-    if (record.has_image) {
+    if (record.has_video) {
+        const video = document.createElement("video");
+        video.src = `${record.video_url}?v=${encodeURIComponent(record.updated_at || "")}`;
+        video.controls = true;
+        video.preload = "metadata";
+        preview.append(video);
+    } else if (record.has_image) {
         const image = document.createElement("img");
         image.src = `${record.image_url}?v=${encodeURIComponent(record.updated_at || "")}`;
         image.alt = record.image_description || record.tag;
@@ -228,13 +251,15 @@ function recordCard(record) {
     badges.append(badge(referenceTypeLabel(normalizedReferenceType(record)), "reference-type"));
     if (record.has_image) badges.append(badge("Image", ""));
     if (record.has_audio) badges.append(badge("Audio", "audio"));
+    if (record.has_video) badges.append(badge("Video", "video"));
+    if (record.has_video_audio) badges.append(badge("Video audio", "audio"));
     title.append(code);
-    if (record.has_audio || record.audio_description) title.append(voiceCode);
+    if (record.has_audio || record.has_video_audio || record.audio_description) title.append(voiceCode);
     title.append(badges);
 
     const description = document.createElement("div");
     description.className = "description";
-    description.textContent = [record.image_description, record.audio_description].filter(Boolean).join(" / ") || "No description";
+    description.textContent = [record.image_description, record.audio_description, record.video_description].filter(Boolean).join(" / ") || "No description";
     body.append(title, description);
     if (record.has_audio) {
         const audio = document.createElement("audio");
@@ -252,7 +277,7 @@ function recordCard(record) {
     const edit = button("Edit", "secondary", () => openEditor(record));
     const remove = button("Delete", "danger", () => removeRecord(record));
     actions.append(select);
-    if (record.has_audio || record.audio_description) actions.append(copyVoice);
+    if (record.has_audio || record.has_video_audio || record.audio_description) actions.append(copyVoice);
     actions.append(edit, remove);
     body.append(actions);
     card.append(preview, body);
@@ -328,6 +353,7 @@ function addDraftFiles(files) {
             reference_type: "uncategorized",
             image: null,
             audio: null,
+            video: null,
         };
         draft[kind] = file;
         groups.set(key, draft);
@@ -344,8 +370,11 @@ function renderDrafts() {
         tagLabel.textContent = "Tag";
         const tagInput = document.createElement("input");
         tagInput.value = draft.tag;
-        tagInput.pattern = "[A-Za-z0-9_-]+";
         tagInput.addEventListener("input", () => { draft.tag = tagInput.value.trim(); });
+        tagInput.addEventListener("blur", () => {
+            draft.tag = normalizeTag(tagInput.value);
+            tagInput.value = draft.tag;
+        });
         tagLabel.append(tagInput);
         const categoryLabelElement = document.createElement("label");
         categoryLabelElement.textContent = "Category";
@@ -367,7 +396,14 @@ function renderDrafts() {
         typeSelect.value = draft.reference_type || "uncategorized";
         typeSelect.addEventListener("change", () => { draft.reference_type = typeSelect.value; });
         typeLabel.append(typeSelect);
-        row.append(tagLabel, categoryLabelElement, typeLabel, draftMedia("Image", draft.image), draftMedia("Audio", draft.audio));
+        row.append(
+            tagLabel,
+            categoryLabelElement,
+            typeLabel,
+            draftMedia("Image", draft.image),
+            draftMedia("Audio", draft.audio),
+            draftMedia("Video", draft.video),
+        );
         row.dataset.index = index;
         return row;
     }));
@@ -388,6 +424,7 @@ function draftMedia(label, file) {
 }
 
 async function importDrafts() {
+    state.drafts.forEach((draft) => { draft.tag = normalizeTag(draft.tag); });
     const tags = state.drafts.map((draft) => draft.tag);
     if (tags.some((tag) => !/^[A-Za-z0-9_-]+$/.test(tag))) return toast("Every draft needs a valid tag.", true);
     if (state.drafts.some((draft) => !/^[A-Za-z0-9_-]+$/.test(draft.category))) return toast("Every draft needs a valid category.", true);
@@ -401,6 +438,7 @@ async function importDrafts() {
             data.append("reference_type", draft.reference_type || "uncategorized");
             if (draft.image) data.append("image", draft.image);
             if (draft.audio) data.append("audio", draft.audio);
+            if (draft.video) data.append("video", draft.video);
             await request(apiRoot, { method: "POST", body: data });
         }
         const count = state.drafts.length;
@@ -430,27 +468,35 @@ function openEditor(record = null) {
     elements["reference-type"].value = normalizedReferenceType(record);
     elements["image-description"].value = record?.image_description || "";
     elements["audio-description"].value = record?.audio_description || "";
+    elements["video-description"].value = record?.video_description || "";
     elements["remove-image-row"].hidden = !record?.has_image;
     elements["remove-audio-row"].hidden = !record?.has_audio;
+    elements["remove-video-row"].hidden = !record?.has_video;
     elements["record-dialog"].showModal();
 }
 
 async function saveRecord(event) {
     event.preventDefault();
+    const tag = normalizeTag(elements.tag.value);
+    if (!tag) return toast("Enter a tag containing at least one letter or number.", true);
+    elements.tag.value = tag;
     const category = selectedCategory();
     if (!/^[A-Za-z0-9_-]+$/.test(category)) return toast("Enter a valid category.", true);
     const recordId = elements["record-id"].value;
     const selectedReferenceType = elements["reference-type"].value;
     const data = new FormData();
-    data.append("tag", elements.tag.value.trim());
+    data.append("tag", tag);
     data.append("category", category);
     data.append("reference_type", selectedReferenceType);
     data.append("image_description", elements["image-description"].value.trim());
     data.append("audio_description", elements["audio-description"].value.trim());
+    data.append("video_description", elements["video-description"].value.trim());
     if (elements["image-file"].files[0]) data.append("image", elements["image-file"].files[0]);
     if (elements["audio-file"].files[0]) data.append("audio", elements["audio-file"].files[0]);
+    if (elements["video-file"].files[0]) data.append("video", elements["video-file"].files[0]);
     data.append("remove_image", String(elements["remove-image"].checked));
     data.append("remove_audio", String(elements["remove-audio"].checked));
+    data.append("remove_video", String(elements["remove-video"].checked));
     elements["save-record"].disabled = true;
     try {
         const payload = await request(recordId ? `${apiRoot}/${recordId}` : apiRoot, {
@@ -544,7 +590,7 @@ function selectionItem(record) {
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     item.append(tag);
-    if (record.has_audio || record.audio_description) {
+    if (record.has_audio || record.has_video_audio || record.audio_description) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
         voiceTag.textContent = `Voice: §${record.tag}§`;
@@ -552,7 +598,8 @@ function selectionItem(record) {
     }
     if (record.image_description) item.append(descriptionLine("Image", record.image_description));
     if (record.audio_description) item.append(descriptionLine("Voice", record.audio_description));
-    if (!record.image_description && !record.audio_description) item.append(descriptionLine("Description", "None"));
+    if (record.video_description) item.append(descriptionLine("Video", record.video_description));
+    if (!record.image_description && !record.audio_description && !record.video_description) item.append(descriptionLine("Description", "None"));
     return item;
 }
 
@@ -570,10 +617,11 @@ function selectionGuideText() {
             lines.push("", referenceTypeHeading(referenceType).toUpperCase());
             for (const record of records) {
                 lines.push(`{${record.tag}}`);
-                if (record.has_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
+                if (record.has_audio || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
                 if (record.image_description) lines.push(`Image: ${record.image_description}`);
                 if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
-                if (!record.image_description && !record.audio_description) lines.push("Description: None");
+                if (record.video_description) lines.push(`Video: ${record.video_description}`);
+                if (!record.image_description && !record.audio_description && !record.video_description) lines.push("Description: None");
                 lines.push("");
             }
         }
@@ -619,6 +667,10 @@ elements["clear-selection"].addEventListener("click", () => {
 });
 elements["copy-selection"].addEventListener("click", copySelectionGuide);
 elements["add-reference"].addEventListener("click", () => openEditor());
+elements.tag.addEventListener("blur", () => {
+    const normalized = normalizeTag(elements.tag.value);
+    if (normalized) elements.tag.value = normalized;
+});
 elements.category.addEventListener("change", () => {
     const creating = elements.category.value === "__new__";
     elements["new-category-row"].hidden = !creating;

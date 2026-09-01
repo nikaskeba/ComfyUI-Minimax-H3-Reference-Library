@@ -16,7 +16,7 @@
         30
       ],
       "flags": {},
-      "order": 46,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
@@ -146,7 +146,7 @@
         150
       ],
       "flags": {},
-      "order": 96,
+      "order": 95,
       "mode": 0,
       "inputs": [
         {
@@ -245,7 +245,7 @@
         106
       ],
       "flags": {},
-      "order": 91,
+      "order": 90,
       "mode": 4,
       "inputs": [
         {
@@ -385,7 +385,7 @@
         250
       ],
       "flags": {},
-      "order": 85,
+      "order": 84,
       "mode": 0,
       "inputs": [
         {
@@ -470,7 +470,7 @@
         90
       ],
       "flags": {},
-      "order": 60,
+      "order": 59,
       "mode": 0,
       "inputs": [
         {
@@ -536,7 +536,7 @@
         90
       ],
       "flags": {},
-      "order": 65,
+      "order": 64,
       "mode": 0,
       "inputs": [
         {
@@ -602,7 +602,7 @@
         150
       ],
       "flags": {},
-      "order": 66,
+      "order": 65,
       "mode": 0,
       "inputs": [
         {
@@ -691,7 +691,7 @@
         82
       ],
       "flags": {},
-      "order": 88,
+      "order": 87,
       "mode": 0,
       "inputs": [
         {
@@ -769,7 +769,7 @@
         50
       ],
       "flags": {},
-      "order": 87,
+      "order": 86,
       "mode": 0,
       "inputs": [
         {
@@ -832,7 +832,7 @@
         110
       ],
       "flags": {},
-      "order": 95,
+      "order": 94,
       "mode": 0,
       "inputs": [
         {
@@ -897,7 +897,7 @@
         126
       ],
       "flags": {},
-      "order": 93,
+      "order": 92,
       "mode": 0,
       "inputs": [
         {
@@ -973,7 +973,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 86,
+      "order": 85,
       "mode": 0,
       "inputs": [
         {
@@ -1254,7 +1254,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 98,
+      "order": 97,
       "mode": 0,
       "inputs": [
         {
@@ -1321,7 +1321,7 @@
         166
       ],
       "flags": {},
-      "order": 90,
+      "order": 89,
       "mode": 0,
       "inputs": [
         {
@@ -1548,7 +1548,7 @@
         673.0012137934964
       ],
       "flags": {},
-      "order": 68,
+      "order": 67,
       "mode": 0,
       "inputs": [
         {
@@ -1630,7 +1630,7 @@
         200
       ],
       "flags": {},
-      "order": 44,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -1920,7 +1920,7 @@
         200
       ],
       "flags": {},
-      "order": 50,
+      "order": 49,
       "mode": 0,
       "inputs": [
         {
@@ -2005,7 +2005,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 79,
+      "order": 78,
       "mode": 0,
       "inputs": [
         {
@@ -2214,7 +2214,7 @@
         226
       ],
       "flags": {},
-      "order": 82,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -2481,7 +2481,7 @@
         106
       ],
       "flags": {},
-      "order": 62,
+      "order": 61,
       "mode": 0,
       "inputs": [
         {
@@ -2565,7 +2565,7 @@
         40
       ],
       "flags": {},
-      "order": 83,
+      "order": 82,
       "mode": 0,
       "inputs": [
         {
@@ -2623,7 +2623,7 @@
         110
       ],
       "flags": {},
-      "order": 84,
+      "order": 83,
       "mode": 0,
       "inputs": [
         {
@@ -2697,7 +2697,7 @@
         106
       ],
       "flags": {},
-      "order": 61,
+      "order": 60,
       "mode": 0,
       "inputs": [
         {
@@ -2781,7 +2781,7 @@
         226
       ],
       "flags": {},
-      "order": 67,
+      "order": 66,
       "mode": 0,
       "inputs": [
         {
@@ -2902,7 +2902,7 @@
         40
       ],
       "flags": {},
-      "order": 70,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -2960,7 +2960,7 @@
         110
       ],
       "flags": {},
-      "order": 75,
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
@@ -3036,7 +3036,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 81,
+      "order": 80,
       "mode": 0,
       "inputs": [
         {
@@ -3100,7 +3100,7 @@
         120
       ],
       "flags": {},
-      "order": 43,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
@@ -3432,7 +3432,7 @@
         110
       ],
       "flags": {},
-      "order": 77,
+      "order": 76,
       "mode": 0,
       "inputs": [
         {
@@ -3519,7 +3519,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 78,
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
@@ -3730,7 +3730,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -3797,7 +3797,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 49,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
@@ -3864,7 +3864,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 73,
+      "order": 72,
       "mode": 0,
       "inputs": [
         {
@@ -4027,7 +4027,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 47,
+      "order": 46,
       "mode": 0,
       "inputs": [
         {
@@ -4094,7 +4094,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 58,
+      "order": 57,
       "mode": 0,
       "inputs": [
         {
@@ -4203,7 +4203,7 @@
         82
       ],
       "flags": {},
-      "order": 45,
+      "order": 44,
       "mode": 0,
       "inputs": [
         {
@@ -4281,7 +4281,7 @@
         150
       ],
       "flags": {},
-      "order": 89,
+      "order": 88,
       "mode": 0,
       "inputs": [
         {
@@ -4385,7 +4385,7 @@
         126
       ],
       "flags": {},
-      "order": 92,
+      "order": 91,
       "mode": 0,
       "inputs": [
         {
@@ -4464,7 +4464,7 @@
         769.5
       ],
       "flags": {},
-      "order": 99,
+      "order": 98,
       "mode": 0,
       "inputs": [
         {
@@ -4537,7 +4537,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 97,
+      "order": 96,
       "mode": 0,
       "inputs": [
         {
@@ -4620,7 +4620,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 71,
+      "order": 70,
       "mode": 0,
       "inputs": [
         {
@@ -4746,43 +4746,6 @@
       }
     },
     {
-      "id": 340,
-      "type": "Note",
-      "pos": [
-        -6002.852980220667,
-        3707.945562096896
-      ],
-      "size": [
-        510,
-        940
-      ],
-      "flags": {},
-      "order": 22,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "title": "Seinfeld Generator",
-      "properties": {
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "==================================================\n\nREFERENCE SYSTEM — CRITICAL\n\n==================================================\n\nCharacter reference tags are WORKFLOW REFERENCE TOKENS.\n\nThey are not ordinary character names.\n\nDuring processing, a reference tag may be expanded or replaced with detailed reference information.\n\nFor example, a tag such as:\n\n^Jerry Seinfeld^\n\nmay be transformed by the workflow into reference text similar to:\n\nJerry Seinfeld played by Jerry Seinfeld on the TV show Seinfeld\n\nLikewise, an attached reference such as:\n\n{BruckBruck}\n\nmay be transformed into detailed visual-reference information supplied by the user.\n\nBecause of this behavior, reference tags must be used deliberately.\n\nThere are TWO character reference systems.\n\n--------------------------------------------------\n\nBUILT-IN CHARACTERS\n\n--------------------------------------------------\n\nVisual reference token:\n\n^Character Name^\n\nVoice reference token:\n\n~Character Name~\n\nCorrect speaker construction:\n\n^Character Name^ (S1) says, <d>[English ~Character Name~]Speech…</d>\n\nExample:\n\n^Jerry Seinfeld^ (S1) says, <d>[English ~Jerry Seinfeld~]What happened?</d>\n\n--------------------------------------------------\n\nATTACHED IMAGE/AUDIO CHARACTERS\n\n--------------------------------------------------\n\nVisual reference token:\n\n{Character_Name}\n\nVoice reference token:\n\n§Character_Name§\n\nCorrect speaker construction:\n\n{Character_Name} (S1) says, <d>[English §Character_Name§]Speech…</d>\n\nExample:\n\n{BruckBruck} (S1) says, <d>[English §BruckBruck§]What happened?</d>\n\n--------------------------------------------------\n\nREFERENCE INVOCATION VS. ORDINARY MENTION\n\n--------------------------------------------------\n\nA reference tag INVOKES the corresponding workflow reference.\n\nA plain character name merely MENTIONS the character.\n\nThese are intentionally different operations.\n\nUse the reference token when visual or identity reinforcement is useful.\n\nExample:\n\n^Jerry Seinfeld^ stands beside the kitchen counter.\n\nThis invokes Jerry's built-in visual reference.\n\nOnce the character has been clearly established, the ordinary name may sometimes be used in descriptive prose when additional reference reinforcement is unnecessary.\n\nExample:\n\nJerry looks toward the front door.\n\nThis is allowed.\n\nIt refers to the already-established character without invoking the visual reference again.\n\nThe same principle applies to attached characters.\n\nExample:\n\n{BruckBruck} enters the room.\n\nBruckBruck looks toward the sofa.\n\nThe first sentence invokes the attached reference.\n\nThe second sentence simply refers to the established character.\n\nReference tags should therefore be used enough to establish and reinforce identity, but they do NOT need to replace every occurrence of a character's name.\n\nDo not unnecessarily repeat reference tokens when a normal name is sufficient and the character's identity is already unambiguous.\n\n--------------------------------------------------\n\nABSOLUTE RULE — NEVER PUT REFERENCE TAGS INSIDE SPOKEN DIALOGUE\n\n--------------------------------------------------\n\nVISUAL REFERENCE TAGS MUST NEVER APPEAR INSIDE THE SPOKEN TEXT OF <d>...</d>.\n\nThis includes:\n\n^Character Name^\n\n{Character_Name}\n\nIf a character mentions another character while speaking, use the NORMAL HUMAN-READABLE NAME inside the spoken sentence.\n\nThis rule is critical because reference tokens are expanded by the workflow.\n\nIf a visual reference token appears inside spoken dialogue, the expanded reference description may become part of the words the character attempts to say.\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]I can't believe ^Jerry Seinfeld^ did that.</d>\n\nThe workflow may expand ^Jerry Seinfeld^ inside the spoken sentence, causing Elaine to attempt to read the injected reference description aloud.\n\nCORRECT:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]I can't believe Jerry did that.</d>\n\nCORRECT:\n\n^George Costanza^ (S1) says,\n\n<d>[English ~George Costanza~]Jerry never told me about this.</d>\n\nCORRECT ATTACHED-CHARACTER EXAMPLE:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I saw Jerry downstairs.</d>\n\nNOT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I saw ^Jerry Seinfeld^ downstairs.</d>\n\n--------------------------------------------------\n\nVOICE TOKENS ARE THE ONLY REFERENCE TOKENS ALLOWED IN THE DIALOGUE HEADER\n\n--------------------------------------------------\n\nThe voice token inside:\n\n[English ~Character Name~]\n\nor:\n\n[English §Character_Name§]\n\nis REQUIRED.\n\nThis voice token is metadata identifying who speaks.\n\nIt is NOT part of the spoken sentence.\n\nTherefore:\n\n<d>[English ~Jerry Seinfeld~]George, what are you doing?</d>\n\nis correct.\n\nHere:\n\n~Jerry Seinfeld~\n\nis the speaker's voice reference.\n\n\"George\" is the actual spoken character mention.\n\nLikewise:\n\n<d>[English §BruckBruck§]Jerry, get over here.</d>\n\nis correct.\n\nHere:\n\n§BruckBruck§\n\nselects the voice.\n\n\"Jerry\" is ordinary spoken dialogue.\n\n--------------------------------------------------\n\nDIALOGUE CONTENT RULE\n\n--------------------------------------------------\n\nAfter the closing ] of the voice header, the remaining text inside <d>...</d> must contain ONLY words the character actually says aloud.\n\nTherefore this structure:\n\n<d>[English ~Character Name~]ACTUAL SPOKEN WORDS</d>\n\ncontains two distinct parts:\n\n1. [English ~Character Name~]\n\n   Voice/language metadata.\n\n2. ACTUAL SPOKEN WORDS\n\n   Literal words heard in the generated video.\n\nNever insert visual reference tokens into part 2.\n\nNever insert:\n\n^Character Name^\n\nor:\n\n{Character_Name}\n\ninto the actual spoken words.\n\nCharacters should refer to each other naturally by:\n\nJerry\n\nGeorge\n\nElaine\n\nKramer\n\nBruckBruck\n\nJeannie\n\nMajor Nelson\n\nor whatever normal spoken name makes sense.\n\n--------------------------------------------------\n\nREFERENCE REINFORCEMENT\n\n--------------------------------------------------\n\nVisual reference tokens may be used outside dialogue when useful to reinforce identity.\n\nGood places to use them include:\n\nsubject_definitions\n\nretention_analysis\n\ninitial character establishment\n\nimportant shot descriptions\n\ncharacter re-entry\n\nmajor camera changes\n\nscenes where identity consistency needs reinforcement\n\nExample:\n\n[Shot 1] ^Jerry Seinfeld^ stands on the RIGHT beside the kitchen counter.\n\nJerry looks toward George.\n\n^George Costanza^ steps closer.\n\nGeorge raises both hands defensively.\n\n^George Costanza^ (S1) says,\n\n<d>[English ~George Costanza~]Jerry, this is an emergency!</d>\n\nThis is valid.\n\nThe tagged references establish the characters visually.\n\nThe ordinary names allow natural descriptive prose without repeatedly injecting reference information.\n\n--------------------------------------------------\n\nREFERENCE SYSTEM PAIRING\n\n--------------------------------------------------\n\nNever mix visual and voice reference systems.\n\nBUILT-IN:\n\n^Character Name^ → ~Character Name~\n\nATTACHED:\n\n{Character_Name} → §Character_Name§\n\nCORRECT:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English ~Jerry Seinfeld~]What happened?</d>\n\nCORRECT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]What happened?</d>\n\nWRONG:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English §Jerry Seinfeld§]What happened?</d>\n\nWRONG:\n\n{BruckBruck} (S1) says,\n\n<d>[English ~BruckBruck~]What happened?</d>\n\n--------------------------------------------------\n\nPRESERVE SUPPLIED REFERENCE TOKENS\n\n--------------------------------------------------\n\nWhenever a supplied reference token IS used, preserve it EXACTLY.\n\nNever alter, reformat, rename, or substitute the characters within:\n\n^ ^\n\n{ }\n\n~ ~\n\n§ §\n\n<d> </d>\n\nFor example, if the user supplies:\n\n{femesole_rachael}\n\ndo not change the reference token to:\n\n{Femesole_Rachael}\n\n{femesole}\n\n^femesole_rachael^\n\nor any other variation.\n\nHowever, ordinary descriptive prose or spoken dialogue may use the character's natural name when appropriate.\n\nFor example:\n\n{femesole_rachael} stands beside the sofa.\n\nRachael looks toward the door.\n\nor:\n\n{femesole_rachael} (S1) says,\n\n<d>[English §femesole_rachael§]Jerry, what are you doing?</d>\n\nThe reference token remains exact when invoked, while ordinary names remain ordinary text.\n\n--------------------------------------------------\n\nLOCATION REFERENCES\n\n--------------------------------------------------\n\nLocation references use:\n\n{Location_Name}\n\nLocation references are also workflow reference tokens.\n\nUse them when establishing or reinforcing the environment.\n\nLocations never speak and therefore never receive voice references.\n\nLocation reference tokens should NEVER appear inside spoken dialogue.\n\nWRONG:\n\n<d>[English ~Jerry Seinfeld~]Let's go to {Monks_Coffee}.</d>\n\nCORRECT:\n\n<d>[English ~Jerry Seinfeld~]Let's go to Monk's.</d>\n\nThen the following shot may establish:\n\n[Shot 1] Hard scene transition to {Monks_Coffee}.\n\n==================================================\n\nDIALOGUE — CRITICAL\n\n==================================================\n\nEVERY spoken word MUST be inside literal <d>...</d> tags.\n\nBUILT-IN CHARACTER:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English ~Jerry Seinfeld~]What's going on?</d>\n\nATTACHED CHARACTER:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]What's going on?</d>\n\nOnly audible speech belongs inside <d>...</d>.\n\nActions, expressions, camera directions, pauses, visual references, location references, and descriptions MUST remain outside the dialogue tags.\n\nWithin <d>...</d>:\n\nThe [English VOICE_REFERENCE] header identifies the speaker.\n\nEverything after ] is literal spoken dialogue.\n\nCharacters mentioned in the spoken dialogue use ordinary names, NEVER reference tags.\n\nCORRECT:\n\n^George Costanza^ leans forward.\n\n^George Costanza^ (S2) says,\n\n<d>[English ~George Costanza~]Jerry, you don't understand the situation.</d>\n\nGeorge closes his mouth and waits.\n\nCORRECT:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]Kramer told me the whole thing.</d>\n\nCORRECT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I haven't seen Jerry all day.</d>\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]^Jerry Seinfeld^ ruined everything.</d>\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]{BruckBruck} ruined everything.</d>\n\nWRONG:\n\n^Jerry Seinfeld^ says,\n\n<d>[English §Jerry Seinfeld§]What's the problem?</d>\n\nWRONG:\n\n{BruckBruck} says,\n\n<d>[English ~BruckBruck~]What's the problem?</d>\n\nWRONG:\n\nGeorge leans forward and says, \"What's the problem?\"\n\nWRONG:\n\n^George Costanza^ says,\n\n[English ~George Costanza~]What's the problem?\n\nEvery dialogue line MUST have both:\n\n<d>\n\nand\n\n</d>\n\n==================================================\n\nFINAL VALIDATION — REFERENCE-SAFE DIALOGUE\n\n==================================================\n\nBefore returning, silently verify:\n\n1. Every supplied reference token remains exact whenever it is invoked.\n\n2. Built-in visual references use ^Character Name^.\n\n3. Built-in voice references use ~Character Name~.\n\n4. Attached visual references use {Character_Name}.\n\n5. Attached voice references use §Character_Name§.\n\n6. Built-in speakers pair ^Character Name^ with ~Character Name~.\n\n7. Attached speakers pair {Character_Name} with §Character_Name§.\n\n8. Reference systems are never mixed.\n\n9. EVERY spoken line uses <d>...</d>.\n\n10. Every <d> has a matching </d>.\n\n11. The required voice token appears inside the [English ...] dialogue header.\n\n12. NO ^visual reference^ appears in the actual spoken words.\n\n13. NO {visual_or_location_reference} appears in the actual spoken words.\n\n14. Characters mentioned inside spoken dialogue use ordinary natural names.\n\n15. Location names mentioned inside spoken dialogue use ordinary natural language rather than workflow reference tokens.\n\n16. Everything after the ] in a dialogue header is text the character literally says aloud.\n\n17. Actions, expressions, camera instructions, and reference descriptions never appear inside spoken dialogue.\n\n18. Ordinary untagged names ARE allowed outside dialogue when merely referring to an already-established character.\n\n19. Reference tags are used when useful for identity reinforcement, but do not need to replace every character-name occurrence.\n\n20. No prompt has more than TWO distinct speakers.\n\n21. (S3) or higher never appears.\n\n22. Non-speaking characters remain nonverbal.\n\n23. Clothing and geography remain consistent.\n\n24. Every prompt is approximately 15 seconds.\n\n25. Every prompt contains EXACTLY five required sections.\n\n26. No summary section exists anywhere.\n\n27. No recap, conclusion, explanation, or extra narrative paragraph exists.\n\n28. Prompts are separated by exactly |.\n\n29. Dialogue normally ends before the final 1-2 seconds.\n\n30. Same-location speaker changes use silent handoffs.\n\n31. Final inherited frames contain closed mouths and no dialogue when required.\n\n32. New speakers are visually activated before speaking.\n\n33. Hard location changes are explicitly identified.\n\n34. The LAST 22 FRAMES can safely initialize the next prompt.\n\n35. detailed_description contains concrete generatable events rather than vague context.\n\n36. Nothing appears after non_diegetic_music except | or the end of the response.\n\n37. The entire response is inside ONE plain-text code block."
-      ],
-      "widgets_values_named": {
-        "text": "==================================================\n\nREFERENCE SYSTEM — CRITICAL\n\n==================================================\n\nCharacter reference tags are WORKFLOW REFERENCE TOKENS.\n\nThey are not ordinary character names.\n\nDuring processing, a reference tag may be expanded or replaced with detailed reference information.\n\nFor example, a tag such as:\n\n^Jerry Seinfeld^\n\nmay be transformed by the workflow into reference text similar to:\n\nJerry Seinfeld played by Jerry Seinfeld on the TV show Seinfeld\n\nLikewise, an attached reference such as:\n\n{BruckBruck}\n\nmay be transformed into detailed visual-reference information supplied by the user.\n\nBecause of this behavior, reference tags must be used deliberately.\n\nThere are TWO character reference systems.\n\n--------------------------------------------------\n\nBUILT-IN CHARACTERS\n\n--------------------------------------------------\n\nVisual reference token:\n\n^Character Name^\n\nVoice reference token:\n\n~Character Name~\n\nCorrect speaker construction:\n\n^Character Name^ (S1) says, <d>[English ~Character Name~]Speech…</d>\n\nExample:\n\n^Jerry Seinfeld^ (S1) says, <d>[English ~Jerry Seinfeld~]What happened?</d>\n\n--------------------------------------------------\n\nATTACHED IMAGE/AUDIO CHARACTERS\n\n--------------------------------------------------\n\nVisual reference token:\n\n{Character_Name}\n\nVoice reference token:\n\n§Character_Name§\n\nCorrect speaker construction:\n\n{Character_Name} (S1) says, <d>[English §Character_Name§]Speech…</d>\n\nExample:\n\n{BruckBruck} (S1) says, <d>[English §BruckBruck§]What happened?</d>\n\n--------------------------------------------------\n\nREFERENCE INVOCATION VS. ORDINARY MENTION\n\n--------------------------------------------------\n\nA reference tag INVOKES the corresponding workflow reference.\n\nA plain character name merely MENTIONS the character.\n\nThese are intentionally different operations.\n\nUse the reference token when visual or identity reinforcement is useful.\n\nExample:\n\n^Jerry Seinfeld^ stands beside the kitchen counter.\n\nThis invokes Jerry's built-in visual reference.\n\nOnce the character has been clearly established, the ordinary name may sometimes be used in descriptive prose when additional reference reinforcement is unnecessary.\n\nExample:\n\nJerry looks toward the front door.\n\nThis is allowed.\n\nIt refers to the already-established character without invoking the visual reference again.\n\nThe same principle applies to attached characters.\n\nExample:\n\n{BruckBruck} enters the room.\n\nBruckBruck looks toward the sofa.\n\nThe first sentence invokes the attached reference.\n\nThe second sentence simply refers to the established character.\n\nReference tags should therefore be used enough to establish and reinforce identity, but they do NOT need to replace every occurrence of a character's name.\n\nDo not unnecessarily repeat reference tokens when a normal name is sufficient and the character's identity is already unambiguous.\n\n--------------------------------------------------\n\nABSOLUTE RULE — NEVER PUT REFERENCE TAGS INSIDE SPOKEN DIALOGUE\n\n--------------------------------------------------\n\nVISUAL REFERENCE TAGS MUST NEVER APPEAR INSIDE THE SPOKEN TEXT OF <d>...</d>.\n\nThis includes:\n\n^Character Name^\n\n{Character_Name}\n\nIf a character mentions another character while speaking, use the NORMAL HUMAN-READABLE NAME inside the spoken sentence.\n\nThis rule is critical because reference tokens are expanded by the workflow.\n\nIf a visual reference token appears inside spoken dialogue, the expanded reference description may become part of the words the character attempts to say.\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]I can't believe ^Jerry Seinfeld^ did that.</d>\n\nThe workflow may expand ^Jerry Seinfeld^ inside the spoken sentence, causing Elaine to attempt to read the injected reference description aloud.\n\nCORRECT:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]I can't believe Jerry did that.</d>\n\nCORRECT:\n\n^George Costanza^ (S1) says,\n\n<d>[English ~George Costanza~]Jerry never told me about this.</d>\n\nCORRECT ATTACHED-CHARACTER EXAMPLE:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I saw Jerry downstairs.</d>\n\nNOT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I saw ^Jerry Seinfeld^ downstairs.</d>\n\n--------------------------------------------------\n\nVOICE TOKENS ARE THE ONLY REFERENCE TOKENS ALLOWED IN THE DIALOGUE HEADER\n\n--------------------------------------------------\n\nThe voice token inside:\n\n[English ~Character Name~]\n\nor:\n\n[English §Character_Name§]\n\nis REQUIRED.\n\nThis voice token is metadata identifying who speaks.\n\nIt is NOT part of the spoken sentence.\n\nTherefore:\n\n<d>[English ~Jerry Seinfeld~]George, what are you doing?</d>\n\nis correct.\n\nHere:\n\n~Jerry Seinfeld~\n\nis the speaker's voice reference.\n\n\"George\" is the actual spoken character mention.\n\nLikewise:\n\n<d>[English §BruckBruck§]Jerry, get over here.</d>\n\nis correct.\n\nHere:\n\n§BruckBruck§\n\nselects the voice.\n\n\"Jerry\" is ordinary spoken dialogue.\n\n--------------------------------------------------\n\nDIALOGUE CONTENT RULE\n\n--------------------------------------------------\n\nAfter the closing ] of the voice header, the remaining text inside <d>...</d> must contain ONLY words the character actually says aloud.\n\nTherefore this structure:\n\n<d>[English ~Character Name~]ACTUAL SPOKEN WORDS</d>\n\ncontains two distinct parts:\n\n1. [English ~Character Name~]\n\n   Voice/language metadata.\n\n2. ACTUAL SPOKEN WORDS\n\n   Literal words heard in the generated video.\n\nNever insert visual reference tokens into part 2.\n\nNever insert:\n\n^Character Name^\n\nor:\n\n{Character_Name}\n\ninto the actual spoken words.\n\nCharacters should refer to each other naturally by:\n\nJerry\n\nGeorge\n\nElaine\n\nKramer\n\nBruckBruck\n\nJeannie\n\nMajor Nelson\n\nor whatever normal spoken name makes sense.\n\n--------------------------------------------------\n\nREFERENCE REINFORCEMENT\n\n--------------------------------------------------\n\nVisual reference tokens may be used outside dialogue when useful to reinforce identity.\n\nGood places to use them include:\n\nsubject_definitions\n\nretention_analysis\n\ninitial character establishment\n\nimportant shot descriptions\n\ncharacter re-entry\n\nmajor camera changes\n\nscenes where identity consistency needs reinforcement\n\nExample:\n\n[Shot 1] ^Jerry Seinfeld^ stands on the RIGHT beside the kitchen counter.\n\nJerry looks toward George.\n\n^George Costanza^ steps closer.\n\nGeorge raises both hands defensively.\n\n^George Costanza^ (S1) says,\n\n<d>[English ~George Costanza~]Jerry, this is an emergency!</d>\n\nThis is valid.\n\nThe tagged references establish the characters visually.\n\nThe ordinary names allow natural descriptive prose without repeatedly injecting reference information.\n\n--------------------------------------------------\n\nREFERENCE SYSTEM PAIRING\n\n--------------------------------------------------\n\nNever mix visual and voice reference systems.\n\nBUILT-IN:\n\n^Character Name^ → ~Character Name~\n\nATTACHED:\n\n{Character_Name} → §Character_Name§\n\nCORRECT:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English ~Jerry Seinfeld~]What happened?</d>\n\nCORRECT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]What happened?</d>\n\nWRONG:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English §Jerry Seinfeld§]What happened?</d>\n\nWRONG:\n\n{BruckBruck} (S1) says,\n\n<d>[English ~BruckBruck~]What happened?</d>\n\n--------------------------------------------------\n\nPRESERVE SUPPLIED REFERENCE TOKENS\n\n--------------------------------------------------\n\nWhenever a supplied reference token IS used, preserve it EXACTLY.\n\nNever alter, reformat, rename, or substitute the characters within:\n\n^ ^\n\n{ }\n\n~ ~\n\n§ §\n\n<d> </d>\n\nFor example, if the user supplies:\n\n{femesole_rachael}\n\ndo not change the reference token to:\n\n{Femesole_Rachael}\n\n{femesole}\n\n^femesole_rachael^\n\nor any other variation.\n\nHowever, ordinary descriptive prose or spoken dialogue may use the character's natural name when appropriate.\n\nFor example:\n\n{femesole_rachael} stands beside the sofa.\n\nRachael looks toward the door.\n\nor:\n\n{femesole_rachael} (S1) says,\n\n<d>[English §femesole_rachael§]Jerry, what are you doing?</d>\n\nThe reference token remains exact when invoked, while ordinary names remain ordinary text.\n\n--------------------------------------------------\n\nLOCATION REFERENCES\n\n--------------------------------------------------\n\nLocation references use:\n\n{Location_Name}\n\nLocation references are also workflow reference tokens.\n\nUse them when establishing or reinforcing the environment.\n\nLocations never speak and therefore never receive voice references.\n\nLocation reference tokens should NEVER appear inside spoken dialogue.\n\nWRONG:\n\n<d>[English ~Jerry Seinfeld~]Let's go to {Monks_Coffee}.</d>\n\nCORRECT:\n\n<d>[English ~Jerry Seinfeld~]Let's go to Monk's.</d>\n\nThen the following shot may establish:\n\n[Shot 1] Hard scene transition to {Monks_Coffee}.\n\n==================================================\n\nDIALOGUE — CRITICAL\n\n==================================================\n\nEVERY spoken word MUST be inside literal <d>...</d> tags.\n\nBUILT-IN CHARACTER:\n\n^Jerry Seinfeld^ (S1) says,\n\n<d>[English ~Jerry Seinfeld~]What's going on?</d>\n\nATTACHED CHARACTER:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]What's going on?</d>\n\nOnly audible speech belongs inside <d>...</d>.\n\nActions, expressions, camera directions, pauses, visual references, location references, and descriptions MUST remain outside the dialogue tags.\n\nWithin <d>...</d>:\n\nThe [English VOICE_REFERENCE] header identifies the speaker.\n\nEverything after ] is literal spoken dialogue.\n\nCharacters mentioned in the spoken dialogue use ordinary names, NEVER reference tags.\n\nCORRECT:\n\n^George Costanza^ leans forward.\n\n^George Costanza^ (S2) says,\n\n<d>[English ~George Costanza~]Jerry, you don't understand the situation.</d>\n\nGeorge closes his mouth and waits.\n\nCORRECT:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]Kramer told me the whole thing.</d>\n\nCORRECT:\n\n{BruckBruck} (S1) says,\n\n<d>[English §BruckBruck§]I haven't seen Jerry all day.</d>\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]^Jerry Seinfeld^ ruined everything.</d>\n\nWRONG:\n\n^Elaine Benes^ (S1) says,\n\n<d>[English ~Elaine Benes~]{BruckBruck} ruined everything.</d>\n\nWRONG:\n\n^Jerry Seinfeld^ says,\n\n<d>[English §Jerry Seinfeld§]What's the problem?</d>\n\nWRONG:\n\n{BruckBruck} says,\n\n<d>[English ~BruckBruck~]What's the problem?</d>\n\nWRONG:\n\nGeorge leans forward and says, \"What's the problem?\"\n\nWRONG:\n\n^George Costanza^ says,\n\n[English ~George Costanza~]What's the problem?\n\nEvery dialogue line MUST have both:\n\n<d>\n\nand\n\n</d>\n\n==================================================\n\nFINAL VALIDATION — REFERENCE-SAFE DIALOGUE\n\n==================================================\n\nBefore returning, silently verify:\n\n1. Every supplied reference token remains exact whenever it is invoked.\n\n2. Built-in visual references use ^Character Name^.\n\n3. Built-in voice references use ~Character Name~.\n\n4. Attached visual references use {Character_Name}.\n\n5. Attached voice references use §Character_Name§.\n\n6. Built-in speakers pair ^Character Name^ with ~Character Name~.\n\n7. Attached speakers pair {Character_Name} with §Character_Name§.\n\n8. Reference systems are never mixed.\n\n9. EVERY spoken line uses <d>...</d>.\n\n10. Every <d> has a matching </d>.\n\n11. The required voice token appears inside the [English ...] dialogue header.\n\n12. NO ^visual reference^ appears in the actual spoken words.\n\n13. NO {visual_or_location_reference} appears in the actual spoken words.\n\n14. Characters mentioned inside spoken dialogue use ordinary natural names.\n\n15. Location names mentioned inside spoken dialogue use ordinary natural language rather than workflow reference tokens.\n\n16. Everything after the ] in a dialogue header is text the character literally says aloud.\n\n17. Actions, expressions, camera instructions, and reference descriptions never appear inside spoken dialogue.\n\n18. Ordinary untagged names ARE allowed outside dialogue when merely referring to an already-established character.\n\n19. Reference tags are used when useful for identity reinforcement, but do not need to replace every character-name occurrence.\n\n20. No prompt has more than TWO distinct speakers.\n\n21. (S3) or higher never appears.\n\n22. Non-speaking characters remain nonverbal.\n\n23. Clothing and geography remain consistent.\n\n24. Every prompt is approximately 15 seconds.\n\n25. Every prompt contains EXACTLY five required sections.\n\n26. No summary section exists anywhere.\n\n27. No recap, conclusion, explanation, or extra narrative paragraph exists.\n\n28. Prompts are separated by exactly |.\n\n29. Dialogue normally ends before the final 1-2 seconds.\n\n30. Same-location speaker changes use silent handoffs.\n\n31. Final inherited frames contain closed mouths and no dialogue when required.\n\n32. New speakers are visually activated before speaking.\n\n33. Hard location changes are explicitly identified.\n\n34. The LAST 22 FRAMES can safely initialize the next prompt.\n\n35. detailed_description contains concrete generatable events rather than vague context.\n\n36. Nothing appears after non_diegetic_music except | or the end of the response.\n\n37. The entire response is inside ONE plain-text code block."
-      },
-      "color": "#222",
-      "bgcolor": "#000"
-    },
-    {
       "id": 246,
       "type": "Note",
       "pos": [
@@ -4794,7 +4757,7 @@
         940
       ],
       "flags": {},
-      "order": 23,
+      "order": 22,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -4833,7 +4796,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 51,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -4915,7 +4878,7 @@
         524
       ],
       "flags": {},
-      "order": 64,
+      "order": 63,
       "mode": 0,
       "inputs": [
         {
@@ -5142,7 +5105,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 24,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -5214,7 +5177,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 25,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -5286,7 +5249,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 56,
+      "order": 55,
       "mode": 0,
       "inputs": [
         {
@@ -5353,7 +5316,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 55,
+      "order": 54,
       "mode": 0,
       "inputs": [
         {
@@ -5420,7 +5383,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 26,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -5492,7 +5455,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 27,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -5564,7 +5527,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 28,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -5636,7 +5599,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 29,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -5706,7 +5669,7 @@
         110
       ],
       "flags": {},
-      "order": 52,
+      "order": 51,
       "mode": 0,
       "inputs": [
         {
@@ -5788,7 +5751,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 30,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -5860,7 +5823,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 31,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -5932,7 +5895,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 57,
+      "order": 56,
       "mode": 0,
       "inputs": [
         {
@@ -5997,7 +5960,7 @@
         202
       ],
       "flags": {},
-      "order": 80,
+      "order": 79,
       "mode": 0,
       "inputs": [
         {
@@ -6083,7 +6046,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 32,
+      "order": 31,
       "mode": 0,
       "inputs": [
         {
@@ -6155,7 +6118,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 33,
+      "order": 32,
       "mode": 0,
       "inputs": [
         {
@@ -6227,7 +6190,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 53,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
@@ -6292,7 +6255,7 @@
         58
       ],
       "flags": {},
-      "order": 34,
+      "order": 33,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6354,7 +6317,7 @@
         60
       ],
       "flags": {},
-      "order": 35,
+      "order": 34,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6419,7 +6382,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 54,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
@@ -6484,7 +6447,7 @@
         130
       ],
       "flags": {},
-      "order": 36,
+      "order": 35,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6557,7 +6520,7 @@
         82
       ],
       "flags": {},
-      "order": 37,
+      "order": 36,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6624,7 +6587,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 38,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -6696,7 +6659,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 76,
+      "order": 75,
       "mode": 0,
       "inputs": [
         {
@@ -6763,7 +6726,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 72,
+      "order": 71,
       "mode": 0,
       "inputs": [
         {
@@ -6828,7 +6791,7 @@
         190
       ],
       "flags": {},
-      "order": 63,
+      "order": 62,
       "mode": 0,
       "inputs": [
         {
@@ -6954,7 +6917,7 @@
         86
       ],
       "flags": {},
-      "order": 69,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -7045,7 +7008,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 74,
+      "order": 73,
       "mode": 0,
       "inputs": [
         {
@@ -7110,7 +7073,7 @@
         2246.5
       ],
       "flags": {},
-      "order": 94,
+      "order": 93,
       "mode": 0,
       "inputs": [
         {
@@ -7182,7 +7145,7 @@
         372
       ],
       "flags": {},
-      "order": 59,
+      "order": 58,
       "mode": 0,
       "inputs": [
         {
@@ -7340,7 +7303,7 @@
         666.8624514724397
       ],
       "flags": {},
-      "order": 39,
+      "order": 38,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7402,7 +7365,7 @@
         173.39718788902246
       ],
       "flags": {},
-      "order": 40,
+      "order": 39,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -7439,7 +7402,7 @@
         400
       ],
       "flags": {},
-      "order": 41,
+      "order": 40,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -7476,7 +7439,7 @@
         239.4771053022714
       ],
       "flags": {},
-      "order": 42,
+      "order": 41,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -7488,10 +7451,10 @@
         }
       },
       "widgets_values": [
-        "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★"
+        "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★\n\nCustom node needed under\n[https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Library](https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Library)"
       ],
       "widgets_values_named": {
-        "text": "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★"
+        "text": "# ★ SKEBA ★\n## [☕ Get the Latest Workflows](https://www.patreon.com/c/skeba)\n### ★ ComfyUI Nodes • Tools • Development ★\n\nCustom node needed under\n[https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Library](https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Library)"
       },
       "color": "#432",
       "bgcolor": "#653"
@@ -9334,10 +9297,10 @@
     },
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.5564281936874779,
+      "scale": 1.3361753282283728,
       "offset": [
-        6530.304459283828,
-        -2461.9269417157607
+        6403.101285752855,
+        -3435.330330917799
       ]
     }
   },

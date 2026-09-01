@@ -23,6 +23,9 @@ _stub_module("torch")
 _stub_module("PIL", Image=object(), ImageOps=object())
 model_management = _stub_module("comfy.model_management")
 _stub_module("comfy", model_management=model_management)
+input_impl = types.SimpleNamespace(VideoFromFile=lambda path: None)
+_stub_module("comfy_api", __path__=[])
+_stub_module("comfy_api.latest", InputImpl=input_impl)
 _stub_module("comfy_extras", __path__=[])
 _stub_module("comfy_extras.nodes_audio", load=lambda path: None)
 _stub_module(
@@ -49,7 +52,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "[Shot 1] The camera pans across {living_room}.", records)
 
         self.assertEqual(
@@ -65,6 +68,7 @@ class PromptResolutionTests(unittest.TestCase):
         )
         self.assertEqual(image_tags, ["living_room"])
         self.assertEqual(audio_tags, [])
+        self.assertEqual(video_tags, [])
 
     def test_audio_only_tag_uses_audio_description(self):
         records = {
@@ -76,7 +80,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "{narrator} introduces the scene.", records)
 
         self.assertEqual(
@@ -89,6 +93,7 @@ class PromptResolutionTests(unittest.TestCase):
         )
         self.assertEqual(image_tags, [])
         self.assertEqual(audio_tags, ["narrator"])
+        self.assertEqual(video_tags, [])
 
     def test_repeated_tag_is_replaced_each_time_and_mapped_once(self):
         records = {
@@ -100,7 +105,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, _, _ = MODULE.resolve_prompt(
+        prompt, mapping, _, _, _ = MODULE.resolve_prompt(
             "{prop} sits beside {prop}.", records)
 
         self.assertEqual(
@@ -120,7 +125,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "<d>[English §anchor§] Good evening.</d>", records)
 
         self.assertEqual(
@@ -133,6 +138,7 @@ class PromptResolutionTests(unittest.TestCase):
         )
         self.assertEqual(image_tags, [])
         self.assertEqual(audio_tags, ["anchor"])
+        self.assertEqual(video_tags, [])
 
     def test_voice_tag_supports_partial_or_empty_audio_data(self):
         cases = (
@@ -150,13 +156,14 @@ class PromptResolutionTests(unittest.TestCase):
                         "audio_description": description,
                     },
                 }
-                prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+                prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
                     f"[English §{tag}§]", records)
 
                 self.assertEqual(prompt, f"[English {expected}]")
                 self.assertEqual(mapping, f"§{tag}§ -> {expected}")
                 self.assertEqual(image_tags, [])
                 self.assertEqual(audio_tags, expected_audio_tags)
+                self.assertEqual(video_tags, [])
 
     def test_voice_tag_beyond_audio_limit_falls_back_to_description(self):
         records = {
@@ -169,7 +176,7 @@ class PromptResolutionTests(unittest.TestCase):
             for index in range(1, 5)
         }
 
-        prompt, mapping, _, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, _, audio_tags, _ = MODULE.resolve_prompt(
             " ".join(f"§voice_{index}§" for index in range(1, 5)), records)
 
         self.assertEqual(
@@ -199,11 +206,12 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, _, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, _, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "{paired} §voice_1§ §voice_2§ §voice_3§", records)
 
         self.assertEqual(image_tags, ["paired"])
         self.assertEqual(audio_tags, ["voice_1", "voice_2", "voice_3"])
+        self.assertEqual(video_tags, [])
         self.assertEqual(
             prompt,
             "<Picture 1> (a paired visual reference) <Audio 1> (explicit voice 1) "
@@ -220,7 +228,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "{performer} addresses the audience.", records)
 
         self.assertEqual(
@@ -233,6 +241,7 @@ class PromptResolutionTests(unittest.TestCase):
         )
         self.assertEqual(image_tags, ["performer"])
         self.assertEqual(audio_tags, ["performer"])
+        self.assertEqual(video_tags, [])
 
     def test_picture_markers_follow_actual_output_slot_order(self):
         records = {
@@ -250,7 +259,7 @@ class PromptResolutionTests(unittest.TestCase):
             },
         }
 
-        prompt, mapping, image_tags, audio_tags = MODULE.resolve_prompt(
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
             "{first_frame}: fully_preserved. {performer} enters with §performer§.",
             records,
         )
@@ -271,6 +280,127 @@ class PromptResolutionTests(unittest.TestCase):
             "§performer§ -> <Audio 1> (the performer's voice)", mapping)
         self.assertEqual(image_tags, ["performer", "first_frame"])
         self.assertEqual(audio_tags, ["performer"])
+        self.assertEqual(video_tags, [])
+
+    def test_video_reference_uses_video_slot_and_offsets_standalone_audio(self):
+        records = {
+            "performance": {
+                "video_file": "performance.mp4",
+                "video_has_audio": True,
+                "video_description": "a singer performing on stage",
+                "image_file": None,
+                "audio_file": None,
+                "audio_description": "the singer's live voice",
+            },
+            "narrator": {
+                "video_file": None,
+                "image_file": None,
+                "audio_file": "narrator.wav",
+                "audio_description": "a calm narrator",
+            },
+        }
+
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
+            "{performance} then §performance§ and §narrator§.", records)
+
+        self.assertEqual(
+            prompt,
+            "<Video 1> (a singer performing on stage) then "
+            "<Audio 1> (the singer's live voice) and "
+            "<Audio 2> (a calm narrator).",
+        )
+        self.assertIn("{performance} -> <Video 1>", mapping)
+        self.assertEqual(image_tags, [])
+        self.assertEqual(audio_tags, ["narrator"])
+        self.assertEqual(video_tags, ["performance"])
+
+    def test_silent_video_is_valid_and_voice_only_video_audio_can_be_standalone(self):
+        silent = {
+            "silent": {
+                "video_file": "silent.mp4",
+                "video_has_audio": False,
+                "video_description": "a silent camera move",
+                "image_file": None,
+                "audio_file": None,
+                "audio_description": "",
+            },
+        }
+        prompt, _, _, audio_tags, video_tags = MODULE.resolve_prompt(
+            "Use {silent}.", silent)
+        self.assertEqual(prompt, "Use <Video 1> (a silent camera move).")
+        self.assertEqual(audio_tags, [])
+        self.assertEqual(video_tags, ["silent"])
+
+        voiced = {
+            "clip": {
+                "video_file": "clip.mp4",
+                "video_has_audio": True,
+                "video_description": "",
+                "image_file": None,
+                "audio_file": None,
+                "audio_description": "dialogue from the clip",
+            },
+        }
+        prompt, _, _, audio_tags, video_tags = MODULE.resolve_prompt(
+            "[English §clip§]", voiced)
+        self.assertEqual(prompt, "[English <Audio 1> (dialogue from the clip)]")
+        self.assertEqual(audio_tags, ["clip"])
+        self.assertEqual(video_tags, [])
+
+    def test_video_limit_and_socket_order(self):
+        records = {
+            f"clip_{index}": {
+                "video_file": f"clip_{index}.mp4",
+                "video_has_audio": False,
+            }
+            for index in range(1, 5)
+        }
+        with self.assertRaisesRegex(ValueError, "at most 3 reference videos"):
+            MODULE.resolve_prompt(" ".join(f"{{clip_{i}}}" for i in range(1, 5)), records)
+
+        names = MODULE.H3TaggedReferencePrompt.RETURN_NAMES
+        self.assertEqual(names[0:2], ("prompt", "mapping"))
+        self.assertEqual(names[2:11], tuple(f"image_{i}" for i in range(1, 10)))
+        self.assertEqual(names[11:14], ("audio_1", "audio_2", "audio_3"))
+        self.assertEqual(names[14:17], ("video_1", "video_2", "video_3"))
+        self.assertEqual(names[17:20], ("video_audio_1", "video_audio_2", "video_audio_3"))
+
+    def test_build_emits_video_frames_and_slot_aligned_embedded_audio(self):
+        records = {
+            "voiced": {
+                "video_file": "voiced.mp4",
+                "video_has_audio": True,
+                "video_description": "a voiced clip",
+                "image_file": None,
+                "audio_file": None,
+            },
+            "silent": {
+                "video_file": "silent.mp4",
+                "video_has_audio": False,
+                "video_description": "a silent clip",
+                "image_file": None,
+                "audio_file": None,
+            },
+        }
+        original_records = MODULE.records_by_tag
+        original_media_path = MODULE.media_path
+        original_load_video = MODULE.load_video
+        try:
+            MODULE.records_by_tag = lambda: records
+            MODULE.media_path = lambda record, kind: record[f"{kind}_file"]
+            MODULE.load_video = lambda path: (
+                f"frames:{path}",
+                f"audio:{path}" if path == "voiced.mp4" else None,
+            )
+            output = MODULE.H3TaggedReferencePrompt().build("{voiced} {silent}")
+        finally:
+            MODULE.records_by_tag = original_records
+            MODULE.media_path = original_media_path
+            MODULE.load_video = original_load_video
+
+        self.assertEqual(output[14:17], (
+            "frames:voiced.mp4", "frames:silent.mp4", None))
+        self.assertEqual(output[17:20], ("audio:voiced.mp4", None, None))
 
     def test_unknown_voice_tag_is_clear(self):
         with self.assertRaisesRegex(ValueError, "§missing_voice§"):

@@ -51,7 +51,7 @@ class LibraryClassificationTests(unittest.TestCase):
         )
         self.assertEqual(record["reference_type"], "character")
 
-        updated, _, _ = MODULE.update_record(
+        updated, _, _, _ = MODULE.update_record(
             record["id"],
             "jerry_apartment",
             "seinfeld",
@@ -59,6 +59,40 @@ class LibraryClassificationTests(unittest.TestCase):
             reference_type="location",
         )
         self.assertEqual(updated["reference_type"], "location")
+
+    def test_human_readable_tags_are_normalized(self):
+        record = MODULE.create_record(
+            "Simpsons chalkboard",
+            image_file="chalkboard.png",
+        )
+        self.assertEqual(record["tag"], "Simpsons_chalkboard")
+
+        braced = MODULE.create_record(
+            "{Jerry's Apartment!}",
+            image_file="apartment.png",
+        )
+        self.assertEqual(braced["tag"], "Jerry_s_Apartment")
+
+    def test_video_records_store_audio_track_metadata_and_remove_cleanly(self):
+        record = MODULE.create_record(
+            "street_scene",
+            video_file="street.mp4",
+            video_has_audio=True,
+            video_description="traffic moving through an intersection",
+        )
+        self.assertEqual(record["video_file"], "street.mp4")
+        self.assertTrue(record["video_has_audio"])
+
+        updated, _, _, old_video = MODULE.update_record(
+            record["id"],
+            "street_scene",
+            video_description="silent traffic footage",
+            video_file="street_silent.mp4",
+            video_has_audio=False,
+        )
+        self.assertEqual(old_video, "street.mp4")
+        self.assertFalse(updated["video_has_audio"])
+        self.assertEqual(updated["video_description"], "silent traffic footage")
 
     def test_unknown_reference_type_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "Reference type must be one of"):

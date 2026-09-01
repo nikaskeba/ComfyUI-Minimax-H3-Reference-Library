@@ -30,19 +30,29 @@ def audio_directory():
     return library_root() / "audio"
 
 
+def video_directory():
+    return library_root() / "videos"
+
+
 def ensure_library():
     image_directory().mkdir(parents=True, exist_ok=True)
     audio_directory().mkdir(parents=True, exist_ok=True)
+    video_directory().mkdir(parents=True, exist_ok=True)
     if not manifest_path().exists():
-        _write_manifest({"version": 1, "revision": 0, "records": []})
+        _write_manifest({"version": 2, "revision": 0, "records": []})
 
 
 def clean_tag(tag):
     tag = (tag or "").strip()
     if tag.startswith("{") and tag.endswith("}"):
         tag = tag[1:-1].strip()
+    # Accept readable names while storing prompt-safe identifiers.
+    tag = re.sub(r"[^A-Za-z0-9_-]+", "_", tag)
+    tag = re.sub(r"_+", "_", tag).strip("_")
     if not tag or not TAG_RE.fullmatch(tag):
-        raise ValueError("Tag must contain only letters, numbers, '_' or '-'.")
+        raise ValueError(
+            "Tag needs at least one letter or number; spaces and punctuation "
+            "are converted to '_'.")
     return tag
 
 
@@ -79,6 +89,9 @@ def read_manifest():
                 raise RuntimeError("H3 reference library manifest contains an invalid record.")
             if record.get("reference_type") not in REFERENCE_TYPES:
                 record["reference_type"] = "uncategorized"
+            record.setdefault("video_description", "")
+            record.setdefault("video_file", None)
+            record.setdefault("video_has_audio", False)
         return manifest
 
 
@@ -101,13 +114,14 @@ def get_record(record_id):
     raise KeyError(record_id)
 
 
-def create_record(tag, category="other", image_description="", audio_description="", image_file=None,
-                  audio_file=None, reference_type="uncategorized"):
+def create_record(tag, category="other", image_description="", audio_description="",
+                  image_file=None, audio_file=None, reference_type="uncategorized",
+                  video_description="", video_file=None, video_has_audio=False):
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
-    if image_file is None and audio_file is None:
-        raise ValueError("A reference record needs an image, audio clip, or both.")
+    if image_file is None and audio_file is None and video_file is None:
+        raise ValueError("A reference record needs an image, audio clip, video, or a combination.")
 
     with LIBRARY_LOCK:
         manifest = read_manifest()
@@ -120,8 +134,11 @@ def create_record(tag, category="other", image_description="", audio_description
             "reference_type": reference_type,
             "image_description": (image_description or "").strip(),
             "audio_description": (audio_description or "").strip(),
+            "video_description": (video_description or "").strip(),
             "image_file": image_file,
             "audio_file": audio_file,
+            "video_file": video_file,
+            "video_has_audio": bool(video_file and video_has_audio),
             "created_at": now,
             "updated_at": now,
         }
@@ -130,9 +147,10 @@ def create_record(tag, category="other", image_description="", audio_description
         return record
 
 
-def update_record(record_id, tag, category="other", image_description="", audio_description="", image_file=None,
-                  audio_file=None, remove_image=False, remove_audio=False,
-                  reference_type="uncategorized"):
+def update_record(record_id, tag, category="other", image_description="", audio_description="",
+                  image_file=None, audio_file=None, remove_image=False, remove_audio=False,
+                  reference_type="uncategorized", video_description="", video_file=None,
+                  video_has_audio=None, remove_video=False):
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
@@ -145,10 +163,18 @@ def update_record(record_id, tag, category="other", image_description="", audio_
 
         old_image = record.get("image_file")
         old_audio = record.get("audio_file")
+        old_video = record.get("video_file")
         next_image = image_file if image_file is not None else (None if remove_image else old_image)
         next_audio = audio_file if audio_file is not None else (None if remove_audio else old_audio)
-        if next_image is None and next_audio is None:
-            raise ValueError("A reference record needs an image, audio clip, or both.")
+        next_video = video_file if video_file is not None else (None if remove_video else old_video)
+        if next_image is None and next_audio is None and next_video is None:
+            raise ValueError("A reference record needs an image, audio clip, video, or a combination.")
+        if video_file is not None:
+            next_video_has_audio = bool(video_has_audio)
+        elif remove_video:
+            next_video_has_audio = False
+        else:
+            next_video_has_audio = bool(record.get("video_has_audio"))
 
         record.update({
             "tag": tag,
@@ -156,12 +182,20 @@ def update_record(record_id, tag, category="other", image_description="", audio_
             "reference_type": reference_type,
             "image_description": (image_description or "").strip(),
             "audio_description": (audio_description or "").strip(),
+            "video_description": (video_description or "").strip(),
             "image_file": next_image,
             "audio_file": next_audio,
+            "video_file": next_video,
+            "video_has_audio": next_video_has_audio,
             "updated_at": _timestamp(),
         })
         _commit(manifest)
-        return record, old_image if old_image != next_image else None, old_audio if old_audio != next_audio else None
+        return (
+            record,
+            old_image if old_image != next_image else None,
+            old_audio if old_audio != next_audio else None,
+            old_video if old_video != next_video else None,
+        )
 
 
 def delete_record(record_id):
@@ -176,12 +210,17 @@ def delete_record(record_id):
 
 
 def media_path(record, kind):
-    if kind not in ("image", "audio"):
+    if kind not in ("image", "audio", "video"):
         raise ValueError("Unknown media kind.")
     filename = record.get(f"{kind}_file")
     if not filename or Path(filename).name != filename:
         raise FileNotFoundError(f"Record has no valid {kind} file.")
-    root = image_directory() if kind == "image" else audio_directory()
+    roots = {
+        "image": image_directory,
+        "audio": audio_directory,
+        "video": video_directory,
+    }
+    root = roots[kind]()
     resolved = (root / filename).resolve()
     if os.path.commonpath((str(root.resolve()), str(resolved))) != str(root.resolve()):
         raise ValueError("Managed media path is outside the library.")
