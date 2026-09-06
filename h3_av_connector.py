@@ -574,14 +574,33 @@ class SkebaH3AVConnectorFinalizeTest(io.ComfyNode):
                 )
             trimmed = waveform[..., head_samples:audio_stop]
             wanted = int(round(bridge_images.shape[0] / FPS * sample_rate))
-            if trimmed.shape[-1] < wanted:
-                raise ValueError(
-                    f"H3 AV Connector Finalize: audio is {wanted - trimmed.shape[-1]} "
-                    "samples shorter than the trimmed picture"
+            shortfall = wanted - int(trimmed.shape[-1])
+            padded_samples = 0
+            if shortfall > 0:
+                # H3 video is timed at 24 FPS while its audio latent runs at
+                # 40 Hz. The audio VAE decoder can therefore finish a fraction
+                # of one audio-latent step before the exact picture boundary.
+                # Preserve A/V duration by extending the final sample only for
+                # that bounded grid-rounding case; a larger deficit still
+                # indicates genuinely incomplete generated audio.
+                grid_tolerance = int(math.ceil(sample_rate / h3.AUDIO_LATENT_FPS))
+                if shortfall > grid_tolerance:
+                    raise ValueError(
+                        f"H3 AV Connector Finalize: audio is {shortfall} samples "
+                        f"shorter than the trimmed picture (grid tolerance is "
+                        f"{grid_tolerance}); check that video and audio came "
+                        "from the same sampler output"
+                    )
+                padding = trimmed[..., -1:].expand(
+                    *trimmed.shape[:-1], shortfall
                 )
+                trimmed = torch.cat((trimmed, padding), dim=-1)
+                padded_samples = shortfall
             trimmed = trimmed[..., :wanted].contiguous()
             bridge_audio = {"waveform": trimmed, "sample_rate": sample_rate}
             audio_note = f"{trimmed.shape[-1]} samples at {sample_rate} Hz"
+            if padded_samples:
+                audio_note += f" (edge-padded {padded_samples} for H3 grid alignment)"
 
         seam_bundle = dict(connector_bundle)
         seam_bundle["generated_total_frames"] = total

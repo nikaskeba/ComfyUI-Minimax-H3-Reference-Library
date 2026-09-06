@@ -2,7 +2,7 @@
   "id": "88eb47ea-3ffd-4973-864c-23a3c3882a90",
   "revision": 0,
   "last_node_id": 610,
-  "last_link_id": 1153,
+  "last_link_id": 1154,
   "nodes": [
     {
       "id": 344,
@@ -18,7 +18,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 44,
       "mode": 0,
       "inputs": [
         {
@@ -89,7 +89,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 49,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
@@ -160,7 +160,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 47,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -373,7 +373,7 @@
         86
       ],
       "flags": {},
-      "order": 46,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
@@ -443,7 +443,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 53,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -642,7 +642,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 58,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -700,7 +700,7 @@
         142
       ],
       "flags": {},
-      "order": 45,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
@@ -780,7 +780,7 @@
         138
       ],
       "flags": {},
-      "order": 67,
+      "order": 62,
       "mode": 0,
       "inputs": [
         {
@@ -867,7 +867,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 71,
+      "order": 65,
       "mode": 0,
       "inputs": [
         {
@@ -934,7 +934,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 72,
+      "order": 66,
       "mode": 0,
       "inputs": [
         {
@@ -1154,7 +1154,7 @@
         114
       ],
       "flags": {},
-      "order": 62,
+      "order": 58,
       "mode": 0,
       "inputs": [
         {
@@ -1226,7 +1226,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 64,
+      "order": 59,
       "mode": 0,
       "inputs": [
         {
@@ -1302,7 +1302,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 51,
+      "order": 56,
       "mode": 0,
       "inputs": [
         {
@@ -1369,7 +1369,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 52,
+      "order": 57,
       "mode": 0,
       "inputs": [
         {
@@ -1714,7 +1714,7 @@
         114
       ],
       "flags": {},
-      "order": 65,
+      "order": 61,
       "mode": 0,
       "inputs": [
         {
@@ -1835,79 +1835,6 @@
       }
     },
     {
-      "id": 217,
-      "type": "ResolutionSelector",
-      "pos": [
-        -4751.4190372076755,
-        3336.646844436875
-      ],
-      "size": [
-        338.94695111278907,
-        159.0071171175091
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "width",
-          "type": "INT",
-          "links": [
-            783
-          ]
-        },
-        {
-          "name": "height",
-          "type": "INT",
-          "links": [
-            784
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "ResolutionSelector",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#346434",
-        "__skeba_bgcolor_base": "rgba(24,24,27,.9)",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        "9:16 (Portrait Widescreen)",
-        0.3,
-        32
-      ],
-      "widgets_values_named": {
-        "aspect_ratio": "9:16 (Portrait Widescreen)",
-        "megapixels": 0.3,
-        "multiple": 32
-      },
-      "color": "#346434",
-      "bgcolor": "rgba(24,24,27,.9)",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 418,
       "type": "Getter",
       "pos": [
@@ -1921,7 +1848,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -1991,7 +1918,7 @@
         85.57264763262947
       ],
       "flags": {},
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -2045,155 +1972,6 @@
       }
     },
     {
-      "id": 216,
-      "type": "PrimitiveFloat",
-      "pos": [
-        -4757.878412009596,
-        3074.3513288947047
-      ],
-      "size": [
-        319.796875,
-        86
-      ],
-      "flags": {},
-      "order": 15,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "FLOAT",
-          "type": "FLOAT",
-          "links": [
-            781
-          ]
-        }
-      ],
-      "title": "Duration in Seconds",
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "PrimitiveFloat",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#346434",
-        "__skeba_bgcolor_base": "rgba(24,24,27,.9)",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        }
-      },
-      "widgets_values": [
-        10
-      ],
-      "widgets_values_named": {
-        "value": 10
-      },
-      "color": "#346434",
-      "bgcolor": "rgba(24,24,27,.9)",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 272,
-      "type": "ModelPreviewOverrideKJ",
-      "pos": [
-        -2273.159207024708,
-        3063.5877370862286
-      ],
-      "size": [
-        436.265625,
-        673
-      ],
-      "flags": {},
-      "order": 68,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 740
-        },
-        {
-          "name": "vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": 747
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MODEL",
-          "type": "MODEL",
-          "links": [
-            758
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfyui-kjnodes",
-        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "ModelPreviewOverrideKJ",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#322",
-        "__skeba_bgcolor_base": "#533"
-      },
-      "widgets_values": [
-        720,
-        80,
-        true,
-        10,
-        1,
-        "taeh3.safetensors",
-        ""
-      ],
-      "widgets_values_named": {
-        "max_resolution": 720,
-        "jpeg_quality": 80,
-        "suppress_default_preview": true,
-        "preview_frames": 10,
-        "preview_fps": 1,
-        "tiny_vae": "taeh3.safetensors",
-        "preview": ""
-      },
-      "color": "#322",
-      "bgcolor": "#533",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 356,
       "type": "Setter",
       "pos": [
@@ -2207,7 +1985,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 73,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -2278,7 +2056,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 16,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -2341,6 +2119,2814 @@
       }
     },
     {
+      "id": 352,
+      "type": "Getter",
+      "pos": [
+        -431.16022537400937,
+        3197.0354058981966
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1012
+          ]
+        }
+      ],
+      "title": "Get_audio_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "audio_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "audio_vae",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 350,
+      "type": "Getter",
+      "pos": [
+        -432.5979435851902,
+        3148.429378893911
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1011
+          ]
+        }
+      ],
+      "title": "Get_video_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "video_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "video_vae",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 215,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -389.90176037968575,
+        3694.1613653659247
+      ],
+      "size": [
+        240,
+        166
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 48,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 782
+        },
+        {
+          "label": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            1030
+          ]
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ComfyMathExpression",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      ],
+      "widgets_values_named": {
+        "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 382,
+      "type": "Getter",
+      "pos": [
+        -378.035332105079,
+        3595.059229218714
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1032
+          ]
+        }
+      ],
+      "title": "Get_width",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "width",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "width",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 383,
+      "type": "Getter",
+      "pos": [
+        -392.40896710114606,
+        3652.8251685422
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1031
+          ]
+        }
+      ],
+      "title": "Get_height",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "height",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "height",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 379,
+      "type": "Getter",
+      "pos": [
+        -447.12497024404394,
+        3750.304248016999
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            782
+          ]
+        }
+      ],
+      "title": "Get_duration_in_seconds",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "duration_in_seconds",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "duration_in_seconds",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 547,
+      "type": "Getter",
+      "pos": [
+        236.6975504730331,
+        3183.5326285415968
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1092
+          ]
+        }
+      ],
+      "title": "Get_video_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "video_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "video_vae",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 548,
+      "type": "Getter",
+      "pos": [
+        226.56531390366249,
+        3229.4321042784195
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1093
+          ]
+        }
+      ],
+      "title": "Get_audio_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "audio_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "audio_vae",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 413,
+      "type": "Setter",
+      "pos": [
+        221.72741322677513,
+        3088.2690377345025
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 67,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "CONDITIONING",
+          "link": 1045
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_positive",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "positive"
+      },
+      "widgets_values": [
+        "positive"
+      ],
+      "widgets_values_named": {
+        "key": "positive"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 551,
+      "type": "Setter",
+      "pos": [
+        844.2185709710026,
+        3114.6891561874086
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 71,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "CONDITIONING",
+          "link": 1095
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_conditioning",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "conditioning"
+      },
+      "widgets_values": [
+        "conditioning"
+      ],
+      "widgets_values_named": {
+        "key": "conditioning"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 328,
+      "type": "CFGGuider",
+      "pos": [
+        -1488.1200964704278,
+        4485.389836106534
+      ],
+      "size": [
+        290,
+        126
+      ],
+      "flags": {},
+      "order": 76,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 761
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 1144
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 711
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            695
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "CFGGuider",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        1
+      ],
+      "widgets_values_named": {
+        "cfg": 1
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 327,
+      "type": "BasicScheduler",
+      "pos": [
+        -1449.945542964647,
+        4233.427444942641
+      ],
+      "size": [
+        290,
+        142
+      ],
+      "flags": {},
+      "order": 49,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 762
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            696
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "BasicScheduler",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "simple",
+        4,
+        0.4
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 4,
+        "denoise": 0.4
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 302,
+      "type": "KSamplerSelect",
+      "pos": [
+        -1346.9970441801095,
+        4009.283074830109
+      ],
+      "size": [
+        260,
+        86
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 22,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            706
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "KSamplerSelect",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 411,
+      "type": "RandomNoise",
+      "pos": [
+        -1332.2871224075018,
+        3961.662860082777
+      ],
+      "size": [
+        260,
+        90
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 23,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            815
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "RandomNoise",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        50280432847566,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 50280432847566,
+        "control_after_generate": "fixed"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 359,
+      "type": "Getter",
+      "pos": [
+        -1666.3345691885245,
+        4523.812644544577
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            761
+          ]
+        }
+      ],
+      "title": "Get_model",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "model",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "model",
+        "var_name": ""
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 360,
+      "type": "Getter",
+      "pos": [
+        -1679.2316806922784,
+        4354.968210900612
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            762
+          ]
+        }
+      ],
+      "title": "Get_model",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "model",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "model",
+        "var_name": ""
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 392,
+      "type": "Getter",
+      "pos": [
+        -3058.973515806394,
+        4391.747333528215
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            796
+          ]
+        }
+      ],
+      "title": "Get_upscale_scale",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "upscale_scale",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "upscale_scale",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 329,
+      "type": "MinimaxH3LatentUpscaler3D",
+      "pos": [
+        -3016.7038785991326,
+        3961.749341181093
+      ],
+      "size": [
+        290,
+        202
+      ],
+      "flags": {},
+      "order": 70,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "latent",
+          "type": "*",
+          "link": 699
+        },
+        {
+          "name": "mode.scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.scale"
+          },
+          "link": 796
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "*",
+          "links": [
+            769
+          ]
+        }
+      ],
+      "properties": {
+        "aux_id": "LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler",
+        "ver": "64fc9d4c7e2c03e8c61d6886182e3309365a1962",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "MinimaxH3LatentUpscaler3D",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "minimax_h3_latent_upscaler_3d_bf16.safetensors",
+        "scale by multiplier",
+        1.5,
+        32,
+        false,
+        "cuda",
+        "fp16"
+      ],
+      "widgets_values_named": {
+        "model_name": "minimax_h3_latent_upscaler_3d_bf16.safetensors",
+        "mode": "scale by multiplier",
+        "mode.scale": 1.5,
+        "align": 32,
+        "keep_proportion": false,
+        "device": "cuda",
+        "precision": "fp16"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 326,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        -2677.9597545762254,
+        3948.594203890924
+      ],
+      "size": [
+        230,
+        78
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 73,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 769
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 704
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            1105
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "LTXVConcatAVLatent",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 347,
+      "type": "Getter",
+      "pos": [
+        -2552.400709925344,
+        4181.761289128974
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1106
+          ]
+        }
+      ],
+      "title": "Get_video_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "video_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "video_vae",
+        "var_name": ""
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 353,
+      "type": "Getter",
+      "pos": [
+        -2565.695695358677,
+        4233.71459996058
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 28,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1107
+          ]
+        }
+      ],
+      "title": "Get_audio_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "audio_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "audio_vae",
+        "var_name": ""
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 414,
+      "type": "Getter",
+      "pos": [
+        -2587.9745490807263,
+        4126.821269093868
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1104
+          ]
+        }
+      ],
+      "title": "Get_positive",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "positive",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "positive",
+        "var_name": ""
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 354,
+      "type": "Getter",
+      "pos": [
+        -704.1220323477924,
+        4194.181487226375
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            756
+          ]
+        }
+      ],
+      "title": "Get_audio_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "audio_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "audio_vae",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 298,
+      "type": "VAEDecode",
+      "pos": [
+        -520.2518932619957,
+        3957.9226817204103
+      ],
+      "size": [
+        260,
+        78
+      ],
+      "flags": {},
+      "order": 79,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 700
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 751
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            1147
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "VAEDecode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 323,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        -503.3531582277566,
+        4088.2560061190643
+      ],
+      "size": [
+        230,
+        78
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 78,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 693
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 756
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            1148
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "VAEDecodeAudio",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 349,
+      "type": "Getter",
+      "pos": [
+        -734.6528199087234,
+        4007.498701853405
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            751
+          ]
+        }
+      ],
+      "title": "Get_video_vae",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "video_vae",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "video_vae",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 589,
+      "type": "SkebaH3AVConnectorFinalizeTest",
+      "pos": [
+        -132.1145798559288,
+        4010.3593509056354
+      ],
+      "size": [
+        389.384765625,
+        86
+      ],
+      "flags": {},
+      "order": 80,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "Generated Video Frames",
+          "name": "generated_images",
+          "type": "IMAGE",
+          "link": 1147
+        },
+        {
+          "name": "connector_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "link": 1154
+        },
+        {
+          "label": "Generated Video Audio",
+          "name": "generated_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 1148
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Generated Connector Video Frames",
+          "type": "IMAGE",
+          "links": [
+            1121
+          ]
+        },
+        {
+          "name": "Generated Connector Video Audio",
+          "type": "AUDIO",
+          "links": [
+            1122
+          ]
+        },
+        {
+          "name": "seam_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_SEAM",
+          "links": [
+            1123
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaH3AVConnectorFinalizeTest",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 552,
+      "type": "Getter",
+      "pos": [
+        -4149.329017607392,
+        4287.669168124763
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1142,
+            1143
+          ]
+        }
+      ],
+      "title": "Get_conditioning",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "conditioning",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "conditioning",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 602,
+      "type": "Setter",
+      "pos": [
+        -4355.599888151697,
+        4157.420493468132
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 53,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "STRING",
+          "link": 1141
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_initial_prompt",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "initial_prompt"
+      },
+      "widgets_values": [
+        "initial_prompt"
+      ],
+      "widgets_values_named": {
+        "key": "initial_prompt"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 391,
+      "type": "Setter",
+      "pos": [
+        -4379.807295607139,
+        3536.874551766057
+      ],
+      "size": [
+        225,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 46,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "FLOAT",
+          "link": 795
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_upscale_scale",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "upscale_scale"
+      },
+      "widgets_values": [
+        "upscale_scale"
+      ],
+      "widgets_values_named": {
+        "key": "upscale_scale"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 562,
+      "type": "ttN int",
+      "pos": [
+        -4742.859910260156,
+        3665.1664524065536
+      ],
+      "size": [
+        434.5389244157626,
+        98
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "int",
+          "type": "INT",
+          "links": [
+            1064
+          ]
+        },
+        {
+          "name": "float",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "Frames To Use for Start Must Be Either 5 22 39 56",
+      "properties": {
+        "cnr_id": "comfyui_tinyterranodes",
+        "ver": "2.0.11",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ttN int",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ttNnodeVersion": "1.0.0"
+      },
+      "widgets_values": [
+        22
+      ],
+      "widgets_values_named": {
+        "int": 22
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 604,
+      "type": "ttN int",
+      "pos": [
+        -4746.564252565726,
+        3815.305875451084
+      ],
+      "size": [
+        434.5389244157626,
+        98
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "int",
+          "type": "INT",
+          "links": [
+            1149
+          ]
+        },
+        {
+          "name": "float",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "Frames To Use for Start Must Be Either 5 22 39 56",
+      "properties": {
+        "cnr_id": "comfyui_tinyterranodes",
+        "ver": "2.0.11",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "Node name for S&R": "ttN int",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ttNnodeVersion": "1.0.0"
+      },
+      "widgets_values": [
+        22
+      ],
+      "widgets_values_named": {
+        "int": 22
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 591,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        771.0268368931472,
+        3979.1896296517575
+      ],
+      "size": [
+        225.3349609375,
+        697.06943359375
+      ],
+      "flags": {},
+      "order": 82,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1124
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 1125
+        },
+        {
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": null
+        }
+      ],
+      "title": "Final Video",
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "VHS_VideoCombine",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "AnimateDiff",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": false,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "AnimateDiff_00023-audio.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "AnimateDiff_00023.png",
+            "fullpath": "C:\\Users\\nicho\\Documents\\ComfyUI\\output\\AnimateDiff_00023-audio.mp4"
+          }
+        }
+      },
+      "widgets_values_named": {
+        "frame_rate": 24,
+        "loop_count": 0,
+        "filename_prefix": "AnimateDiff",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": false,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "AnimateDiff_00023-audio.mp4",
+            "subfolder": "",
+            "type": "output",
+            "format": "video/h264-mp4",
+            "frame_rate": 24,
+            "workflow": "AnimateDiff_00023.png",
+            "fullpath": "C:\\Users\\nicho\\Documents\\ComfyUI\\output\\AnimateDiff_00023-audio.mp4"
+          }
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 586,
+      "type": "Setter",
+      "pos": [
+        856.6223007511701,
+        3219.191128383719
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 72,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "LATENT",
+          "link": 1103
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_initial_latent",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "initial_latent"
+      },
+      "widgets_values": [
+        "initial_latent"
+      ],
+      "widgets_values_named": {
+        "key": "initial_latent"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 563,
+      "type": "Setter",
+      "pos": [
+        -4365.064905742063,
+        3784.438188802494
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 51,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "INT",
+          "link": 1064
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_Start_Frames",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "Start_Frames"
+      },
+      "widgets_values": [
+        "Start_Frames"
+      ],
+      "widgets_values_named": {
+        "key": "Start_Frames"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 603,
+      "type": "Setter",
+      "pos": [
+        -4344.213168379245,
+        3983.5587092359156
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 52,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "INT",
+          "link": 1149
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_End_Frames",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "End_Frames"
+      },
+      "widgets_values": [
+        "End_Frames"
+      ],
+      "widgets_values_named": {
+        "key": "End_Frames"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 292,
+      "type": "String",
+      "pos": [
+        -4730.996985945621,
+        3971.6747059109503
+      ],
+      "size": [
+        335.0708896719743,
+        658.1330909255357
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1141
+          ]
+        }
+      ],
+      "title": "One Prompt Only",
+      "properties": {
+        "cnr_id": "ComfyLiterals",
+        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "String",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": [
+        "subject_definitions:\n\n<Subject 1> is {binary_thott}, a man with buzzed hair wearing a red bra and red panties, with exaggerated confidence and energetic dance movements.\n\n<Subject 2> is an unreferenced man wearing a cheap shiny pastel-pink suit, pink shirt, pink trousers, and white shoes.\n\n<Subject 3> is a second unreferenced man wearing a cheap shiny pastel-pink suit, pink shirt, pink trousers, and white shoes.\n\n<Subject 4> is a bizarre low-budget public-access television studio with a pink carpeted floor, wrinkled pink fabric backdrop, artificial palm trees, exposed extension cords, rotating mirrored decorations, an obviously homemade illuminated heart, cheap fog machine, and an enormous handmade sign reading “DON’T FORGET.”\n\nsummary:\n\n[reference generation]\n\nInside a surreal low-budget public-access music program, two completely unreferenced men dressed entirely in pink perform an awkward synchronized song while {binary_thott} dances between them wearing a red bra and panties. The performance rapidly deteriorates into an aggressively strange music-video spectacle centered around Binary Thott repeatedly demanding not to be forgotten.\n\nretention_analysis:\n\n<Subject 1> Binary Thott occupies CENTER stage, maintaining buzzed hair, red bra, red panties, high-pitched voice, and exaggerated dancing.\n\n<Subject 2> The first unreferenced pink-suited singer stands LEFT and performs synchronized dancing without intelligible individual dialogue.\n\n<Subject 3> The second unreferenced pink-suited singer stands RIGHT and performs synchronized dancing without intelligible individual dialogue.\n\n<Subject 4> The entire video remains inside the cheap pink public-access studio.\n\ndetailed_description:\n\n[Shot 1] Static wide shot resembling badly preserved late-night public-access television. Two completely untagged, unreferenced men in matching shiny pink suits stand LEFT and RIGHT, swaying awkwardly while singing indistinct melodic backing vocals together.\n\n{binary_thott} stands CENTER between them in his red bra and panties.\n\nHe begins dancing with excessive enthusiasm: hips swinging, shoulders bouncing, arms pumping, knees bending, repeatedly pointing at himself.\n\nThe camera suddenly performs a violent digital crash zoom toward Binary Thott.\n\n{binary_thott} (S1) says in his high-pitched voice, [English §binary_thott§]Don’t forget about me! Me! Me! Me!\n\n[Shot 2] At 00:05.000, terrible green-screen duplication effect creates six additional visual copies of Binary Thott dancing behind the real physical Binary Thott.\n\nThe copies are intentionally badly synchronized.\n\nThe two pink men continue their bizarre synchronized swaying.\n\nHuge spinning text appears:\n\n“ME”\n\nThen another:\n\n“ME”\n\nThen twenty tiny copies of the word “ME” begin bouncing around the screen.\n\n{binary_thott} (S1) says, [English §binary_thott§]Me! Me! Me! MEEEEEE!\n\n[Shot 3] At 00:09.000, extreme fisheye close-up of Binary Thott’s face.\n\nHe stares directly into the lens while continuing to dance despite only his head and shoulders fitting into frame.\n\nThe image repeatedly switches between normal video, oversaturated pink, inverted colors, VHS tracking distortion, and a terrible sparkling star wipe.\n\nBehind him, the two unreferenced men continue dancing with completely serious expressions.\n\n[Shot 4] At 00:12.000, instant static wide shot.\n\nEveryone abruptly stops.\n\nThe two pink men stare directly into the camera.\n\nBinary Thott stands perfectly still between them.\n\nOne full second of uncomfortable silence.\n\nBinary Thott suddenly thrusts his face toward the camera.\n\n{binary_thott} (S1) says in an extremely high-pitched voice, [English §binary_thott§]ME!\n\nFreeze frame.\n\nBinary Thott’s frozen face stretches horizontally until it fills the entire screen.\n\nHuge cheap text flashes:\n\n“DON’T FORGET”\n\nthen:\n\n“ABOUT”\n\nthen:\n\n“ME ME ME ME ME”\n\nA badly composited spinning hot dog flies across the screen for absolutely no reason.\n\nHard cut to analog static.\n\noverall_soundscape:\n\nCheap public-access studio acoustics, badly compressed microphones, synthetic drum machine, plastic keyboard, excessive reverb, occasional microphone clipping, artificial audience applause, VHS hiss, random digital swooshes, and an inexplicably loud cash-register sound during the final freeze frame. The two unreferenced men provide only indistinct melodic backing vocals without separate intelligible words.\n\nnon_diegetic_music:\n\nAggressively cheerful low-budget 1980s-style public-access synth-pop with cheap drum-machine percussion, plastic keyboard chords, cheesy bass, and intentionally amateur production."
+      ],
+      "widgets_values_named": {
+        "String": "subject_definitions:\n\n<Subject 1> is {binary_thott}, a man with buzzed hair wearing a red bra and red panties, with exaggerated confidence and energetic dance movements.\n\n<Subject 2> is an unreferenced man wearing a cheap shiny pastel-pink suit, pink shirt, pink trousers, and white shoes.\n\n<Subject 3> is a second unreferenced man wearing a cheap shiny pastel-pink suit, pink shirt, pink trousers, and white shoes.\n\n<Subject 4> is a bizarre low-budget public-access television studio with a pink carpeted floor, wrinkled pink fabric backdrop, artificial palm trees, exposed extension cords, rotating mirrored decorations, an obviously homemade illuminated heart, cheap fog machine, and an enormous handmade sign reading “DON’T FORGET.”\n\nsummary:\n\n[reference generation]\n\nInside a surreal low-budget public-access music program, two completely unreferenced men dressed entirely in pink perform an awkward synchronized song while {binary_thott} dances between them wearing a red bra and panties. The performance rapidly deteriorates into an aggressively strange music-video spectacle centered around Binary Thott repeatedly demanding not to be forgotten.\n\nretention_analysis:\n\n<Subject 1> Binary Thott occupies CENTER stage, maintaining buzzed hair, red bra, red panties, high-pitched voice, and exaggerated dancing.\n\n<Subject 2> The first unreferenced pink-suited singer stands LEFT and performs synchronized dancing without intelligible individual dialogue.\n\n<Subject 3> The second unreferenced pink-suited singer stands RIGHT and performs synchronized dancing without intelligible individual dialogue.\n\n<Subject 4> The entire video remains inside the cheap pink public-access studio.\n\ndetailed_description:\n\n[Shot 1] Static wide shot resembling badly preserved late-night public-access television. Two completely untagged, unreferenced men in matching shiny pink suits stand LEFT and RIGHT, swaying awkwardly while singing indistinct melodic backing vocals together.\n\n{binary_thott} stands CENTER between them in his red bra and panties.\n\nHe begins dancing with excessive enthusiasm: hips swinging, shoulders bouncing, arms pumping, knees bending, repeatedly pointing at himself.\n\nThe camera suddenly performs a violent digital crash zoom toward Binary Thott.\n\n{binary_thott} (S1) says in his high-pitched voice, [English §binary_thott§]Don’t forget about me! Me! Me! Me!\n\n[Shot 2] At 00:05.000, terrible green-screen duplication effect creates six additional visual copies of Binary Thott dancing behind the real physical Binary Thott.\n\nThe copies are intentionally badly synchronized.\n\nThe two pink men continue their bizarre synchronized swaying.\n\nHuge spinning text appears:\n\n“ME”\n\nThen another:\n\n“ME”\n\nThen twenty tiny copies of the word “ME” begin bouncing around the screen.\n\n{binary_thott} (S1) says, [English §binary_thott§]Me! Me! Me! MEEEEEE!\n\n[Shot 3] At 00:09.000, extreme fisheye close-up of Binary Thott’s face.\n\nHe stares directly into the lens while continuing to dance despite only his head and shoulders fitting into frame.\n\nThe image repeatedly switches between normal video, oversaturated pink, inverted colors, VHS tracking distortion, and a terrible sparkling star wipe.\n\nBehind him, the two unreferenced men continue dancing with completely serious expressions.\n\n[Shot 4] At 00:12.000, instant static wide shot.\n\nEveryone abruptly stops.\n\nThe two pink men stare directly into the camera.\n\nBinary Thott stands perfectly still between them.\n\nOne full second of uncomfortable silence.\n\nBinary Thott suddenly thrusts his face toward the camera.\n\n{binary_thott} (S1) says in an extremely high-pitched voice, [English §binary_thott§]ME!\n\nFreeze frame.\n\nBinary Thott’s frozen face stretches horizontally until it fills the entire screen.\n\nHuge cheap text flashes:\n\n“DON’T FORGET”\n\nthen:\n\n“ABOUT”\n\nthen:\n\n“ME ME ME ME ME”\n\nA badly composited spinning hot dog flies across the screen for absolutely no reason.\n\nHard cut to analog static.\n\noverall_soundscape:\n\nCheap public-access studio acoustics, badly compressed microphones, synthetic drum machine, plastic keyboard, excessive reverb, occasional microphone clipping, artificial audience applause, VHS hiss, random digital swooshes, and an inexplicably loud cash-register sound during the final freeze frame. The two unreferenced men provide only indistinct melodic backing vocals without separate intelligible words.\n\nnon_diegetic_music:\n\nAggressively cheerful low-budget 1980s-style public-access synth-pop with cheap drum-machine percussion, plastic keyboard chords, cheesy bass, and intentionally amateur production."
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 216,
+      "type": "PrimitiveFloat",
+      "pos": [
+        -4757.878412009596,
+        3074.3513288947047
+      ],
+      "size": [
+        319.796875,
+        86
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            781
+          ]
+        }
+      ],
+      "title": "Duration in Seconds",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "PrimitiveFloat",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#346434",
+        "__skeba_bgcolor_base": "rgba(24,24,27,.9)",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        15
+      ],
+      "widgets_values_named": {
+        "value": 15
+      },
+      "color": "#346434",
+      "bgcolor": "rgba(24,24,27,.9)",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
       "id": 309,
       "type": "H3TaggedReferencePrompt",
       "pos": [
@@ -2352,7 +4938,7 @@
         584
       ],
       "flags": {},
-      "order": 63,
+      "order": 60,
       "mode": 0,
       "inputs": [
         {
@@ -2564,210 +5150,46 @@
       }
     },
     {
-      "id": 352,
-      "type": "Getter",
+      "id": 337,
+      "type": "H3BuiltInReference",
       "pos": [
-        -431.16022537400937,
-        3197.0354058981966
+        -1420.5163568088412,
+        3419.608458434434
       ],
       "size": [
-        210,
-        34
+        400,
+        200
       ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 17,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1012
-          ]
-        }
-      ],
-      "title": "Get_audio_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "audio_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "audio_vae",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 350,
-      "type": "Getter",
-      "pos": [
-        -432.5979435851902,
-        3148.429378893911
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 18,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1011
-          ]
-        }
-      ],
-      "title": "Get_video_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "video_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "video_vae",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 215,
-      "type": "ComfyMathExpression",
-      "pos": [
-        -389.90176037968575,
-        3694.1613653659247
-      ],
-      "size": [
-        240,
-        166
-      ],
-      "flags": {
-        "collapsed": true
-      },
+      "flags": {},
       "order": 55,
       "mode": 0,
       "inputs": [
         {
-          "label": "a",
-          "name": "values.a",
-          "type": "FLOAT,INT,BOOLEAN",
-          "link": 782
-        },
-        {
-          "label": "b",
-          "name": "values.b",
-          "shape": 7,
-          "type": "FLOAT,INT,BOOLEAN",
-          "link": null
+          "name": "prompt_template",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt_template"
+          },
+          "link": 771
         }
       ],
       "outputs": [
         {
-          "name": "FLOAT",
-          "type": "FLOAT",
-          "links": []
-        },
-        {
-          "name": "INT",
-          "type": "INT",
+          "name": "prompt",
+          "type": "STRING",
           "links": [
-            1030
+            736
           ]
         },
         {
-          "name": "BOOL",
-          "type": "BOOLEAN",
-          "links": []
+          "name": "mapping",
+          "type": "STRING",
+          "links": null
         }
       ],
       "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
+        "cnr_id": "h3-reference-library",
+        "ver": "0ddafbbef2688ae7bfc77aaa571608c60cd76680",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2775,27 +5197,169 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "Node name for S&R": "ComfyMathExpression",
+        "Node name for S&R": "H3BuiltInReference",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
         "__skeba_tags": {
           "inputs": [],
           "outputs": []
         },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "[Shot 1] ^Abby Sciuto^ works at her desk.",
+        null
+      ],
+      "widgets_values_named": {
+        "prompt_template": "[Shot 1] ^Abby Sciuto^ works at her desk.",
+        "Open Built-In Characters": null
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 368,
+      "type": "Getter",
+      "pos": [
+        -1604.9991416717778,
+        3474.6310898667944
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            771
+          ]
+        }
+      ],
+      "title": "Get_initial_prompt",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "initial_prompt",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "initial_prompt",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 331,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        -1478.414408486369,
+        4431.306250567165
+      ],
+      "size": [
+        230,
+        58
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 75,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 1145
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            711
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ConditioningZeroOut",
         "ue_properties": {
           "widget_ue_connectable": {},
           "version": "7.8",
           "input_ue_unconnectable": {}
         },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
       },
-      "widgets_values": [
-        "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
-      ],
-      "widgets_values_named": {
-        "expression": "max(5, round(a * 24)) + (5 - (max(5, round(a * 24)) % 17)) % 17"
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
+      "color": "#223",
+      "bgcolor": "#335",
       "_meta": {
         "skeba_tags": {
           "inputs": [],
@@ -2804,43 +5368,101 @@
       }
     },
     {
-      "id": 382,
-      "type": "Getter",
+      "id": 587,
+      "type": "SkebaMiniMaxH3AVConnectorGuideTest",
       "pos": [
-        -378.035332105079,
-        3595.059229218714
+        -2221.9251177991137,
+        4123.685848135197
       ],
       "size": [
-        210,
-        34
+        408.980078125,
+        294
       ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 19,
+      "flags": {},
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
-          "name": "value",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 1104
+        },
+        {
+          "name": "latent",
           "shape": 7,
-          "type": "*",
-          "link": null
+          "type": "LATENT",
+          "link": 1105
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 1106
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 1107
+        },
+        {
+          "name": "start_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1108
+        },
+        {
+          "name": "start_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 1109
+        },
+        {
+          "name": "end_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 1110
+        },
+        {
+          "name": "end_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 1111
         }
       ],
       "outputs": [
         {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
+          "name": "positive",
+          "type": "CONDITIONING",
           "links": [
-            1032
+            1144,
+            1145
+          ]
+        },
+        {
+          "name": "connector_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "links": [
+            1154
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "Pinned Generation Latent",
+          "type": "LATENT",
+          "links": [
+            1114
           ]
         }
       ],
-      "title": "Get_width",
+      "title": "Upscale-Pass AV Connector",
       "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2848,182 +5470,31 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
+        "Node name for S&R": "SkebaMiniMaxH3AVConnectorGuideTest",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
           "version": "7.8"
         },
-        "var_name": "",
         "__skeba_tags": {
           "inputs": [],
           "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
+        }
       },
       "widgets_values": [
-        "width",
-        ""
+        "22",
+        "22",
+        false,
+        true,
+        false
       ],
       "widgets_values_named": {
-        "key": "width",
-        "var_name": ""
+        "start_overlap": "22",
+        "end_overlap": "22",
+        "bypass": false,
+        "replace_existing_noise_mask": true,
+        "preserve_upscaled_endpoints": false
       },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 383,
-      "type": "Getter",
-      "pos": [
-        -392.40896710114606,
-        3652.8251685422
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 20,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1031
-          ]
-        }
-      ],
-      "title": "Get_height",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "height",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "height",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 379,
-      "type": "Getter",
-      "pos": [
-        -447.12497024404394,
-        3750.304248016999
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 21,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            782
-          ]
-        }
-      ],
-      "title": "Get_duration_in_seconds",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "duration_in_seconds",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "duration_in_seconds",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
       "_meta": {
         "skeba_tags": {
           "inputs": [],
@@ -3035,15 +5506,15 @@
       "id": 544,
       "type": "SkebaCachedMiniMaxH3ReferenceToVideo",
       "pos": [
-        -225.2596244891297,
-        3087.2610360780986
+        -220.08550262958144,
+        3094.584743337601
       ],
       "size": [
         413.696875,
         648
       ],
       "flags": {},
-      "order": 66,
+      "order": 63,
       "mode": 0,
       "inputs": [
         {
@@ -3293,1861 +5764,18 @@
       }
     },
     {
-      "id": 547,
-      "type": "Getter",
-      "pos": [
-        236.6975504730331,
-        3183.5326285415968
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 22,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1092
-          ]
-        }
-      ],
-      "title": "Get_video_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "video_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "video_vae",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 548,
-      "type": "Getter",
-      "pos": [
-        226.56531390366249,
-        3229.4321042784195
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 23,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1093
-          ]
-        }
-      ],
-      "title": "Get_audio_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "audio_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "audio_vae",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 413,
-      "type": "Setter",
-      "pos": [
-        221.72741322677513,
-        3088.2690377345025
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 69,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "CONDITIONING",
-          "link": 1045
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_positive",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "positive"
-      },
-      "widgets_values": [
-        "positive"
-      ],
-      "widgets_values_named": {
-        "key": "positive"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 551,
-      "type": "Setter",
-      "pos": [
-        844.2185709710026,
-        3114.6891561874086
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 74,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "CONDITIONING",
-          "link": 1095
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_conditioning",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "conditioning"
-      },
-      "widgets_values": [
-        "conditioning"
-      ],
-      "widgets_values_named": {
-        "key": "conditioning"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 328,
-      "type": "CFGGuider",
-      "pos": [
-        -1488.1200964704278,
-        4485.389836106534
-      ],
-      "size": [
-        290,
-        126
-      ],
-      "flags": {},
-      "order": 80,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 761
-        },
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 1144
-        },
-        {
-          "name": "negative",
-          "type": "CONDITIONING",
-          "link": 711
-        }
-      ],
-      "outputs": [
-        {
-          "name": "GUIDER",
-          "type": "GUIDER",
-          "links": [
-            695
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "CFGGuider",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        1
-      ],
-      "widgets_values_named": {
-        "cfg": 1
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 331,
-      "type": "ConditioningZeroOut",
-      "pos": [
-        -1478.414408486369,
-        4431.306250567165
-      ],
-      "size": [
-        230,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 79,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "conditioning",
-          "type": "CONDITIONING",
-          "link": 1145
-        }
-      ],
-      "outputs": [
-        {
-          "name": "CONDITIONING",
-          "type": "CONDITIONING",
-          "links": [
-            711
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "ConditioningZeroOut",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 327,
-      "type": "BasicScheduler",
-      "pos": [
-        -1449.945542964647,
-        4233.427444942641
-      ],
-      "size": [
-        290,
-        142
-      ],
-      "flags": {},
-      "order": 56,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "model",
-          "type": "MODEL",
-          "link": 762
-        }
-      ],
-      "outputs": [
-        {
-          "name": "SIGMAS",
-          "type": "SIGMAS",
-          "links": [
-            696
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "BasicScheduler",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "simple",
-        4,
-        0.4
-      ],
-      "widgets_values_named": {
-        "scheduler": "simple",
-        "steps": 4,
-        "denoise": 0.4
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 325,
-      "type": "SamplerCustomAdvanced",
-      "pos": [
-        -1100.8170174464358,
-        3931.4047110703905
-      ],
-      "size": [
-        230,
-        250
-      ],
-      "flags": {},
-      "order": 81,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "noise",
-          "type": "NOISE",
-          "link": 815
-        },
-        {
-          "name": "guider",
-          "type": "GUIDER",
-          "link": 695
-        },
-        {
-          "name": "sampler",
-          "type": "SAMPLER",
-          "link": 706
-        },
-        {
-          "name": "sigmas",
-          "type": "SIGMAS",
-          "link": 696
-        },
-        {
-          "name": "latent_image",
-          "type": "LATENT",
-          "link": 1114
-        }
-      ],
-      "outputs": [
-        {
-          "name": "output",
-          "type": "LATENT",
-          "links": [
-            693,
-            700
-          ]
-        },
-        {
-          "name": "denoised_output",
-          "type": "LATENT",
-          "links": []
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.33.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "SamplerCustomAdvanced",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 302,
-      "type": "KSamplerSelect",
-      "pos": [
-        -1346.9970441801095,
-        4009.283074830109
-      ],
-      "size": [
-        260,
-        86
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 24,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "SAMPLER",
-          "type": "SAMPLER",
-          "links": [
-            706
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "KSamplerSelect",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "res_multistep"
-      ],
-      "widgets_values_named": {
-        "sampler_name": "res_multistep"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 411,
-      "type": "RandomNoise",
-      "pos": [
-        -1332.2871224075018,
-        3961.662860082777
-      ],
-      "size": [
-        260,
-        90
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 25,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "NOISE",
-          "type": "NOISE",
-          "links": [
-            815
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "RandomNoise",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        50280432847566,
-        "fixed"
-      ],
-      "widgets_values_named": {
-        "noise_seed": 50280432847566,
-        "control_after_generate": "fixed"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 359,
-      "type": "Getter",
-      "pos": [
-        -1666.3345691885245,
-        4523.812644544577
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 26,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            761
-          ]
-        }
-      ],
-      "title": "Get_model",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "model",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "model",
-        "var_name": ""
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 360,
-      "type": "Getter",
-      "pos": [
-        -1679.2316806922784,
-        4354.968210900612
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 27,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            762
-          ]
-        }
-      ],
-      "title": "Get_model",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "model",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "model",
-        "var_name": ""
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 392,
-      "type": "Getter",
-      "pos": [
-        -3058.973515806394,
-        4391.747333528215
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 28,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            796
-          ]
-        }
-      ],
-      "title": "Get_upscale_scale",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "upscale_scale",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "upscale_scale",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 329,
-      "type": "MinimaxH3LatentUpscaler3D",
-      "pos": [
-        -3016.7038785991326,
-        3961.749341181093
-      ],
-      "size": [
-        290,
-        202
-      ],
-      "flags": {},
-      "order": 76,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "latent",
-          "type": "*",
-          "link": 699
-        },
-        {
-          "name": "mode.scale",
-          "type": "FLOAT",
-          "widget": {
-            "name": "mode.scale"
-          },
-          "link": 796
-        }
-      ],
-      "outputs": [
-        {
-          "name": "latent",
-          "type": "*",
-          "links": [
-            769
-          ]
-        }
-      ],
-      "properties": {
-        "aux_id": "LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler",
-        "ver": "64fc9d4c7e2c03e8c61d6886182e3309365a1962",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "MinimaxH3LatentUpscaler3D",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "minimax_h3_latent_upscaler_3d_bf16.safetensors",
-        "scale by multiplier",
-        1.5,
-        32,
-        false,
-        "cuda",
-        "fp16"
-      ],
-      "widgets_values_named": {
-        "model_name": "minimax_h3_latent_upscaler_3d_bf16.safetensors",
-        "mode": "scale by multiplier",
-        "mode.scale": 1.5,
-        "align": 32,
-        "keep_proportion": false,
-        "device": "cuda",
-        "precision": "fp16"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 326,
-      "type": "LTXVConcatAVLatent",
-      "pos": [
-        -2677.9597545762254,
-        3948.594203890924
-      ],
-      "size": [
-        230,
-        78
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 77,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "video_latent",
-          "type": "LATENT",
-          "link": 769
-        },
-        {
-          "name": "audio_latent",
-          "type": "LATENT",
-          "link": 704
-        }
-      ],
-      "outputs": [
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "links": [
-            1105
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "LTXVConcatAVLatent",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 347,
-      "type": "Getter",
-      "pos": [
-        -2552.400709925344,
-        4181.761289128974
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 29,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1106
-          ]
-        }
-      ],
-      "title": "Get_video_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "video_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "video_vae",
-        "var_name": ""
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 353,
-      "type": "Getter",
-      "pos": [
-        -2565.695695358677,
-        4233.71459996058
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 30,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1107
-          ]
-        }
-      ],
-      "title": "Get_audio_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "audio_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "audio_vae",
-        "var_name": ""
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 414,
-      "type": "Getter",
-      "pos": [
-        -2587.9745490807263,
-        4126.821269093868
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 31,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1104
-          ]
-        }
-      ],
-      "title": "Get_positive",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "positive",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "positive",
-        "var_name": ""
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 354,
-      "type": "Getter",
-      "pos": [
-        -703.8527014020619,
-        4181.827393846124
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 32,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            756
-          ]
-        }
-      ],
-      "title": "Get_audio_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "audio_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "audio_vae",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 298,
-      "type": "VAEDecode",
-      "pos": [
-        -519.9825623162645,
-        3945.5685883401607
-      ],
-      "size": [
-        260,
-        78
-      ],
-      "flags": {},
-      "order": 83,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 700
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 751
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            1147
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "VAEDecode",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 323,
-      "type": "VAEDecodeAudio",
-      "pos": [
-        -503.0838272820256,
-        4075.9019127388133
-      ],
-      "size": [
-        230,
-        78
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 82,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "samples",
-          "type": "LATENT",
-          "link": 693
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 756
-        }
-      ],
-      "outputs": [
-        {
-          "name": "AUDIO",
-          "type": "AUDIO",
-          "links": [
-            1148
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "VAEDecodeAudio",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 349,
-      "type": "Getter",
-      "pos": [
-        -734.383488962993,
-        3995.144608473155
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 33,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            751
-          ]
-        }
-      ],
-      "title": "Get_video_vae",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "video_vae",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "video_vae",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 368,
-      "type": "Getter",
-      "pos": [
-        -1570.7683505741634,
-        3130.6183319168686
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 34,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            771
-          ]
-        }
-      ],
-      "title": "Get_initial_prompt",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "initial_prompt",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "initial_prompt",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 337,
-      "type": "H3BuiltInReference",
-      "pos": [
-        -1420.5163568088412,
-        3419.608458434434
-      ],
-      "size": [
-        400,
-        200
-      ],
-      "flags": {},
-      "order": 57,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "prompt_template",
-          "type": "STRING",
-          "widget": {
-            "name": "prompt_template"
-          },
-          "link": 771
-        }
-      ],
-      "outputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "links": [
-            736
-          ]
-        },
-        {
-          "name": "mapping",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "h3-reference-library",
-        "ver": "0ddafbbef2688ae7bfc77aaa571608c60cd76680",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "H3BuiltInReference",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "[Shot 1] ^Abby Sciuto^ works at her desk.",
-        null
-      ],
-      "widgets_values_named": {
-        "prompt_template": "[Shot 1] ^Abby Sciuto^ works at her desk.",
-        "Open Built-In Characters": null
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 589,
-      "type": "SkebaH3AVConnectorFinalizeTest",
-      "pos": [
-        -131.84524891019808,
-        3998.005257525386
-      ],
-      "size": [
-        389.384765625,
-        86
-      ],
-      "flags": {},
-      "order": 84,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "Generated Video Frames",
-          "name": "generated_images",
-          "type": "IMAGE",
-          "link": 1147
-        },
-        {
-          "name": "connector_bundle",
-          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
-          "link": 1116
-        },
-        {
-          "label": "Generated Video Audio",
-          "name": "generated_audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 1148
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Generated Connector Video Frames",
-          "type": "IMAGE",
-          "links": [
-            1121
-          ]
-        },
-        {
-          "name": "Generated Connector Video Audio",
-          "type": "AUDIO",
-          "links": [
-            1122
-          ]
-        },
-        {
-          "name": "seam_bundle",
-          "type": "SKEBA_H3_AV_CONNECTOR_SEAM",
-          "links": [
-            1123
-          ]
-        },
-        {
-          "name": "status",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "h3-reference-library",
-        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "SkebaH3AVConnectorFinalizeTest",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 595,
       "type": "SkebaH3AVConnectorAssembleTest",
       "pos": [
-        290.9787163856489,
-        3960.3828761888167
+        311.4103689855748,
+        3987.873988438752
       ],
       "size": [
         375.33359375,
         142
       ],
       "flags": {},
-      "order": 85,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -5232,44 +5860,64 @@
       }
     },
     {
-      "id": 552,
-      "type": "Getter",
+      "id": 325,
+      "type": "SamplerCustomAdvanced",
       "pos": [
-        -4149.329017607392,
-        4287.669168124763
+        -1100.8170174464358,
+        3931.4047110703905
       ],
       "size": [
-        210,
-        34
+        230,
+        250
       ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 35,
+      "flags": {},
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
+          "name": "noise",
+          "type": "NOISE",
+          "link": 815
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 695
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 706
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 696
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 1114
         }
       ],
       "outputs": [
         {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
+          "name": "output",
+          "type": "LATENT",
           "links": [
-            1142,
-            1143
+            693,
+            700
           ]
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
         }
       ],
-      "title": "Get_conditioning",
       "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "cnr_id": "comfy-core",
+        "ver": "0.33.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5277,367 +5925,107 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "Node name for S&R": "Getter",
+        "Node name for S&R": "SamplerCustomAdvanced",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 272,
+      "type": "ModelPreviewOverrideKJ",
+      "pos": [
+        -2281.0464517004643,
+        3054.5046928332195
+      ],
+      "size": [
+        436.265625,
+        673
+      ],
+      "flags": {},
+      "order": 64,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 740
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 747
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            758
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ModelPreviewOverrideKJ",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
           "version": "7.8"
         },
-        "var_name": "",
         "__skeba_tags": {
           "inputs": [],
           "outputs": []
-        }
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
       },
       "widgets_values": [
-        "conditioning",
+        720,
+        80,
+        true,
+        10,
+        1,
+        "taeh3.safetensors",
         ""
       ],
       "widgets_values_named": {
-        "key": "conditioning",
-        "var_name": ""
+        "max_resolution": 720,
+        "jpeg_quality": 80,
+        "suppress_default_preview": true,
+        "preview_frames": 10,
+        "preview_fps": 1,
+        "tiny_vae": "taeh3.safetensors",
+        "preview": ""
       },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 292,
-      "type": "String",
-      "pos": [
-        -4730.996985945621,
-        3971.6747059109503
-      ],
-      "size": [
-        335.0708896719743,
-        658.1330909255357
-      ],
-      "flags": {},
-      "order": 36,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "STRING",
-          "type": "STRING",
-          "links": [
-            1141
-          ]
-        }
-      ],
-      "title": "One Prompt Only",
-      "properties": {
-        "cnr_id": "ComfyLiterals",
-        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "String",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#232",
-        "__skeba_bgcolor_base": "#353"
-      },
-      "widgets_values": [
-        "The womaen in crayons leave and enter a stage."
-      ],
-      "widgets_values_named": {
-        "String": "The womaen in crayons leave and enter a stage."
-      },
-      "color": "#232",
-      "bgcolor": "#353",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 602,
-      "type": "Setter",
-      "pos": [
-        -4355.599888151697,
-        4157.420493468132
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 59,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "STRING",
-          "link": 1141
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_initial_prompt",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "initial_prompt"
-      },
-      "widgets_values": [
-        "initial_prompt"
-      ],
-      "widgets_values_named": {
-        "key": "initial_prompt"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 391,
-      "type": "Setter",
-      "pos": [
-        -4379.807295607139,
-        3536.874551766057
-      ],
-      "size": [
-        225,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 50,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "FLOAT",
-          "link": 795
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_upscale_scale",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "upscale_scale"
-      },
-      "widgets_values": [
-        "upscale_scale"
-      ],
-      "widgets_values_named": {
-        "key": "upscale_scale"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 562,
-      "type": "ttN int",
-      "pos": [
-        -4742.859910260156,
-        3665.1664524065536
-      ],
-      "size": [
-        434.5389244157626,
-        98
-      ],
-      "flags": {},
-      "order": 37,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "int",
-          "type": "INT",
-          "links": [
-            1064
-          ]
-        },
-        {
-          "name": "float",
-          "type": "FLOAT",
-          "links": []
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "title": "Frames To Use for Start Must Be Either 5 22 39 56",
-      "properties": {
-        "cnr_id": "comfyui_tinyterranodes",
-        "ver": "2.0.11",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "ttN int",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "ttNnodeVersion": "1.0.0"
-      },
-      "widgets_values": [
-        22
-      ],
-      "widgets_values_named": {
-        "int": 22
-      },
-      "color": "#232",
-      "bgcolor": "#353",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 604,
-      "type": "ttN int",
-      "pos": [
-        -4746.564252565726,
-        3815.305875451084
-      ],
-      "size": [
-        434.5389244157626,
-        98
-      ],
-      "flags": {},
-      "order": 38,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "int",
-          "type": "INT",
-          "links": [
-            1149
-          ]
-        },
-        {
-          "name": "float",
-          "type": "FLOAT",
-          "links": []
-        },
-        {
-          "name": "text",
-          "type": "STRING",
-          "links": null
-        }
-      ],
-      "title": "Frames To Use for Start Must Be Either 5 22 39 56",
-      "properties": {
-        "cnr_id": "comfyui_tinyterranodes",
-        "ver": "2.0.11",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "Node name for S&R": "ttN int",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "ttNnodeVersion": "1.0.0"
-      },
-      "widgets_values": [
-        22
-      ],
-      "widgets_values_named": {
-        "int": 22
-      },
-      "color": "#232",
-      "bgcolor": "#353",
+      "color": "#322",
+      "bgcolor": "#533",
       "_meta": {
         "skeba_tags": {
           "inputs": [],
@@ -5649,15 +6037,15 @@
       "id": 576,
       "type": "VHS_LoadVideo",
       "pos": [
-        -4160.74027466952,
-        3065.562166043402
+        -3848.688071897382,
+        3065.6930805767806
       ],
       "size": [
         260.4306640625,
-        743.4179361979167
+        742.7500732421875
       ],
       "flags": {},
-      "order": 39,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -5701,7 +6089,7 @@
           "links": null
         }
       ],
-      "title": "Start Video",
+      "title": "End Video",
       "properties": {
         "cnr_id": "comfyui_fearnworksnodes",
         "ver": "0.1.2",
@@ -5724,37 +6112,37 @@
         }
       },
       "widgets_values": {
-        "video": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+        "video": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
         "force_rate": 24,
         "custom_width": 0,
         "custom_height": 0,
-        "frame_load_cap": 0,
-        "skip_first_frames": 50,
+        "frame_load_cap": 200,
+        "skip_first_frames": 124,
         "select_every_nth": 1,
         "format": "AnimateDiff",
         "videopreview": {
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+            "filename": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
             "type": "input",
             "format": "video/mov",
             "force_rate": 24,
             "custom_width": 0,
             "custom_height": 0,
-            "frame_load_cap": 0,
-            "skip_first_frames": 50,
+            "frame_load_cap": 200,
+            "skip_first_frames": 124,
             "select_every_nth": 1
           }
         }
       },
       "widgets_values_named": {
-        "video": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+        "video": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
         "force_rate": 24,
         "custom_width": 0,
         "custom_height": 0,
-        "frame_load_cap": 0,
-        "skip_first_frames": 50,
+        "frame_load_cap": 200,
+        "skip_first_frames": 124,
         "select_every_nth": 1,
         "format": "AnimateDiff",
         "choose video to upload": null,
@@ -5762,140 +6150,15 @@
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+            "filename": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
             "type": "input",
             "format": "video/mov",
             "force_rate": 24,
             "custom_width": 0,
             "custom_height": 0,
-            "frame_load_cap": 0,
-            "skip_first_frames": 50,
+            "frame_load_cap": 200,
+            "skip_first_frames": 124,
             "select_every_nth": 1
-          }
-        }
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 591,
-      "type": "VHS_VideoCombine",
-      "pos": [
-        771.2961678388776,
-        3966.835536271508
-      ],
-      "size": [
-        225.3349609375,
-        697.06943359375
-      ],
-      "flags": {},
-      "order": 86,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 1124
-        },
-        {
-          "name": "audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 1125
-        },
-        {
-          "name": "meta_batch",
-          "shape": 7,
-          "type": "VHS_BatchManager",
-          "link": null
-        },
-        {
-          "name": "vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "Filenames",
-          "type": "VHS_FILENAMES",
-          "links": null
-        }
-      ],
-      "title": "Final Video",
-      "properties": {
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "VHS_VideoCombine",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": {
-        "frame_rate": 24,
-        "loop_count": 0,
-        "filename_prefix": "AnimateDiff",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": false,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": true,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "AnimateDiff_00022-audio.mp4",
-            "subfolder": "",
-            "type": "output",
-            "format": "video/h264-mp4",
-            "frame_rate": 24,
-            "workflow": "AnimateDiff_00022.png",
-            "fullpath": "C:\\Users\\nicho\\Documents\\ComfyUI\\output\\AnimateDiff_00022-audio.mp4"
-          }
-        }
-      },
-      "widgets_values_named": {
-        "frame_rate": 24,
-        "loop_count": 0,
-        "filename_prefix": "AnimateDiff",
-        "format": "video/h264-mp4",
-        "pix_fmt": "yuv420p",
-        "crf": 19,
-        "save_metadata": false,
-        "trim_to_audio": false,
-        "pingpong": false,
-        "save_output": true,
-        "videopreview": {
-          "hidden": false,
-          "paused": false,
-          "params": {
-            "filename": "AnimateDiff_00022-audio.mp4",
-            "subfolder": "",
-            "type": "output",
-            "format": "video/h264-mp4",
-            "frame_rate": 24,
-            "workflow": "AnimateDiff_00022.png",
-            "fullpath": "C:\\Users\\nicho\\Documents\\ComfyUI\\output\\AnimateDiff_00022-audio.mp4"
           }
         }
       },
@@ -5910,15 +6173,15 @@
       "id": 575,
       "type": "VHS_LoadVideo",
       "pos": [
-        -3805.3587107202866,
-        3053.4052601992876
+        -4143.888875712794,
+        3055.943368539255
       ],
       "size": [
         260.4306640625,
-        743.4179361979167
+        742.7500732421875
       ],
       "flags": {},
-      "order": 40,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -5962,7 +6225,7 @@
           "links": null
         }
       ],
-      "title": "End Video",
+      "title": "Start Video",
       "properties": {
         "cnr_id": "comfyui_fearnworksnodes",
         "ver": "0.1.2",
@@ -5985,11 +6248,11 @@
         }
       },
       "widgets_values": {
-        "video": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+        "video": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
         "force_rate": 24,
         "custom_width": 0,
         "custom_height": 0,
-        "frame_load_cap": 60,
+        "frame_load_cap": 124,
         "skip_first_frames": 0,
         "select_every_nth": 1,
         "format": "AnimateDiff",
@@ -5997,24 +6260,24 @@
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+            "filename": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
             "type": "input",
             "format": "video/mov",
             "force_rate": 24,
             "custom_width": 0,
             "custom_height": 0,
-            "frame_load_cap": 60,
+            "frame_load_cap": 124,
             "skip_first_frames": 0,
             "select_every_nth": 1
           }
         }
       },
       "widgets_values_named": {
-        "video": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+        "video": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
         "force_rate": 24,
         "custom_width": 0,
         "custom_height": 0,
-        "frame_load_cap": 60,
+        "frame_load_cap": 124,
         "skip_first_frames": 0,
         "select_every_nth": 1,
         "format": "AnimateDiff",
@@ -6023,18 +6286,91 @@
           "hidden": false,
           "paused": false,
           "params": {
-            "filename": "FD302AF3-9B3B-4E4D-AD7A-ED80C207A207.mov",
+            "filename": "645E3B7E-CFB2-416D-8B76-4834161B6BE0.mov",
             "type": "input",
             "format": "video/mov",
             "force_rate": 24,
             "custom_width": 0,
             "custom_height": 0,
-            "frame_load_cap": 60,
+            "frame_load_cap": 124,
             "skip_first_frames": 0,
             "select_every_nth": 1
           }
         }
       },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 217,
+      "type": "ResolutionSelector",
+      "pos": [
+        -4751.4190372076755,
+        3336.646844436875
+      ],
+      "size": [
+        338.94695111278907,
+        159.0071171175091
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            783
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            784
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ResolutionSelector",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#346434",
+        "__skeba_bgcolor_base": "rgba(24,24,27,.9)",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "9:16 (Portrait Widescreen)",
+        0.2,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "9:16 (Portrait Widescreen)",
+        "megapixels": 0.2,
+        "multiple": 32
+      },
+      "color": "#346434",
+      "bgcolor": "rgba(24,24,27,.9)",
       "_meta": {
         "skeba_tags": {
           "inputs": [],
@@ -6054,7 +6390,7 @@
         294
       ],
       "flags": {},
-      "order": 70,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -6103,22 +6439,6 @@
           "shape": 7,
           "type": "AUDIO",
           "link": 1099
-        },
-        {
-          "name": "start_overlap",
-          "type": "COMBO",
-          "widget": {
-            "name": "start_overlap"
-          },
-          "link": 1150
-        },
-        {
-          "name": "end_overlap",
-          "type": "COMBO",
-          "widget": {
-            "name": "end_overlap"
-          },
-          "link": 1151
         }
       ],
       "outputs": [
@@ -6132,9 +6452,7 @@
         {
           "name": "connector_bundle",
           "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
-          "links": [
-            1116
-          ]
+          "links": []
         },
         {
           "name": "status",
@@ -6184,640 +6502,6 @@
         "bypass": false,
         "replace_existing_noise_mask": false,
         "preserve_upscaled_endpoints": false
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 605,
-      "type": "Getter",
-      "pos": [
-        190.30277186912573,
-        3307.49907872931
-      ],
-      "size": [
-        210,
-        82
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 41,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "INT",
-          "links": [
-            1150
-          ]
-        }
-      ],
-      "title": "Get_Start_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "Node name for S&R": "Getter",
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "Start_Frames",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "Start_Frames",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 586,
-      "type": "Setter",
-      "pos": [
-        856.6223007511701,
-        3219.191128383719
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 75,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "LATENT",
-          "link": 1103
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_initial_latent",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "initial_latent"
-      },
-      "widgets_values": [
-        "initial_latent"
-      ],
-      "widgets_values_named": {
-        "key": "initial_latent"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 587,
-      "type": "SkebaMiniMaxH3AVConnectorGuideTest",
-      "pos": [
-        -2221.9251177991137,
-        4123.685848135197
-      ],
-      "size": [
-        408.980078125,
-        294
-      ],
-      "flags": {},
-      "order": 78,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "link": 1104
-        },
-        {
-          "name": "latent",
-          "shape": 7,
-          "type": "LATENT",
-          "link": 1105
-        },
-        {
-          "name": "vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": 1106
-        },
-        {
-          "name": "audio_vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": 1107
-        },
-        {
-          "name": "start_frames",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 1108
-        },
-        {
-          "name": "start_audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 1109
-        },
-        {
-          "name": "end_frames",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 1110
-        },
-        {
-          "name": "end_audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 1111
-        },
-        {
-          "name": "start_overlap",
-          "type": "COMBO",
-          "widget": {
-            "name": "start_overlap"
-          },
-          "link": 1152
-        },
-        {
-          "name": "end_overlap",
-          "type": "COMBO",
-          "widget": {
-            "name": "end_overlap"
-          },
-          "link": 1153
-        }
-      ],
-      "outputs": [
-        {
-          "name": "positive",
-          "type": "CONDITIONING",
-          "links": [
-            1144,
-            1145
-          ]
-        },
-        {
-          "name": "connector_bundle",
-          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
-          "links": null
-        },
-        {
-          "name": "status",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "Pinned Generation Latent",
-          "type": "LATENT",
-          "links": [
-            1114
-          ]
-        }
-      ],
-      "title": "Upscale-Pass AV Connector",
-      "properties": {
-        "cnr_id": "h3-reference-library",
-        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "SkebaMiniMaxH3AVConnectorGuideTest",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "22",
-        "22",
-        false,
-        true,
-        false
-      ],
-      "widgets_values_named": {
-        "start_overlap": "22",
-        "end_overlap": "22",
-        "bypass": false,
-        "replace_existing_noise_mask": true,
-        "preserve_upscaled_endpoints": false
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 563,
-      "type": "Setter",
-      "pos": [
-        -4365.064905742063,
-        3784.438188802494
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 60,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "INT",
-          "link": 1064
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_Start_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "Start_Frames"
-      },
-      "widgets_values": [
-        "Start_Frames"
-      ],
-      "widgets_values_named": {
-        "key": "Start_Frames"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 603,
-      "type": "Setter",
-      "pos": [
-        -4344.213168379245,
-        3983.5587092359156
-      ],
-      "size": [
-        210,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 61,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "INT",
-          "link": 1149
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_End_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "End_Frames"
-      },
-      "widgets_values": [
-        "End_Frames"
-      ],
-      "widgets_values_named": {
-        "key": "End_Frames"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 607,
-      "type": "Getter",
-      "pos": [
-        200.88114464079263,
-        3354.6023077329614
-      ],
-      "size": [
-        210,
-        82
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 42,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "INT",
-          "links": [
-            1151
-          ]
-        }
-      ],
-      "title": "Get_End_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "Node name for S&R": "Getter",
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "End_Frames",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "End_Frames",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 608,
-      "type": "Getter",
-      "pos": [
-        -2495.0237497973776,
-        4330.574155347439
-      ],
-      "size": [
-        210,
-        74
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 43,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1152
-          ]
-        }
-      ],
-      "title": "Get_Start_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "Node name for S&R": "Getter",
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "Start_Frames",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "Start_Frames",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 610,
-      "type": "Getter",
-      "pos": [
-        -2493.1395508699998,
-        4385.596406999552
-      ],
-      "size": [
-        210,
-        82
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 44,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1153
-          ]
-        }
-      ],
-      "title": "Get_End_Frames",
-      "properties": {
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {}
-        },
-        "Node name for S&R": "Getter",
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "End_Frames",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "End_Frames",
-        "var_name": ""
       },
       "_meta": {
         "skeba_tags": {
@@ -7525,14 +7209,6 @@
       "LATENT"
     ],
     [
-      1116,
-      574,
-      1,
-      589,
-      1,
-      "SKEBA_H3_AV_CONNECTOR_BUNDLE"
-    ],
-    [
       1121,
       589,
       0,
@@ -7685,36 +7361,12 @@
       "INT"
     ],
     [
-      1150,
-      605,
-      0,
-      574,
-      8,
-      "COMBO"
-    ],
-    [
-      1151,
-      607,
-      0,
-      574,
-      9,
-      "COMBO"
-    ],
-    [
-      1152,
-      608,
-      0,
+      1154,
       587,
-      8,
-      "COMBO"
-    ],
-    [
-      1153,
-      610,
-      0,
-      587,
-      9,
-      "COMBO"
+      1,
+      589,
+      1,
+      "SKEBA_H3_AV_CONNECTOR_BUNDLE"
     ]
   ],
   "groups": [
@@ -7746,8 +7398,8 @@
       "id": 17,
       "title": "Process Video For Save",
       "bounding": [
-        -781.7269939497186,
-        3843.5713381865094,
+        -781.9963248954489,
+        3855.925431566759,
         2018.4078852346174,
         862.3736937472477
       ],
@@ -7811,7 +7463,7 @@
         "state": {
           "lastGroupId": 24,
           "lastNodeId": 610,
-          "lastLinkId": 1153,
+          "lastLinkId": 1154,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -9054,10 +8706,10 @@
     },
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.32723985072200784,
+      "scale": 0.1,
       "offset": [
-        5425.955294802081,
-        -2148.7242726126356
+        10481.710731939373,
+        471.25746360757284
       ]
     }
   },

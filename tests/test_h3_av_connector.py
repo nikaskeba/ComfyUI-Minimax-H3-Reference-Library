@@ -325,6 +325,37 @@ class H3AVConnectorFinalizeTests(unittest.TestCase):
         self.assertEqual(result[1]["waveform"].shape[-1], 73000)
         self.assertEqual(result[2]["bridge_frames"], 73)
 
+    def test_small_h3_audio_grid_shortfall_is_edge_padded(self):
+        generated = image_batch(100)
+        sample_rate = 32000
+        exact_full_duration = int(round(100 / 24 * sample_rate))
+        waveform = torch.arange(
+            exact_full_duration - 266, dtype=torch.float32
+        ).reshape(1, 1, -1)
+        result = MODULE.SkebaH3AVConnectorFinalizeTest.execute(
+            generated_images=generated,
+            generated_audio={"waveform": waveform, "sample_rate": sample_rate},
+            connector_bundle=self.connector_bundle(),
+        )
+
+        wanted = int(round(73 / 24 * sample_rate))
+        output = result[1]["waveform"]
+        self.assertEqual(output.shape[-1], wanted)
+        self.assertTrue(torch.equal(output[..., -266:], output[..., -1:].expand(1, 1, 266)))
+        self.assertIn("edge-padded 266", result[3])
+
+    def test_audio_shorter_than_one_h3_grid_step_is_still_rejected(self):
+        generated = image_batch(100)
+        sample_rate = 32000
+        exact_full_duration = int(round(100 / 24 * sample_rate))
+        waveform = torch.zeros((1, 2, exact_full_duration - 801))
+        with self.assertRaisesRegex(ValueError, "grid tolerance is 800"):
+            MODULE.SkebaH3AVConnectorFinalizeTest.execute(
+                generated_images=generated,
+                generated_audio={"waveform": waveform, "sample_rate": sample_rate},
+                connector_bundle=self.connector_bundle(),
+            )
+
     def test_bypassed_bundle_returns_generated_media_unchanged(self):
         images = image_batch(5)
         audio = audio_value(5 / 24)

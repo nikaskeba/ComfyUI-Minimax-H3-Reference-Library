@@ -256,8 +256,10 @@ duplicate context regions, so they are not repeated in the usable bridge.
 
 The guided endpoint frames are sacrificial duplicates. Finalize removes them
 from the decoded bridge and trims the exact corresponding audio durations,
-including H3's rounded audio-grid overhang. Its bridge outputs can be used
-directly. The seam bundle additionally lets Assemble concatenate the complete
+including H3's rounded audio-grid overhang. If the audio VAE decoder ends less
+than one 40 Hz audio-latent step before the exact 24 FPS picture boundary,
+Finalize edge-pads that small rounding gap; larger shortages remain errors.
+Its bridge outputs can be used directly. The seam bundle additionally lets Assemble concatenate the complete
 source, trimmed bridge, and destination. Assemble keeps endpoint media intact,
 normalizes formats only when required, maintains exact 24 FPS audio duration,
 and smooths only the generated bridge's first/last 40 ms by default.
