@@ -389,8 +389,17 @@ The node expands it without the show or franchise name:
 When a character has multiple portrayals, the catalog supplies an actor-specific
 tag such as `^Bruce Wayne / Batman | Christian Bale | The Dark Knight^`.
 The character page can search and sort by character, actor, or show in either
-alphabetical direction. Clip filenames remain in the Markdown source but are not
-displayed or returned by the character browser API.
+alphabetical direction. Selected characters appear together in a visible guide;
+**Copy selected guide** copies each character and voice tag as one line, for
+example:
+
+```text
+^Abby Sciuto^ Voice: ~Abby Sciuto~   Played by Pauley Perrette | NCIS
+```
+
+**Clear selection** removes every selected character. Each catalog row also has
+a combined **Copy character + voice** action. Clip filenames remain in the
+Markdown source but are not displayed or returned by the character browser API.
 
 ## Reference Library
 

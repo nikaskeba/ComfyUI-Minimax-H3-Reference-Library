@@ -20,15 +20,17 @@
             <div class="section-heading">
                 <div>
                     <h2 id="built-in-title">Character database</h2>
-                    <p>Select characters and copy character or voice tags into the Built-In Reference node.</p>
+                    <p>Select characters to build a combined character and voice guide for the Built-In Reference node.</p>
                 </div>
                 <div class="built-in-actions">
                     <span id="built-in-selection-count">No characters selected</span>
                     <button id="refresh-built-ins" class="secondary" type="button">Refresh catalog</button>
-                    <button id="copy-built-in-selection" class="primary" type="button" disabled>Copy character tags</button>
-                    <button id="copy-built-in-voice-selection" class="primary" type="button" disabled>Copy voice tags</button>
+                    <button id="clear-built-in-selection" class="secondary" type="button" disabled>Clear selection</button>
+                    <button id="copy-built-in-selection" class="primary" type="button" disabled>Copy selected guide</button>
                 </div>
             </div>
+            <div id="built-in-selection-empty" class="selection-empty">No characters selected.</div>
+            <div id="built-in-selection-guide" class="selection-guide" hidden></div>
             <div class="built-in-filters">
                 <label>
                     <span>Status</span>

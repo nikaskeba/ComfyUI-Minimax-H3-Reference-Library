@@ -72,6 +72,37 @@ button:hover { border-color: #647075; }
 button.primary { border-color: var(--accent); background: var(--accent); color: #07120d; font-weight: 700; }
 button.primary:hover { background: var(--accent-hover); }
 .built-in-actions { display: flex; align-items: center; gap: 12px; color: var(--muted); }
+.selection-empty {
+    margin-bottom: 18px;
+    padding: 20px;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    text-align: center;
+}
+.selection-guide {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 14px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    background: #111a16;
+}
+.selection-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 18px;
+    padding: 9px 11px;
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+}
+.selection-tags { display: flex; flex-wrap: wrap; gap: 7px 14px; }
+.selection-item code { color: #79dcae; font-size: 14px; }
+.selection-item code.voice-tag { color: #c6a8ef; }
+.selection-details { color: var(--muted); }
 .built-in-filters {
     display: grid;
     grid-template-columns: 170px minmax(240px, 1fr) 170px 120px auto;
@@ -122,6 +153,7 @@ button.primary:hover { background: var(--accent-hover); }
 @media (max-width: 760px) {
     .section-heading, .built-in-actions { align-items: stretch; flex-direction: column; }
     .built-in-filters, .built-in-row { grid-template-columns: 1fr; }
+    .selection-item { display: grid; }
     .built-in-filters > span { padding: 0; text-align: left; }
     .built-in-check { display: block; }
     .built-in-meta { justify-content: space-between; }

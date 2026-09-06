@@ -3,7 +3,8 @@ const state = { records: [], selected: new Set() };
 const elements = Object.fromEntries([
     "built-in-folder", "built-in-search", "built-in-count", "built-in-empty",
     "built-in-records", "built-in-selection-count", "refresh-built-ins",
-    "copy-built-in-selection", "copy-built-in-voice-selection",
+    "clear-built-in-selection", "copy-built-in-selection",
+    "built-in-selection-empty", "built-in-selection-guide",
     "built-in-sort-field", "built-in-sort-direction", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
@@ -133,16 +134,11 @@ function recordRow(record) {
 
     const details = document.createElement("div");
     details.className = "built-in-details";
-    const actor = document.createElement("strong");
-    actor.textContent = record.actor || "Actor not listed";
-    details.append(actor, document.createTextNode(record.franchise ? ` | ${record.franchise}` : ""));
+    details.textContent = portrayalText(record);
 
     const actions = document.createElement("div");
     actions.className = "built-in-meta";
-    actions.append(
-        button("Copy character tag", () => copyTags([record])),
-        button("Copy voice tag", () => copyTags([record], voiceTag, "Voice tag")),
-    );
+    actions.append(button("Copy character + voice", () => copyCharacterGuide([record])));
     row.append(checkLabel, identity, details, actions);
     return row;
 }
@@ -161,29 +157,58 @@ function renderSelectionState() {
     elements["built-in-selection-count"].textContent = count
         ? `${count} character${count === 1 ? "" : "s"} selected`
         : "No characters selected";
+    elements["built-in-selection-empty"].hidden = count !== 0;
+    elements["built-in-selection-guide"].hidden = count === 0;
+    elements["clear-built-in-selection"].disabled = count === 0;
     elements["copy-built-in-selection"].disabled = count === 0;
-    elements["copy-built-in-voice-selection"].disabled = count === 0;
+    elements["built-in-selection-guide"].replaceChildren(
+        ...selectedRecords().map(selectionItem),
+    );
 }
 
-async function copyTags(records, formatTag = referenceTag, label = "Tag") {
+function selectedRecords() {
+    const byTag = new Map(state.records.map((record) => [record.tag, record]));
+    return [...state.selected].map((tag) => byTag.get(tag)).filter(Boolean);
+}
+
+function portrayalText(record) {
+    const playedBy = record.actor ? `Played by ${record.actor}` : "Actor not listed";
+    return record.franchise ? `${playedBy} | ${record.franchise}` : playedBy;
+}
+
+function guideLine(record) {
+    return `${referenceTag(record)} Voice: ${voiceTag(record)}   ${portrayalText(record)}`;
+}
+
+function selectionItem(record) {
+    const item = document.createElement("div");
+    item.className = "selection-item";
+    const tags = document.createElement("div");
+    tags.className = "selection-tags";
+    const character = document.createElement("code");
+    character.textContent = referenceTag(record);
+    const voice = document.createElement("code");
+    voice.className = "voice-tag";
+    voice.textContent = `Voice: ${voiceTag(record)}`;
+    const details = document.createElement("div");
+    details.className = "selection-details";
+    details.textContent = portrayalText(record);
+    tags.append(character, voice);
+    item.append(tags, details);
+    return item;
+}
+
+async function copyCharacterGuide(records) {
     try {
-        await navigator.clipboard.writeText(records.map(formatTag).join("\n"));
-        toast(`${records.length === 1 ? label : `${label}s`} copied.`);
+        await navigator.clipboard.writeText(records.map(guideLine).join("\n"));
+        toast(`${records.length === 1 ? "Character guide" : "Character guides"} copied.`);
     } catch (error) {
-        toast("Could not copy character tags.", true);
+        toast("Could not copy the character guide.", true);
     }
 }
 
 function copySelection() {
-    return copyTags(state.records.filter((record) => state.selected.has(record.tag)));
-}
-
-function copyVoiceSelection() {
-    return copyTags(
-        state.records.filter((record) => state.selected.has(record.tag)),
-        voiceTag,
-        "Voice tag",
-    );
+    return copyCharacterGuide(selectedRecords());
 }
 
 let toastTimer;
@@ -199,7 +224,10 @@ elements["built-in-folder"].addEventListener("change", renderRecords);
 elements["built-in-sort-field"].addEventListener("change", renderRecords);
 elements["built-in-sort-direction"].addEventListener("change", renderRecords);
 elements["refresh-built-ins"].addEventListener("click", loadRecords);
+elements["clear-built-in-selection"].addEventListener("click", () => {
+    state.selected.clear();
+    renderRecords();
+});
 elements["copy-built-in-selection"].addEventListener("click", copySelection);
-elements["copy-built-in-voice-selection"].addEventListener("click", copyVoiceSelection);
 
 loadRecords();
