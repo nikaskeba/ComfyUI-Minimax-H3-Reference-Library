@@ -7,6 +7,12 @@ from pathlib import Path
 
 MODULE_PATH = Path(__file__).parents[1] / "h3_tag_references.py"
 PACKAGE_NAME = "h3_prompt_test_package"
+RESTORE_MODULES = (
+    "numpy", "torch", "PIL", "comfy", "comfy.model_management",
+    "comfy_api", "comfy_api.latest", "comfy_extras",
+    "comfy_extras.nodes_audio",
+)
+PREVIOUS_MODULES = {name: sys.modules.get(name) for name in RESTORE_MODULES}
 
 
 def _stub_module(name, **attributes):
@@ -39,6 +45,11 @@ SPEC = importlib.util.spec_from_file_location(
     f"{PACKAGE_NAME}.h3_tag_references", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
+for module_name, previous in PREVIOUS_MODULES.items():
+    if previous is None:
+        sys.modules.pop(module_name, None)
+    else:
+        sys.modules[module_name] = previous
 
 
 class PromptResolutionTests(unittest.TestCase):
@@ -362,11 +373,15 @@ class PromptResolutionTests(unittest.TestCase):
         video_fps = MODULE.H3TaggedReferencePrompt.INPUT_TYPES()["required"]["video_fps"]
         self.assertEqual(video_fps[0], "FLOAT")
         self.assertEqual(video_fps[1]["default"], 24.0)
+        video_max_side = MODULE.H3TaggedReferencePrompt.INPUT_TYPES()["required"]["video_max_side"]
+        self.assertEqual(video_max_side[0], "INT")
+        self.assertEqual(video_max_side[1]["default"], 1536)
         self.assertEqual(names[0:2], ("prompt", "mapping"))
         self.assertEqual(names[2:11], tuple(f"image_{i}" for i in range(1, 10)))
         self.assertEqual(names[11:14], ("audio_1", "audio_2", "audio_3"))
         self.assertEqual(names[14:17], ("video_1", "video_2", "video_3"))
         self.assertEqual(names[17:20], ("video_audio_1", "video_audio_2", "video_audio_3"))
+        self.assertEqual(names[20], "reference_bundle")
 
     def test_build_emits_video_frames_and_slot_aligned_embedded_audio(self):
         records = {
@@ -391,7 +406,7 @@ class PromptResolutionTests(unittest.TestCase):
         try:
             MODULE.records_by_tag = lambda: records
             MODULE.media_path = lambda record, kind: record[f"{kind}_file"]
-            MODULE.load_video = lambda path, fps=24: (
+            MODULE.load_video = lambda path, fps=24, max_side=1536: (
                 f"frames:{path}@{fps}",
                 f"audio:{path}" if path == "voiced.mp4" else None,
             )
@@ -405,6 +420,47 @@ class PromptResolutionTests(unittest.TestCase):
         self.assertEqual(output[14:17], (
             "frames:voiced.mp4@29.97", "frames:silent.mp4@29.97", None))
         self.assertEqual(output[17:20], ("audio:voiced.mp4", None, None))
+        self.assertEqual(
+            [entry["tag"] for entry in output[20]["videos"]],
+            ["voiced", "silent"],
+        )
+        self.assertEqual(output[20]["video_max_side"], 1536)
+
+    def test_video_max_side_only_shrinks_larger_media(self):
+        self.assertEqual(MODULE.normalized_video_dimensions(1280, 720, 1536), (1280, 720))
+        self.assertEqual(MODULE.normalized_video_dimensions(3840, 2160, 1536), (1536, 864))
+        self.assertEqual(MODULE.normalized_video_dimensions(2160, 3840, 1536), (864, 1536))
+        self.assertEqual(MODULE.normalized_video_dimensions(3840, 2160, 0), (3840, 2160))
+
+    def test_bundle_only_mode_does_not_decode_reference_media(self):
+        records = {
+            "clip": {
+                "id": "clip-id",
+                "video_file": "clip.mp4",
+                "video_has_audio": True,
+                "video_description": "a reference clip",
+                "image_file": None,
+                "audio_file": None,
+            },
+        }
+        original_records = MODULE.records_by_tag
+        original_media_path = MODULE.media_path
+        original_load_video = MODULE.load_video
+        try:
+            MODULE.records_by_tag = lambda: records
+            MODULE.media_path = lambda record, kind: record[f"{kind}_file"]
+            MODULE.load_video = lambda *args, **kwargs: self.fail(
+                "bundle-only mode decoded the video")
+            output = MODULE.H3TaggedReferencePrompt().build(
+                "{clip}", defer_media_loading=True)
+        finally:
+            MODULE.records_by_tag = original_records
+            MODULE.media_path = original_media_path
+            MODULE.load_video = original_load_video
+
+        self.assertEqual(output[14:20], (None, None, None, None, None, None))
+        self.assertTrue(output[20]["media_deferred"])
+        self.assertTrue(output[20]["videos"][0]["has_audio"])
 
     def test_unknown_voice_tag_is_clear(self):
         with self.assertRaisesRegex(ValueError, "§missing_voice§"):

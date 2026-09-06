@@ -1,11 +1,11 @@
 import re
 
+import av
 import numpy as np
 import torch
 from PIL import Image, ImageOps
 
 import comfy.model_management
-from comfy_api.latest import InputImpl
 from comfy_extras.nodes_audio import load as load_audio_file
 
 from .library import library_revision, media_path, records_by_tag
@@ -15,6 +15,7 @@ MAX_IMAGES = 9
 MAX_AUDIO = 3
 MAX_VIDEOS = 3
 DEFAULT_VIDEO_FPS = 24.0
+DEFAULT_VIDEO_MAX_SIDE = 1536
 REFERENCE_RE = re.compile(
     r"\{(?P<reference>[A-Za-z0-9_-]+)\}|§(?P<voice>[A-Za-z0-9_-]+)§")
 
@@ -178,14 +179,54 @@ def load_audio(path):
     return {"waveform": waveform.unsqueeze(0), "sample_rate": sample_rate}
 
 
-def load_video(path, target_fps=DEFAULT_VIDEO_FPS):
-    components = InputImpl.VideoFromFile(str(path)).get_components()
-    images = components.images
-    source_fps = float(components.frame_rate)
+def normalized_video_dimensions(width, height, max_side=DEFAULT_VIDEO_MAX_SIDE):
+    width = int(width)
+    height = int(height)
+    max_side = int(max_side)
+    if width < 1 or height < 1:
+        raise ValueError("Reference video has invalid dimensions.")
+    if max_side <= 0 or max(width, height) <= max_side:
+        return width, height
+    scale = max_side / max(width, height)
+    return max(1, round(width * scale)), max(1, round(height * scale))
+
+
+def _decode_video_frames(path, max_side):
+    frames = []
+    with av.open(str(path), mode="r") as container:
+        if not container.streams.video:
+            raise ValueError(f"Reference video '{path}' contains no video stream.")
+        stream = container.streams.video[0]
+        source_fps = float(stream.average_rate) if stream.average_rate else 0.0
+        target_width, target_height = normalized_video_dimensions(
+            stream.width, stream.height, max_side)
+        has_audio = bool(container.streams.audio)
+        for frame in container.decode(stream):
+            rotation = frame.rotation
+            if frame.width != target_width or frame.height != target_height:
+                frame = frame.reformat(
+                    width=target_width,
+                    height=target_height,
+                    format="rgb24",
+                )
+                image = frame.to_ndarray()
+            else:
+                image = frame.to_ndarray(format="rgb24")
+            if rotation:
+                k = int(round(rotation // 90))
+                image = np.rot90(image, k=k, axes=(0, 1)).copy()
+            frames.append(torch.from_numpy(np.ascontiguousarray(image)))
+    if not frames:
+        raise ValueError(f"Reference video '{path}' contains no decoded frames.")
+    images = torch.stack(frames).float().div_(255.0)
+    return images, source_fps, has_audio
+
+
+def load_video(path, target_fps=DEFAULT_VIDEO_FPS,
+               max_side=DEFAULT_VIDEO_MAX_SIDE):
+    images, source_fps, has_audio = _decode_video_frames(path, max_side)
     if source_fps <= 0:
         raise ValueError(f"Reference video '{path}' has an invalid frame rate.")
-    if images.shape[0] < 1:
-        raise ValueError(f"Reference video '{path}' contains no decoded frames.")
     target_fps = float(target_fps)
     if not 1 <= target_fps <= 240:
         raise ValueError(f"Reference video '{path}' has an invalid forced frame rate.")
@@ -195,7 +236,8 @@ def load_video(path, target_fps=DEFAULT_VIDEO_FPS):
         indexes = torch.floor(positions * source_fps / target_fps).long()
         indexes = indexes.clamp(max=images.shape[0] - 1)
         images = images[indexes]
-    return images, components.audio
+    audio = load_audio(path) if has_audio else None
+    return images, audio
 
 
 class H3TaggedReferencePrompt:
@@ -215,6 +257,22 @@ class H3TaggedReferencePrompt:
                     "step": 0.001,
                     "tooltip": "Force every video reference loaded by this node to the same frame rate.",
                 }),
+                "video_max_side": ("INT", {
+                    "default": DEFAULT_VIDEO_MAX_SIDE,
+                    "min": 0,
+                    "max": 8192,
+                    "step": 32,
+                    "tooltip": "Shrink larger reference videos during decoding while retaining smaller videos. Use 0 for original size.",
+                }),
+                "defer_media_loading": ("BOOLEAN", {
+                    "default": False,
+                    "label_on": "BUNDLE ONLY",
+                    "label_off": "LOAD MEDIA",
+                    "tooltip": (
+                        "Use BUNDLE ONLY with the SKEBA Cached Reference node. "
+                        "Source media is decoded only when its compiled cache misses."
+                    ),
+                }),
             },
         }
 
@@ -226,6 +284,7 @@ class H3TaggedReferencePrompt:
         + ("AUDIO",) * MAX_AUDIO
         + ("IMAGE",) * MAX_VIDEOS
         + ("AUDIO",) * MAX_VIDEOS
+        + ("SKEBA_H3_REFERENCE_BUNDLE",)
     )
     RETURN_NAMES = (
         ("prompt", "mapping")
@@ -233,18 +292,62 @@ class H3TaggedReferencePrompt:
         + tuple(f"audio_{i}" for i in range(1, MAX_AUDIO + 1))
         + tuple(f"video_{i}" for i in range(1, MAX_VIDEOS + 1))
         + tuple(f"video_audio_{i}" for i in range(1, MAX_VIDEOS + 1))
+        + ("reference_bundle",)
     )
     FUNCTION = "build"
     CATEGORY = "Skeba AI Nodes - Reference"
 
     @classmethod
-    def IS_CHANGED(cls, prompt_template, video_fps=DEFAULT_VIDEO_FPS):
-        return f"{library_revision()}:{prompt_template}:{video_fps}"
+    def IS_CHANGED(cls, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
+                   video_max_side=DEFAULT_VIDEO_MAX_SIDE,
+                   defer_media_loading=False):
+        return (f"{library_revision()}:{prompt_template}:{video_fps}:"
+                f"{video_max_side}:{defer_media_loading}")
 
-    def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS):
+    def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
+              video_max_side=DEFAULT_VIDEO_MAX_SIDE,
+              defer_media_loading=False):
         records = records_by_tag()
         prompt, mapping, image_tags, audio_tags, video_tags = resolve_prompt(
             prompt_template or "", records)
+
+        def bundle_entry(tag, kind):
+            record = records[tag]
+            source_kind = kind
+            if kind == "audio" and not record.get("audio_file"):
+                source_kind = "video"
+            return {
+                "record_id": record.get("id") or tag,
+                "tag": tag,
+                "source_kind": source_kind,
+                "source_path": str(media_path(record, source_kind)),
+                "has_audio": bool(
+                    record.get("video_has_audio")
+                    if source_kind == "video"
+                    else record.get("audio_file")
+                ),
+            }
+
+        reference_bundle = {
+            "schema_version": 2,
+            "images": [bundle_entry(tag, "image") for tag in image_tags],
+            "audios": [bundle_entry(tag, "audio") for tag in audio_tags],
+            "videos": [bundle_entry(tag, "video") for tag in video_tags],
+            "video_fps": float(video_fps),
+            "video_max_side": int(video_max_side),
+            "media_deferred": bool(defer_media_loading),
+        }
+
+        if defer_media_loading:
+            return (
+                prompt,
+                mapping,
+                *([None] * MAX_IMAGES),
+                *([None] * MAX_AUDIO),
+                *([None] * MAX_VIDEOS),
+                *([None] * MAX_VIDEOS),
+                reference_bundle,
+            )
 
         images = [load_image(media_path(records[tag], "image")) for tag in image_tags]
         video_media = {}
@@ -254,6 +357,7 @@ class H3TaggedReferencePrompt:
                 video_media[tag] = load_video(
                     media_path(records[tag], "video"),
                     video_fps,
+                    video_max_side,
                 )
             return video_media[tag]
 
@@ -272,8 +376,12 @@ class H3TaggedReferencePrompt:
             video_for(tag)[1] if records[tag].get("video_has_audio") else None
             for tag in video_tags
         ]
+
         images.extend([None] * (MAX_IMAGES - len(images)))
         audios.extend([None] * (MAX_AUDIO - len(audios)))
         videos.extend([None] * (MAX_VIDEOS - len(videos)))
         video_audios.extend([None] * (MAX_VIDEOS - len(video_audios)))
-        return (prompt, mapping, *images, *audios, *videos, *video_audios)
+        return (
+            prompt, mapping, *images, *audios, *videos, *video_audios,
+            reference_bundle,
+        )
