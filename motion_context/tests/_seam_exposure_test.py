@@ -79,6 +79,33 @@ def main():
         half, accumulation=accumulation(previous.half()))
     assert half_matched.dtype == torch.float16
 
+    # Boundary matching sees the pinned and generated sides before Trim. It
+    # corrects only the generated side, tracks a one-frame pulse, and reaches
+    # exactly neutral at the end of its short fade.
+    boundary_images = torch.full((12, 4, 5, 3), 0.5)
+    boundary_images[4] = 0.8
+    boundary_images[5] = 0.7
+    boundary_images[6] = 0.6
+    boundary_images[7:] = 0.5
+    boundary_matched = module.match_boundary_luminance(
+        boundary_images, 4, analysis_frames=4, correction_frames=4,
+        strength=1.0, max_adjustment_ev=0.25)
+    assert torch.equal(boundary_matched[:4], boundary_images[:4])
+    assert float(boundary_matched[4].mean()) < float(boundary_images[4].mean())
+    assert torch.equal(boundary_matched[7:], boundary_images[7:])
+
+    color_boundary = torch.tensor([0.2, 0.4, 0.6]).reshape(
+        1, 1, 1, 3).repeat(8, 4, 5, 1)
+    color_boundary[:4] *= 1.1
+    color_boundary_matched = module.match_boundary_luminance(
+        color_boundary, 4, correction_frames=4)
+    assert torch.allclose(
+        color_boundary_matched[4, ..., 1] /
+        color_boundary_matched[4, ..., 0], torch.full((4, 5), 2.0))
+    assert torch.allclose(
+        color_boundary_matched[4, ..., 2] /
+        color_boundary_matched[4, ..., 0], torch.full((4, 5), 3.0))
+
     wrong_size = torch.full((6, 3, 5, 3), 0.5)
     try:
         node.match(images, accumulation=accumulation(wrong_size))
@@ -92,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

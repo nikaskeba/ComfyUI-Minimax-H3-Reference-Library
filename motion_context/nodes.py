@@ -51,7 +51,7 @@ from .patch_payload import (
     apply_patch as _apply_payload_patch,
     is_applied as _payload_patch_applied,
 )
-from .seam_exposure import H3SeamExposureMatch
+from .seam_exposure import H3SeamExposureMatch, match_boundary_luminance
 
 try:
     import torchaudio
@@ -117,9 +117,9 @@ AUDIO_HZ = 40.0
 # request lands on the nearest real one instead of being clamped to 39.
 VIDEO_RUN_GRID = (124, 107, 90, 73, 56, 39, 22, 5, 1)
 
-# Settings that used to be widgets. Each had exactly one right answer, so
-# offering the wrong one was noise. The losing branches are still in the
-# code below: change a constant here to reproduce the failure they cause.
+# Backward-compatible defaults for the mode widgets.  Older workflows do not
+# serialize these inputs, so the apply() defaults below must remain aligned
+# with these values.
 #
 #   ENCODE_MODE   "video" encodes the pinned run in one VAE call, so the
 #                 motion lives inside the latent. "frames" encodes each
@@ -141,6 +141,11 @@ ANCHOR_MODE = "head"
 AUDIO_MODE = "timeline"
 CROP = "disabled"
 
+ENCODE_MODES = ("video", "frames")
+ANCHOR_MODES = ("head", "before")
+AUDIO_MODES = ("timeline", "ref")
+CROP_MODES = ("disabled", "center")
+
 
 def _pixel_frames(latent_t):
     """Pixel frames covered by latent_t latent steps."""
@@ -154,6 +159,18 @@ def _step_offsets(latent_t):
         out.append(acc)
         acc += FRAME_PER_TOKEN[k % 5]
     return out
+
+
+def _crossfade_plan(context_frames, requested_crossfade):
+    """Return (start frame, usable overlap) for a post-trim video crossfade.
+
+    Only frames inside the duplicated context window may participate.  The
+    returned slice starts before the normal hard-trim point and continues
+    through the generated portion of the clip.
+    """
+    n = max(0, int(context_frames))
+    effective = min(n, max(0, int(requested_crossfade)))
+    return n - effective, effective
 
 
 def _resize(image, width, height, crop):
@@ -389,6 +406,36 @@ class MiniMaxH3MotionContext:
                                "output 0 trim frames. Turn this on for the "
                                "first clip, then off to enable motion "
                                "context on later clips."}),
+                # Keep new widget-backed inputs after the legacy widgets.
+                # ComfyUI stores widgets positionally in workflow JSON, so
+                # inserting them earlier would corrupt old saved settings.
+                "encode_mode": (list(ENCODE_MODES), {
+                    "default": ENCODE_MODE,
+                    "tooltip": "video encodes the entire pixel context run "
+                               "together and preserves its motion. frames "
+                               "encodes each input frame independently and "
+                               "is mainly useful for comparison. A wired "
+                               "context_latent is already encoded and does "
+                               "not need this setting."}),
+                "anchor_mode": (list(ANCHOR_MODES), {
+                    "default": ANCHOR_MODE,
+                    "tooltip": "head places context at the beginning and "
+                               "returns the number of frames Trim must remove. "
+                               "before places it before frame zero and returns "
+                               "no trim, but is experimental and may weaken "
+                               "continuity or affect exposure."}),
+                "crop": (list(CROP_MODES), {
+                    "default": CROP,
+                    "tooltip": "Resize behavior for decoded context_frames. "
+                               "disabled stretches to the target canvas; "
+                               "center preserves aspect ratio and center-crops. "
+                               "A context_latent cannot be resized or cropped."}),
+                "audio_mode": (list(AUDIO_MODES), {
+                    "default": AUDIO_MODE,
+                    "tooltip": "timeline places the previous tail audio on "
+                               "the new clip timeline so H3 can continue it. "
+                               "ref supplies it as a standard voice/sound "
+                               "reference for imitation instead of continuity."}),
             },
         }
 
@@ -406,7 +453,8 @@ class MiniMaxH3MotionContext:
     def apply(self, conditioning, vae, latent, context_length,
               audio_context_length=22, context_frames=None,
               context_latent=None, audio_vae=None, context_audio=None,
-              bypass=False):
+              bypass=False, encode_mode=ENCODE_MODE,
+              anchor_mode=ANCHOR_MODE, crop=CROP, audio_mode=AUDIO_MODE):
         if bypass:
             _LOG.info("h3_motion_context: Motion Context bypassed")
             return (conditioning, 0)
@@ -418,8 +466,18 @@ class MiniMaxH3MotionContext:
                 "Context is enabled. Drive both bypass switches from the "
                 "same boolean (or turn the loader bypass off).")
 
-        encode_mode, anchor_mode = ENCODE_MODE, ANCHOR_MODE
-        audio_mode, crop = AUDIO_MODE, CROP
+        if encode_mode not in ENCODE_MODES:
+            raise ValueError("h3_motion_context: encode_mode must be one of %s"
+                             % (", ".join(ENCODE_MODES),))
+        if anchor_mode not in ANCHOR_MODES:
+            raise ValueError("h3_motion_context: anchor_mode must be one of %s"
+                             % (", ".join(ANCHOR_MODES),))
+        if audio_mode not in AUDIO_MODES:
+            raise ValueError("h3_motion_context: audio_mode must be one of %s"
+                             % (", ".join(AUDIO_MODES),))
+        if crop not in CROP_MODES:
+            raise ValueError("h3_motion_context: crop must be one of %s"
+                             % (", ".join(CROP_MODES),))
         context_length = int(context_length)
         _ensure_layout_patch()
 
@@ -704,21 +762,60 @@ class MiniMaxH3MotionContextTrim:
                     "tooltip": "Return images and audio unchanged. Turn this "
                                "on for the first clip, then off when Motion "
                                "Context is enabled."}),
+                # Appended for positional compatibility with saved workflows.
+                "video_crossfade_frames": ("INT", {
+                    "default": 39, "min": 0, "max": 4096,
+                    "tooltip": "Expose up to this many frames from the end "
+                               "of the duplicated context as crossfade_images. "
+                               "The normal images output remains fully trimmed. "
+                               "Use the extra output with an overlap-aware "
+                               "video combiner; 0 disables it."}),
+                "boundary_match": ("BOOLEAN", {
+                    "default": False,
+                    "label_on": "MATCH LUMINANCE",
+                    "label_off": "OFF",
+                    "tooltip": "Before trimming, compare the final pinned "
+                               "frames with the first generated frames and "
+                               "remove a short brightness pulse. Intended for "
+                               "anchor_mode=head; it does nothing when "
+                               "trim_frames is 0."}),
+                "boundary_analysis_frames": ("INT", {
+                    "default": 4, "min": 1, "max": 32,
+                    "tooltip": "Pinned frames immediately before the trim "
+                               "boundary used as the luminance reference."}),
+                "boundary_correction_frames": ("INT", {
+                    "default": 8, "min": 1, "max": 120,
+                    "tooltip": "Generated frames corrected after the "
+                               "boundary. The correction fades to zero across "
+                               "this window."}),
+                "boundary_strength": ("FLOAT", {
+                    "default": 1.0, "min": 0.0, "max": 1.0, "step": 0.05,
+                    "tooltip": "Strength of the boundary-only luminance "
+                               "correction."}),
+                "boundary_max_ev": ("FLOAT", {
+                    "default": 0.25, "min": 0.0, "max": 1.0, "step": 0.01,
+                    "tooltip": "Maximum brightening or darkening applied to "
+                               "any corrected frame, measured in exposure "
+                               "stops (EV)."}),
             },
         }
 
-    RETURN_TYPES = ("IMAGE", "AUDIO")
-    RETURN_NAMES = ("images", "audio")
+    RETURN_TYPES = ("IMAGE", "AUDIO", "IMAGE", "INT")
+    RETURN_NAMES = ("images", "audio", "crossfade_images", "crossfade_frames")
     FUNCTION = "trim"
     CATEGORY = "Skeba AI Nodes - Motion Context"
     DESCRIPTION = ("Remove the leading pinned frames from a decoded H3 clip, "
-                   "trimming picture and sound by the same duration.")
+                   "trimming picture and sound by the same duration. Also "
+                   "exposes an optional overlap-bearing picture output for "
+                   "external video crossfades.")
 
     def trim(self, images, trim_frames, audio=None, fps=24.0, match_tail=True,
-             bypass=False):
+             bypass=False, video_crossfade_frames=39, boundary_match=False,
+             boundary_analysis_frames=4, boundary_correction_frames=8,
+             boundary_strength=1.0, boundary_max_ev=0.25):
         if bypass:
             _LOG.info("h3_motion_context: Trim bypassed")
-            return (images, audio)
+            return (images, audio, images, 0)
 
         n = max(0, int(trim_frames))
         total = int(images.shape[0])
@@ -726,7 +823,26 @@ class MiniMaxH3MotionContextTrim:
             raise ValueError(
                 "h3_motion_context: asked to trim %d frames from a %d frame clip"
                 % (n, total))
-        out_images = images[n:] if n else images
+        corrected_images = images
+        if boundary_match and n:
+            corrected_images = match_boundary_luminance(
+                images,
+                n,
+                analysis_frames=boundary_analysis_frames,
+                correction_frames=boundary_correction_frames,
+                strength=boundary_strength,
+                max_adjustment_ev=boundary_max_ev,
+            )
+            _LOG.info(
+                "h3_motion_context: matched luminance across frame %d using "
+                "%d reference frames and a %d-frame correction window",
+                n, int(boundary_analysis_frames),
+                int(boundary_correction_frames))
+        out_images = corrected_images[n:] if n else corrected_images
+        crossfade_start, effective_crossfade = _crossfade_plan(
+            n, video_crossfade_frames)
+        crossfade_images = (corrected_images[crossfade_start:]
+                            if effective_crossfade else out_images)
 
         out_audio = audio
         if audio is not None:
@@ -769,7 +885,7 @@ class MiniMaxH3MotionContextTrim:
                       "this node or it will run %.3fs ahead of the picture.",
                       n, total - n, n / float(fps))
 
-        return (out_images, out_audio)
+        return (out_images, out_audio, crossfade_images, effective_crossfade)
 
 
 def _resolve_latent_path(path, clip_index=0):
@@ -1021,4 +1137,3 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SKEBAMiniMaxH3MotionContextLoadLatent": "SKEBA H3 Motion Context Load Latent",
     "SKEBAH3SeamExposureMatch": "SKEBA H3 Seam Exposure Match",
 }
-

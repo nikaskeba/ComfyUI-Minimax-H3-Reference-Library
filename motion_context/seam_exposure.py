@@ -18,6 +18,63 @@ def _mean_luminance(images):
     return float(luminance.mean().item())
 
 
+def match_boundary_luminance(images, boundary_frame, analysis_frames=4,
+                             correction_frames=8, strength=1.0,
+                             max_adjustment_ev=0.25):
+    """Match the generated side of an in-clip context boundary.
+
+    Unlike H3SeamExposureMatch, this runs before Motion Context Trim and can
+    therefore compare the actual final pinned frames with the first generated
+    frames.  A per-frame luminance gain removes a short exposure pulse, while a
+    cosine envelope returns the correction to neutral without touching the
+    pinned side or changing RGB channel ratios.
+    """
+    boundary = int(boundary_frame)
+    total = int(images.shape[0])
+    if (float(strength) <= 0.0 or boundary <= 0 or boundary >= total or
+            images.ndim != 4 or images.shape[-1] < 3):
+        return images
+
+    analysis = min(max(1, int(analysis_frames)), boundary)
+    count = min(max(1, int(correction_frames)), total - boundary)
+    reference_luminance = _mean_luminance(
+        images[boundary - analysis:boundary])
+    if reference_luminance <= _BLACK_FLOOR:
+        return images
+
+    rgb = images[boundary:boundary + count, ..., :3].float()
+    luminance = (rgb[..., 0] * 0.2126 + rgb[..., 1] * 0.7152 +
+                 rgb[..., 2] * 0.0722)
+    frame_luminance = luminance.mean(dim=(1, 2))
+    safe_luminance = frame_luminance.clamp_min(_BLACK_FLOOR)
+    reference = torch.as_tensor(
+        reference_luminance, device=images.device, dtype=torch.float32)
+    exposure_ev = torch.log2(reference / safe_luminance)
+    limit = max(0.0, float(max_adjustment_ev))
+    exposure_ev = exposure_ev.clamp(-limit, limit)
+    exposure_ev = torch.where(
+        frame_luminance > _BLACK_FLOOR,
+        exposure_ev,
+        torch.zeros_like(exposure_ev),
+    )
+
+    if count == 1:
+        weights = torch.ones(1, device=images.device, dtype=torch.float32)
+    else:
+        positions = torch.arange(
+            count, device=images.device, dtype=torch.float32)
+        weights = 0.5 * (1.0 + torch.cos(
+            math.pi * positions / float(count - 1)))
+    gains = torch.exp2(exposure_ev * float(strength) * weights)
+    gains = gains.to(dtype=images.dtype)
+
+    output = images.clone()
+    output[boundary:boundary + count] = (
+        output[boundary:boundary + count] * gains[:, None, None, None]
+    ).clamp(0.0, 1.0)
+    return output
+
+
 class H3SeamExposureMatch:
     @classmethod
     def INPUT_TYPES(cls):
@@ -108,4 +165,3 @@ class H3SeamExposureMatch:
         output[:fade_count] = (output[:fade_count] *
                                gains[:, None, None, None]).clamp(0.0, 1.0)
         return (output,)
-

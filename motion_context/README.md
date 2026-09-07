@@ -152,8 +152,9 @@ away.
 
 ## Settings
 
-The two generation settings are below. The three nodes also expose the shared
-automation-oriented `bypass` switch described above.
+The generation controls are below. The three runtime nodes also expose the
+shared automation-oriented `bypass` switch described above. Existing workflows
+keep the established defaults: `video`, `head`, `disabled`, and `timeline`.
 
 **context_length** - frames of the previous clip's picture to carry over.
 5, 22, 39 or 56. Those are the lengths that are a whole number of latent
@@ -168,17 +169,47 @@ only controls how far back the sound reaches. 0 follows context_length.
 **Use 22** to line it up with a 22-frame picture window. Longer windows
 (44, 96) are legal but nobody has rendered one.
 
-Everything else is fixed: the pinned run is encoded in one VAE call, it
-sits at the head of the clip where the Trim node removes it, and the
-pinned audio goes on this clip's own timeline. The alternatives all
-existed only to reproduce their own failures, so they're constants at the
-top of `nodes.py` now. Change one there if you ever need to see what they
-did.
+**encode_mode** - `video` encodes decoded context frames as one temporal run,
+which is the recommended continuity path. `frames` encodes every supplied frame
+as an independent still. It costs more conditioning rows and can weaken motion,
+but is available for testing. This option has no effect when `context_latent` is
+wired because those frames are already encoded.
+
+**anchor_mode** - `head` places the previous run at the beginning of the new
+clip and tells Trim how much to remove. This remains the recommended mode.
+`before` places it before frame zero and returns zero trim frames. It is
+experimental: earlier tests found weaker anchors and possible exposure changes.
+
+**crop** - controls decoded `context_frames` resizing. `disabled` stretches the
+frames to the target canvas, matching prior behavior. `center` preserves aspect
+ratio and center-crops to fill. A `context_latent` cannot be resized or cropped;
+its resolution must already match the target latent.
+
+**audio_mode** - `timeline` places the source tail on the new clip's timeline so
+H3 can continue it. `ref` uses normal reference-audio placement, which encourages
+the model to imitate the sound or voice rather than continue the exact timeline.
 
 `match_tail` on the Trim node stays a setting because that node has no
 idea what the other one did. Leave it on. H3 rounds its audio grid up, so
 every clip carries about 8ms more sound than picture, and that error
 stacks at every join.
+
+**video_crossfade_frames** on Trim exposes an additional picture output that
+retains up to that many frames from the end of the duplicated context window.
+The normal `images` output remains fully trimmed. Connect `crossfade_images` and
+`crossfade_frames` to an overlap-aware video combiner if you want a visual blend
+instead of a hard cut. The value is capped to the actual trim window; set it to
+0 to disable the overlap output. This affects picture only—Trim's main audio
+output still follows `trim_frames` and `match_tail`.
+
+**boundary_match** corrects a brief exposure pulse at the point where `head`
+context ends and newly generated frames begin. It runs before trimming, so it
+can compare the final pinned frames directly with each of the first generated
+frames. The correction changes RGB by one shared gain (preserving color ratios)
+and fades back to neutral. Start with 4 analysis frames, 8 correction frames,
+strength 1.0, and a 0.25 EV limit. It does nothing with `trim_frames` 0, so it
+is specifically for `anchor_mode=head`. Leave it off for intentional lighting
+changes or hard scene cuts.
 
 ## Writing prompts for a chain
 
@@ -378,4 +409,3 @@ Open an issue.
 | `tests/level_step.py` | Level and room-tone continuity at each join. Also catches sample-rate mismatches. |
 | `tests/freeze_detect.py` | Stretches where the picture stops moving. |
 | `tests/_mock_harness.py`, `tests/_node_smoke_test.py`, `tests/_payload_gate_test.py`, `tests/_seam_exposure_test.py` | Patch and node tests. |
-

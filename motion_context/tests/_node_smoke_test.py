@@ -192,9 +192,41 @@ def main():
     bypass_images = T(np.zeros((3, 2, 2, 3), dtype=np.float32))
     bypass_audio = {"waveform": T(np.zeros((1, 2, 8), dtype=np.float32)),
                     "sample_rate": 32000}
-    got_images, got_audio = nodes.MiniMaxH3MotionContextTrim().trim(
+    got_images, got_audio, got_crossfade, got_crossfade_frames = \
+        nodes.MiniMaxH3MotionContextTrim().trim(
         bypass_images, 999, audio=bypass_audio, bypass=True)
     assert got_images is bypass_images and got_audio is bypass_audio
+    assert got_crossfade is bypass_images and got_crossfade_frames == 0
+
+    motion_inputs = nodes.MiniMaxH3MotionContext.INPUT_TYPES()["optional"]
+    assert motion_inputs["encode_mode"][0] == ["video", "frames"]
+    assert motion_inputs["anchor_mode"][0] == ["head", "before"]
+    assert motion_inputs["audio_mode"][0] == ["timeline", "ref"]
+    assert motion_inputs["crop"][0] == ["disabled", "center"]
+    assert motion_inputs["encode_mode"][1]["default"] == "video"
+    assert motion_inputs["anchor_mode"][1]["default"] == "head"
+    assert motion_inputs["audio_mode"][1]["default"] == "timeline"
+    assert motion_inputs["crop"][1]["default"] == "disabled"
+
+    trim_cls = nodes.MiniMaxH3MotionContextTrim
+    assert trim_cls.RETURN_NAMES == (
+        "images", "audio", "crossfade_images", "crossfade_frames")
+    assert "video_crossfade_frames" in trim_cls.INPUT_TYPES()["optional"]
+    trim_optional = trim_cls.INPUT_TYPES()["optional"]
+    assert trim_optional["boundary_match"][1]["default"] is False
+    assert trim_optional["boundary_analysis_frames"][1]["default"] == 4
+    assert trim_optional["boundary_correction_frames"][1]["default"] == 8
+    assert trim_optional["boundary_strength"][1]["default"] == 1.0
+    assert trim_optional["boundary_max_ev"][1]["default"] == 0.25
+    assert nodes._crossfade_plan(90, 39) == (51, 39)
+    assert nodes._crossfade_plan(22, 39) == (0, 22)
+    assert nodes._crossfade_plan(0, 39) == (0, 0)
+    assert nodes._crossfade_plan(22, 0) == (22, 0)
+    trimmed, _, overlap, overlap_n = trim_cls().trim(
+        T(np.zeros((10, 2, 2, 3), dtype=np.float32)), 4,
+        video_crossfade_frames=2)
+    assert trimmed.shape[0] == 6
+    assert overlap.shape[0] == 8 and overlap_n == 2
 
     loader = nodes.MiniMaxH3MotionContextLoadLatent()
     (placeholder,) = loader.load("path/that/does/not/exist", bypass=True)
@@ -301,6 +333,19 @@ def main():
     print("pixels path: same %d blocks at the same offsets, encoded rather "
           "than sliced" % len(px))
 
+    # Restored comparison modes execute rather than merely appearing in the UI.
+    captured.clear()
+    _, before_trim = node.apply(
+        conditioning=[["c", {}]], vae=VAE(), latent=target,
+        context_frames=context, context_length="22",
+        encode_mode="frames", anchor_mode="before", crop="center",
+        audio_context_length=22)
+    before = captured["minimax_keyframes"]
+    assert len(before) == 22
+    assert [kf[nodes.MC_KEY] for kf in before] == list(range(-22, 0))
+    assert before_trim == 0
+    print("restored modes: per-frame encode + before anchor + center crop ran")
+
     # a resolution change cannot slice a latent and must refuse, not
     # quietly take the lossy path
     small = {"samples": Nested([
@@ -330,7 +375,8 @@ def main():
     else:
         raise AssertionError("no context at all did not refuse")
 
-    # the constants that replaced the widgets must be on the good values
+    # Older workflows omit the restored mode widgets, so their defaults must
+    # remain on the established settings.
     assert nodes.ENCODE_MODE == "video"
     assert nodes.ANCHOR_MODE == "head"
     assert nodes.AUDIO_MODE == "timeline"
@@ -508,4 +554,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -493,9 +493,18 @@ The five Motion Context nodes are available under
 `Skeba AI Nodes - Motion Context` with their original workflow identifiers:
 
 - **SKEBA H3 Motion Context** pins picture and audio context from the previous
-  clip so the next MiniMax H3 generation can continue it.
+  clip so the next MiniMax H3 generation can continue it. It now exposes video
+  versus per-frame encoding, head versus before-frame anchoring, decoded-frame
+  crop behavior, and timeline versus reference audio placement. Existing
+  workflows retain the recommended `video` / `head` / `disabled` / `timeline`
+  defaults.
 - **SKEBA H3 Motion Context Trim** removes the leading pinned context frames
-  from the decoded continuation.
+  from the decoded continuation. Its primary IMAGE/AUDIO outputs remain fully
+  trimmed; optional `crossfade_images` and `crossfade_frames` outputs retain a
+  configurable part of the duplicated video window for an external overlap
+  combiner. An optional boundary luminance matcher can correct a short exposure
+  pulse before the pinned head is removed. `match_tail` keeps decoded audio
+  duration aligned to picture.
 - **SKEBA H3 Motion Context Save Latent** saves the sampler's combined video and
   audio latent for a later workflow run.
 - **SKEBA H3 Motion Context Load Latent** loads that saved latent, including
