@@ -1,8 +1,8 @@
 {
   "id": "d6385871-1b12-43d3-b208-ff4baac00ead",
   "revision": 0,
-  "last_node_id": 629,
-  "last_link_id": 1194,
+  "last_node_id": 636,
+  "last_link_id": 1206,
   "nodes": [
     {
       "id": 344,
@@ -18,7 +18,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 68,
+      "order": 70,
       "mode": 0,
       "inputs": [
         {
@@ -36,6 +36,8 @@
       ],
       "title": "Set_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -43,8 +45,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -89,7 +89,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 69,
+      "order": 71,
       "mode": 0,
       "inputs": [
         {
@@ -107,6 +107,8 @@
       ],
       "title": "Set_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -114,8 +116,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -160,7 +160,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 67,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -178,6 +178,8 @@
       ],
       "title": "Set_clip",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -185,8 +187,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -229,7 +229,7 @@
         86
       ],
       "flags": {},
-      "order": 66,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -248,6 +248,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -255,8 +257,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
         "Node name for S&R": "ModelAttentionBackend",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -299,7 +299,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 70,
+      "order": 72,
       "mode": 0,
       "inputs": [
         {
@@ -317,6 +317,8 @@
       ],
       "title": "Set_total_steps",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -324,8 +326,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -366,7 +366,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 65,
+      "order": 67,
       "mode": 0,
       "inputs": [
         {
@@ -403,6 +403,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.32.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -410,8 +412,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.32.0",
         "Node name for S&R": "ComfyMathExpression",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -472,6 +472,8 @@
       ],
       "title": "Get_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -479,8 +481,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -544,6 +544,8 @@
       ],
       "title": "Get_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -551,8 +553,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -616,6 +616,8 @@
       ],
       "title": "Get_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -623,8 +625,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -692,6 +692,8 @@
       ],
       "title": "Get_output_latent",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -699,8 +701,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -742,7 +742,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 130,
+      "order": 136,
       "mode": 0,
       "inputs": [
         {
@@ -760,6 +760,8 @@
       ],
       "title": "Set_latent_saves",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -767,8 +769,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -841,6 +841,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -848,8 +850,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "previewExposures": [],
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -888,7 +888,7 @@
         114
       ],
       "flags": {},
-      "order": 87,
+      "order": 89,
       "mode": 0,
       "inputs": [
         {
@@ -907,6 +907,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -914,8 +916,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "LoraLoaderModelOnly",
         "__skeba_tags": {
           "inputs": [],
@@ -960,7 +960,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 75,
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
@@ -978,6 +978,8 @@
       ],
       "title": "Set_width",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -985,8 +987,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -1027,7 +1027,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 76,
+      "order": 78,
       "mode": 0,
       "inputs": [
         {
@@ -1045,6 +1045,8 @@
       ],
       "title": "Set_height",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1052,8 +1054,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -1116,6 +1116,8 @@
       ],
       "title": "Get_accumultation",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1123,8 +1125,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1168,7 +1168,7 @@
         110
       ],
       "flags": {},
-      "order": 72,
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
@@ -1194,6 +1194,8 @@
       ],
       "title": "Accumulate Saved Clips",
       "properties": {
+        "cnr_id": "comfyui-execution-inversion",
+        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1201,8 +1203,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui-execution-inversion",
-        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "Node name for S&R": "AccumulateNode | akatz-loops",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1251,6 +1251,8 @@
       ],
       "title": "Steps",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1258,8 +1260,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
         "Node name for S&R": "PrimitiveInt",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1326,6 +1326,8 @@
       ],
       "title": "Get_latent_saves",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1333,8 +1335,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1374,7 +1374,7 @@
         160.69510972276385
       ],
       "flags": {},
-      "order": 86,
+      "order": 88,
       "mode": 0,
       "inputs": [
         {
@@ -1405,6 +1405,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1412,8 +1414,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAMiniMaxH3MotionContextLoadLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1482,6 +1482,8 @@
       ],
       "title": "Get_bool",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1489,8 +1491,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1554,6 +1554,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1561,8 +1563,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1608,7 +1608,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 81,
+      "order": 83,
       "mode": 0,
       "inputs": [
         {
@@ -1626,6 +1626,8 @@
       ],
       "title": "Set_upscale_scale",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1633,8 +1635,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -1673,7 +1673,7 @@
         94
       ],
       "flags": {},
-      "order": 97,
+      "order": 99,
       "mode": 0,
       "inputs": [
         {
@@ -1691,6 +1691,8 @@
       ],
       "title": "Set_accumultation",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1698,8 +1700,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -1727,96 +1727,6 @@
       }
     },
     {
-      "id": 266,
-      "type": "SkebaPromptFromListNode",
-      "pos": [
-        -2688.9897766248337,
-        3126.6752652295077
-      ],
-      "size": [
-        257.09140625,
-        86
-      ],
-      "flags": {},
-      "order": 102,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "prompt_batch",
-          "type": "SKEBA_PROMPT_LIST",
-          "link": 542
-        },
-        {
-          "name": "index",
-          "type": "INT",
-          "link": 541
-        },
-        {
-          "name": "original_1",
-          "type": "*",
-          "link": null
-        },
-        {
-          "name": "processed_1",
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "prompt",
-          "type": "STRING",
-          "links": [
-            770,
-            1000
-          ]
-        },
-        {
-          "name": "current_prompt",
-          "type": "INT",
-          "links": [
-            780,
-            1008
-          ]
-        },
-        {
-          "name": "output_1",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
-        "Node name for S&R": "SkebaPromptFromListNode",
-        "aux_id": "Hahihula/ComfyUI-batching-nodes",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "version": "7.8",
-          "input_ue_unconnectable": {}
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "skeba_bypass_lane_count": 1,
-        "skeba_bypass_lane_types": {}
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 542,
       "type": "Setter",
       "pos": [
@@ -1830,7 +1740,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 109,
+      "order": 112,
       "mode": 0,
       "inputs": [
         {
@@ -1848,6 +1758,8 @@
       ],
       "title": "Set_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1855,8 +1767,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -1895,7 +1805,7 @@
         114
       ],
       "flags": {},
-      "order": 94,
+      "order": 96,
       "mode": 0,
       "inputs": [
         {
@@ -1914,6 +1824,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -1921,8 +1833,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "LoraLoaderModelOnly",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -1954,323 +1864,6 @@
       }
     },
     {
-      "id": 526,
-      "type": "VRGDG_PythonCodeRunner",
-      "pos": [
-        -2413.1279058611076,
-        3209.886696084628
-      ],
-      "size": [
-        225.577734375,
-        218.36528384150915
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 108,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "input_text",
-          "shape": 7,
-          "type": "STRING",
-          "link": 1000
-        },
-        {
-          "name": "input_json",
-          "shape": 7,
-          "type": "STRING",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "result_text",
-          "type": "STRING",
-          "links": [
-            1006
-          ]
-        },
-        {
-          "name": "result_json",
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "has_error",
-          "type": "BOOLEAN",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
-        "Node name for S&R": "VRGDG_PythonCodeRunner",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
-      ],
-      "widgets_values_named": {
-        "python_code": "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 541,
-      "type": "StringToNumber",
-      "pos": [
-        -2385.354912284445,
-        3259.363947970955
-      ],
-      "size": [
-        270,
-        102
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 112,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "string",
-          "type": "STRING",
-          "widget": {
-            "name": "string"
-          },
-          "link": 1006
-        }
-      ],
-      "outputs": [
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": [
-            1007
-          ]
-        },
-        {
-          "name": "FLOAT",
-          "type": "FLOAT",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
-        "Node name for S&R": "StringToNumber",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "0",
-        "round"
-      ],
-      "widgets_values_named": {
-        "string": "0",
-        "rounding": "round"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 268,
-      "type": "ComfyMathExpression",
-      "pos": [
-        -2376.863028201662,
-        3298.704205151484
-      ],
-      "size": [
-        225,
-        148
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 115,
-      "mode": 0,
-      "inputs": [
-        {
-          "label": "a",
-          "name": "values.a",
-          "type": "FLOAT,INT,BOOLEAN",
-          "link": 780
-        },
-        {
-          "label": "b",
-          "name": "values.b",
-          "shape": 7,
-          "type": "FLOAT,INT,BOOLEAN",
-          "link": 1007
-        },
-        {
-          "label": "c",
-          "name": "values.c",
-          "shape": 7,
-          "type": "FLOAT,INT,BOOLEAN",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "FLOAT",
-          "type": "FLOAT",
-          "links": null
-        },
-        {
-          "name": "INT",
-          "type": "INT",
-          "links": null
-        },
-        {
-          "name": "BOOL",
-          "type": "BOOLEAN",
-          "links": [
-            772
-          ]
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.32.0",
-        "Node name for S&R": "ComfyMathExpression",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "a == 1 or b == 0"
-      ],
-      "widgets_values_named": {
-        "expression": "a == 1 or b == 0"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 369,
-      "type": "Setter",
-      "pos": [
-        -2352.301440821401,
-        3346.998614579911
-      ],
-      "size": [
-        225,
-        58
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 117,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "BOOLEAN",
-          "link": 772
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_bool",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "bool"
-      },
-      "widgets_values": [
-        "bool"
-      ],
-      "widgets_values_named": {
-        "key": "bool"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 367,
       "type": "Setter",
       "pos": [
@@ -2284,7 +1877,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 107,
+      "order": 109,
       "mode": 0,
       "inputs": [
         {
@@ -2302,6 +1895,8 @@
       ],
       "title": "Set_prompt_from_batch",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2309,8 +1904,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -2351,7 +1944,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 95,
+      "order": 97,
       "mode": 0,
       "inputs": [
         {
@@ -2395,6 +1988,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.32.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2402,8 +1997,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.32.0",
         "Node name for S&R": "ComfyMathExpression",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -2440,7 +2033,7 @@
         190
       ],
       "flags": {},
-      "order": 88,
+      "order": 90,
       "mode": 0,
       "inputs": [
         {
@@ -2518,6 +2111,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui-execution-inversion",
+        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2525,8 +2120,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui-execution-inversion",
-        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "Node name for S&R": "ForLoopOpen | akatz-loops",
         "ue_properties": {
           "widget_ue_connectable": {
@@ -2567,7 +2160,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 103,
+      "order": 105,
       "mode": 0,
       "inputs": [
         {
@@ -2606,6 +2199,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2613,8 +2208,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
         "Node name for S&R": "SkebaCombineVideoClipsNode",
         "aux_id": "Hahihula/ComfyUI-batching-nodes",
         "ue_properties": {
@@ -2654,7 +2247,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 104,
+      "order": 106,
       "mode": 0,
       "inputs": [
         {
@@ -2672,6 +2265,8 @@
       ],
       "title": "Loop Completion (required)",
       "properties": {
+        "cnr_id": "kikotools",
+        "ver": "1.0.28",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2679,8 +2274,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "kikotools",
-        "ver": "1.0.28",
         "Node name for S&R": "DisplayAny",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -2696,12 +2289,12 @@
       },
       "widgets_values": [
         "raw value",
-        "raw value",
+        "3",
         null
       ],
       "widgets_values_named": {
         "mode": "raw value",
-        "display_0": "raw value",
+        "display_0": "3",
         "copy_value": null
       },
       "color": "#323",
@@ -2725,7 +2318,7 @@
         150
       ],
       "flags": {},
-      "order": 96,
+      "order": 98,
       "mode": 0,
       "inputs": [
         {
@@ -2785,6 +2378,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui-execution-inversion",
+        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2792,8 +2387,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui-execution-inversion",
-        "ver": "711a5fb244fc0b39a22f5b5603cb2a86b3534631",
         "Node name for S&R": "ForLoopClose | akatz-loops",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -2852,6 +2445,8 @@
       ],
       "title": "Get_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2859,8 +2454,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -2902,7 +2495,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 83,
+      "order": 85,
       "mode": 0,
       "inputs": [
         {
@@ -2940,6 +2533,8 @@
       ],
       "title": "Duration seconds -> valid H3 frame count",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -2947,8 +2542,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "ComfyMathExpression",
         "__skeba_tags": {
           "inputs": [],
@@ -2989,7 +2582,7 @@
         673
       ],
       "flags": {},
-      "order": 101,
+      "order": 103,
       "mode": 0,
       "inputs": [
         {
@@ -3014,6 +2607,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3021,8 +2616,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui-kjnodes",
-        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
         "Node name for S&R": "ModelPreviewOverrideKJ",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3077,7 +2670,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 106,
+      "order": 108,
       "mode": 0,
       "inputs": [
         {
@@ -3095,6 +2688,8 @@
       ],
       "title": "Set_model",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3102,8 +2697,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -3170,6 +2763,8 @@
       ],
       "title": "Get_height",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3177,8 +2772,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3224,7 +2817,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 84,
+      "order": 86,
       "mode": 0,
       "inputs": [
         {
@@ -3242,6 +2835,8 @@
       ],
       "title": "Set_prompt_start",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3249,8 +2844,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -3291,7 +2884,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 73,
+      "order": 75,
       "mode": 0,
       "inputs": [
         {
@@ -3348,6 +2941,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3355,8 +2950,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
         "Node name for S&R": "SkebaPromptLoopNode",
         "aux_id": "Hahihula/ComfyUI-batching-nodes",
         "ue_properties": {
@@ -3424,6 +3017,8 @@
       ],
       "title": "Get_video_to_collect",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3431,8 +3026,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3500,6 +3093,8 @@
       ],
       "title": "Get_prompt_start",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3507,8 +3102,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3576,6 +3169,8 @@
       ],
       "title": "Get_width",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3583,8 +3178,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3652,6 +3245,8 @@
       ],
       "title": "Get_model",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3659,8 +3254,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3706,7 +3299,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 91,
+      "order": 93,
       "mode": 0,
       "inputs": [
         {
@@ -3724,6 +3317,8 @@
       ],
       "title": "Set_reference_bundle",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3731,8 +3326,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -3795,6 +3388,8 @@
       ],
       "title": "Get_clip",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3802,8 +3397,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3871,6 +3464,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3878,8 +3473,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -3947,6 +3540,8 @@
       ],
       "title": "Get_initial_latent",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -3954,8 +3549,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4019,6 +3612,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4026,8 +3621,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4091,6 +3684,8 @@
       ],
       "title": "Get_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4098,8 +3693,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4128,78 +3721,6 @@
       }
     },
     {
-      "id": 373,
-      "type": "Getter",
-      "pos": [
-        -3621.3596592478007,
-        4165.082953346588
-      ],
-      "size": [
-        210,
-        82
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 21,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            776
-          ]
-        }
-      ],
-      "title": "Get_bool",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "bool",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "bool",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 353,
       "type": "Getter",
       "pos": [
@@ -4213,7 +3734,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 22,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -4235,6 +3756,8 @@
       ],
       "title": "Get_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4242,8 +3765,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4289,7 +3810,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 23,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -4311,6 +3832,8 @@
       ],
       "title": "Get_bool",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4318,8 +3841,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4365,7 +3886,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 89,
+      "order": 91,
       "mode": 0,
       "inputs": [
         {
@@ -4396,6 +3917,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4403,8 +3926,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAMiniMaxH3MotionContextLoadLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4451,7 +3972,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 78,
+      "order": 80,
       "mode": 0,
       "inputs": [
         {
@@ -4489,6 +4010,8 @@
       ],
       "title": "Duration seconds -> valid H3 frame count",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4496,8 +4019,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "ComfyMathExpression",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4540,7 +4061,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 24,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -4562,6 +4083,8 @@
       ],
       "title": "Get_bool",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4569,8 +4092,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4616,7 +4137,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 79,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -4653,6 +4174,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.32.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4660,8 +4183,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.32.0",
         "Node name for S&R": "ComfyMathExpression",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4704,7 +4225,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 25,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -4726,6 +4247,8 @@
       ],
       "title": "Get_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4733,8 +4256,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4780,7 +4301,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 26,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -4802,6 +4323,8 @@
       ],
       "title": "Get_reference_bundle",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4809,8 +4332,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4856,7 +4377,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 27,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -4878,6 +4399,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4885,8 +4408,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -4932,7 +4453,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 28,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -4954,6 +4475,8 @@
       ],
       "title": "Get_height",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -4961,8 +4484,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5008,7 +4529,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 29,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -5030,6 +4551,8 @@
       ],
       "title": "Get_reference_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5037,8 +4560,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5084,7 +4605,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 30,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -5106,6 +4627,8 @@
       ],
       "title": "Get_clip",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5113,8 +4636,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5160,7 +4681,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 31,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -5182,6 +4703,8 @@
       ],
       "title": "Get_width",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5189,8 +4712,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5236,7 +4757,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 121,
+      "order": 127,
       "mode": 0,
       "inputs": [
         {
@@ -5255,6 +4776,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5262,8 +4785,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
         "Node name for S&R": "ConditioningZeroOut",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5300,7 +4821,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 32,
+      "order": 31,
       "mode": 0,
       "inputs": [
         {
@@ -5322,6 +4843,8 @@
       ],
       "title": "Get_noise",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5329,8 +4852,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5372,7 +4893,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 33,
+      "order": 32,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5385,6 +4906,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5392,8 +4915,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "KSamplerSelect",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5434,7 +4955,7 @@
         159.0071171175091
       ],
       "flags": {},
-      "order": 34,
+      "order": 33,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5454,6 +4975,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5461,8 +4984,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "ResolutionSelector",
         "__skeba_tags": {
           "inputs": [],
@@ -5507,7 +5028,7 @@
         86
       ],
       "flags": {},
-      "order": 35,
+      "order": 34,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5521,6 +5042,8 @@
       ],
       "title": "Duration in Seconds",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5528,8 +5051,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "PrimitiveFloat",
         "__skeba_tags": {
           "inputs": [],
@@ -5572,7 +5093,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 118,
+      "order": 124,
       "mode": 0,
       "inputs": [
         {
@@ -5596,6 +5117,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5603,8 +5126,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
         "Node name for S&R": "LTXVConcatAVLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5639,7 +5160,7 @@
         142
       ],
       "flags": {},
-      "order": 74,
+      "order": 76,
       "mode": 0,
       "inputs": [
         {
@@ -5658,6 +5179,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5665,8 +5188,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
         "Node name for S&R": "BasicScheduler",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5711,7 +5232,7 @@
         126
       ],
       "flags": {},
-      "order": 123,
+      "order": 129,
       "mode": 0,
       "inputs": [
         {
@@ -5740,6 +5261,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5747,8 +5270,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
         "Node name for S&R": "CFGGuider",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5789,7 +5310,7 @@
         122
       ],
       "flags": {},
-      "order": 71,
+      "order": 73,
       "mode": 0,
       "inputs": [
         {
@@ -5816,6 +5337,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5823,8 +5346,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAMiniMaxH3MotionContextSaveLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5867,7 +5388,7 @@
         122
       ],
       "flags": {},
-      "order": 125,
+      "order": 131,
       "mode": 0,
       "inputs": [
         {
@@ -5894,6 +5415,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5901,8 +5424,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAMiniMaxH3MotionContextSaveLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -5945,7 +5466,7 @@
         230
       ],
       "flags": {},
-      "order": 128,
+      "order": 134,
       "mode": 0,
       "inputs": [
         {
@@ -5976,6 +5497,8 @@
       ],
       "title": "Wait for both context saves",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -5983,8 +5506,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
         "Node name for S&R": "StringConcatenate",
         "__skeba_tags": {
           "inputs": [],
@@ -6030,7 +5551,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 36,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
@@ -6052,6 +5573,8 @@
       ],
       "title": "Get_upscale_scale",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6059,8 +5582,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6102,7 +5623,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 37,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -6124,6 +5645,8 @@
       ],
       "title": "Get_accumultation",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6131,8 +5654,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6178,7 +5699,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 113,
+      "order": 117,
       "mode": 0,
       "inputs": [
         {
@@ -6196,6 +5717,8 @@
       ],
       "title": "Set_output_latent",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6203,8 +5726,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -6243,7 +5764,7 @@
         58
       ],
       "flags": {},
-      "order": 122,
+      "order": 128,
       "mode": 0,
       "inputs": [
         {
@@ -6261,6 +5782,8 @@
       ],
       "title": "Set_frames_to_trim",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6268,8 +5791,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -6310,7 +5831,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 38,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -6332,6 +5853,8 @@
       ],
       "title": "Get_duration_in_seconds",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6339,8 +5862,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6384,7 +5905,7 @@
         250
       ],
       "flags": {},
-      "order": 124,
+      "order": 130,
       "mode": 0,
       "inputs": [
         {
@@ -6430,6 +5951,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.33.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6437,8 +5960,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.33.2",
         "Node name for S&R": "SamplerCustomAdvanced",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6475,7 +5996,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 39,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -6497,6 +6018,8 @@
       ],
       "title": "Get_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6504,8 +6027,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6547,7 +6068,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 127,
+      "order": 133,
       "mode": 0,
       "inputs": [
         {
@@ -6571,6 +6092,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6578,8 +6101,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
         "Node name for S&R": "VAEDecodeAudio",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6612,7 +6133,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 40,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -6634,6 +6155,8 @@
       ],
       "title": "Get_frames_to_trim",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6641,8 +6164,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6682,7 +6203,7 @@
         78
       ],
       "flags": {},
-      "order": 126,
+      "order": 132,
       "mode": 0,
       "inputs": [
         {
@@ -6706,6 +6227,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6713,8 +6236,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "VAEDecode",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6747,7 +6268,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 41,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -6769,6 +6290,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6776,8 +6299,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6819,7 +6340,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 134,
+      "order": 140,
       "mode": 0,
       "inputs": [
         {
@@ -6837,6 +6358,8 @@
       ],
       "title": "Set_video_to_collect",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6844,8 +6367,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -6888,7 +6409,7 @@
         162
       ],
       "flags": {},
-      "order": 132,
+      "order": 138,
       "mode": 0,
       "inputs": [
         {
@@ -6913,6 +6434,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6920,8 +6443,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "CreateVideo",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -6968,7 +6489,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 42,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
@@ -6990,6 +6511,8 @@
       ],
       "title": "Get_model",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -6997,8 +6520,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7044,7 +6565,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 43,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
@@ -7066,6 +6587,8 @@
       ],
       "title": "Get_video_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7073,8 +6596,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7120,7 +6641,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 44,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -7142,6 +6663,8 @@
       ],
       "title": "Get_current_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7149,8 +6672,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7196,7 +6717,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 114,
+      "order": 118,
       "mode": 0,
       "inputs": [
         {
@@ -7222,6 +6743,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7229,8 +6752,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
         "Node name for S&R": "LTXVSeparateAVLatent",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7261,7 +6782,7 @@
         202
       ],
       "flags": {},
-      "order": 116,
+      "order": 121,
       "mode": 0,
       "inputs": [
         {
@@ -7288,6 +6809,8 @@
         }
       ],
       "properties": {
+        "aux_id": "LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler",
+        "ver": "64fc9d4c7e2c03e8c61d6886182e3309365a1962",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7295,8 +6818,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "aux_id": "LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler",
-        "ver": "64fc9d4c7e2c03e8c61d6886182e3309365a1962",
         "Node name for S&R": "MinimaxH3LatentUpscaler3D",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7349,7 +6870,7 @@
         138
       ],
       "flags": {},
-      "order": 111,
+      "order": 114,
       "mode": 0,
       "inputs": [
         {
@@ -7395,6 +6916,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7402,8 +6925,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "SamplerCustomAdvanced",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7436,7 +6957,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 45,
+      "order": 44,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7449,6 +6970,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7456,8 +6979,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "KSamplerSelect",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7496,7 +7017,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 105,
+      "order": 107,
       "mode": 0,
       "inputs": [
         {
@@ -7525,6 +7046,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7532,8 +7055,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.31.0",
         "Node name for S&R": "CFGGuider",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7572,7 +7093,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 46,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
@@ -7594,6 +7115,8 @@
       ],
       "title": "Get_noise",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7601,8 +7124,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7644,7 +7165,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 47,
+      "order": 46,
       "mode": 0,
       "inputs": [
         {
@@ -7666,6 +7187,8 @@
       ],
       "title": "Get_model",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7673,8 +7196,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7716,7 +7237,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -7738,6 +7259,8 @@
       ],
       "title": "Get_model",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7745,8 +7268,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7788,7 +7309,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 49,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
@@ -7810,6 +7331,8 @@
       ],
       "title": "Get_initial_latent",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7817,8 +7340,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7858,7 +7379,7 @@
         142
       ],
       "flags": {},
-      "order": 80,
+      "order": 82,
       "mode": 0,
       "inputs": [
         {
@@ -7885,6 +7406,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7892,8 +7415,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "BasicScheduler",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -7940,7 +7461,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 50,
+      "order": 49,
       "mode": 0,
       "inputs": [
         {
@@ -7962,6 +7483,8 @@
       ],
       "title": "Get_total_steps",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -7969,8 +7492,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -8012,7 +7533,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 100,
+      "order": 102,
       "mode": 0,
       "inputs": [
         {
@@ -8031,6 +7552,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8038,8 +7561,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.0",
         "Node name for S&R": "ConditioningZeroOut",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -8070,7 +7591,7 @@
         134
       ],
       "flags": {},
-      "order": 131,
+      "order": 137,
       "mode": 0,
       "inputs": [
         {
@@ -8095,6 +7616,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8102,8 +7625,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAH3SeamExposureMatch",
         "__skeba_color_base": "#223",
         "__skeba_bgcolor_base": "#335",
@@ -8146,10 +7667,10 @@
       ],
       "size": [
         428.15625,
-        130
+        361.26378676470586
       ],
       "flags": {},
-      "order": 133,
+      "order": 139,
       "mode": 0,
       "inputs": [
         {
@@ -8169,6 +7690,8 @@
       ],
       "title": "Save Video In Progress (Optional)",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8176,8 +7699,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "SaveVideo",
         "__skeba_tags": {
           "inputs": [],
@@ -8228,7 +7749,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 51,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -8250,6 +7771,8 @@
       ],
       "title": "Get_positive",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8257,8 +7780,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -8300,7 +7821,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 77,
+      "order": 79,
       "mode": 0,
       "inputs": [
         {
@@ -8318,6 +7839,8 @@
       ],
       "title": "Set_duration_in_seconds",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8325,8 +7848,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -8365,7 +7886,7 @@
         88.00277988817243
       ],
       "flags": {},
-      "order": 52,
+      "order": 51,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -8379,6 +7900,8 @@
       ],
       "title": "Upscale Perecemt (1.5, 2, 2.5, 3...)",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8386,8 +7909,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
         "Node name for S&R": "PrimitiveFloat",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -8430,7 +7951,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 85,
+      "order": 87,
       "mode": 0,
       "inputs": [
         {
@@ -8448,6 +7969,8 @@
       ],
       "title": "Set_noise",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8455,8 +7978,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -8484,139 +8005,6 @@
       }
     },
     {
-      "id": 263,
-      "type": "SKEBAMiniMaxH3MotionContext",
-      "pos": [
-        -3363.467466572163,
-        3919.5101239031437
-      ],
-      "size": [
-        284.390625,
-        370
-      ],
-      "flags": {},
-      "order": 93,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "conditioning",
-          "type": "CONDITIONING",
-          "link": 1153
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 748
-        },
-        {
-          "name": "latent",
-          "type": "LATENT",
-          "link": 822
-        },
-        {
-          "name": "context_frames",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "context_latent",
-          "shape": 7,
-          "type": "LATENT",
-          "link": 535
-        },
-        {
-          "name": "audio_vae",
-          "shape": 7,
-          "type": "VAE",
-          "link": 757
-        },
-        {
-          "name": "context_audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": null
-        },
-        {
-          "name": "bypass",
-          "shape": 7,
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "bypass"
-          },
-          "link": 776
-        }
-      ],
-      "outputs": [
-        {
-          "name": "conditioning",
-          "type": "CONDITIONING",
-          "links": [
-            686,
-            688
-          ]
-        },
-        {
-          "name": "trim_frames",
-          "type": "INT",
-          "links": []
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
-        "Node name for S&R": "SKEBAMiniMaxH3MotionContext",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        "22",
-        24,
-        false,
-        "video",
-        "head",
-        "disabled",
-        "timeline",
-        true,
-        true
-      ],
-      "widgets_values_named": {
-        "context_length": "22",
-        "audio_context_length": 24,
-        "bypass": false,
-        "encode_mode": "video",
-        "anchor_mode": "head",
-        "crop": "disabled",
-        "audio_mode": "timeline",
-        "video_context_enabled": true,
-        "audio_context_enabled": true
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 333,
       "type": "SKEBAMiniMaxH3MotionContext",
       "pos": [
@@ -8628,7 +8016,7 @@
         370
       ],
       "flags": {},
-      "order": 120,
+      "order": 126,
       "mode": 0,
       "inputs": [
         {
@@ -8678,6 +8066,15 @@
             "name": "bypass"
           },
           "link": 777
+        },
+        {
+          "name": "video_context_enabled",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "video_context_enabled"
+          },
+          "link": 1202
         }
       ],
       "outputs": [
@@ -8698,6 +8095,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8705,8 +8104,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
         "Node name for S&R": "SKEBAMiniMaxH3MotionContext",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -8752,204 +8149,6 @@
       }
     },
     {
-      "id": 622,
-      "type": "Getter",
-      "pos": [
-        779.2266996032037,
-        4665.026839548527
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 53,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1189
-          ]
-        }
-      ],
-      "title": "Get_bool",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "bool",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "bool",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 265,
-      "type": "SKEBAMiniMaxH3MotionContextTrim",
-      "pos": [
-        892.9866414954076,
-        4401.462512824362
-      ],
-      "size": [
-        306.984375,
-        334
-      ],
-      "flags": {},
-      "order": 129,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 614
-        },
-        {
-          "name": "audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 703
-        },
-        {
-          "name": "trim_frames",
-          "type": "INT",
-          "widget": {
-            "name": "trim_frames"
-          },
-          "link": 1166
-        },
-        {
-          "name": "bypass",
-          "shape": 7,
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "bypass"
-          },
-          "link": 1189
-        }
-      ],
-      "outputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "links": [
-            1187
-          ]
-        },
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "links": [
-            611
-          ]
-        },
-        {
-          "name": "crossfade_images",
-          "type": "IMAGE",
-          "links": null
-        },
-        {
-          "name": "crossfade_frames",
-          "type": "INT",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "0.1.2",
-        "Node name for S&R": "SKEBAMiniMaxH3MotionContextTrim",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        0,
-        24,
-        true,
-        true,
-        48,
-        true,
-        4,
-        8,
-        1,
-        0.4
-      ],
-      "widgets_values_named": {
-        "trim_frames": 0,
-        "fps": 24,
-        "match_tail": true,
-        "bypass": true,
-        "video_crossfade_frames": 48,
-        "boundary_match": true,
-        "boundary_analysis_frames": 4,
-        "boundary_correction_frames": 8,
-        "boundary_strength": 1,
-        "boundary_max_ev": 0.4
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 262,
       "type": "SaveVideo",
       "pos": [
@@ -8958,10 +8157,10 @@
       ],
       "size": [
         313.41135082637265,
-        301.09220047221294
+        297.1416372265023
       ],
       "flags": {},
-      "order": 110,
+      "order": 113,
       "mode": 0,
       "inputs": [
         {
@@ -8979,6 +8178,8 @@
       ],
       "title": "Save Combined Video",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -8986,8 +8187,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.30.2",
         "Node name for S&R": "SaveVideo",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9038,7 +8237,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 54,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
@@ -9060,6 +8259,8 @@
       ],
       "title": "Get_prompt_from_batch",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9067,8 +8268,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9112,7 +8311,7 @@
         584
       ],
       "flags": {},
-      "order": 82,
+      "order": 84,
       "mode": 0,
       "inputs": [
         {
@@ -9280,6 +8479,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "360fbdee08d4f2cf631a8d146738b9dc4bf98f9f",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9287,8 +8488,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "360fbdee08d4f2cf631a8d146738b9dc4bf98f9f",
         "Node name for S&R": "H3TaggedReferencePrompt",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9339,7 +8538,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 90,
+      "order": 92,
       "mode": 0,
       "inputs": [
         {
@@ -9357,6 +8556,8 @@
       ],
       "title": "Set_reference_prompt",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9364,8 +8565,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -9406,7 +8605,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 55,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
@@ -9428,6 +8627,8 @@
       ],
       "title": "Get_duration_in_seconds",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9435,8 +8636,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9482,7 +8681,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 56,
+      "order": 54,
       "mode": 0,
       "inputs": [
         {
@@ -9504,6 +8703,8 @@
       ],
       "title": "Get_audio_vae",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9511,8 +8712,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Getter",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9556,7 +8755,7 @@
         708
       ],
       "flags": {},
-      "order": 92,
+      "order": 94,
       "mode": 0,
       "inputs": [
         {
@@ -9780,6 +8979,8 @@
       ],
       "title": "BASE PASS - Cached References + First/Last",
       "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9787,8 +8988,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
         "Node name for S&R": "SkebaCachedMiniMaxH3ReferenceFirstLast",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -9837,7 +9036,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 98,
+      "order": 100,
       "mode": 0,
       "inputs": [
         {
@@ -9855,6 +9054,8 @@
       ],
       "title": "Set_positive",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9862,8 +9063,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -9904,7 +9103,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 99,
+      "order": 101,
       "mode": 0,
       "inputs": [
         {
@@ -9922,6 +9121,8 @@
       ],
       "title": "Set_initial_latent",
       "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9929,8 +9130,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
         "Node name for S&R": "Setter",
         "showOutputText": true,
         "ue_properties": {
@@ -9969,7 +9168,7 @@
         658.1330909255357
       ],
       "flags": {},
-      "order": 57,
+      "order": 55,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -9983,6 +9182,8 @@
       ],
       "title": "Prompt (Each Divided With a | )",
       "properties": {
+        "cnr_id": "ComfyLiterals",
+        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -9990,8 +9191,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "ComfyLiterals",
-        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
         "Node name for S&R": "String",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -10034,7 +9233,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 119,
+      "order": 125,
       "mode": 0,
       "inputs": [
         {
@@ -10161,6 +9360,8 @@
       ],
       "title": "UPSCALE PASS - Cached References + First/Last",
       "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -10168,8 +9369,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
         "Node name for S&R": "SkebaCachedMiniMaxH3ReferenceFirstLast",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -10220,7 +9419,7 @@
         375.02273286291984
       ],
       "flags": {},
-      "order": 58,
+      "order": 56,
       "mode": 4,
       "inputs": [],
       "outputs": [
@@ -10240,6 +9439,8 @@
       ],
       "title": "Starting Image",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -10247,8 +9448,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
         "Node name for S&R": "LoadImage",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -10287,7 +9486,7 @@
         375.02273286291984
       ],
       "flags": {},
-      "order": 59,
+      "order": 57,
       "mode": 4,
       "inputs": [],
       "outputs": [
@@ -10307,6 +9506,8 @@
       ],
       "title": "Last Image",
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -10314,8 +9515,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.34.0",
         "Node name for S&R": "LoadImage",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -10356,7 +9555,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 60,
+      "order": 58,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -10369,6 +9568,8 @@
         }
       ],
       "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
@@ -10376,8 +9577,6 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "comfy-core",
-        "ver": "0.28.2",
         "Node name for S&R": "RandomNoise",
         "ue_properties": {
           "widget_ue_connectable": {},
@@ -10420,7 +9619,7 @@
         173.390625
       ],
       "flags": {},
-      "order": 61,
+      "order": 59,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -10457,7 +9656,7 @@
         247.61675608906853
       ],
       "flags": {},
-      "order": 62,
+      "order": 60,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -10494,7 +9693,7 @@
         383.42317801354375
       ],
       "flags": {},
-      "order": 63,
+      "order": 61,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -10531,7 +9730,7 @@
         625.6436754963115
       ],
       "flags": {},
-      "order": 64,
+      "order": 62,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -10555,6 +9754,1265 @@
       },
       "color": "#323",
       "bgcolor": "#535"
+    },
+    {
+      "id": 526,
+      "type": "VRGDG_PythonCodeRunner",
+      "pos": [
+        -2622.622038739238,
+        3275.6802794475707
+      ],
+      "size": [
+        225.577734375,
+        218.36528384150915
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 110,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 1000
+        },
+        {
+          "name": "input_json",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_text",
+          "type": "STRING",
+          "links": [
+            1006
+          ]
+        },
+        {
+          "name": "result_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "has_error",
+          "type": "BOOLEAN",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "VRGDG_PythonCodeRunner",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
+      ],
+      "widgets_values_named": {
+        "python_code": "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 369,
+      "type": "Setter",
+      "pos": [
+        -2189.420791031856,
+        3239.826893258043
+      ],
+      "size": [
+        225,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 116,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "BOOLEAN",
+          "link": 772
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_bool",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "bool"
+      },
+      "widgets_values": [
+        "bool"
+      ],
+      "widgets_values_named": {
+        "key": "bool"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 373,
+      "type": "Getter",
+      "pos": [
+        -3621.3596592478007,
+        4165.082953346588
+      ],
+      "size": [
+        210,
+        82
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 63,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            776
+          ]
+        }
+      ],
+      "title": "Get_bool",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "bool",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "bool",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 263,
+      "type": "SKEBAMiniMaxH3MotionContext",
+      "pos": [
+        -3363.467466572163,
+        3919.5101239031437
+      ],
+      "size": [
+        284.390625,
+        370
+      ],
+      "flags": {},
+      "order": 95,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 1153
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 748
+        },
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "link": 822
+        },
+        {
+          "name": "context_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "context_latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 535
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 757
+        },
+        {
+          "name": "context_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "bypass",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "bypass"
+          },
+          "link": 776
+        },
+        {
+          "name": "video_context_enabled",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "video_context_enabled"
+          },
+          "link": 1200
+        }
+      ],
+      "outputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            686,
+            688
+          ]
+        },
+        {
+          "name": "trim_frames",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SKEBAMiniMaxH3MotionContext",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "22",
+        24,
+        false,
+        "video",
+        "head",
+        "disabled",
+        "timeline",
+        true,
+        true
+      ],
+      "widgets_values_named": {
+        "context_length": "22",
+        "audio_context_length": 24,
+        "bypass": false,
+        "encode_mode": "video",
+        "anchor_mode": "head",
+        "crop": "disabled",
+        "audio_mode": "timeline",
+        "video_context_enabled": true,
+        "audio_context_enabled": true
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 633,
+      "type": "Setter",
+      "pos": [
+        -2234.0790049530474,
+        3399.004816163729
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {},
+      "order": 123,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "BOOLEAN",
+          "link": 1199
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_new_location_bool",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "new_location_bool"
+      },
+      "widgets_values": [
+        "new_location_bool"
+      ],
+      "widgets_values_named": {
+        "key": "new_location_bool"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 631,
+      "type": "Getter",
+      "pos": [
+        -3651.6521931284365,
+        4231.705657399542
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 64,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "BOOLEAN",
+          "links": [
+            1200
+          ]
+        }
+      ],
+      "title": "Get_new_location_bool",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "new_location_bool",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "new_location_bool",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 634,
+      "type": "Getter",
+      "pos": [
+        -1006.1924116053164,
+        4317.258059732362
+      ],
+      "size": [
+        210,
+        74
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 65,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1202
+          ]
+        }
+      ],
+      "title": "Get_new_location_bool",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "new_location_bool",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "new_location_bool",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 268,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -2358.594507732558,
+        3183.431386282829
+      ],
+      "size": [
+        225,
+        128
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 111,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 780
+        },
+        {
+          "label": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": [
+            772
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.32.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ComfyMathExpression",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "a == 1"
+      ],
+      "widgets_values_named": {
+        "expression": "a == 1"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 266,
+      "type": "SkebaPromptFromListNode",
+      "pos": [
+        -2688.9897766248337,
+        3126.6752652295077
+      ],
+      "size": [
+        257.09140625,
+        86
+      ],
+      "flags": {},
+      "order": 104,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt_batch",
+          "type": "SKEBA_PROMPT_LIST",
+          "link": 542
+        },
+        {
+          "name": "index",
+          "type": "INT",
+          "link": 541
+        },
+        {
+          "name": "original_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "processed_1",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            770,
+            1000
+          ]
+        },
+        {
+          "name": "current_prompt",
+          "type": "INT",
+          "links": [
+            780,
+            1008,
+            1204
+          ]
+        },
+        {
+          "name": "output_1",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaPromptFromListNode",
+        "aux_id": "Hahihula/ComfyUI-batching-nodes",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "skeba_bypass_lane_count": 1,
+        "skeba_bypass_lane_types": {}
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 635,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -2491.4131396616795,
+        3427.8995795772225
+      ],
+      "size": [
+        400,
+        128
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 119,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 1204
+        },
+        {
+          "label": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 1203
+        },
+        {
+          "label": "c",
+          "name": "values.c",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": [
+            1205
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ComfyMathExpression",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "a == 1 or b == 0"
+      ],
+      "widgets_values_named": {
+        "expression": "a == 1 or b == 0"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 636,
+      "type": "Setter",
+      "pos": [
+        -2340.5029045736487,
+        3483.0620545555644
+      ],
+      "size": [
+        210,
+        58
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 122,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "type": "BOOLEAN",
+          "link": 1205
+        }
+      ],
+      "outputs": [
+        {
+          "name": "*",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "title": "Set_trim_bool",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Setter",
+        "showOutputText": true,
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "previousName": "trim_bool"
+      },
+      "widgets_values": [
+        "trim_bool"
+      ],
+      "widgets_values_named": {
+        "key": "trim_bool"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 265,
+      "type": "SKEBAMiniMaxH3MotionContextTrim",
+      "pos": [
+        907.5980583286911,
+        4342.398462872387
+      ],
+      "size": [
+        306.984375,
+        334
+      ],
+      "flags": {},
+      "order": 135,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 614
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 703
+        },
+        {
+          "name": "trim_frames",
+          "type": "INT",
+          "widget": {
+            "name": "trim_frames"
+          },
+          "link": 1166
+        },
+        {
+          "name": "bypass",
+          "shape": 7,
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "bypass"
+          },
+          "link": 1189
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            1187
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            611
+          ]
+        },
+        {
+          "name": "crossfade_images",
+          "type": "IMAGE",
+          "links": null
+        },
+        {
+          "name": "crossfade_frames",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SKEBAMiniMaxH3MotionContextTrim",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        0,
+        24,
+        true,
+        true,
+        48,
+        true,
+        4,
+        8,
+        1,
+        0.6
+      ],
+      "widgets_values_named": {
+        "trim_frames": 0,
+        "fps": 24,
+        "match_tail": true,
+        "bypass": true,
+        "video_crossfade_frames": 48,
+        "boundary_match": true,
+        "boundary_analysis_frames": 4,
+        "boundary_correction_frames": 8,
+        "boundary_strength": 1,
+        "boundary_max_ev": 0.6
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 622,
+      "type": "Getter",
+      "pos": [
+        731.5030331240254,
+        4610.815061634782
+      ],
+      "size": [
+        210,
+        74
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 66,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "BOOLEAN",
+          "type": "BOOLEAN",
+          "links": [
+            1189
+          ]
+        }
+      ],
+      "title": "Get_trim_bool",
+      "properties": {
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "trim_bool",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "trim_bool",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 632,
+      "type": "ComfyMathExpression",
+      "pos": [
+        -2390.0438784482853,
+        3344.182485501325
+      ],
+      "size": [
+        400,
+        128
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 120,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "a",
+          "name": "values.a",
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": 1206
+        },
+        {
+          "label": "b",
+          "name": "values.b",
+          "shape": 7,
+          "type": "FLOAT,INT,BOOLEAN",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": null
+        },
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "BOOL",
+          "type": "BOOLEAN",
+          "links": [
+            1199
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "ComfyMathExpression",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "a != 0"
+      ],
+      "widgets_values_named": {
+        "expression": "a != 0"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 541,
+      "type": "StringToNumber",
+      "pos": [
+        -2794.9155342447743,
+        3385.2400076405797
+      ],
+      "size": [
+        270,
+        102
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 115,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "string",
+          "type": "STRING",
+          "widget": {
+            "name": "string"
+          },
+          "link": 1006
+        }
+      ],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            1203,
+            1206
+          ]
+        },
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "StringToNumber",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "0",
+        "round"
+      ],
+      "widgets_values_named": {
+        "string": "0",
+        "rounding": "round"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
     }
   ],
   "links": [
@@ -11303,14 +11761,6 @@
       "STRING"
     ],
     [
-      1007,
-      541,
-      0,
-      268,
-      1,
-      "INT"
-    ],
-    [
       1008,
       266,
       1,
@@ -11813,6 +12263,62 @@
       546,
       5,
       "IMAGE"
+    ],
+    [
+      1199,
+      632,
+      2,
+      633,
+      0,
+      "BOOLEAN"
+    ],
+    [
+      1200,
+      631,
+      0,
+      263,
+      8,
+      "BOOLEAN"
+    ],
+    [
+      1202,
+      634,
+      0,
+      333,
+      8,
+      "BOOLEAN"
+    ],
+    [
+      1203,
+      541,
+      0,
+      635,
+      1,
+      "INT"
+    ],
+    [
+      1204,
+      266,
+      1,
+      635,
+      0,
+      "INT"
+    ],
+    [
+      1205,
+      635,
+      2,
+      636,
+      0,
+      "BOOLEAN"
+    ],
+    [
+      1206,
+      541,
+      0,
+      632,
+      0,
+      "INT"
     ]
   ],
   "groups": [
@@ -11956,8 +12462,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 24,
-          "lastNodeId": 629,
-          "lastLinkId": 1194,
+          "lastNodeId": 636,
+          "lastLinkId": 1206,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -12127,6 +12633,8 @@
               }
             ],
             "properties": {
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
@@ -12134,8 +12642,6 @@
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
               "secondTabWidth": 65,
-              "cnr_id": "comfy-core",
-              "ver": "0.30.2",
               "Node name for S&R": "UNETLoader",
               "__skeba_tags": {
                 "inputs": [],
@@ -12198,6 +12704,8 @@
               }
             ],
             "properties": {
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
@@ -12205,8 +12713,6 @@
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
               "secondTabWidth": 65,
-              "cnr_id": "comfy-core",
-              "ver": "0.30.2",
               "Node name for S&R": "CLIPLoader",
               "__skeba_tags": {
                 "inputs": [],
@@ -12271,6 +12777,8 @@
               }
             ],
             "properties": {
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
@@ -12278,8 +12786,6 @@
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
               "secondTabWidth": 65,
-              "cnr_id": "comfy-core",
-              "ver": "0.30.2",
               "Node name for S&R": "VAELoader",
               "__skeba_tags": {
                 "inputs": [],
@@ -12340,6 +12846,8 @@
               }
             ],
             "properties": {
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
@@ -12347,8 +12855,6 @@
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
               "secondTabWidth": 65,
-              "cnr_id": "comfy-core",
-              "ver": "0.30.2",
               "Node name for S&R": "VAELoader",
               "__skeba_tags": {
                 "inputs": [],
@@ -13200,10 +13706,10 @@
     },
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.5439573006239652,
+      "scale": 1.9749999999999976,
       "offset": [
-        6443.419102398346,
-        -2820.7301832781277
+        2701.88551462313,
+        -3205.7034506911987
       ]
     }
   },
