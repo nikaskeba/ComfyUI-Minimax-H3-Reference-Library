@@ -7,8 +7,8 @@ H3 Reference Library replaces a large set of manually connected reference widget
 
 ## Features
 
-- Local manager at `/h3-references` with a toolbar launcher and an **Open Reference Library** button on the node
-- Separate known-character catalog at `/h3-built-in-references`
+- Local manager at `/h3-references` with **Reference Library** and **Built In Characters** tabs, a toolbar launcher, and an **Open Reference Library** button on the node
+- Legacy standalone known-character catalog retained at `/h3-built-in-references`
 - Image, audio, and video records; embedded video soundtracks are detected automatically
 - Drag-and-drop bulk import with automatic image/audio/video pairing by filename stem
 - Reusable tags, descriptions, searchable categories, previews, and audio playback
@@ -403,6 +403,28 @@ example:
 a combined **Copy character + voice** action. Clip filenames remain in the
 Markdown source but are not displayed or returned by the character browser API.
 
+The main **H3 Reference Library** manager includes the same catalog in a
+separate **Built In Characters** tab. The shared **Reference creator** above
+the tabs combines selections from both the managed library and built-in catalog
+into one grouped guide. Tags copied from this merged view use the same
+delimiters as `H3 Tagged Reference Prompt` and add `_BC` to prevent a built-in
+character from colliding with a user-created record:
+
+```text
+{Abby Sciuto_BC} Voice: §Abby Sciuto_BC§   Played by Pauley Perrette | NCIS
+```
+
+The regular tag expands to the existing portrayal description, such as `Abby
+Sciuto played by Pauley Perrette featured on NCIS`. Each built-in character can
+also have one optional image attached from the merged tab. When present, the
+same `{Name_BC}` tag claims a normal `<Picture N>` slot, feeds that image through
+the reference bundle, and remains compatible with persistent reference caching.
+Replacing or removing the image automatically invalidates the affected cache.
+The section-sign tag expands to the existing voice wording and consumes no audio
+slot because built-in voices remain semantic descriptions. The standalone page
+and original **Built-In Reference** node retain `^Name^` and `~Name~` for
+workflow compatibility.
+
 ## Reference Library
 
 ![H3 Reference Library manager with categories, filters, and managed references](media/reference-manager.png)
@@ -495,7 +517,9 @@ The five Motion Context nodes are available under
 - **SKEBA H3 Motion Context** pins picture and audio context from the previous
   clip so the next MiniMax H3 generation can continue it. It now exposes video
   versus per-frame encoding, head versus before-frame anchoring, decoded-frame
-  crop behavior, and timeline versus reference audio placement. Existing
+  crop behavior, timeline versus reference audio placement, and independent
+  video/audio continuation switches. Audio-only continuation can carry sound
+  across a new visual location without adding picture keyframes or trim. Existing
   workflows retain the recommended `video` / `head` / `disabled` / `timeline`
   defaults.
 - **SKEBA H3 Motion Context Trim** removes the leading pinned context frames
@@ -563,7 +587,9 @@ into a LATENT lane.
 - Upload failures remain visible in the editor or affected bulk draft instead of appearing only in the browser console.
 - Stored tags contain letters, numbers, underscores, and hyphens; spaces and punctuation entered in the manager are normalized automatically.
 - Library reference tags use `{tag}`; library voice tags use `§tag§`.
-- Built-in character tags use `^Character Name^`; voice tags use `~Character Name~`.
+- Built-in tags copied from the Reference Library tab use `{Character Name_BC}`
+  and `§Character Name_BC§`. The legacy standalone page and node retain
+  `^Character Name^` and `~Character Name~`.
 
 ## Updating
 

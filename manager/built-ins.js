@@ -1,5 +1,6 @@
 const apiRoot = "/api/h3-built-in-references/records";
 const state = { records: [], selected: new Set() };
+const libraryTagMode = document.body.dataset.builtInTagMode === "library";
 const elements = Object.fromEntries([
     "built-in-folder", "built-in-search", "built-in-count", "built-in-empty",
     "built-in-records", "built-in-selection-count", "refresh-built-ins",
@@ -8,8 +9,8 @@ const elements = Object.fromEntries([
     "built-in-sort-field", "built-in-sort-direction", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
-async function request(url) {
-    const response = await fetch(url);
+async function request(url, options = {}) {
+    const response = await fetch(url, options);
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(payload.error || `Request failed (${response.status})`);
     return payload;
@@ -32,11 +33,11 @@ async function loadRecords() {
 }
 
 function referenceTag(record) {
-    return `^${record.tag}^`;
+    return libraryTagMode ? `{${record.library_tag || `${record.tag}_BC`}}` : `^${record.tag}^`;
 }
 
 function voiceTag(record) {
-    return `~${record.tag}~`;
+    return libraryTagMode ? `\u00a7${record.library_tag || `${record.tag}_BC`}\u00a7` : `~${record.tag}~`;
 }
 
 function renderFolderFilter() {
@@ -138,6 +139,17 @@ function recordRow(record) {
 
     const actions = document.createElement("div");
     actions.className = "built-in-meta";
+    if (libraryTagMode) {
+        if (record.image_url) {
+            const preview = document.createElement("img");
+            preview.className = "built-in-image-preview";
+            preview.src = record.image_url;
+            preview.alt = `${record.name} reference`;
+            actions.append(preview);
+        }
+        actions.append(button(record.has_image ? "Replace image" : "Add image", () => chooseImage(record)));
+        if (record.has_image) actions.append(button("Remove image", () => removeImage(record)));
+    }
     actions.append(button("Copy character + voice", () => copyCharacterGuide([record])));
     row.append(checkLabel, identity, details, actions);
     return row;
@@ -154,6 +166,12 @@ function button(text, onClick) {
 
 function renderSelectionState() {
     const count = state.selected.size;
+    if (libraryTagMode) {
+        window.dispatchEvent(new CustomEvent("skeba-built-in-selection-change", {
+            detail: { records: selectedRecords() },
+        }));
+        return;
+    }
     elements["built-in-selection-count"].textContent = count
         ? `${count} character${count === 1 ? "" : "s"} selected`
         : "No characters selected";
@@ -164,6 +182,37 @@ function renderSelectionState() {
     elements["built-in-selection-guide"].replaceChildren(
         ...selectedRecords().map(selectionItem),
     );
+}
+
+function chooseImage(record) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.addEventListener("change", async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        const form = new FormData();
+        form.append("image", file);
+        try {
+            await request(`${apiRoot}/${record.attachment_id}/image`, { method: "PUT", body: form });
+            await loadRecords();
+            toast(`Reference image attached to ${record.name}.`);
+        } catch (error) {
+            toast(error.message, true);
+        }
+    }, { once: true });
+    input.click();
+}
+
+async function removeImage(record) {
+    if (!window.confirm(`Remove the optional reference image for ${record.name}?`)) return;
+    try {
+        await request(`${apiRoot}/${record.attachment_id}/image`, { method: "DELETE" });
+        await loadRecords();
+        toast(`Reference image removed from ${record.name}.`);
+    } catch (error) {
+        toast(error.message, true);
+    }
 }
 
 function selectedRecords() {
@@ -224,10 +273,20 @@ elements["built-in-folder"].addEventListener("change", renderRecords);
 elements["built-in-sort-field"].addEventListener("change", renderRecords);
 elements["built-in-sort-direction"].addEventListener("change", renderRecords);
 elements["refresh-built-ins"].addEventListener("click", loadRecords);
-elements["clear-built-in-selection"].addEventListener("click", () => {
-    state.selected.clear();
-    renderRecords();
-});
-elements["copy-built-in-selection"].addEventListener("click", copySelection);
+if (elements["clear-built-in-selection"]) {
+    elements["clear-built-in-selection"].addEventListener("click", () => {
+        state.selected.clear();
+        renderRecords();
+    });
+}
+if (elements["copy-built-in-selection"]) {
+    elements["copy-built-in-selection"].addEventListener("click", copySelection);
+}
+if (libraryTagMode) {
+    window.addEventListener("skeba-clear-all-reference-selection", () => {
+        state.selected.clear();
+        renderRecords();
+    });
+}
 
 loadRecords();

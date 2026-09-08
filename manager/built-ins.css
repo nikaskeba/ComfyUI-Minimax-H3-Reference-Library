@@ -144,7 +144,8 @@ button.primary:hover { background: var(--accent-hover); }
 .built-in-identity code.voice-tag { color: #c6a8ef; }
 .built-in-details { color: var(--muted); }
 .built-in-details strong { color: var(--text); font-weight: 600; }
-.built-in-meta { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
+.built-in-meta { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px; }
+.built-in-image-preview { width: 54px; height: 54px; border: 1px solid var(--border); border-radius: 5px; object-fit: cover; background: #0f1213; }
 .empty-state { padding: 40px; text-align: center; border: 1px dashed var(--border); color: var(--muted); }
 #toast { position: fixed; right: 22px; bottom: 22px; z-index: 10; max-width: min(420px, calc(100vw - 44px)); padding: 11px 14px; border: 1px solid var(--border); border-radius: 5px; background: #253138; color: var(--text); opacity: 0; pointer-events: none; transform: translateY(10px); transition: 150ms ease; }
 #toast.visible { opacity: 1; transform: translateY(0); }

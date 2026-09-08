@@ -40,6 +40,12 @@ _stub_module(
     media_path=lambda record, kind: "",
     records_by_tag=lambda: {},
 )
+_stub_module(
+    f"{PACKAGE_NAME}.built_in_references",
+    built_in_images_revision=lambda: 0,
+    catalog_revision=lambda: "0",
+    library_built_in_records=lambda: {},
+)
 
 SPEC = importlib.util.spec_from_file_location(
     f"{PACKAGE_NAME}.h3_tag_references", MODULE_PATH)
@@ -53,6 +59,57 @@ for module_name, previous in PREVIOUS_MODULES.items():
 
 
 class PromptResolutionTests(unittest.TestCase):
+    def test_built_in_attachment_claims_a_picture_slot(self):
+        records = {
+            "Abby Sciuto_BC": {
+                "built_in": True,
+                "image_file": "abby.png",
+                "audio_file": None,
+                "video_file": None,
+                "image_description": "Abby Sciuto played by Pauley Perrette featured on NCIS",
+                "audio_description": "in Abby Sciuto's voice as played by Pauley Perrette",
+            },
+        }
+
+        prompt, _mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
+            "{Abby Sciuto_BC} enters.", records)
+
+        self.assertEqual(
+            prompt,
+            "<Picture 1> (Abby Sciuto played by Pauley Perrette featured on NCIS) enters.",
+        )
+        self.assertEqual((image_tags, audio_tags, video_tags), (["Abby Sciuto_BC"], [], []))
+
+    def test_namespaced_built_in_character_and_voice_tags(self):
+        records = {
+            "Abby Sciuto_BC": {
+                "built_in": True,
+                "image_file": None,
+                "audio_file": None,
+                "video_file": None,
+                "image_description": (
+                    "Abby Sciuto played by Pauley Perrette featured on NCIS"
+                ),
+                "audio_description": (
+                    "in Abby Sciuto's voice as played by Pauley Perrette"
+                ),
+            },
+        }
+
+        prompt, mapping, image_tags, audio_tags, video_tags = MODULE.resolve_prompt(
+            "{Abby Sciuto_BC} says <d>[English §Abby Sciuto_BC§] Hi.</d>",
+            records,
+        )
+
+        self.assertEqual(
+            prompt,
+            "Abby Sciuto played by Pauley Perrette featured on NCIS says "
+            "<d>[English in Abby Sciuto's voice as played by Pauley Perrette] Hi.</d>",
+        )
+        self.assertIn("{Abby Sciuto_BC} -> Abby Sciuto played by", mapping)
+        self.assertIn("§Abby Sciuto_BC§ -> in Abby Sciuto's voice", mapping)
+        self.assertEqual((image_tags, audio_tags, video_tags), ([], [], []))
+
     def test_tags_are_replaced_in_place_without_subject_legends(self):
         records = {
             "living_room": {

@@ -9,6 +9,11 @@ import comfy.model_management
 from comfy_extras.nodes_audio import load as load_audio_file
 
 from .library import library_revision, media_path, records_by_tag
+from .built_in_references import (
+    built_in_images_revision,
+    catalog_revision,
+    library_built_in_records,
+)
 
 
 MAX_IMAGES = 9
@@ -17,7 +22,8 @@ MAX_VIDEOS = 3
 DEFAULT_VIDEO_FPS = 24.0
 DEFAULT_VIDEO_MAX_SIDE = 1536
 REFERENCE_RE = re.compile(
-    r"\{(?P<reference>[A-Za-z0-9_-]+)\}|§(?P<voice>[A-Za-z0-9_-]+)§")
+    r"\{(?P<reference>(?:[A-Za-z0-9_-]+|[^{}\r\n]+_BC))\}"
+    r"|§(?P<voice>(?:[A-Za-z0-9_-]+|[^§\r\n]+_BC))§")
 
 
 def _description(record, kind, tag):
@@ -37,6 +43,11 @@ def _picture_replacement(record, tag, image_index=None, audio_index=None):
         picture = f"<Picture {image_index + 1}>"
         description = (record.get("image_description") or "").strip().rstrip(".")
         return f"{picture} ({description})" if description else picture
+    if record.get("built_in"):
+        # Built-in characters are semantic, media-free records. Their regular
+        # tag describes the portrayal; only the section-sign variant should
+        # resolve to the voice wording.
+        return _replacement_description(record, tag)
     if record.get("audio_file") or record.get("audio_description"):
         return _voice_replacement(record, tag, audio_index)
     return _replacement_description(record, tag)
@@ -301,13 +312,15 @@ class H3TaggedReferencePrompt:
     def IS_CHANGED(cls, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
                    video_max_side=DEFAULT_VIDEO_MAX_SIDE,
                    defer_media_loading=False):
-        return (f"{library_revision()}:{prompt_template}:{video_fps}:"
+        return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
+                f"{prompt_template}:{video_fps}:"
                 f"{video_max_side}:{defer_media_loading}")
 
     def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
               video_max_side=DEFAULT_VIDEO_MAX_SIDE,
               defer_media_loading=False):
         records = records_by_tag()
+        records.update(library_built_in_records())
         prompt, mapping, image_tags, audio_tags, video_tags = resolve_prompt(
             prompt_template or "", records)
 

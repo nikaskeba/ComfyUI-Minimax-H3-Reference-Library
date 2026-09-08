@@ -1,5 +1,10 @@
 import functools
+import hashlib
+import json
+import os
 import re
+import threading
+import uuid
 from collections import Counter
 from pathlib import Path
 
@@ -8,11 +13,86 @@ CATALOG_PATH = Path(__file__).with_name("built_in_references.md")
 FOLDER_RE = re.compile(r"^##\s+Folder:\s+`([^`]+)`(?:\s+\((.*?)\))?")
 CLIP_RE = re.compile(r"\[([^\]]+)\]\(([^)]+)\)")
 TAG_RE = re.compile(r"(?P<marker>[\^~])(?P<value>[^\^~\r\n]+?)(?P=marker)")
+ATTACHMENT_LOCK = threading.RLock()
 
 
 def catalog_revision():
     stat = CATALOG_PATH.stat()
     return f"{stat.st_mtime_ns}:{stat.st_size}"
+
+
+def _attachment_manifest_path():
+    import folder_paths
+    return Path(folder_paths.get_user_directory()) / "h3_reference_library" / "built_in_images.json"
+
+
+def _read_attachment_manifest():
+    with ATTACHMENT_LOCK:
+        path = _attachment_manifest_path()
+        if not path.exists():
+            return {"version": 1, "revision": 0, "images": {}}
+        try:
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as error:
+            raise RuntimeError(f"Built-in image manifest could not be read: {error}") from error
+        if not isinstance(manifest, dict) or not isinstance(manifest.get("images"), dict):
+            raise RuntimeError("Built-in image manifest is invalid.")
+        manifest.setdefault("version", 1)
+        manifest.setdefault("revision", 0)
+        return manifest
+
+
+def _write_attachment_manifest(manifest):
+    path = _attachment_manifest_path()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(f".{uuid.uuid4().hex}.tmp")
+    try:
+        with temporary.open("w", encoding="utf-8") as handle:
+            json.dump(manifest, handle, indent=2, ensure_ascii=True)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def built_in_images_revision():
+    manifest = _read_attachment_manifest()
+    return int(manifest.get("revision", 0))
+
+
+def built_in_attachment_id(record):
+    value = library_built_in_tag_value(record)
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()[:24]
+
+
+def built_in_image_filename(record):
+    return _read_attachment_manifest()["images"].get(library_built_in_tag_value(record))
+
+
+def set_built_in_image(record, filename):
+    if not filename or Path(filename).name != filename:
+        raise ValueError("Built-in character image filename is invalid.")
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        tag = library_built_in_tag_value(record)
+        previous = manifest["images"].get(tag)
+        manifest["images"][tag] = filename
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
+        return previous
+
+
+def remove_built_in_image(record):
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        tag = library_built_in_tag_value(record)
+        previous = manifest["images"].pop(tag, None)
+        if previous is not None:
+            manifest["revision"] = int(manifest.get("revision", 0)) + 1
+            _write_attachment_manifest(manifest)
+        return previous
 
 
 def _plain_name(value):
@@ -106,6 +186,20 @@ def built_in_voice_tag(record):
     return f"~{value}~"
 
 
+def library_built_in_tag_value(record):
+    """Namespaced tag used when built-ins appear in Reference Library."""
+    value = record.get("tag", record["name"]) if isinstance(record, dict) else record
+    return f"{value}_BC"
+
+
+def library_built_in_tag(record):
+    return f"{{{library_built_in_tag_value(record)}}}"
+
+
+def library_built_in_voice_tag(record):
+    return f"§{library_built_in_tag_value(record)}§"
+
+
 def _description(record):
     parts = [record["name"]]
     if record["actor"]:
@@ -120,6 +214,31 @@ def _voice_description(record):
     if record["actor"]:
         description += f" as played by {record['actor']}"
     return description
+
+
+def library_built_in_records():
+    """Expose catalog characters as H3 Reference Library records."""
+    attachments = _read_attachment_manifest()["images"]
+    result = {}
+    for record in list_built_in_references():
+        tag = library_built_in_tag_value(record)
+        result[tag] = {
+            "id": f"built-in:{tag}",
+            "tag": tag,
+            "category": "built-in-characters",
+            "reference_type": "character",
+            "image_description": _description(record),
+            "audio_description": _voice_description(record),
+            "image_file": attachments.get(tag),
+            "audio_file": None,
+            "video_file": None,
+            "video_has_audio": False,
+            "built_in": True,
+            "name": record["name"],
+            "actor": record["actor"],
+            "franchise": record["franchise"],
+        }
+    return result
 
 
 def resolve_built_in_prompt(prompt_template, records=None):

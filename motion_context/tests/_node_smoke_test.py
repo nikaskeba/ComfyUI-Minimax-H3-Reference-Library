@@ -207,6 +207,8 @@ def main():
     assert motion_inputs["anchor_mode"][1]["default"] == "head"
     assert motion_inputs["audio_mode"][1]["default"] == "timeline"
     assert motion_inputs["crop"][1]["default"] == "disabled"
+    assert motion_inputs["video_context_enabled"][1]["default"] is True
+    assert motion_inputs["audio_context_enabled"][1]["default"] is True
 
     trim_cls = nodes.MiniMaxH3MotionContextTrim
     assert trim_cls.RETURN_NAMES == (
@@ -268,6 +270,22 @@ def main():
             return T(np.zeros((1, 16, steps, h, w), dtype=np.float32))
 
     node = nodes.MiniMaxH3MotionContext()
+
+    # A location change can continue only the previous soundtrack. It creates
+    # no visual keyframes, places timeline audio at the beginning, and asks
+    # Trim to remove no picture or sound.
+    audio_only_cond, audio_only_trim = node.apply(
+        conditioning=[["c", {}]], vae=VAE(), latent=target,
+        context_length="22", audio_context_length=22,
+        context_latent=prev, video_context_enabled=False,
+        audio_context_enabled=True)
+    assert audio_only_trim == 0
+    assert "minimax_keyframes" not in captured
+    assert captured["minimax_refs"][0]["kind"] == "audio"
+    assert captured["minimax_refs"][0][nodes.MC_AUDIO_KEY] == 0.0
+    assert audio_only_cond
+
+    captured.clear()
     out, trim = node.apply(
         conditioning=[["c", {}]], vae=VAE(), latent=target,
         context_frames=context, context_length="22",
@@ -319,6 +337,16 @@ def main():
     print("latent path: 7 cond blocks at %s sliced from the latent tail "
           "(bit-identical to the source steps), audio 37 steps, end_frame "
           "%.4f (overhang-compensated)" % (idx, got_end))
+
+    captured.clear()
+    _, silent_trim = node.apply(
+        conditioning=[["c", {}]], vae=VAE(), latent=target,
+        context_frames=context, context_length="22",
+        audio_context_length=22, context_latent=prev,
+        audio_context_enabled=False)
+    assert silent_trim == 22
+    assert captured["minimax_keyframes"]
+    assert "minimax_refs" not in captured
 
     # no latent wired: the pixel path, same offsets, and the fake VAE
     # returns zeros so the blocks must now be zero rather than sliced

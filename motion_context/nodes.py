@@ -436,6 +436,20 @@ class MiniMaxH3MotionContext:
                                "the new clip timeline so H3 can continue it. "
                                "ref supplies it as a standard voice/sound "
                                "reference for imitation instead of continuity."}),
+                "video_context_enabled": ("BOOLEAN", {
+                    "default": True,
+                    "label_on": "CONTINUE VIDEO",
+                    "label_off": "NEW VISUAL SCENE",
+                    "tooltip": "Disable to omit previous-picture keyframes "
+                               "and return 0 trim frames while optionally "
+                               "continuing audio. Useful for a new location "
+                               "that should keep uninterrupted sound."}),
+                "audio_context_enabled": ("BOOLEAN", {
+                    "default": True,
+                    "label_on": "CONTINUE AUDIO",
+                    "label_off": "NEW AUDIO",
+                    "tooltip": "Disable to omit previous audio context while "
+                               "still allowing picture continuation."}),
             },
         }
 
@@ -454,7 +468,8 @@ class MiniMaxH3MotionContext:
               audio_context_length=22, context_frames=None,
               context_latent=None, audio_vae=None, context_audio=None,
               bypass=False, encode_mode=ENCODE_MODE,
-              anchor_mode=ANCHOR_MODE, crop=CROP, audio_mode=AUDIO_MODE):
+              anchor_mode=ANCHOR_MODE, crop=CROP, audio_mode=AUDIO_MODE,
+              video_context_enabled=True, audio_context_enabled=True):
         if bypass:
             _LOG.info("h3_motion_context: Motion Context bypassed")
             return (conditioning, 0)
@@ -486,6 +501,54 @@ class MiniMaxH3MotionContext:
         width = int(video.shape[4]) * 16
         height = int(video.shape[3]) * 16
         frame_count = _pixel_frames(latent_t)
+
+        # Audio-only continuation deliberately has no picture keyframes and
+        # therefore no duplicated head to trim. Its tail ends at frame zero,
+        # even when anchor_mode=head is selected for normal combined runs.
+        # Keeping this path separate also avoids rejecting a prior latent only
+        # because its picture dimensions differ when its audio is all we use.
+        if not video_context_enabled:
+            if not audio_context_enabled:
+                _LOG.info("h3_motion_context: picture and audio context disabled")
+                return (conditioning, 0)
+            if context_latent is None and context_audio is None:
+                raise ValueError(
+                    "h3_motion_context: audio-only continuation needs "
+                    "context_latent (preferred) or context_audio plus audio_vae.")
+
+            _ensure_payload_patch()
+            a_frames = int(audio_context_length) or int(context_length)
+            if context_latent is not None:
+                audio_latent, ref_audio_t, overhang = _audio_tail_from_latent(
+                    context_latent, a_frames)
+                audio_src = "latent"
+            else:
+                if audio_vae is None:
+                    raise ValueError(
+                        "h3_motion_context: context_audio supplied without "
+                        "audio_vae. Wire the H3 audio VAE, or wire "
+                        "context_latent instead.")
+                audio_latent, ref_audio_t = _encode_tail_audio(
+                    audio_vae, context_audio, a_frames / float(FPS))
+                overhang = 0.0
+                audio_src = "vae"
+
+            ref = {
+                "kind": "audio",
+                "ref_audio_t": ref_audio_t,
+                "audio_latent": audio_latent,
+            }
+            if audio_mode == "timeline":
+                end_coord = round(overhang)
+                ref[MC_AUDIO_KEY] = end_coord / FRAME_RESCALE
+            out = node_helpers.conditioning_set_values(
+                conditioning, {"minimax_refs": [ref]}, append=True)
+            _LOG.info(
+                "h3_motion_context: audio-only continuation, %d frames -> "
+                "%d latent steps from %s, ending at frame %.3f, trim 0",
+                a_frames, ref_audio_t, audio_src,
+                float(ref.get(MC_AUDIO_KEY, 0.0)))
+            return (out, 0)
 
         # Decide where the pinned VIDEO comes from before anything else,
         # because it decides how many frames are even available. Slicing it
@@ -624,7 +687,8 @@ class MiniMaxH3MotionContext:
         audio_ref = None
         a_frames = 0
         audio_src = "off"
-        if context_latent is not None or context_audio is not None:
+        if audio_context_enabled and (
+                context_latent is not None or context_audio is not None):
             _ensure_payload_patch()
             # the audio window is independent of the video one: audio cond
             # rows cost rows but never cost delivered frames

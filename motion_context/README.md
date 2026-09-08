@@ -189,6 +189,15 @@ its resolution must already match the target latent.
 H3 can continue it. `ref` uses normal reference-audio placement, which encourages
 the model to imitate the sound or voice rather than continue the exact timeline.
 
+**video_context_enabled / audio_context_enabled** - independently choose which
+part of the previous latent continues. With video off and audio on, Motion
+Context emits no picture keyframes, places the audio tail immediately before
+frame zero, and returns `trim_frames = 0`. This is the new-location mode: the
+picture can start cleanly while music, ambience, or speech continues. Keep Load
+Latent enabled so the previous audio is available. The master `bypass` remains
+for the first clip only, when no previous latent exists. With audio off and video
+on, visual context and trimming work normally without adding audio context.
+
 `match_tail` on the Trim node stays a setting because that node has no
 idea what the other one did. Leave it on. H3 rounds its audio grid up, so
 every clip carries about 8ms more sound than picture, and that error

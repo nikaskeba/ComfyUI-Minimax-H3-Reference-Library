@@ -21,7 +21,17 @@ from .library import (
     update_record,
     video_directory,
 )
-from .built_in_references import catalog_revision, list_built_in_references
+from .built_in_references import (
+    built_in_attachment_id,
+    built_in_image_filename,
+    built_in_images_revision,
+    catalog_revision,
+    library_built_in_records,
+    library_built_in_tag_value,
+    list_built_in_references,
+    remove_built_in_image,
+    set_built_in_image,
+)
 
 
 WEB_DIRECTORY_PATH = Path(__file__).parent / "manager"
@@ -75,15 +85,68 @@ def register_routes():
                 list_built_in_references(),
                 key=lambda record: (record["folder"], record["name"].lower()),
             )
+            attached_records = library_built_in_records()
+            image_revision = built_in_images_revision()
             return web.json_response({
-                "revision": catalog_revision(),
+                "revision": f"{catalog_revision()}:{image_revision}",
                 "records": [
-                    {key: value for key, value in record.items() if key != "clips"}
+                    {
+                        **{key: value for key, value in record.items() if key != "clips"},
+                        "library_tag": library_built_in_tag_value(record),
+                        "attachment_id": built_in_attachment_id(record),
+                        "has_image": bool(
+                            attached_records[library_built_in_tag_value(record)].get("image_file")
+                        ),
+                        "image_url": (
+                            f"/api/h3-built-in-references/records/"
+                            f"{built_in_attachment_id(record)}/image?v={image_revision}"
+                            if attached_records[library_built_in_tag_value(record)].get("image_file")
+                            else None
+                        ),
+                    }
                     for record in records
                 ],
             })
-        except (OSError, ValueError) as error:
+        except (OSError, RuntimeError, ValueError) as error:
             return web.json_response({"error": str(error)}, status=500)
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/image")
+    async def update_built_in_image(request):
+        filename = None
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            _fields, files = await _read_multipart(request)
+            if "image" not in files:
+                raise ValueError("Choose an image to attach to the built-in character.")
+            filename = _save_image(*files["image"])
+            previous = set_built_in_image(record, filename)
+            remove_media(previous, "image")
+            return web.json_response({"attached": built_in_attachment_id(record)})
+        except Exception as error:
+            remove_media(filename, "image")
+            return _error_response(error)
+
+    @routes.delete("/api/h3-built-in-references/records/{attachment_id}/image")
+    async def delete_built_in_image(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            previous = remove_built_in_image(record)
+            remove_media(previous, "image")
+            return web.json_response({"removed": built_in_attachment_id(record)})
+        except Exception as error:
+            return _error_response(error)
+
+    @routes.get("/api/h3-built-in-references/records/{attachment_id}/image")
+    async def get_built_in_image(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            filename = built_in_image_filename(record)
+            return web.FileResponse(media_path({
+                "tag": library_built_in_tag_value(record),
+                "image_file": filename,
+            }, "image"))
+        except (KeyError, FileNotFoundError, ValueError):
+            raise web.HTTPNotFound()
 
     @routes.post("/api/h3-references/records")
     async def add_record(request):
@@ -217,6 +280,13 @@ def _save_image(filename, data):
     finally:
         if temporary.exists():
             temporary.unlink()
+
+
+def _built_in_by_attachment_id(attachment_id):
+    for record in list_built_in_references():
+        if built_in_attachment_id(record) == attachment_id:
+            return record
+    raise KeyError(attachment_id)
 
 
 def _save_audio(filename, data):

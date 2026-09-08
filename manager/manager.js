@@ -13,7 +13,9 @@ const mediaByReferenceType = {
     video: ["video"],
     uncategorized: ["image", "audio", "video"],
 };
-const state = { records: [], categories: [], drafts: [], selected: new Set() };
+const state = {
+    records: [], categories: [], drafts: [], selected: new Set(), builtInSelected: [],
+};
 
 const elements = Object.fromEntries([
     "library-count", "category-filter", "type-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
@@ -909,7 +911,11 @@ function toggleSelection(recordId) {
 
 function selectedGroups() {
     const groups = new Map();
-    for (const record of state.records.filter((item) => state.selected.has(item.id))) {
+    const selectedRecords = [
+        ...state.records.filter((item) => state.selected.has(item.id)),
+        ...state.builtInSelected,
+    ];
+    for (const record of selectedRecords) {
         const category = record.category || "other";
         if (!groups.has(category)) groups.set(category, []);
         groups.get(category).push(record);
@@ -955,6 +961,15 @@ function selectionItem(record) {
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     item.append(tag);
+    if (record.built_in) {
+        const voiceTag = document.createElement("code");
+        voiceTag.className = "voice-tag";
+        voiceTag.textContent = `Voice: \u00a7${record.tag}\u00a7`;
+        item.append(voiceTag);
+        item.append(descriptionLine("Portrayal", portrayalText(record)));
+        if (record.has_image) item.append(descriptionLine("Image", "Attached"));
+        return item;
+    }
     if (record.has_audio || record.has_video_audio || record.audio_description) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
@@ -982,6 +997,13 @@ function selectionGuideText() {
             lines.push("", referenceTypeHeading(referenceType).toUpperCase());
             for (const record of records) {
                 lines.push(`{${record.tag}}`);
+                if (record.built_in) {
+                    lines.push(`Voice tag: \u00a7${record.tag}\u00a7`);
+                    lines.push(`Portrayal: ${portrayalText(record)}`);
+                    if (record.has_image) lines.push("Image: Attached");
+                    lines.push("");
+                    continue;
+                }
                 if (record.has_audio || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
                 if (record.image_description) lines.push(`Image: ${record.image_description}`);
                 if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
@@ -992,6 +1014,11 @@ function selectionGuideText() {
         }
         return lines.join("\n").trimEnd();
     }).join("\n\n");
+}
+
+function portrayalText(record) {
+    const playedBy = record.actor ? `Played by ${record.actor}` : "Actor not listed";
+    return record.franchise ? `${playedBy} | ${record.franchise}` : playedBy;
 }
 
 async function copySelectionGuide() {
@@ -1027,7 +1054,21 @@ elements["media-filter"].addEventListener("change", renderRecords);
 elements.refresh.addEventListener("click", loadRecords);
 elements["clear-selection"].addEventListener("click", () => {
     state.selected.clear();
+    state.builtInSelected = [];
+    window.dispatchEvent(new CustomEvent("skeba-clear-all-reference-selection"));
     renderRecords();
+    renderSelectionGuide();
+});
+window.addEventListener("skeba-built-in-selection-change", (event) => {
+    const records = Array.isArray(event.detail?.records) ? event.detail.records : [];
+    state.builtInSelected = records.map((record) => ({
+        ...record,
+        id: `built-in:${record.library_tag}`,
+        tag: record.library_tag,
+        category: "built-in-characters",
+        reference_type: "character",
+        built_in: true,
+    }));
     renderSelectionGuide();
 });
 elements["copy-selection"].addEventListener("click", copySelectionGuide);
@@ -1061,5 +1102,22 @@ elements["drop-zone"].addEventListener("drop", (event) => {
     elements["drop-zone"].classList.remove("dragging");
     addDraftFiles(event.dataTransfer.files);
 });
+
+const managerTabs = [...document.querySelectorAll(".manager-tab")];
+const managerPanels = [...document.querySelectorAll(".manager-tab-panel")];
+function activateManagerTab(panelId) {
+    for (const buttonElement of managerTabs) {
+        const active = buttonElement.dataset.tab === panelId;
+        buttonElement.classList.toggle("active", active);
+        buttonElement.setAttribute("aria-selected", String(active));
+    }
+    for (const panel of managerPanels) panel.hidden = panel.id !== panelId;
+    const libraryActive = panelId === "reference-library-tab";
+    document.getElementById("library-toolbar").hidden = !libraryActive;
+    elements["library-count"].hidden = !libraryActive;
+}
+for (const buttonElement of managerTabs) {
+    buttonElement.addEventListener("click", () => activateManagerTab(buttonElement.dataset.tab));
+}
 
 loadRecords();

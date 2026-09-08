@@ -1,6 +1,8 @@
 import importlib.util
+import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 MODULE_PATH = Path(__file__).parents[1] / "built_in_references.py"
@@ -31,6 +33,45 @@ class BuiltInReferenceTests(unittest.TestCase):
             "Bruce Wayne / Batman | Christian Bale | The Dark Knight",
             {record["tag"] for record in batmen},
         )
+
+    def test_reference_library_namespace_uses_bc_suffix(self):
+        records = MODULE.list_built_in_references()
+        abby = next(record for record in records if record["name"] == "Abby Sciuto")
+        self.assertEqual(MODULE.library_built_in_tag(abby), "{Abby Sciuto_BC}")
+        self.assertEqual(
+            MODULE.library_built_in_voice_tag(abby), "§Abby Sciuto_BC§")
+
+        with mock.patch.object(
+                MODULE, "_read_attachment_manifest",
+                return_value={"version": 1, "revision": 0, "images": {}}):
+            library_records = MODULE.library_built_in_records()
+        converted = library_records["Abby Sciuto_BC"]
+        self.assertTrue(converted["built_in"])
+        self.assertEqual(converted["reference_type"], "character")
+        self.assertIn("Pauley Perrette", converted["image_description"])
+        self.assertIn("Pauley Perrette", converted["audio_description"])
+        self.assertFalse(converted["image_file"])
+        self.assertFalse(converted["audio_file"])
+
+    def test_optional_image_attachment_is_persistent_and_exposed(self):
+        abby = next(
+            record for record in MODULE.list_built_in_references()
+            if record["name"] == "Abby Sciuto"
+        )
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+                MODULE, "_attachment_manifest_path",
+                return_value=Path(directory) / "built_in_images.json"):
+            self.assertIsNone(MODULE.built_in_image_filename(abby))
+            self.assertIsNone(MODULE.set_built_in_image(abby, "abby.png"))
+            self.assertEqual(MODULE.built_in_images_revision(), 1)
+            self.assertEqual(MODULE.built_in_image_filename(abby), "abby.png")
+            self.assertEqual(
+                MODULE.library_built_in_records()["Abby Sciuto_BC"]["image_file"],
+                "abby.png",
+            )
+            self.assertEqual(MODULE.remove_built_in_image(abby), "abby.png")
+            self.assertEqual(MODULE.built_in_images_revision(), 2)
+            self.assertIsNone(MODULE.built_in_image_filename(abby))
 
     def test_portrayal_specific_tag_resolves_and_short_duplicate_is_rejected(self):
         prompt, mapping = MODULE.resolve_built_in_prompt(
