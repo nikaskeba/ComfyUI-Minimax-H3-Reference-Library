@@ -26566,4 +26566,144 @@ Connected getter 750: {'inputs': {'key': 'Set_Start_Video_Bool', 'var_name': '',
 [32m[INFO][0m h3_motion_context: Motion Context bypassed
 [32m[INFO][0m Requested to load MiniMaxH3
 [32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 320 patches attached. Force pre-loaded 210 weights: 1175 KB.
-  0%|          | 0/8 [00:00<?, ?it/s]  0%|          | 0/8 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/8 [00:08<?, ?it/s,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:08<01:00,  8.61s/it,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:07<01:00,  8.61s/it]                                    25%|██▌       | 2/8 [00:07<00:22,  3.68s/it] 38%|███▊      | 3/8 [00:10<00:17,  3.59s/it] 50%|█████     | 4/8 [00:14<00:14,  3.63s/it]
+  0%|          | 0/8 [00:00<?, ?it/s]  0%|          | 0/8 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/8 [00:08<?, ?it/s,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:08<01:00,  8.61s/it,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:07<01:00,  8.61s/it]                                    25%|██▌       | 2/8 [00:07<00:22,  3.68s/it] 38%|███▊      | 3/8 [00:10<00:17,  3.59s/it] 50%|█████     | 4/8 [00:14<00:14,  3.63s/it] 62%|██████▎   | 5/8 [00:18<00:10,  3.66s/it] 75%|███████▌  | 6/8 [00:21<00:07,  3.73s/it] 88%|████████▊ | 7/8 [00:25<00:03,  3.67s/it]100%|██████████| 8/8 [00:29<00:00,  3.68s/it]100%|██████████| 8/8 [00:29<00:00,  3.66s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context\clip_00001.safetensors (video (1, 24, 107, 22, 38), audio (1, 32, 2, 603))
+[MinimaxH3-3D] Latent 38x22 -> 56x32 | Pixels 896x512 | scale=1.500
+[MinimaxH3-3D] Loaded upscale model: minimax_h3_latent_upscaler_3d_bf16.safetensors
+  Params: 345,280,216 | Attn: forced off | Temporal: on (every=2, kernel=5) | Precision: fp16
+[32m[INFO][0m Model MiniMaxH3TEModel_ prepared for dynamic VRAM loading. 14956MB Staged. 0 patches attached. Force pre-loaded 410 weights: 4572 KB.
+[32m[INFO][0m h3_motion_context: Load Latent bypassed
+[32m[INFO][0m h3_motion_context: Motion Context bypassed
+[32m[INFO][0m Requested to load MiniMaxH3
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 208 patches attached. Force pre-loaded 210 weights: 1175 KB.
+  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/4 [00:12<?, ?it/s,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:12<00:38, 12.97s/it,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:21<00:38, 12.97s/it]                                    50%|█████     | 2/4 [00:21<00:21, 10.59s/it] 75%|███████▌  | 3/4 [00:31<00:10, 10.53s/it]100%|██████████| 4/4 [00:42<00:00, 10.53s/it]100%|██████████| 4/4 [00:42<00:00, 10.56s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context_upscaled\clip_00001.safetensors (video (1, 24, 107, 32, 56), audio (1, 32, 2, 603))
+[32m[INFO][0m Requested to load MiniMaxH3AudioVAE
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m Requested to load MiniMaxH3VideoVAE
+[32m[INFO][0m Model MiniMaxH3VideoVAE prepared for dynamic VRAM loading. 2677MB Staged. 0 patches attached. Force pre-loaded 128 weights: 692 KB.
+[32m[INFO][0m h3_motion_context: Trim bypassed
+[32m[INFO][0m [32mPrompt executed in 156.00 seconds[0m
+[32m[INFO][0m [LoRA-Manager] Calculating hash for checkpoint 'minimax_h3_fl2va_pruned_int8_convrot' from C:/Users/nicho/Documents/ComfyUI/models/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors
+[32m[INFO][0m got prompt
+'🔥 - 190 Nodes not included in prompt but is activated'
+Connected getter 343: {'inputs': {'key': 'clip', 'var_name': '', '*': ['342', 0], 'value': ['342', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_clip'}}
+Connected getter 557: {'inputs': {'key': 'clip', 'var_name': '', '*': ['342', 0], 'value': ['342', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_clip'}}
+Connected getter 345: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 346: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 347: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 349: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 350: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 558: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 676: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 708: {'inputs': {'key': 'video_vae', 'var_name': '', '*': ['344', 0], 'value': ['344', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_vae'}}
+Connected getter 352: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 353: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 354: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 355: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 559: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 677: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 709: {'inputs': {'key': 'audio_vae', 'var_name': '', '*': ['351', 0], 'value': ['351', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_audio_vae'}}
+Connected getter 357: {'inputs': {'key': 'model', 'var_name': '', '*': ['356', 0], 'value': ['356', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_model'}}
+Connected getter 358: {'inputs': {'key': 'model', 'var_name': '', '*': ['356', 0], 'value': ['356', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_model'}}
+Connected getter 360: {'inputs': {'key': 'model', 'var_name': '', '*': ['356', 0], 'value': ['356', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_model'}}
+Connected getter 359: {'inputs': {'key': 'upscale_model_no_lora', 'var_name': '', '*': ['639', 0], 'value': ['639', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_upscale_model_no_lora'}}
+Connected getter 362: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 364: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 365: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 366: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 407: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 673: {'inputs': {'key': 'current_prompt', 'var_name': '', '*': ['542', 0], 'value': ['542', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_current_prompt'}}
+Connected getter 368: {'inputs': {'key': 'prompt_from_batch', 'var_name': '', '*': ['367', 0], 'value': ['367', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_prompt_from_batch'}}
+Connected getter 370: {'inputs': {'key': 'bool', 'var_name': '', '*': ['369', 0], 'value': ['369', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_bool'}}
+Connected getter 371: {'inputs': {'key': 'bool', 'var_name': '', '*': ['369', 0], 'value': ['369', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_bool'}}
+Connected getter 373: {'inputs': {'key': 'bool', 'var_name': '', '*': ['369', 0], 'value': ['369', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_bool'}}
+Connected getter 374: {'inputs': {'key': 'bool', 'var_name': '', '*': ['369', 0], 'value': ['369', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_bool'}}
+Connected getter 376: {'inputs': {'key': 'output_latent', 'var_name': '', '*': ['375', 0], 'value': ['375', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_output_latent'}}
+Connected getter 379: {'inputs': {'key': 'duration_in_seconds', 'var_name': '', '*': ['378', 0], 'value': ['378', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_duration_in_seconds'}}
+Connected getter 572: {'inputs': {'key': 'duration_in_seconds', 'var_name': '', '*': ['378', 0], 'value': ['378', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_duration_in_seconds'}}
+Connected getter 382: {'inputs': {'key': 'width', 'var_name': '', '*': ['380', 0], 'value': ['380', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_width'}}
+Connected getter 569: {'inputs': {'key': 'width', 'var_name': '', '*': ['380', 0], 'value': ['380', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_width'}}
+Connected getter 383: {'inputs': {'key': 'height', 'var_name': '', '*': ['381', 0], 'value': ['381', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_height'}}
+Connected getter 570: {'inputs': {'key': 'height', 'var_name': '', '*': ['381', 0], 'value': ['381', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_height'}}
+Connected getter 386: {'inputs': {'key': 'total_steps', 'var_name': '', '*': ['385', 0], 'value': ['385', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_total_steps'}}
+Connected getter 392: {'inputs': {'key': 'upscale_scale', 'var_name': '', '*': ['391', 0], 'value': ['391', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_upscale_scale'}}
+Connected getter 401: {'inputs': {'key': 'video_to_collect', 'var_name': '', '*': ['400', 0], 'value': ['400', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_video_to_collect'}}
+Connected getter 403: {'inputs': {'key': 'accumultation', 'var_name': '', '*': ['402', 0], 'value': ['402', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_accumultation'}}
+Connected getter 404: {'inputs': {'key': 'accumultation', 'var_name': '', '*': ['402', 0], 'value': ['402', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_accumultation'}}
+Connected getter 410: {'inputs': {'key': 'latent_saves', 'var_name': '', '*': ['409', 0], 'value': ['409', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_latent_saves'}}
+Connected getter 418: {'inputs': {'key': 'initial_latent', 'var_name': '', '*': ['417', 0], 'value': ['417', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_initial_latent'}}
+Connected getter 419: {'inputs': {'key': 'initial_latent', 'var_name': '', '*': ['417', 0], 'value': ['417', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_initial_latent'}}
+Connected getter 566: {'inputs': {'key': 'prompt_start', 'var_name': '', '*': ['565', 0], 'value': ['565', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_prompt_start'}}
+Connected getter 568: {'inputs': {'key': 'reference_bundle', 'var_name': '', '*': ['567', 0], 'value': ['567', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_reference_bundle'}}
+Connected getter 574: {'inputs': {'key': 'reference_prompt', 'var_name': '', '*': ['573', 0], 'value': ['573', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_reference_prompt'}}
+Connected getter 603: {'inputs': {'key': 'positive', 'var_name': '', '*': ['413', 0], 'value': ['413', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_positive'}}
+Connected getter 605: {'inputs': {'key': 'noise', 'var_name': '', '*': ['604', 0], 'value': ['604', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_noise'}}
+Connected getter 606: {'inputs': {'key': 'noise', 'var_name': '', '*': ['604', 0], 'value': ['604', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_noise'}}
+Connected getter 622: {'inputs': {'key': 'trim_bool', 'var_name': '', '*': ['636', 0], 'value': ['636', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_trim_bool'}}
+Connected getter 631: {'inputs': {'key': 'new_location_bool', 'var_name': '', '*': ['633', 0], 'value': ['633', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_new_location_bool'}}
+Connected getter 634: {'inputs': {'key': 'new_location_bool', 'var_name': '', '*': ['633', 0], 'value': ['633', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_new_location_bool'}}
+Connected getter 651: {'inputs': {'key': 'combined_video', 'var_name': '', '*': ['650', 0], 'value': ['650', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_combined_video'}}
+Connected getter 653: {'inputs': {'key': 'model_after_lora', 'var_name': '', '*': ['652', 0], 'value': ['652', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_model_after_lora'}}
+Connected getter 666: {'inputs': {'key': 'frame_rate', 'var_name': '', '*': ['663', 0], 'value': ['663', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_frame_rate'}}
+Connected getter 667: {'inputs': {'key': 'frame_rate', 'var_name': '', '*': ['663', 0], 'value': ['663', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_frame_rate'}}
+Connected getter 688: {'inputs': {'key': 'frame_rate', 'var_name': '', '*': ['663', 0], 'value': ['663', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_frame_rate'}}
+Connected getter 689: {'inputs': {'key': 'frame_rate', 'var_name': '', '*': ['663', 0], 'value': ['663', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_frame_rate'}}
+Connected getter 707: {'inputs': {'key': 'Base_AV_Bool', 'var_name': '', '*': ['706', 0], 'value': ['706', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_Base_AV_Bool'}}
+Connected getter 741: {'inputs': {'key': 'Base_AV_Bool', 'var_name': '', '*': ['706', 0], 'value': ['706', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_Base_AV_Bool'}}
+Connected getter 713: {'inputs': {'key': 'remaining', 'var_name': '', '*': ['695', 0], 'value': ['695', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_remaining'}}
+Connected getter 725: {'inputs': {'key': 'End_Video_Bool', 'var_name': '', '*': ['724', 0], 'value': ['724', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_End_Video_Bool'}}
+Connected getter 760: {'inputs': {'key': 'End_Video_Bool', 'var_name': '', '*': ['724', 0], 'value': ['724', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_End_Video_Bool'}}
+Connected getter 728: {'inputs': {'key': 'Set_Start_Video_Bool', 'var_name': '', '*': ['727', 0], 'value': ['727', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_Set_Start_Video_Bool'}}
+Connected getter 750: {'inputs': {'key': 'Set_Start_Video_Bool', 'var_name': '', '*': ['727', 0], 'value': ['727', 0]}, 'class_type': 'Getter', '_meta': {'title': 'Get_Set_Start_Video_Bool'}}
+[32m[INFO][0m Model MiniMaxH3TEModel_ prepared for dynamic VRAM loading. 14956MB Staged. 0 patches attached. Force pre-loaded 410 weights: 4572 KB.
+[32m[INFO][0m h3_motion_context: Load Latent bypassed
+[32m[INFO][0m h3_motion_context: Motion Context bypassed
+[32m[INFO][0m Requested to load MiniMaxH3
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 320 patches attached. Force pre-loaded 210 weights: 1175 KB.
+  0%|          | 0/8 [00:00<?, ?it/s]  0%|          | 0/8 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/8 [00:07<?, ?it/s,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:07<00:51,  7.33s/it,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:06<00:51,  7.33s/it]                                    25%|██▌       | 2/8 [00:06<00:20,  3.49s/it] 38%|███▊      | 3/8 [00:10<00:17,  3.52s/it] 50%|█████     | 4/8 [00:14<00:14,  3.51s/it] 62%|██████▎   | 5/8 [00:17<00:10,  3.55s/it] 75%|███████▌  | 6/8 [00:21<00:07,  3.53s/it] 88%|████████▊ | 7/8 [00:24<00:03,  3.56s/it]100%|██████████| 8/8 [00:28<00:00,  3.58s/it]100%|██████████| 8/8 [00:28<00:00,  3.53s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context\clip_00001.safetensors (video (1, 24, 107, 22, 38), audio (1, 32, 2, 603))
+[MinimaxH3-3D] Latent 38x22 -> 56x32 | Pixels 896x512 | scale=1.500
+[32m[INFO][0m Model MiniMaxH3TEModel_ prepared for dynamic VRAM loading. 14956MB Staged. 0 patches attached. Force pre-loaded 410 weights: 4572 KB.
+[32m[INFO][0m h3_motion_context: Load Latent bypassed
+[32m[INFO][0m h3_motion_context: Motion Context bypassed
+[32m[INFO][0m Requested to load MiniMaxH3
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 208 patches attached. Force pre-loaded 210 weights: 1175 KB.
+  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/4 [00:14<?, ?it/s,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:14<00:43, 14.42s/it,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:20<00:43, 14.42s/it]                                    50%|█████     | 2/4 [00:20<00:20, 10.28s/it] 75%|███████▌  | 3/4 [00:31<00:10, 10.44s/it]100%|██████████| 4/4 [00:41<00:00, 10.47s/it]100%|██████████| 4/4 [00:41<00:00, 10.37s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context_upscaled\clip_00001.safetensors (video (1, 24, 107, 32, 56), audio (1, 32, 2, 603))
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m Model MiniMaxH3VideoVAE prepared for dynamic VRAM loading. 2677MB Staged. 0 patches attached. Force pre-loaded 128 weights: 692 KB.
+[32m[INFO][0m h3_motion_context: Trim bypassed
+[32m[INFO][0m Model MiniMaxH3TEModel_ prepared for dynamic VRAM loading. 14956MB Staged. 0 patches attached. Force pre-loaded 410 weights: 4572 KB.
+[32m[INFO][0m h3_motion_context: loaded AV latent from C:\Users\nicho\Documents\ComfyUI\output\h3_context\clip_00001.safetensors
+[32m[INFO][0m h3_motion_context: interior keyframe anchors enabled
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m h3_motion_context: keyframe/ref coexistence already enabled by another pack, standing down
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m h3_motion_context: audio-only continuation, 24 frames -> 40 latent steps from re-encoded latent, ending at frame 0.000, trim 0
+[32m[INFO][0m Requested to load MiniMaxH3
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 320 patches attached. Force pre-loaded 210 weights: 1175 KB.
+  0%|          | 0/8 [00:00<?, ?it/s]  0%|          | 0/8 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/8 [00:07<?, ?it/s,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:07<00:51,  7.42s/it,  Model Initialization complete!  ] 12%|█▎        | 1/8 [00:07<00:51,  7.42s/it]                                    25%|██▌       | 2/8 [00:07<00:21,  3.63s/it] 38%|███▊      | 3/8 [00:10<00:18,  3.68s/it] 50%|█████     | 4/8 [00:14<00:14,  3.67s/it] 62%|██████▎   | 5/8 [00:18<00:11,  3.68s/it] 75%|███████▌  | 6/8 [00:22<00:07,  3.70s/it] 88%|████████▊ | 7/8 [00:25<00:03,  3.71s/it]100%|██████████| 8/8 [00:29<00:00,  3.72s/it]100%|██████████| 8/8 [00:29<00:00,  3.68s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context\clip_00002.safetensors (video (1, 24, 107, 22, 38), audio (1, 32, 2, 603))
+[MinimaxH3-3D] Latent 38x22 -> 56x32 | Pixels 896x512 | scale=1.500
+[32m[INFO][0m Model MiniMaxH3TEModel_ prepared for dynamic VRAM loading. 14956MB Staged. 0 patches attached. Force pre-loaded 410 weights: 4572 KB.
+[32m[INFO][0m h3_motion_context: loaded AV latent from C:\Users\nicho\Documents\ComfyUI\output\h3_context_upscaled\clip_00001.safetensors
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m h3_motion_context: audio-only continuation, 24 frames -> 40 latent steps from re-encoded latent, ending at frame 0.000, trim 0
+[32m[INFO][0m Requested to load MiniMaxH3
+[32m[INFO][0m 0 models unloaded.
+[32m[INFO][0m Model MiniMaxH3 prepared for dynamic VRAM loading. 19995MB Staged. 208 patches attached. Force pre-loaded 210 weights: 1175 KB.
+  0%|          | 0/4 [00:00<?, ?it/s]  0%|          | 0/4 [00:00<?, ?it/s,   Model Initializing ...  ]  0%|          | 0/4 [00:15<?, ?it/s,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:15<00:45, 15.23s/it,  Model Initialization complete!  ] 25%|██▌       | 1/4 [00:21<00:45, 15.23s/it]                                    50%|█████     | 2/4 [00:21<00:21, 10.53s/it] 75%|███████▌  | 3/4 [00:31<00:10, 10.50s/it]100%|██████████| 4/4 [00:42<00:00, 10.50s/it]100%|██████████| 4/4 [00:42<00:00, 10.51s/it]
+[32m[INFO][0m h3_motion_context: saved AV latent to C:\Users\nicho\Documents\ComfyUI\output\h3_context_upscaled\clip_00002.safetensors (video (1, 24, 107, 32, 56), audio (1, 32, 2, 603))
+[32m[INFO][0m Model MiniMaxH3AudioVAE prepared for dynamic VRAM loading. 576MB Staged. 0 patches attached. Force pre-loaded 401 weights: 539 KB.
+[32m[INFO][0m Model MiniMaxH3VideoVAE prepared for dynamic VRAM loading. 2677MB Staged. 0 patches attached. Force pre-loaded 128 weights: 692 KB.
+[32m[INFO][0m h3_motion_context: Trim bypassed
+[32m[INFO][0m [32mPrompt executed in 257.18 seconds[0m
