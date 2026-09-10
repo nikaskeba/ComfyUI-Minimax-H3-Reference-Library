@@ -120,8 +120,10 @@ def create_record(tag, category="other", image_description="", audio_description
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
-    if image_file is None and audio_file is None and video_file is None:
-        raise ValueError("A reference record needs an image, audio clip, video, or a combination.")
+    text_voice = reference_type == "character" and bool((audio_description or "").strip())
+    if image_file is None and audio_file is None and video_file is None and not text_voice:
+        raise ValueError(
+            "A reference record needs media, or a Character needs a voice description.")
 
     with LIBRARY_LOCK:
         manifest = read_manifest()
@@ -167,8 +169,11 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         next_image = image_file if image_file is not None else (None if remove_image else old_image)
         next_audio = audio_file if audio_file is not None else (None if remove_audio else old_audio)
         next_video = video_file if video_file is not None else (None if remove_video else old_video)
-        if next_image is None and next_audio is None and next_video is None:
-            raise ValueError("A reference record needs an image, audio clip, video, or a combination.")
+        text_voice = reference_type == "character" and bool((audio_description or "").strip())
+        if (next_image is None and next_audio is None and next_video is None
+                and not text_voice):
+            raise ValueError(
+                "A reference record needs media, or a Character needs a voice description.")
         if video_file is not None:
             next_video_has_audio = bool(video_has_audio)
         elif remove_video:

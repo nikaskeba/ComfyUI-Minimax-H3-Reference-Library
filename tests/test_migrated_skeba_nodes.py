@@ -149,6 +149,84 @@ class MigratedSkebaNodeTests(unittest.TestCase):
         self.assertEqual(video[0].images.shape[0], 3)
         self.assertEqual(video[0].audio["waveform"].shape[-1], 15)
 
+    def test_video_bookends_order_silence_and_accumulation_unchanged(self):
+        import torch
+
+        def video(value, audio=None, rate=2):
+            component = types.SimpleNamespace(
+                images=torch.full((2, 2, 2, 3), float(value)), audio=audio, frame_rate=rate)
+            return types.SimpleNamespace(get_components=lambda: component, get_bit_depth=lambda: 8)
+
+        body = video(2, {"waveform": torch.ones((1, 2, 8)), "sample_rate": 10})
+        accumulation = {"accum": [body]}
+        with mock.patch.object(self.video, "torch", torch):
+            for start, end, order in ((video(1), video(3), [1, 2, 3]),
+                                      (video(1), None, [1, 2]),
+                                      (None, video(3), [2, 3])):
+                result, count = self.video.CombineVideoClipsNode().combine(accumulation, start, end)
+                components = result[0]
+                self.assertEqual(count, len(order))
+                self.assertEqual(components.images[::2, 0, 0, 0].tolist(), order)
+                expected = torch.zeros((1, 2, len(order) * 10))
+                offset = order.index(2) * 10
+                expected[..., offset:offset + 8] = 1
+                self.assertTrue(torch.equal(components.audio["waveform"], expected))
+                self.assertEqual(accumulation["accum"], [body])
+            result, count = self.video.CombineVideoClipsNode().combine({"accum": []}, video(1), video(3))
+            self.assertEqual(count, 2)
+            self.assertIsNone(result[0].audio)
+            with self.assertRaisesRegex(ValueError, "frame rate"):
+                self.video.CombineVideoClipsNode().combine(accumulation, video(1, rate=24))
+
+    def test_video_bookends_resize_to_body_without_mutating_sources(self):
+        import torch
+
+        def video(height, width, value):
+            component = types.SimpleNamespace(
+                images=torch.full((2, height, width, 3), float(value)),
+                audio=None, frame_rate=24)
+            return types.SimpleNamespace(get_components=lambda: component, get_bit_depth=lambda: 8)
+
+        start, body, end = video(8, 8, 1), video(4, 8, 2), video(2, 8, 3)
+        with mock.patch.object(self.video, "torch", torch):
+            result, count = self.video.CombineVideoClipsNode().combine({"accum": [body]}, start, end)
+            frames = result[0].images
+            self.assertEqual(tuple(frames.shape), (6, 4, 8, 3))
+            self.assertEqual(count, 3)
+            self.assertTrue(torch.all(frames[:2, :, :2] == 0))
+            self.assertTrue(torch.all(frames[:2, :, 2:6] == 1))
+            self.assertTrue(torch.all(frames[2:4] == 2))
+            self.assertTrue(torch.all(frames[4:, 0] == 0))
+            self.assertTrue(torch.all(frames[4:, 1:3] == 3))
+            self.assertEqual(tuple(start.get_components().images.shape), (2, 8, 8, 3))
+            self.assertEqual(tuple(end.get_components().images.shape), (2, 2, 8, 3))
+            with self.assertRaisesRegex(ValueError, "image dimensions"):
+                self.video.CombineVideoClipsNode().combine({"accum": [body, video(8, 8, 4)]})
+
+    def test_video_bookends_resample_to_accumulated_audio_rate(self):
+        import torch
+
+        def video(rate):
+            t = torch.arange(rate, dtype=torch.float32) / rate
+            waveform = torch.sin(2 * torch.pi * 440 * t).reshape(1, 1, -1)
+            component = types.SimpleNamespace(
+                images=torch.zeros((24, 2, 2, 3)),
+                audio={"waveform": waveform, "sample_rate": rate}, frame_rate=24)
+            return types.SimpleNamespace(get_components=lambda: component, get_bit_depth=lambda: 8)
+
+        start, body, end = video(44100), video(32000), video(48000)
+        with mock.patch.object(self.video, "torch", torch):
+            result, count = self.video.CombineVideoClipsNode().combine({"accum": [body]}, start, end)
+            audio = result[0].audio
+            self.assertEqual(audio["sample_rate"], 32000)
+            self.assertEqual(audio["waveform"].shape[-1], 96000)
+            expected = body.get_components().audio["waveform"]
+            for offset in (0, 32000, 64000):
+                segment = audio["waveform"][..., offset:offset + 32000]
+                self.assertLess(float((segment[..., 100:-100] - expected[..., 100:-100]).abs().max()), 0.01)
+            self.assertEqual(start.get_components().audio["sample_rate"], 44100)
+            self.assertEqual(end.get_components().audio["waveform"].shape[-1], 48000)
+
     def test_migrated_nodes_use_skeba_utility_category(self):
         classes = (
             self.images.BatchImageLoaderNode,

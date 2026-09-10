@@ -31,6 +31,7 @@ from .built_in_references import (
     list_built_in_references,
     remove_built_in_image,
     set_built_in_image,
+    set_built_in_image_context,
 )
 
 
@@ -97,6 +98,9 @@ def register_routes():
                         "has_image": bool(
                             attached_records[library_built_in_tag_value(record)].get("image_file")
                         ),
+                        "image_context": attached_records[
+                            library_built_in_tag_value(record)
+                        ].get("image_context", ""),
                         "image_url": (
                             f"/api/h3-built-in-references/records/"
                             f"{built_in_attachment_id(record)}/image?v={image_revision}"
@@ -133,6 +137,20 @@ def register_routes():
             previous = remove_built_in_image(record)
             remove_media(previous, "image")
             return web.json_response({"removed": built_in_attachment_id(record)})
+        except Exception as error:
+            return _error_response(error)
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/image-context")
+    async def update_built_in_image_context(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            payload = await request.json()
+            description = set_built_in_image_context(
+                record, payload.get("image_context", ""))
+            return web.json_response({
+                "updated": built_in_attachment_id(record),
+                "image_context": description,
+            })
         except Exception as error:
             return _error_response(error)
 

@@ -110,6 +110,34 @@ class LibraryClassificationTests(unittest.TestCase):
         )
         self.assertEqual(record["reference_type"], "video")
 
+    def test_character_can_store_a_text_only_voice_description(self):
+        record = MODULE.create_record(
+            "text_voice",
+            reference_type="character",
+            audio_description="a warm, restrained speaking voice",
+        )
+
+        self.assertIsNone(record["image_file"])
+        self.assertIsNone(record["audio_file"])
+        self.assertEqual(
+            record["audio_description"], "a warm, restrained speaking voice")
+
+        updated, *_ = MODULE.update_record(
+            record["id"],
+            "text_voice",
+            reference_type="character",
+            audio_description="a brighter speaking voice",
+        )
+        self.assertEqual(updated["audio_description"], "a brighter speaking voice")
+
+    def test_description_only_non_character_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "needs media"):
+            MODULE.create_record(
+                "text_music",
+                reference_type="music",
+                audio_description="synthwave",
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

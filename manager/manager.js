@@ -25,6 +25,7 @@ const elements = Object.fromEntries([
     "new-category-row", "new-category", "category-options",
     "image-fields", "audio-fields", "video-fields", "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
     "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "record-error", "save-record", "toast",
+    "open-bulk-import", "bulk-import-dialog", "close-bulk-import", "import-progress", "import-progress-text", "built-in-top-search",
 ].map((id) => [id, document.getElementById(id)]));
 
 function extension(name) {
@@ -304,7 +305,7 @@ function recordCard(record) {
     } else {
         const audioMark = document.createElement("span");
         audioMark.className = "audio-only";
-        audioMark.textContent = "Audio";
+        audioMark.textContent = record.has_audio ? "Audio" : "Voice description";
         preview.append(audioMark);
     }
 
@@ -722,7 +723,9 @@ async function importDrafts() {
     const missingType = state.drafts.find((draft) => !assignableReferenceTypes.includes(draft.reference_type));
     if (missingType) return rejectImport(`Choose a reference type for {${missingType.tag}}.`, missingType);
     const missingMedia = state.drafts.find(
-        (draft) => !allowedMedia(draft.reference_type).some((kind) => draft[kind]),
+        (draft) => !allowedMedia(draft.reference_type).some((kind) => draft[kind])
+            && !(draft.reference_type === "character"
+                && (draft.audio_description || "").trim()),
     );
     if (missingMedia) {
         return rejectImport(
@@ -732,9 +735,16 @@ async function importDrafts() {
     }
     if (new Set(tags).size !== tags.length) return rejectImport("Draft tags must be unique.");
     elements["import-drafts"].disabled = true;
+    elements["close-bulk-import"].disabled = true;
+    elements["clear-drafts"].disabled = true;
+    elements["import-drafts"].textContent = "Uploading...";
+    elements["bulk-import-dialog"].setAttribute("aria-busy", "true");
+    elements["import-progress"].hidden = false;
     const importedDrafts = [];
     try {
-        for (const draft of state.drafts) {
+        for (const [index, draft] of state.drafts.entries()) {
+            elements["import-progress-text"].textContent =
+                `Uploading ${index + 1} of ${state.drafts.length}: {${draft.tag}}`;
             const data = new FormData();
             data.append("tag", draft.tag);
             data.append("category", draft.category);
@@ -744,8 +754,10 @@ async function importDrafts() {
                 data.append("image_description", (draft.image_description || "").trim());
                 data.append("image", draft.image);
             }
-            if (permitted.includes("audio") && draft.audio) {
+            if (permitted.includes("audio")) {
                 data.append("audio_description", (draft.audio_description || "").trim());
+            }
+            if (permitted.includes("audio") && draft.audio) {
                 data.append("audio", draft.audio);
             }
             if (permitted.includes("video") && draft.video) {
@@ -767,9 +779,16 @@ async function importDrafts() {
         const count = state.drafts.length;
         clearDrafts();
         await loadRecords();
+        elements["bulk-import-dialog"].close();
         toast(`Imported ${count} reference${count === 1 ? "" : "s"}.`);
     } finally {
         elements["import-drafts"].disabled = false;
+        elements["close-bulk-import"].disabled = false;
+        elements["clear-drafts"].disabled = false;
+        elements["import-drafts"].textContent = "Upload references";
+        elements["bulk-import-dialog"].removeAttribute("aria-busy");
+        elements["import-progress"].hidden = true;
+        elements["import-progress-text"].textContent = "Processing uploads...";
     }
 }
 
@@ -848,8 +867,11 @@ async function saveRecord(event) {
             && !elements[`remove-${kind}`].checked;
         return Boolean(file || existing);
     });
-    if (!hasExistingOrNewMedia) {
-        return rejectRecord(`${referenceTypeLabel(selectedReferenceType)} needs an allowed media file.`);
+    const textOnlyVoice = selectedReferenceType === "character"
+        && Boolean(elements["audio-description"].value.trim());
+    if (!hasExistingOrNewMedia && !textOnlyVoice) {
+        return rejectRecord(
+            `${referenceTypeLabel(selectedReferenceType)} needs allowed media or a voice description.`);
     }
     const data = new FormData();
     data.append("tag", tag);
@@ -1093,6 +1115,20 @@ elements["close-dialog"].addEventListener("click", () => elements["record-dialog
 elements["cancel-dialog"].addEventListener("click", () => elements["record-dialog"].close());
 elements["record-form"].addEventListener("submit", saveRecord);
 elements["bulk-files"].addEventListener("change", (event) => addDraftFiles(event.target.files));
+elements["open-bulk-import"].addEventListener("click", () => {
+    setUploadError(elements["import-error"]);
+    elements["bulk-import-dialog"].showModal();
+});
+elements["close-bulk-import"].addEventListener("click", () => {
+    if (!elements["bulk-import-dialog"].hasAttribute("aria-busy")) {
+        elements["bulk-import-dialog"].close();
+    }
+});
+elements["bulk-import-dialog"].addEventListener("cancel", (event) => {
+    if (elements["bulk-import-dialog"].hasAttribute("aria-busy")) {
+        event.preventDefault();
+    }
+});
 elements["clear-drafts"].addEventListener("click", clearDrafts);
 elements["import-drafts"].addEventListener("click", importDrafts);
 elements["drop-zone"].addEventListener("dragover", (event) => { event.preventDefault(); elements["drop-zone"].classList.add("dragging"); });
@@ -1114,6 +1150,7 @@ function activateManagerTab(panelId) {
     for (const panel of managerPanels) panel.hidden = panel.id !== panelId;
     const libraryActive = panelId === "reference-library-tab";
     document.getElementById("library-toolbar").hidden = !libraryActive;
+    elements["built-in-top-search"].hidden = libraryActive;
     elements["library-count"].hidden = !libraryActive;
 }
 for (const buttonElement of managerTabs) {

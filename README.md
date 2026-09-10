@@ -429,6 +429,11 @@ workflow compatibility.
 
 ![H3 Reference Library manager with categories, filters, and managed references](media/reference-manager.png)
 
+The manager uses a sticky top bar for tab selection, per-tab search, filters,
+and the primary Add/Bulk Import actions. Bulk Import opens as a modal and keeps
+its progress indicator or actionable server error visible while files are
+processed.
+
 The manager supports:
 
 - Single and bulk image, audio, and video uploads
@@ -437,6 +442,9 @@ The manager supports:
 - Existing-category dropdowns, custom category creation, and per-media descriptions
 - Media-aware reference-type choices that hide unsupported types and media fields
 - A prominent **Add Audio Track** / **Replace Audio Track** control for bulk character and object setup
+- Text-only Character voice descriptions; an uploaded voice clip is optional
+- Optional Built In Character image context, shown only for attached images and
+  added only to the visual reference expansion (voice descriptions are unchanged)
 - Automatic Video type selection for video-only bulk drafts
 - Automatic normalization of readable tags such as `Simpsons chalkboard` to `Simpsons_chalkboard`
 - Persistent single-record, bulk-banner, and per-draft upload errors with backend or proxy response details
@@ -518,7 +526,10 @@ The five Motion Context nodes are available under
   clip so the next MiniMax H3 generation can continue it. It now exposes video
   versus per-frame encoding, head versus before-frame anchoring, decoded-frame
   crop behavior, timeline versus reference audio placement, and independent
-  video/audio continuation switches. Audio-only continuation can carry sound
+  video/audio continuation switches. Optional pre-cut reinforcement repeats
+  the final temporal context block inside the disposable head to strengthen an
+  upscale pass's background adherence without adding a delivered frame.
+  Audio-only continuation can carry sound
   across a new visual location without adding picture keyframes or trim. Existing
   workflows retain the recommended `video` / `head` / `disabled` / `timeline`
   defaults.
@@ -618,3 +629,15 @@ for components that predate the Motion Context consolidation are retained under
 `LICENSES/`; see `THIRD_PARTY_NOTICES.md` for provenance and modifications.
 
 [MIT](LICENSE)
+
+### Optional video bookends
+
+Skeba Combine Video Clips accepts `starting_video` and `ending_video`: the
+output order is starting video, accumulated clips, ending video. Either input
+can be omitted. `clip_count` includes connected bookends. Starting and ending videos automatically fit the first accumulated clip’s
+dimensions, preserving aspect ratio with black bars. Without accumulated clips,
+the first connected video sets the size. Accumulated clips must match dimensions.
+All videos must match frame rate and bit depth; audio sample rates are automatically converted to the first accumulated audio
+track’s rate (or the first available track when the accumulation is silent).
+Audio channel layouts must still match. Silent clips receive silence when other clips have
+audio, and short audio tracks are padded to preserve timing.

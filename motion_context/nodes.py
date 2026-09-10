@@ -391,8 +391,8 @@ class MiniMaxH3MotionContext:
                 "audio_vae": ("VAE", {
                     "tooltip": "H3 audio VAE. Supply with context_audio to "
                                "carry the previous clip's tail sound across "
-                               "the join. Not needed when context_latent is "
-                               "wired."}),
+                               "the join. Also required when reencode_audio_context "
+                               "is enabled for context_latent."}),
                 "context_audio": ("AUDIO", {
                     "tooltip": "Audio of the previous clip. The tail "
                                "matching the pinned frames is encoded and "
@@ -450,6 +450,29 @@ class MiniMaxH3MotionContext:
                     "label_off": "NEW AUDIO",
                     "tooltip": "Disable to omit previous audio context while "
                                "still allowing picture continuation."}),
+                "continuation_mode": (["standard", "pre-cut reinforcement", "scene reference"], {
+                    "default": "standard",
+                    "tooltip": "Standard motion context, extra pre-cut video references, "
+                               "or a fixed scene image reference. Scene reference disables "
+                               "pre-cut duplication. Extracts the previous clip's final "
+                               "frame unless scene_reference is connected."}),
+                "reencode_audio_context": ("BOOLEAN", {
+                    "default": False,
+                    "label_on": "RE-ENCODE AUDIO",
+                    "label_off": "DIRECT AUDIO LATENT",
+                    "tooltip": "Experimental: decode the previous audio latent, "
+                               "then encode its tail with audio_vae. Video still "
+                               "uses the original latent. Requires audio_vae; "
+                               "ignored when audio context is disabled."}),
+                "pre_cut_reinforcement_copies": ("INT", {
+                    "default": 1, "min": 1, "max": 4,
+                    "tooltip": "Extra copies of the final video context block "
+                               "when pre_cut_reinforcement is enabled. Try 2 "
+                               "for stronger scene adherence. Higher values "
+                               "may restrict motion or affect generated audio."}),
+                "scene_reference": ("IMAGE", {
+                    "tooltip": "Optional override for the automatically extracted scene image. "
+                               "Only used in scene reference mode with video context enabled."}),
             },
         }
 
@@ -469,10 +492,19 @@ class MiniMaxH3MotionContext:
               context_latent=None, audio_vae=None, context_audio=None,
               bypass=False, encode_mode=ENCODE_MODE,
               anchor_mode=ANCHOR_MODE, crop=CROP, audio_mode=AUDIO_MODE,
-              video_context_enabled=True, audio_context_enabled=True):
+              video_context_enabled=True, audio_context_enabled=True,
+              pre_cut_reinforcement=False, reencode_audio_context=False,
+              pre_cut_reinforcement_copies=1, continuation_mode=None,
+              scene_reference=None):
         if bypass:
             _LOG.info("h3_motion_context: Motion Context bypassed")
             return (conditioning, 0)
+
+        if continuation_mode is None:
+            continuation_mode = "pre-cut reinforcement" if pre_cut_reinforcement else "standard"
+        if continuation_mode not in ("standard", "pre-cut reinforcement", "scene reference"):
+            raise ValueError("h3_motion_context: invalid continuation_mode")
+        pre_cut_reinforcement = continuation_mode == "pre-cut reinforcement"
 
         if (isinstance(context_latent, dict)
                 and context_latent.get("skeba_h3_motion_context_bypassed")):
@@ -502,6 +534,25 @@ class MiniMaxH3MotionContext:
         height = int(video.shape[3]) * 16
         frame_count = _pixel_frames(latent_t)
 
+        if reencode_audio_context and audio_context_enabled and context_latent is not None:
+            if audio_vae is None:
+                raise ValueError(
+                    "h3_motion_context: reencode_audio_context requires audio_vae.")
+            parts = _streams_from_latent(context_latent)
+            if len(parts) < 2:
+                raise ValueError(
+                    "h3_motion_context: context_latent has no audio stream to re-encode.")
+            source_video, source_audio = parts[:2]
+            if source_audio.ndim == 3:
+                source_audio = source_audio.unsqueeze(0)
+            # Decode the full clip so the tail retains its decoder context.
+            waveform = audio_vae.decode(source_audio[:1]).movedim(-1, 1)
+            sr = int(getattr(audio_vae, "audio_sample_rate_output",
+                             getattr(audio_vae, "audio_sample_rate", 32000)))
+            source_frames = _pixel_frames(int(source_video.shape[-3]))
+            end = int(round(source_frames / float(FPS) * sr))
+            context_audio = {"waveform": waveform[..., :end], "sample_rate": sr}
+
         # Audio-only continuation deliberately has no picture keyframes and
         # therefore no duplicated head to trim. Its tail ends at frame zero,
         # even when anchor_mode=head is selected for normal combined runs.
@@ -518,7 +569,7 @@ class MiniMaxH3MotionContext:
 
             _ensure_payload_patch()
             a_frames = int(audio_context_length) or int(context_length)
-            if context_latent is not None:
+            if context_latent is not None and not reencode_audio_context:
                 audio_latent, ref_audio_t, overhang = _audio_tail_from_latent(
                     context_latent, a_frames)
                 audio_src = "latent"
@@ -531,7 +582,7 @@ class MiniMaxH3MotionContext:
                 audio_latent, ref_audio_t = _encode_tail_audio(
                     audio_vae, context_audio, a_frames / float(FPS))
                 overhang = 0.0
-                audio_src = "vae"
+                audio_src = "re-encoded latent" if reencode_audio_context and context_latent is not None else "vae"
 
             ref = {
                 "kind": "audio",
@@ -678,6 +729,31 @@ class MiniMaxH3MotionContext:
                 "latent": blk,
             })
 
+        if pre_cut_reinforcement:
+            if anchor_mode != "head":
+                raise ValueError(
+                    "h3_motion_context: pre_cut_reinforcement requires "
+                    "anchor_mode=head so the reinforced context is trimmed out.")
+            # H3 has no per-keyframe strength setting. Repeating the final
+            # temporal block increases its attention weight without another
+            # decode/encode. With 22-frame context this block represents the
+            # final four source frames and stays entirely inside the head that
+            # Motion Context Trim removes.
+            copies = int(pre_cut_reinforcement_copies)
+            if not 1 <= copies <= 4:
+                raise ValueError(
+                    "h3_motion_context: pre_cut_reinforcement_copies must be 1..4.")
+            for _ in range(copies):
+                keyframes.append({
+                    "resolved_frame_index": 0,
+                    MC_KEY: indices[-1],
+                    "latent": blocks[-1].clone(),
+                })
+            _LOG.info(
+                "h3_motion_context: reinforced final pre-cut context block "
+                "at frame %d with %d extra copies (trim boundary %d)",
+                indices[-1], copies, span)
+
         values = {
             "minimax_keyframes": keyframes,
             "minimax_frame_count": frame_count,
@@ -693,7 +769,7 @@ class MiniMaxH3MotionContext:
             # the audio window is independent of the video one: audio cond
             # rows cost rows but never cost delivered frames
             a_frames = int(audio_context_length) or span
-            if context_latent is not None:
+            if context_latent is not None and not reencode_audio_context:
                 if context_audio is not None:
                     _LOG.info("h3_motion_context: both context_latent and "
                               "context_audio wired; using the latent (skips "
@@ -710,7 +786,7 @@ class MiniMaxH3MotionContext:
                 audio_latent, ref_audio_t = _encode_tail_audio(
                     audio_vae, context_audio, a_frames / float(FPS))
                 overhang = 0.0  # decoded audio was match_tail-cut at the frame
-                audio_src = "vae"
+                audio_src = "re-encoded latent" if reencode_audio_context and context_latent is not None else "vae"
             ref = {
                 "kind": "audio",
                 "ref_audio_t": ref_audio_t,
@@ -749,6 +825,37 @@ class MiniMaxH3MotionContext:
             # the lot. Applied as a second call so the keyframe values
             # land first and this one only touches the reference list.
             audio_ref = ref
+
+        if continuation_mode == "scene reference":
+            scene_source = "connected image"
+            if scene_reference is None:
+                if video_src == "latent":
+                    steps = _steps_for_frames(n)
+                    decoded = vae.decode(src_video[:, :, -steps:].clone())
+                    scene_reference = decoded[-1:].clone()
+                    scene_source = "previous latent tail"
+                else:
+                    scene_reference = context_frames[-1:]
+                    scene_source = "previous video frames"
+            _ensure_payload_patch()
+            ref_h, ref_w = scene_reference.shape[1:3]
+            scale = min(1.0, ((width * height) / (ref_w * ref_h)) ** 0.5)
+            rw = max(32, round(ref_w * scale / 32) * 32)
+            rh = max(32, round(ref_h * scale / 32) * 32)
+            scene_latent = vae.encode(_resize(scene_reference[:1], rw, rh, "disabled"))
+            scene_ref = {
+                "kind": "image", "latent_h": rh // 16, "latent_w": rw // 16,
+                "latent": scene_latent, "skeba_motion_scene_reference": True,
+            }
+            # Replace only our own scene reference; preserve character/audio refs.
+            conditioning = [
+                [embedding, dict(metadata, minimax_refs=[
+                    ref for ref in metadata.get("minimax_refs", [])
+                    if not ref.get("skeba_motion_scene_reference")] + [scene_ref])]
+                for embedding, metadata in conditioning
+            ]
+            _LOG.info("h3_motion_context: scene reference %dx%d from %s; pre-cut duplication off",
+                      rw, rh, scene_source)
 
         out = node_helpers.conditioning_set_values(conditioning, values)
         if audio_ref is not None:

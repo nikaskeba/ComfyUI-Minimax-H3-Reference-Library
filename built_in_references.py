@@ -30,15 +30,18 @@ def _read_attachment_manifest():
     with ATTACHMENT_LOCK:
         path = _attachment_manifest_path()
         if not path.exists():
-            return {"version": 1, "revision": 0, "images": {}}
+            return {"version": 2, "revision": 0, "images": {}, "image_contexts": {}}
         try:
             manifest = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as error:
             raise RuntimeError(f"Built-in image manifest could not be read: {error}") from error
         if not isinstance(manifest, dict) or not isinstance(manifest.get("images"), dict):
             raise RuntimeError("Built-in image manifest is invalid.")
-        manifest.setdefault("version", 1)
+        if not isinstance(manifest.get("image_contexts", {}), dict):
+            raise RuntimeError("Built-in image-context manifest is invalid.")
+        manifest["version"] = 2
         manifest.setdefault("revision", 0)
+        manifest.setdefault("image_contexts", {})
         return manifest
 
 
@@ -71,6 +74,12 @@ def built_in_image_filename(record):
     return _read_attachment_manifest()["images"].get(library_built_in_tag_value(record))
 
 
+def built_in_image_context(record):
+    manifest = _read_attachment_manifest()
+    return manifest.get("image_contexts", {}).get(
+        library_built_in_tag_value(record), "")
+
+
 def set_built_in_image(record, filename):
     if not filename or Path(filename).name != filename:
         raise ValueError("Built-in character image filename is invalid.")
@@ -84,11 +93,30 @@ def set_built_in_image(record, filename):
         return previous
 
 
+def set_built_in_image_context(record, description):
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        tag = library_built_in_tag_value(record)
+        if not manifest["images"].get(tag):
+            raise ValueError(
+                "Attach an image before adding built-in character image context.")
+        description = (description or "").strip()
+        contexts = manifest.setdefault("image_contexts", {})
+        if description:
+            contexts[tag] = description
+        else:
+            contexts.pop(tag, None)
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
+        return description
+
+
 def remove_built_in_image(record):
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
         tag = library_built_in_tag_value(record)
         previous = manifest["images"].pop(tag, None)
+        manifest.setdefault("image_contexts", {}).pop(tag, None)
         if previous is not None:
             manifest["revision"] = int(manifest.get("revision", 0)) + 1
             _write_attachment_manifest(manifest)
@@ -218,7 +246,9 @@ def _voice_description(record):
 
 def library_built_in_records():
     """Expose catalog characters as H3 Reference Library records."""
-    attachments = _read_attachment_manifest()["images"]
+    manifest = _read_attachment_manifest()
+    attachments = manifest["images"]
+    image_contexts = manifest.get("image_contexts", {})
     result = {}
     for record in list_built_in_references():
         tag = library_built_in_tag_value(record)
@@ -227,7 +257,12 @@ def library_built_in_records():
             "tag": tag,
             "category": "built-in-characters",
             "reference_type": "character",
-            "image_description": _description(record),
+            "image_description": (
+                f"{_description(record)}. Image context: {image_contexts[tag]}"
+                if attachments.get(tag) and image_contexts.get(tag)
+                else _description(record)
+            ),
+            "image_context": image_contexts.get(tag, "") if attachments.get(tag) else "",
             "audio_description": _voice_description(record),
             "image_file": attachments.get(tag),
             "audio_file": None,

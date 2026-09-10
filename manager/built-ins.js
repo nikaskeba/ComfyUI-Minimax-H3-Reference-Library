@@ -63,7 +63,7 @@ function filteredRecords() {
     const sortField = elements["built-in-sort-field"].value;
     const direction = elements["built-in-sort-direction"].value === "desc" ? -1 : 1;
     return state.records.filter((record) => (!folder || record.folder === folder)
-        && [record.name, record.actor, record.franchise, record.status]
+        && [record.name, record.actor, record.franchise, record.status, record.image_context]
             .some((value) => (value || "").toLowerCase().includes(query)))
         .sort((left, right) => direction * compareRecords(left, right, sortField));
 }
@@ -136,6 +136,24 @@ function recordRow(record) {
     const details = document.createElement("div");
     details.className = "built-in-details";
     details.textContent = portrayalText(record);
+    if (libraryTagMode && record.has_image) {
+        const contextEditor = document.createElement("label");
+        contextEditor.className = "built-in-image-context";
+        const contextTitle = document.createElement("span");
+        contextTitle.textContent = "Image context (visual reference only)";
+        const contextInput = document.createElement("textarea");
+        contextInput.rows = 2;
+        contextInput.value = record.image_context || "";
+        contextInput.placeholder = "Example: Use the face and hairstyle; ignore the plain white background.";
+        const saveContext = button("Save image context", () => saveImageContext(
+            record, contextInput, saveContext));
+        saveContext.disabled = true;
+        contextInput.addEventListener("input", () => {
+            saveContext.disabled = contextInput.value.trim() === (record.image_context || "").trim();
+        });
+        contextEditor.append(contextTitle, contextInput, saveContext);
+        details.append(contextEditor);
+    }
 
     const actions = document.createElement("div");
     actions.className = "built-in-meta";
@@ -211,6 +229,25 @@ async function removeImage(record) {
         await loadRecords();
         toast(`Reference image removed from ${record.name}.`);
     } catch (error) {
+        toast(error.message, true);
+    }
+}
+
+async function saveImageContext(record, input, saveButton) {
+    const originalText = saveButton.textContent;
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+    try {
+        await request(`${apiRoot}/${record.attachment_id}/image-context`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image_context: input.value.trim() }),
+        });
+        await loadRecords();
+        toast(`Image context saved for ${record.name}.`);
+    } catch (error) {
+        saveButton.disabled = false;
+        saveButton.textContent = originalText;
         toast(error.message, true);
     }
 }

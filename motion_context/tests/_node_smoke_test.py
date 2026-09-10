@@ -209,6 +209,7 @@ def main():
     assert motion_inputs["crop"][1]["default"] == "disabled"
     assert motion_inputs["video_context_enabled"][1]["default"] is True
     assert motion_inputs["audio_context_enabled"][1]["default"] is True
+    assert motion_inputs["continuation_mode"][1]["default"] == "standard"
 
     trim_cls = nodes.MiniMaxH3MotionContextTrim
     assert trim_cls.RETURN_NAMES == (
@@ -338,6 +339,33 @@ def main():
           "(bit-identical to the source steps), audio 37 steps, end_frame "
           "%.4f (overhang-compensated)" % (idx, got_end))
 
+    # Reinforcement repeats the final temporal block at its real timeline
+    # coordinate. It never extends beyond the 22-frame disposable head.
+    captured.clear()
+    _, reinforced_trim = node.apply(
+        conditioning=[["c", {}]], vae=VAE(), latent=target,
+        context_frames=context, context_length="22",
+        audio_context_length=22, context_latent=prev,
+        audio_context_enabled=False, pre_cut_reinforcement=True)
+    reinforced = captured["minimax_keyframes"]
+    assert reinforced_trim == 22
+    assert len(reinforced) == 8
+    assert [kf[nodes.MC_KEY] for kf in reinforced] == idx + [idx[-1]]
+    assert np.array_equal(reinforced[-1]["latent"].a,
+                          reinforced[-2]["latent"].a)
+
+    try:
+        node.apply(
+            conditioning=[["c", {}]], vae=VAE(), latent=target,
+            context_frames=context, context_length="22",
+            audio_context_length=22, context_latent=prev,
+            anchor_mode="before", audio_context_enabled=False,
+            pre_cut_reinforcement=True)
+    except ValueError as e:
+        assert "requires anchor_mode=head" in str(e), str(e)
+    else:
+        raise AssertionError("pre-cut reinforcement accepted before mode")
+
     captured.clear()
     _, silent_trim = node.apply(
         conditioning=[["c", {}]], vae=VAE(), latent=target,
@@ -429,6 +457,72 @@ def main():
     print("cycle check: every clip length 22..%d x windows 5/22/39/56 "
           "slices from cycle position 0" % nodes._pixel_frames(5 * 39 + 2))
 
+    for copies in (1, 2, 4):
+        result, trim = node.apply(
+            conditioning=[["c", {}]], vae=VAE(), latent=target,
+            context_latent=prev, context_length="22", audio_context_enabled=False,
+            pre_cut_reinforcement=True, pre_cut_reinforcement_copies=copies)
+        kfs = result[0][1]["minimax_keyframes"]
+        assert len(kfs) == 7 + copies and trim == 22
+        for kf in kfs[7:]:
+            assert kf[nodes.MC_KEY] == 18
+            assert np.array_equal(kf["latent"].a, kfs[6]["latent"].a)
+    print("reinforcement copies: counts 1/2/4 preserve positions, video content and trim")
+
+    scene = T(np.zeros((1, 480, 864, 3), dtype=np.float32))
+    original_ref = {"kind": "image", "latent": "character"}
+    for audio_enabled in (False, True):
+        source = [["c", {"minimax_refs": [original_ref]}]]
+        result, trim = node.apply(
+            conditioning=source, vae=VAE(), latent=target, context_latent=prev,
+            context_length="22", continuation_mode="scene reference",
+            scene_reference=scene, pre_cut_reinforcement=True,
+            audio_context_enabled=audio_enabled)
+        refs = result[0][1]["minimax_refs"]
+        assert refs[0] is original_ref
+        assert sum(bool(r.get("skeba_motion_scene_reference")) for r in refs) == 1
+        assert len(refs) == (3 if audio_enabled else 2)
+        assert len(result[0][1]["minimax_keyframes"]) == 7 and trim == 22
+        assert source[0][1]["minimax_refs"] == [original_ref]
+        if not audio_enabled:
+            again, _ = node.apply(
+                conditioning=result, vae=VAE(), latent=target, context_latent=prev,
+                context_length="22", continuation_mode="scene reference",
+                scene_reference=scene, audio_context_enabled=False)
+            assert len(again[0][1]["minimax_refs"]) == 2
+    class SceneVAE(VAE):
+        def __init__(self):
+            self.decoded = []
+
+        def decode(self, z):
+            self.decoded.append(z.a.copy())
+            return T(np.zeros((22, 480, 864, 3), dtype=np.float32))
+
+    for latent_source in (True, False):
+        scene_vae = SceneVAE()
+        result, trim = node.apply(
+            conditioning=[["c", {}]], vae=scene_vae, latent=target,
+            context_latent=prev if latent_source else None,
+            context_frames=None if latent_source else context,
+            context_length="22", continuation_mode="scene reference",
+            audio_context_enabled=False)
+        assert trim == 22
+        assert result[0][1]["minimax_refs"][-1]["skeba_motion_scene_reference"]
+        assert len(scene_vae.decoded) == int(latent_source)
+        if latent_source:
+            assert np.array_equal(scene_vae.decoded[0], prev["samples"].parts[0].a[:, :, -7:])
+    scene_vae = SceneVAE()
+    node.apply(conditioning=[["c", {}]], vae=scene_vae, latent=target,
+               context_latent=prev, context_length="22", continuation_mode="scene reference",
+               scene_reference=scene, audio_context_enabled=False)
+    assert not scene_vae.decoded
+    result, _ = node.apply(conditioning=[["c", {}]], vae=VAE(), latent=target,
+                          context_latent=prev, context_length="22",
+                          continuation_mode="standard", pre_cut_reinforcement=True,
+                          audio_context_enabled=False)
+    assert len(result[0][1]["minimax_keyframes"]) == 7
+    print("scene mode: exclusive reinforcement, preserved refs, no duplicates, automatic extraction and image override verified")
+
     # decoded-audio path must still work and carry integer end_frame
     captured.clear()
 
@@ -451,6 +545,58 @@ def main():
     end2 = nodes.FRAME_RESCALE * ref2[nodes.MC_AUDIO_KEY]
     assert abs(end2 - 37.0) < 1e-9, end2
     print("vae path: window snapped to the audio grid, end coord %.1f" % end2)
+
+    class ReencodeVAE:
+        audio_sample_rate = 32000
+        audio_sample_rate_output = 32000
+
+        def __init__(self):
+            self.decoded = []
+            self.encoded = []
+
+        def decode(self, z):
+            self.decoded.append(z.a.copy())
+            return T(np.arange(166400 * 2, dtype=np.float32).reshape(1, 166400, 2))
+
+        def encode(self, x):
+            self.encoded.append(x.a.copy())
+            return T(np.full((1, 32, 2, 40), 0.125, dtype=np.float32))
+
+    assert motion_inputs["reencode_audio_context"][1]["default"] is False
+    for video_enabled in (True, False):
+        av = ReencodeVAE()
+        result, trim = node.apply(
+            conditioning=[["c", {}]], vae=VAE(), latent=target,
+            context_latent=prev, context_length="22", audio_context_length=24,
+            audio_vae=av, reencode_audio_context=True,
+            video_context_enabled=video_enabled)
+        assert len(av.decoded) == len(av.encoded) == 1
+        assert np.array_equal(av.decoded[0], prev["samples"].parts[1].a)
+        end = round(124 / 24 * 32000)
+        expected = np.arange(166400 * 2, dtype=np.float32).reshape(1, 166400, 2)
+        assert np.array_equal(av.encoded[0], expected[:, end - 32000:end])
+        ref = result[0][1]["minimax_refs"][-1]
+        assert np.all(ref["audio_latent"].a == 0.125)
+        assert trim == (22 if video_enabled else 0)
+        if video_enabled:
+            assert np.array_equal(result[0][1]["minimax_keyframes"][0]["latent"].a,
+                                  nodes._video_tail_from_latent(prev, 22)[0][0].a)
+    av = ReencodeVAE()
+    node.apply(conditioning=[["c", {}]], vae=VAE(), latent=target,
+               context_latent=prev, context_length="22", audio_vae=av,
+               reencode_audio_context=True, audio_context_enabled=False)
+    assert not av.decoded and not av.encoded
+    node.apply(conditioning=[["c", {}]], vae=VAE(), latent=target,
+               context_latent=prev, context_length="22", audio_vae=av)
+    assert not av.decoded and not av.encoded
+    try:
+        node.apply(conditioning=[["c", {}]], vae=VAE(), latent=target,
+                   context_latent=prev, context_length="22", reencode_audio_context=True)
+    except ValueError as exc:
+        assert "requires audio_vae" in str(exc)
+    else:
+        raise AssertionError("re-encode accepted missing audio VAE")
+    print("re-encode: full audio decode, aligned tail encode, original video, opt-in verified")
 
     # every clip length on the ladder, every window, both paths: the
     # pinned window must always end on an integer audio coordinate

@@ -198,6 +198,15 @@ Latent enabled so the previous audio is available. The master `bypass` remains
 for the first clip only, when no previous latent exists. With audio off and video
 on, visual context and trimming work normally without adding audio context.
 
+**pre_cut_reinforcement** - in `head` mode, repeats the final temporal latent
+block from the previous clip at the end of the disposable context window. H3
+has no native per-keyframe strength control, so the repeated block gives the
+last four source frames additional attention weight without decoding or
+re-encoding them. The normal Trim removes the entire context window, including
+this reinforcement. Enable it when an upscale pass preserves the subject but
+allows static background details to jump at the first retained frame. Leave it
+off for new-location transitions or if the boundary becomes overly rigid.
+
 `match_tail` on the Trim node stays a setting because that node has no
 idea what the other one did. Leave it on. H3 rounds its audio grid up, so
 every clip carries about 8ms more sound than picture, and that error
@@ -418,3 +427,45 @@ Open an issue.
 | `tests/level_step.py` | Level and room-tone continuity at each join. Also catches sample-rate mismatches. |
 | `tests/freeze_detect.py` | Stretches where the picture stops moving. |
 | `tests/_mock_harness.py`, `tests/_node_smoke_test.py`, `tests/_payload_gate_test.py`, `tests/_seam_exposure_test.py` | Patch and node tests. |
+
+### Experimental audio context re-encoding
+
+Enable `reencode_audio_context` (**RE-ENCODE AUDIO**) on Motion Context to
+decode the previous latent's full audio, crop to its video endpoint, and
+VAE-encode the `audio_context_length` tail. Connect `audio_vae`; the existing
+`context_latent` supplies the source, so no additional audio wiring is needed.
+Video context still uses the original latent. The toggle defaults off and is
+ignored when audio context is disabled or the node is bypassed. With only
+`context_audio` connected, the existing waveform encode path is used.
+
+For a two-pass comparison, enable it on both Motion Context nodes and keep
+`audio_context_enabled` on. Logs report `from re-encoded latent`. This adds
+an audio VAE decode/encode per continuation; it is an experiment, not a
+confirmed fix for degradation. The decoded waveform is not loudness-normalized.
+
+With `pre_cut_reinforcement` enabled, `pre_cut_reinforcement_copies` controls
+how many extra copies of the final video context block are supplied (1–4).
+The default 1 preserves existing behavior. Try 2 for a same-location
+continuation; this is experimental and may restrict motion or affect audio.
+The references sit in the trimmed overlap but can influence the entire clip.
+
+### Continuation modes
+
+`continuation_mode` replaces the pre-cut reinforcement toggle:
+
+- **standard**: ordinary previous-clip context.
+- **pre-cut reinforcement**: add `pre_cut_reinforcement_copies` of the final video block.
+- **scene reference**: encode the optional `scene_reference` image as a fixed visual
+  reference alongside previous-clip motion; no pre-cut duplicates.
+
+Scene reference mode automatically decodes the previous latent's context window
+and re-encodes its final frame as an image reference. With decoded context frames,
+it uses their final frame directly. No extra image wiring is needed on either pass.
+Connect `scene_reference` to override extraction with a clean location image.
+The automatic reference follows the previous clip; it does not recover original
+scene detail already lost in earlier generations. It is a DiT appearance reference, not a
+new numbered prompt image or a pinned future frame. It does not add Qwen
+image tokens. Existing character/audio references are preserved. Audio
+re-encoding works in all modes. Video context disabled or bypass skips the
+scene image. Existing saved boolean widgets migrate to standard/reinforced.
+This is experimental; visual stability still requires a render comparison.

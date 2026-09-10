@@ -65,13 +65,38 @@ class BuiltInReferenceTests(unittest.TestCase):
             self.assertIsNone(MODULE.set_built_in_image(abby, "abby.png"))
             self.assertEqual(MODULE.built_in_images_revision(), 1)
             self.assertEqual(MODULE.built_in_image_filename(abby), "abby.png")
+            self.assertEqual(MODULE.built_in_image_context(abby), "")
+            MODULE.set_built_in_image_context(
+                abby, "Use the face and hairstyle; ignore the white background.")
+            self.assertEqual(
+                MODULE.built_in_image_context(abby),
+                "Use the face and hairstyle; ignore the white background.",
+            )
+            converted = MODULE.library_built_in_records()["Abby Sciuto_BC"]
+            self.assertIn("ignore the white background", converted["image_description"])
+            self.assertEqual(
+                converted["audio_description"],
+                "in Abby Sciuto's voice as played by Pauley Perrette",
+            )
             self.assertEqual(
                 MODULE.library_built_in_records()["Abby Sciuto_BC"]["image_file"],
                 "abby.png",
             )
             self.assertEqual(MODULE.remove_built_in_image(abby), "abby.png")
-            self.assertEqual(MODULE.built_in_images_revision(), 2)
+            self.assertEqual(MODULE.built_in_images_revision(), 3)
             self.assertIsNone(MODULE.built_in_image_filename(abby))
+            self.assertEqual(MODULE.built_in_image_context(abby), "")
+
+    def test_image_context_requires_an_attached_image(self):
+        abby = next(
+            record for record in MODULE.list_built_in_references()
+            if record["name"] == "Abby Sciuto"
+        )
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+                MODULE, "_attachment_manifest_path",
+                return_value=Path(directory) / "built_in_images.json"):
+            with self.assertRaisesRegex(ValueError, "Attach an image"):
+                MODULE.set_built_in_image_context(abby, "face reference")
 
     def test_portrayal_specific_tag_resolves_and_short_duplicate_is_rejected(self):
         prompt, mapping = MODULE.resolve_built_in_prompt(
