@@ -648,3 +648,17 @@ clip**, **Replace voice clip**, or **Remove voice clip**; the audio player previ
 the attachment. Use the character's section-sign voice tag to reference the
 clip in a prompt. Characters without uploaded media keep their existing text
 references. Image and voice attachments can be used separately or together.
+
+### Fixed Palette Quantize
+
+Install this repository in ComfyUI/custom_nodes (or update your existing copy),
+restart ComfyUI, and refresh the browser. No extra dependencies for this node.
+Search Fixed Palette Quantize under Skeba AI Nodes - Utilities.
+
+Connect IMAGE/video-frame batches and select 2-16 colors using the pickers or
+hex fields. Defaults: #00FF00, #000000, #FFFFFF. Outputs: IMAGE and palette STRING.
+Unused colors remain saved when reducing the count. Without the frontend, all
+16 standard hex inputs remain available. RGB nearest-color matching has no
+dithering and uses 65,536-pixel chunks on the input device (CPU or GPU). RGBA
+alpha is preserved. Quantize after resizing; later interpolation or lossy
+video encoding can introduce colors. Use lossless RGB output for exact saved colors.

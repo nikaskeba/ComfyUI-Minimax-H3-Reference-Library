@@ -1,3 +1,4 @@
+from .fixed_palette import FixedPaletteQuantize
 from .h3_tag_references import H3TaggedReferencePrompt
 from .built_in_references import H3BuiltInReference
 from .cached_h3_reference import (
@@ -29,6 +30,7 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaFixedPaletteQuantize": FixedPaletteQuantize,
     "H3TaggedReferencePrompt": H3TaggedReferencePrompt,
     "H3BuiltInReference": H3BuiltInReference,
     "SkebaCachedMiniMaxH3ReferenceToVideo": SkebaCachedMiniMaxH3ReferenceToVideo,
@@ -53,6 +55,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaFixedPaletteQuantize": "Fixed Palette Quantize",
     "H3TaggedReferencePrompt": "H3 Tagged Reference Prompt",
     "H3BuiltInReference": "Built-In Reference",
     "SkebaCachedMiniMaxH3ReferenceToVideo": "SKEBA MiniMax H3 Cached Reference to Video",
