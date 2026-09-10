@@ -42,6 +42,9 @@ class T:
     def unsqueeze(self, d):
         return T(np.expand_dims(self.a, d))
 
+    def reshape(self, *shape):
+        return T(self.a.reshape(*shape))
+
     def clone(self):
         return T(self.a.copy())
 
@@ -493,10 +496,16 @@ def main():
     class SceneVAE(VAE):
         def __init__(self):
             self.decoded = []
+            self.encoded = []
 
         def decode(self, z):
             self.decoded.append(z.a.copy())
-            return T(np.zeros((22, 480, 864, 3), dtype=np.float32))
+            return T(np.zeros((1, 22, 480, 864, 3), dtype=np.float32))
+
+        def encode(self, x):
+            self.encoded.append(x.shape)
+            assert x.ndim == 4
+            return super().encode(x)
 
     for latent_source in (True, False):
         scene_vae = SceneVAE()
@@ -509,6 +518,9 @@ def main():
         assert trim == 22
         assert result[0][1]["minimax_refs"][-1]["skeba_motion_scene_reference"]
         assert len(scene_vae.decoded) == int(latent_source)
+        assert scene_vae.encoded[-1] == (1, 480, 864, 3)
+        scene_ref = result[0][1]["minimax_refs"][-1]
+        assert (scene_ref["latent_h"], scene_ref["latent_w"]) == (30, 54)
         if latent_source:
             assert np.array_equal(scene_vae.decoded[0], prev["samples"].parts[0].a[:, :, -7:])
     scene_vae = SceneVAE()

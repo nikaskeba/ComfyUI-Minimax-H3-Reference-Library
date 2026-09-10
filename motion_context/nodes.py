@@ -832,6 +832,8 @@ class MiniMaxH3MotionContext:
                 if video_src == "latent":
                     steps = _steps_for_frames(n)
                     decoded = vae.decode(src_video[:, :, -steps:].clone())
+                    if decoded.ndim == 5:
+                        decoded = decoded.reshape(-1, *decoded.shape[-3:])
                     scene_reference = decoded[-1:].clone()
                     scene_source = "previous latent tail"
                 else:
