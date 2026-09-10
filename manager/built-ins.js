@@ -167,6 +167,17 @@ function recordRow(record) {
         }
         actions.append(button(record.has_image ? "Replace image" : "Add image", () => chooseImage(record)));
         if (record.has_image) actions.append(button("Remove image", () => removeImage(record)));
+        if (record.audio_url) {
+            const preview = document.createElement("audio");
+            preview.controls = true;
+            preview.preload = "none";
+            preview.src = record.audio_url;
+            preview.setAttribute("aria-label", `${record.name} voice reference`);
+            actions.append(preview);
+        }
+        actions.append(button(record.has_audio ? "Replace voice clip" : "Add voice clip", () => chooseAudio(record)));
+        if (record.has_audio) actions.append(button("Remove voice clip", () => removeAudio(record)));
+
     }
     actions.append(button("Copy character + voice", () => copyCharacterGuide([record])));
     row.append(checkLabel, identity, details, actions);
@@ -228,6 +239,37 @@ async function removeImage(record) {
         await request(`${apiRoot}/${record.attachment_id}/image`, { method: "DELETE" });
         await loadRecords();
         toast(`Reference image removed from ${record.name}.`);
+    } catch (error) {
+        toast(error.message, true);
+    }
+}
+
+function chooseAudio(record) {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "audio/*";
+    input.addEventListener("change", async () => {
+        const file = input.files?.[0];
+        if (!file) return;
+        const form = new FormData();
+        form.append("audio", file);
+        try {
+            await request(`${apiRoot}/${record.attachment_id}/audio`, { method: "PUT", body: form });
+            await loadRecords();
+            toast(`Voice clip attached to ${record.name}.`);
+        } catch (error) {
+            toast(error.message, true);
+        }
+    }, { once: true });
+    input.click();
+}
+
+async function removeAudio(record) {
+    if (!window.confirm(`Remove the optional reference audio for ${record.name}?`)) return;
+    try {
+        await request(`${apiRoot}/${record.attachment_id}/audio`, { method: "DELETE" });
+        await loadRecords();
+        toast(`Voice clip removed from ${record.name}.`);
     } catch (error) {
         toast(error.message, true);
     }

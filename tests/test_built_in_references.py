@@ -87,6 +87,27 @@ class BuiltInReferenceTests(unittest.TestCase):
             self.assertIsNone(MODULE.built_in_image_filename(abby))
             self.assertEqual(MODULE.built_in_image_context(abby), "")
 
+    def test_voice_attachment_independent_of_image_and_invalidates_revision(self):
+        record = MODULE.list_built_in_references()[0]
+        tag = MODULE.library_built_in_tag_value(record)
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+                MODULE, "_attachment_manifest_path", return_value=Path(directory) / "attachments.json"):
+            self.assertIsNone(MODULE.set_built_in_audio(record, "voice.wav"))
+            self.assertEqual(MODULE.built_in_audio_filename(record), "voice.wav")
+            converted = MODULE.library_built_in_records()[tag]
+            self.assertEqual(converted["audio_file"], "voice.wav")
+            self.assertIsNone(converted["image_file"])
+            MODULE.set_built_in_image(record, "face.png")
+            self.assertEqual(MODULE.set_built_in_audio(record, "new.wav"), "voice.wav")
+            self.assertEqual(MODULE.built_in_images_revision(), 3)
+            self.assertEqual(MODULE.remove_built_in_image(record), "face.png")
+            self.assertEqual(MODULE.built_in_audio_filename(record), "new.wav")
+            MODULE.set_built_in_image(record, "face.png")
+            self.assertEqual(MODULE.remove_built_in_audio(record), "new.wav")
+            self.assertEqual(MODULE.built_in_image_filename(record), "face.png")
+            with self.assertRaises(ValueError):
+                MODULE.set_built_in_audio(record, "../outside.wav")
+
     def test_image_context_requires_an_attached_image(self):
         abby = next(
             record for record in MODULE.list_built_in_references()

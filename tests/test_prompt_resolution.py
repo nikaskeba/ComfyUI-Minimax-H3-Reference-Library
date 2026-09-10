@@ -59,6 +59,18 @@ for module_name, previous in PREVIOUS_MODULES.items():
 
 
 class PromptResolutionTests(unittest.TestCase):
+    def test_built_in_attached_voice_resolves_with_or_without_image(self):
+        for image in (None, "face.png"):
+            records = {"Actor_BC": {
+                "built_in": True, "image_file": image, "audio_file": "voice.wav",
+                "image_description": "the character", "audio_description": "the character voice",
+            }}
+            prompt, _, image_tags, audio_tags, _ = MODULE.resolve_prompt(
+                "{Actor_BC} speaks with \u00a7Actor_BC\u00a7", records)
+            self.assertEqual(audio_tags, ["Actor_BC"])
+            self.assertEqual(image_tags, ["Actor_BC"] if image else [])
+            self.assertIn("<Audio 1>", prompt)
+
     def test_built_in_attachment_claims_a_picture_slot(self):
         records = {
             "Abby Sciuto_BC": {

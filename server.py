@@ -23,6 +23,9 @@ from .library import (
 )
 from .built_in_references import (
     built_in_attachment_id,
+    built_in_audio_filename,
+    set_built_in_audio,
+    remove_built_in_audio,
     built_in_image_filename,
     built_in_images_revision,
     catalog_revision,
@@ -95,6 +98,11 @@ def register_routes():
                         **{key: value for key, value in record.items() if key != "clips"},
                         "library_tag": library_built_in_tag_value(record),
                         "attachment_id": built_in_attachment_id(record),
+                        "has_audio": bool(attached_records[library_built_in_tag_value(record)].get("audio_file")),
+                        "audio_url": (
+                            f"/api/h3-built-in-references/records/{built_in_attachment_id(record)}/audio?v={image_revision}"
+                            if attached_records[library_built_in_tag_value(record)].get("audio_file") else None
+                        ),
                         "has_image": bool(
                             attached_records[library_built_in_tag_value(record)].get("image_file")
                         ),
@@ -113,6 +121,32 @@ def register_routes():
             })
         except (OSError, RuntimeError, ValueError) as error:
             return web.json_response({"error": str(error)}, status=500)
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/audio")
+    async def update_built_in_audio(request):
+        filename = None
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            _fields, files = await _read_multipart(request)
+            if "audio" not in files:
+                raise ValueError("Choose an audio to attach to the built-in character.")
+            filename = _save_audio(*files["audio"])
+            previous = set_built_in_audio(record, filename)
+            remove_media(previous, "audio")
+            return web.json_response({"attached": built_in_attachment_id(record)})
+        except Exception as error:
+            remove_media(filename, "audio")
+            return _error_response(error)
+
+    @routes.delete("/api/h3-built-in-references/records/{attachment_id}/audio")
+    async def delete_built_in_audio(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            previous = remove_built_in_audio(record)
+            remove_media(previous, "audio")
+            return web.json_response({"removed": built_in_attachment_id(record)})
+        except Exception as error:
+            return _error_response(error)
 
     @routes.put("/api/h3-built-in-references/records/{attachment_id}/image")
     async def update_built_in_image(request):
@@ -153,6 +187,18 @@ def register_routes():
             })
         except Exception as error:
             return _error_response(error)
+
+    @routes.get("/api/h3-built-in-references/records/{attachment_id}/audio")
+    async def get_built_in_audio(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            filename = built_in_audio_filename(record)
+            return web.FileResponse(media_path({
+                "tag": library_built_in_tag_value(record),
+                "audio_file": filename,
+            }, "audio"))
+        except (KeyError, FileNotFoundError, ValueError):
+            raise web.HTTPNotFound()
 
     @routes.get("/api/h3-built-in-references/records/{attachment_id}/image")
     async def get_built_in_image(request):

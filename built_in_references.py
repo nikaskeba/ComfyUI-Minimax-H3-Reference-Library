@@ -39,6 +39,8 @@ def _read_attachment_manifest():
             raise RuntimeError("Built-in image manifest is invalid.")
         if not isinstance(manifest.get("image_contexts", {}), dict):
             raise RuntimeError("Built-in image-context manifest is invalid.")
+        if not isinstance(manifest.get("audio", {}), dict):
+            raise RuntimeError("Built-in audio manifest is invalid.")
         manifest["version"] = 2
         manifest.setdefault("revision", 0)
         manifest.setdefault("image_contexts", {})
@@ -72,6 +74,34 @@ def built_in_attachment_id(record):
 
 def built_in_image_filename(record):
     return _read_attachment_manifest()["images"].get(library_built_in_tag_value(record))
+
+
+def built_in_audio_filename(record):
+    return _read_attachment_manifest().get("audio", {}).get(library_built_in_tag_value(record))
+
+
+def set_built_in_audio(record, filename):
+    if not filename or Path(filename).name != filename:
+        raise ValueError("Built-in character audio filename is invalid.")
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        tag = library_built_in_tag_value(record)
+        audio = manifest.setdefault("audio", {})
+        previous = audio.get(tag)
+        audio[tag] = filename
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
+        return previous
+
+
+def remove_built_in_audio(record):
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        previous = manifest.get("audio", {}).pop(library_built_in_tag_value(record), None)
+        if previous is not None:
+            manifest["revision"] = int(manifest.get("revision", 0)) + 1
+            _write_attachment_manifest(manifest)
+        return previous
 
 
 def built_in_image_context(record):
@@ -265,7 +295,7 @@ def library_built_in_records():
             "image_context": image_contexts.get(tag, "") if attachments.get(tag) else "",
             "audio_description": _voice_description(record),
             "image_file": attachments.get(tag),
-            "audio_file": None,
+            "audio_file": manifest.get("audio", {}).get(tag),
             "video_file": None,
             "video_has_audio": False,
             "built_in": True,

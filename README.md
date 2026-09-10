@@ -641,3 +641,10 @@ All videos must match frame rate and bit depth; audio sample rates are automatic
 track’s rate (or the first available track when the accumulation is silent).
 Audio channel layouts must still match. Silent clips receive silence when other clips have
 audio, and short audio tracks are padded to preserve timing.
+
+Built In Characters supports optional voice clips independently of reference
+images. In the Reference Library's Built In Characters view, use **Add voice
+clip**, **Replace voice clip**, or **Remove voice clip**; the audio player previews
+the attachment. Use the character's section-sign voice tag to reference the
+clip in a prompt. Characters without uploaded media keep their existing text
+references. Image and voice attachments can be used separately or together.
