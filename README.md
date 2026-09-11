@@ -662,3 +662,28 @@ Unused colors remain saved when reducing the count. Without the frontend, all
 dithering and uses 65,536-pixel chunks on the input device (CPU or GPU). RGBA
 alpha is preserved. Quantize after resizing; later interpolation or lossy
 video encoding can introduce colors. Use lossless RGB output for exact saved colors.
+
+#### Palette eyedropper and video frame selection
+
+Restart ComfyUI and refresh after updating. In Fixed Palette Quantize, choose
+`preview_frame` (zero-based) and click **Preview / Pick Colors**. This queues
+only the image-input branch with a preview helper, not downstream quantization
+or export. Upstream image generation may still run if it is not cached. Frame
+indices beyond the batch use the final frame.
+
+Click **Pick** next to a color, then click the displayed frame. Choose Exact
+Pixel, 3x3 Average (default), or 5x5 Average. Sampling uses original float frame
+pixels with boundary-clamped regions, not the resized preview. The resulting
+uppercase hex value updates the ordinary saved palette widget and its swatch.
+Run the normal workflow afterward to quantize all frames with those colors.
+
+Changing the preview frame requires another preview request. Reopening a saved
+workflow retains colors but requires refreshing the temporary preview. Only
+the selected frame is stored in ComfyUI's temp/skeba_palette directory as a
+float array and display PNG; the video batch is not retained by the picker.
+Auto Extract and Snap are deferred; the quantization algorithm is unchanged.
+
+
+### Deterministic reference compiler
+
+H3 Tagged Reference Prompt now offers `compiler_mode = deterministic` for six-section semantic prompts, independent Subject/Speaker/media numbering, and JSON mapping diagnostics. Existing workflows default to legacy mode. See [the compiler guide](docs/reference_compiler.md) and [example prompt](example/reference_compiler_prompt.txt).

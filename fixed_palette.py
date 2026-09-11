@@ -22,6 +22,9 @@ class FixedPaletteQuantize:
             "number_of_colors": ("INT", {"default": 3, "min": 2, "max": 16}),
             **{f"color_{i + 1}": ("STRING", {"default": color, "dynamicPrompts": False})
                for i, color in enumerate(DEFAULT_COLORS)},
+        }, "optional": {
+            "preview_frame": ("INT", {"default": 0, "min": 0, "max": 2147483647}),
+            "sampling_mode": (["Exact Pixel", "3x3 Average", "5x5 Average"], {"default": "3x3 Average"}),
         }}
 
     RETURN_TYPES = ("IMAGE", "STRING")
@@ -30,7 +33,7 @@ class FixedPaletteQuantize:
     CATEGORY = "Skeba AI Nodes - Utilities"
     DESCRIPTION = "Replace every RGB pixel with its nearest exact palette color. No dithering; preserves alpha."
 
-    def quantize(self, image, number_of_colors=3, **colors):
+    def quantize(self, image, number_of_colors=3, preview_frame=0, sampling_mode="3x3 Average", **colors):
         if not 2 <= number_of_colors <= 16:
             raise ValueError("number_of_colors must be between 2 and 16.")
         if image.ndim != 4 or image.shape[-1] not in (3, 4) or not image.is_floating_point():

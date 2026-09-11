@@ -1,3 +1,4 @@
+from .reference_compiler import compile_prompt
 import re
 
 import av
@@ -285,6 +286,21 @@ class H3TaggedReferencePrompt:
                     ),
                 }),
             },
+            "optional": {
+                "compiler_mode": (["legacy", "deterministic"], {
+                    "default": "legacy",
+                    "tooltip": "Deterministic compiles six-section semantic prompts and temporary declarations. Legacy preserves existing numbered/freeform prompts.",
+                }),
+                "compiler_video_usage": (["reference", "motion_reference", "continuation", "editing"], {
+                    "default": "reference", "tooltip": "Video task purpose in deterministic mode; a reference alone never implies continuation.",
+                }),
+                "compiler_audio_usage": (["reference", "reuse"], {
+                    "default": "reference", "tooltip": "Whether used audio supplies a reference or is explicitly reused, in deterministic mode.",
+                }),
+                "compiler_voice_isolation": ("BOOLEAN", {
+                    "default": True, "tooltip": "Explicitly bind each character's audio to its owner and exclude other characters' voice references at speaking turns. Deterministic mode only.",
+                }),
+            },
         }
 
     # Video outputs are appended so existing image/audio socket indices remain
@@ -311,18 +327,34 @@ class H3TaggedReferencePrompt:
     @classmethod
     def IS_CHANGED(cls, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
                    video_max_side=DEFAULT_VIDEO_MAX_SIDE,
-                   defer_media_loading=False):
+                   defer_media_loading=False, compiler_mode="legacy",
+                   compiler_video_usage="reference", compiler_audio_usage="reference",
+                   compiler_voice_isolation=True):
         return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
                 f"{prompt_template}:{video_fps}:"
-                f"{video_max_side}:{defer_media_loading}")
+                f"{video_max_side}:{defer_media_loading}:{compiler_mode}:"
+                f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}")
 
     def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
               video_max_side=DEFAULT_VIDEO_MAX_SIDE,
-              defer_media_loading=False):
+              defer_media_loading=False, compiler_mode="legacy",
+              compiler_video_usage="reference", compiler_audio_usage="reference",
+              compiler_voice_isolation=True):
         records = records_by_tag()
         records.update(library_built_in_records())
-        prompt, mapping, image_tags, audio_tags, video_tags = resolve_prompt(
-            prompt_template or "", records)
+        if compiler_mode == "deterministic":
+            compiled = compile_prompt(
+                prompt_template or "", records, video_usage=compiler_video_usage,
+                audio_usage=compiler_audio_usage, max_images=MAX_IMAGES,
+                max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS,
+                voice_isolation=compiler_voice_isolation)
+            prompt, mapping = compiled.prompt, compiled.mapping
+            image_tags, audio_tags, video_tags = compiled.images, compiled.audios, compiled.videos
+        elif compiler_mode == "legacy":
+            prompt, mapping, image_tags, audio_tags, video_tags = resolve_prompt(
+                prompt_template or "", records)
+        else:
+            raise ValueError("Unknown compiler_mode.")
 
         def bundle_entry(tag, kind):
             record = records[tag]

@@ -1,3 +1,5 @@
+import asyncio
+from .palette_sampling import sample_preview
 import io
 import uuid
 from pathlib import Path
@@ -50,6 +52,18 @@ def register_routes():
         return
     ROUTES_REGISTERED = True
     routes = PromptServer.instance.routes
+
+    @routes.post("/api/skeba-palette/sample")
+    async def sample_palette_pixel(request):
+        try:
+            payload = await request.json()
+            result = await asyncio.to_thread(
+                sample_preview, payload["token"], payload["u"], payload["v"], payload["sampling_mode"])
+            return web.json_response(result)
+        except FileNotFoundError:
+            return web.json_response({"error": "Preview expired. Click Preview / Pick Colors again."}, status=404)
+        except (ValueError, TypeError, KeyError) as error:
+            return web.json_response({"error": str(error)}, status=400)
 
     @routes.get("/h3-references")
     async def manager_page(request):

@@ -1,0 +1,24 @@
+<character:cashier = A cashier in a red uniform.>
+<voice:cashier = Young male voice, friendly tone.>
+<location:coffee_shop = A cozy coffee shop with wooden tables.>
+
+subject_definitions:
+<character:cashier>
+<location:coffee_shop>
+
+summary:
+<character:cashier> greets a customer in <location:coffee_shop>.
+
+retention_analysis:
+<character:cashier>: fully_preserved - retain the red uniform.
+<location:coffee_shop>: fully_preserved - retain the wooden tables.
+
+detailed_description:
+[Shot 1] At 00:00, <character:cashier> stands behind the counter in <location:coffee_shop>.
+At 00:02, <character:cashier> says <voice:cashier>, <d>[English]Your order is ready.</d>
+
+overall_soundscape:
+Quiet conversation and cups touching saucers.
+
+non_diegetic_music:
+N/A

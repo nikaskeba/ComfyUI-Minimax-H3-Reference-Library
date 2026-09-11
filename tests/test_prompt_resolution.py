@@ -23,7 +23,7 @@ def _stub_module(name, **attributes):
     return module
 
 
-package = _stub_module(PACKAGE_NAME, __path__=[])
+package = _stub_module(PACKAGE_NAME, __path__=[str(MODULE_PATH.parent)])
 _stub_module("numpy")
 _stub_module("torch")
 _stub_module("PIL", Image=object(), ImageOps=object())
@@ -530,6 +530,46 @@ class PromptResolutionTests(unittest.TestCase):
         self.assertEqual(output[14:20], (None, None, None, None, None, None))
         self.assertTrue(output[20]["media_deferred"])
         self.assertTrue(output[20]["videos"][0]["has_audio"])
+
+    def test_compiler_media_outputs_match_mapping_and_deferred_bundle(self):
+        from unittest.mock import patch
+        import json
+        records = {
+            "plain": dict(reference_type="character", name="Plain", image_file="plain.png"),
+            "hero": dict(reference_type="character", name="Hero", image_file="hero.png", audio_file="hero.wav"),
+            "clip": dict(reference_type="video", video_file="clip.mp4", video_has_audio=True),
+        }
+        source = "subject_definitions:\n{plain}\n{hero}\n\nsummary:\n{hero} moves.\n\nretention_analysis:\nKeep clothing.\n\ndetailed_description:\n{hero} says \u00a7hero\u00a7, <d>[English]Go!</d> Follow {clip}.\n\noverall_soundscape:\nReference the wind from \u00a7clip\u00a7.\n\nnon_diegetic_music:\nN/A"
+        with patch.object(MODULE, "records_by_tag", return_value=records), \
+             patch.object(MODULE, "library_built_in_records", return_value={}), \
+             patch.object(MODULE, "media_path", side_effect=lambda r,k:r[k+"_file"]), \
+             patch.object(MODULE, "load_image", side_effect=lambda p:p), \
+             patch.object(MODULE, "load_audio", side_effect=lambda p:p), \
+             patch.object(MODULE, "load_video", return_value=("frames", "soundtrack")):
+            node = MODULE.H3TaggedReferencePrompt()
+            output = node.build(source, compiler_mode="deterministic")
+            deferred = node.build(source, compiler_mode="deterministic", defer_media_loading=True)
+            isolation_off = node.build(source, compiler_mode="deterministic", defer_media_loading=True,
+                                       compiler_voice_isolation=False)
+        mapping = json.loads(output[1])
+        self.assertEqual(output[2:4], ("hero.png", "plain.png"))
+        self.assertEqual(output[11], "hero.wav")
+        self.assertEqual(output[14], "frames")
+        self.assertEqual(output[17], "soundtrack")
+        self.assertEqual(mapping["resources"]["saved:hero"]["picture"], 1)
+        self.assertEqual(mapping["resources"]["saved:hero"]["audio"], 2)
+        self.assertEqual(mapping["resources"]["saved:clip"]["audio"], 1)
+        self.assertTrue(mapping["resources"]["saved:clip"]["audio_used"])
+        self.assertIn("Reference the wind from <Audio 1>.", output[0])
+        self.assertEqual(output[:2], deferred[:2])
+        for kind in ("images", "audios", "videos"):
+            self.assertEqual(output[20][kind], deferred[20][kind])
+        self.assertTrue(all(v is None for v in deferred[2:20]))
+        self.assertIn("is the only speaker using <Audio 2>", deferred[0])
+        self.assertNotIn("is the only speaker using", isolation_off[0])
+        self.assertEqual(deferred[20], isolation_off[20])
+        self.assertNotEqual(node.IS_CHANGED(source, compiler_voice_isolation=True),
+                            node.IS_CHANGED(source, compiler_voice_isolation=False))
 
     def test_unknown_voice_tag_is_clear(self):
         with self.assertRaisesRegex(ValueError, "§missing_voice§"):

@@ -1,3 +1,4 @@
+import { attachPreview } from "./palette_preview.js";
 import { app } from "../../scripts/app.js";
 
 app.registerExtension({
@@ -46,12 +47,15 @@ app.registerExtension({
                 };
                 picker.addEventListener("input", () => commit(picker.value));
                 hex.addEventListener("change", () => commit(hex.value));
-                row.append(name, picker, hex);
+                const pick = document.createElement("button");
+                pick.textContent = "Pick";
+                row.append(name, picker, hex, pick);
                 root.append(row);
-                rows.push({ row, sync });
+                rows.push({ row, sync, commit, pick });
             }
             const panel = node.addDOMWidget("palette_editor", "palette_editor", root, { serialize: false });
-            panel.computeSize = () => [260, Math.max(2, Math.min(16, Number(count.value))) * 32 + 12];
+            let previewHeight = () => 0;
+            panel.computeSize = () => [300, Math.max(2, Math.min(16, Number(count.value))) * 32 + 12 + previewHeight()];
             const refresh = () => {
                 rows.forEach(({ row, sync }, i) => {
                     row.style.display = i < Number(count.value) ? "flex" : "none";
@@ -64,6 +68,7 @@ app.registerExtension({
             count.callback = function (...values) { changed?.apply(this, values); refresh(); };
             const configured = node.onConfigure;
             node.onConfigure = function (...values) { const r = configured?.apply(this, values); refresh(); return r; };
+            previewHeight = attachPreview(app, node, root, rows, refresh);
             refresh();
             return result;
         };

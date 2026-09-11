@@ -1,3 +1,4 @@
+from .palette_sampling import PaletteFramePreview
 from .fixed_palette import FixedPaletteQuantize
 from .h3_tag_references import H3TaggedReferencePrompt
 from .built_in_references import H3BuiltInReference
@@ -30,6 +31,7 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaPaletteFramePreview": PaletteFramePreview,
     "SkebaFixedPaletteQuantize": FixedPaletteQuantize,
     "H3TaggedReferencePrompt": H3TaggedReferencePrompt,
     "H3BuiltInReference": H3BuiltInReference,
@@ -55,6 +57,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaPaletteFramePreview": "Palette Frame Preview",
     "SkebaFixedPaletteQuantize": "Fixed Palette Quantize",
     "H3TaggedReferencePrompt": "H3 Tagged Reference Prompt",
     "H3BuiltInReference": "Built-In Reference",
