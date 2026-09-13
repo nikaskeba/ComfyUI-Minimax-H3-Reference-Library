@@ -3,6 +3,7 @@ import sys
 import tempfile
 import types
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 import torch
@@ -13,7 +14,7 @@ PROJECT_ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(COMFY_ROOT))
 PACKAGE_NAME = "h3_cached_node_test_package"
 PACKAGE = types.ModuleType(PACKAGE_NAME)
-PACKAGE.__path__ = []
+PACKAGE.__path__ = [str(PROJECT_ROOT)]
 sys.modules[PACKAGE_NAME] = PACKAGE
 LIBRARY = types.ModuleType(f"{PACKAGE_NAME}.library")
 LIBRARY.library_root = lambda: Path("unused")
@@ -117,6 +118,68 @@ class CachedNodeTests(unittest.TestCase):
     def tearDown(self):
         NODE_MODULE.h3._empty_av_latent = self.original_empty
         self.temporary.cleanup()
+
+    def test_voice_crop_invalidates_both_audio_caches_and_restores_full_audio(self):
+        audio_vae = _VAE(self.audio_model, audio=True)
+        source = {"waveform": torch.arange(20*32000, dtype=torch.float32).repeat(1,2,1), "sample_rate": 32000}
+        entry = {"record_id": "person", "tag": "person", "source_path": str(self.audio_source)}
+        args = dict(clip=_Clip(), vae=_VAE(self.video_model), audio_vae=audio_vae,
+                    prompt="test", width=32, height=32, length=5,
+                    reference_bundle={"audios": [entry]})
+        with patch.object(NODE_MODULE, "_load_audio_source", return_value=source) as loader:
+            for index, cap in enumerate((None, 15.0, 7.5, 5.0),1):
+                if cap is not None:
+                    entry["max_duration_seconds"] = cap
+                result = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+                self.assertEqual(audio_vae.calls,index)
+                self.assertEqual(audio_vae.last_input_shape,(1,int((cap or 20)*32000),2))
+                if cap is not None:
+                    self.assertIn(f"Voice crop: first up to {cap:g}s",result[2])
+            self.assertEqual(loader.call_count,4)
+            for cap in (5.0, 7.5, None):
+                if cap is None:
+                    entry.pop("max_duration_seconds")
+                else:
+                    entry["max_duration_seconds"] = cap
+                result = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+                self.assertIn("HIT (lazy bundle)",result[2])
+                self.assertEqual(audio_vae.calls,4)
+                self.assertEqual(loader.call_count,4)
+            # Exercise the lower tensor cache without a compiled payload.
+            with patch.object(NODE_MODULE._CACHE,"load_compiled",return_value=None):
+                entry["max_duration_seconds"] = 3.0
+                NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+                self.assertEqual(audio_vae.calls,5)
+                self.assertEqual(audio_vae.last_input_shape,(1,3*32000,2))
+                NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+                self.assertEqual(audio_vae.calls,5)
+                entry["max_duration_seconds"] = 5.0
+                NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+                self.assertEqual(audio_vae.calls,5)
+        self.assertEqual(source["waveform"].shape,(1,2,20*32000))
+
+    def test_voice_crop_connected_and_deferred_encode_same_samples(self):
+        source = {"waveform": torch.arange(12*32000, dtype=torch.float32).repeat(1,2,1), "sample_rate":32000}
+        entry = {"tag":"person", "source_path":str(self.audio_source), "max_duration_seconds":5.0}
+        args = dict(clip=_Clip(), vae=_VAE(self.video_model), audio_vae=_VAE(self.audio_model,audio=True),
+                    prompt="test", width=32, height=32, length=5, cache_mode="disabled",
+                    reference_bundle={"audios":[entry]})
+        encoded = []
+        real_encode = NODE_MODULE.h3._encode_ref_audio
+        def capture(vae, value):
+            encoded.append(value["waveform"].clone())
+            return real_encode(vae,value)
+        with patch.object(NODE_MODULE.h3,"_encode_ref_audio",side_effect=capture), \
+             patch.object(NODE_MODULE,"_load_audio_source",return_value=source) as loader:
+            NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args,ref_audios={"ref_audio_0":source})
+            loader.assert_not_called()
+            NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+            loader.assert_called_once()
+            # Already-cropped normal outputs must not be shortened again.
+            cropped = NODE_MODULE.crop_voice_reference(source,5.0)
+            NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args,ref_audios={"ref_audio_0":cropped})
+        for waveform in encoded:
+            self.assertTrue(torch.equal(waveform,source["waveform"][...,:5*32000]))
 
     def test_second_execution_reuses_image_and_audio_latents(self):
         video_vae = _VAE(self.video_model)

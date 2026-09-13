@@ -1,6 +1,6 @@
 from .palette_sampling import PaletteFramePreview
 from .fixed_palette import FixedPaletteQuantize
-from .h3_tag_references import H3TaggedReferencePrompt
+from .h3_tag_references import H3TaggedReferencePrompt, H3PromptListValidator
 from .built_in_references import H3BuiltInReference
 from .cached_h3_reference import (
     SkebaCachedMiniMaxH3ReferenceFirstLast,
@@ -34,6 +34,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaPaletteFramePreview": PaletteFramePreview,
     "SkebaFixedPaletteQuantize": FixedPaletteQuantize,
     "H3TaggedReferencePrompt": H3TaggedReferencePrompt,
+    "SKEBAH3PromptListValidator": H3PromptListValidator,
     "H3BuiltInReference": H3BuiltInReference,
     "SkebaCachedMiniMaxH3ReferenceToVideo": SkebaCachedMiniMaxH3ReferenceToVideo,
     "SkebaCachedMiniMaxH3ReferenceFirstLast": SkebaCachedMiniMaxH3ReferenceFirstLast,
@@ -60,6 +61,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaPaletteFramePreview": "Palette Frame Preview",
     "SkebaFixedPaletteQuantize": "Fixed Palette Quantize",
     "H3TaggedReferencePrompt": "H3 Tagged Reference Prompt",
+    "SKEBAH3PromptListValidator": "SKEBA H3 Prompt List Validator",
     "H3BuiltInReference": "Built-In Reference",
     "SkebaCachedMiniMaxH3ReferenceToVideo": "SKEBA MiniMax H3 Cached Reference to Video",
     "SkebaCachedMiniMaxH3ReferenceFirstLast": "SKEBA MiniMax H3 Cached Reference + First/Last Frame",

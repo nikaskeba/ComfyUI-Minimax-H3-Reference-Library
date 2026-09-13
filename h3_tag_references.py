@@ -1,4 +1,5 @@
 from .reference_compiler import compile_prompt
+from .reference_audio import crop_voice_reference
 import re
 
 import av
@@ -289,7 +290,7 @@ class H3TaggedReferencePrompt:
             "optional": {
                 "compiler_mode": (["legacy", "deterministic"], {
                     "default": "legacy",
-                    "tooltip": "Deterministic compiles six-section semantic prompts and temporary declarations. Legacy preserves existing numbered/freeform prompts.",
+                    "tooltip": "Deterministic compiles semantic prompts and temporary declarations; retention_analysis is optional. Legacy preserves existing numbered/freeform prompts.",
                 }),
                 "compiler_video_usage": (["reference", "motion_reference", "continuation", "editing"], {
                     "default": "reference", "tooltip": "Video task purpose in deterministic mode; a reference alone never implies continuation.",
@@ -299,6 +300,10 @@ class H3TaggedReferencePrompt:
                 }),
                 "compiler_voice_isolation": ("BOOLEAN", {
                     "default": True, "tooltip": "Explicitly bind each character's audio to its owner and exclude other characters' voice references at speaking turns. Deterministic mode only.",
+                }),
+                "auto_crop_voice_references": ("BOOLEAN", {
+                    "default": True,
+                    "tooltip": "Keep the first 15 / used voice count seconds of each character voice reference. Shorter clips stay unchanged. Music, reused audio, and video soundtracks are excluded from this budget.",
                 }),
             },
         }
@@ -329,17 +334,18 @@ class H3TaggedReferencePrompt:
                    video_max_side=DEFAULT_VIDEO_MAX_SIDE,
                    defer_media_loading=False, compiler_mode="legacy",
                    compiler_video_usage="reference", compiler_audio_usage="reference",
-                   compiler_voice_isolation=True):
+                   compiler_voice_isolation=True, auto_crop_voice_references=True):
         return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
                 f"{prompt_template}:{video_fps}:"
                 f"{video_max_side}:{defer_media_loading}:{compiler_mode}:"
-                f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}")
+                f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}:"
+                f"{auto_crop_voice_references}")
 
     def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
               video_max_side=DEFAULT_VIDEO_MAX_SIDE,
               defer_media_loading=False, compiler_mode="legacy",
               compiler_video_usage="reference", compiler_audio_usage="reference",
-              compiler_voice_isolation=True):
+              compiler_voice_isolation=True, auto_crop_voice_references=True):
         records = records_by_tag()
         records.update(library_built_in_records())
         if compiler_mode == "deterministic":
@@ -356,12 +362,33 @@ class H3TaggedReferencePrompt:
         else:
             raise ValueError("Unknown compiler_mode.")
 
+        voice_tags = []
+        if auto_crop_voice_references:
+            for tag in dict.fromkeys(audio_tags):
+                record = records[tag]
+                kind = record.get("reference_type") or record.get("type") or ""
+                usage = record.get("audio_usage", compiler_audio_usage
+                                   if compiler_mode == "deterministic" else "reference")
+                if ((kind.lower() == "character" or record.get("built_in"))
+                        and record.get("audio_file") and usage == "reference"):
+                    voice_tags.append(tag)
+        voice_caps = {tag: 15.0 / len(voice_tags) for tag in voice_tags}
+        if compiler_mode == "deterministic":
+            compiled.debug["voice_reference_crop"] = {
+                "enabled": bool(auto_crop_voice_references), "budget_seconds": 15.0,
+                "max_seconds_by_tag": voice_caps,
+            }
+            mapping = compiled.mapping
+        elif voice_caps:
+            mapping += "\n" + "\n".join(
+                f"Voice crop: {tag} - first up to {seconds:g}s" for tag, seconds in voice_caps.items())
+
         def bundle_entry(tag, kind):
             record = records[tag]
             source_kind = kind
             if kind == "audio" and not record.get("audio_file"):
                 source_kind = "video"
-            return {
+            entry = {
                 "record_id": record.get("id") or tag,
                 "tag": tag,
                 "source_kind": source_kind,
@@ -372,6 +399,9 @@ class H3TaggedReferencePrompt:
                     else record.get("audio_file")
                 ),
             }
+            if kind == "audio" and tag in voice_caps:
+                entry["max_duration_seconds"] = voice_caps[tag]
+            return entry
 
         reference_bundle = {
             "schema_version": 2,
@@ -409,7 +439,8 @@ class H3TaggedReferencePrompt:
         audios = []
         for tag in audio_tags:
             if records[tag].get("audio_file"):
-                audios.append(load_audio(media_path(records[tag], "audio")))
+                audio = load_audio(media_path(records[tag], "audio"))
+                audios.append(crop_voice_reference(audio, voice_caps.get(tag)))
             else:
                 audio = video_for(tag)[1]
                 if audio is None:
@@ -430,3 +461,66 @@ class H3TaggedReferencePrompt:
             prompt, mapping, *images, *audios, *videos, *video_audios,
             reference_bundle,
         )
+
+
+class H3PromptListValidator:
+    @classmethod
+    def INPUT_TYPES(cls):
+        compiler_options = H3TaggedReferencePrompt.INPUT_TYPES()["optional"]
+        return {
+            "required": {
+                "text": ("STRING", {"multiline": True, "default": "",
+                                    "tooltip": "Complete prompt list, before splitting or entering the loop."}),
+                "validation_enabled": ("BOOLEAN", {"default": True,
+                    "label_on": "VALIDATE / DETERMINISTIC", "label_off": "SKIP / LEGACY"}),
+                "delimiter": ("STRING", {"default": "|"}),
+                "skip_empty": ("BOOLEAN", {"default": True}),
+            },
+            "optional": {name: compiler_options[name] for name in (
+                "compiler_video_usage", "compiler_audio_usage", "compiler_voice_isolation")},
+        }
+
+    RETURN_TYPES = ("STRING", ["legacy", "deterministic"], "BOOLEAN", "STRING")
+    RETURN_NAMES = ("text", "compiler_mode", "validation_enabled", "report")
+    FUNCTION = "validate_list"
+    CATEGORY = "Skeba AI Nodes - Reference"
+    DESCRIPTION = "Validate every prompt before passing the original text to a loop. Failure stops this branch before any prompt is generated."
+
+    @classmethod
+    def IS_CHANGED(cls, validation_enabled=True, **kwargs):
+        if not validation_enabled:
+            return "validation-disabled"
+        return f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}"
+
+    def validate_list(self, text, validation_enabled=True, delimiter="|", skip_empty=True,
+                      compiler_video_usage="reference", compiler_audio_usage="reference",
+                      compiler_voice_isolation=True):
+        if not validation_enabled:
+            return (text, "legacy", False, "Validation disabled. Compiler mode: legacy.")
+        if not delimiter:
+            raise ValueError("H3 prompt list validation: delimiter must not be empty.")
+        prompts = text.split(delimiter)
+        prompts = [p.strip() for p in prompts if p.strip() or not skip_empty]
+        if not prompts:
+            raise ValueError("H3 prompt list validation: no prompts to validate.")
+        records = records_by_tag()
+        records.update(library_built_in_records())
+        errors = []
+        report = []
+        for number, prompt in enumerate(prompts, 1):
+            try:
+                compiled = compile_prompt(
+                    prompt, records, video_usage=compiler_video_usage,
+                    audio_usage=compiler_audio_usage, voice_isolation=compiler_voice_isolation,
+                    max_images=MAX_IMAGES, max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS)
+            except ValueError as error:
+                errors.append(f"Prompt {number}: {error}")
+                continue
+            report.append(f"Prompt {number}: OK ({len(compiled.images)} images, "
+                          f"{len(compiled.audios)} standalone audio, {len(compiled.videos)} videos).")
+            report.extend(f"Prompt {number} warning: {warning}" for warning in compiled.debug["warnings"])
+        if errors:
+            raise ValueError(f"H3 prompt list validation failed for {len(errors)} of {len(prompts)} prompts. "
+                             "The prompt list was not released to the loop.\n" + "\n".join(errors))
+        return (text, "deterministic", True,
+                f"Validated all {len(prompts)} prompts. Compiler mode: deterministic.\n" + "\n".join(report))

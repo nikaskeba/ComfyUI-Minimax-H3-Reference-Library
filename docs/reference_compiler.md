@@ -4,12 +4,43 @@ In **H3 Tagged Reference Prompt**, select `compiler_mode = deterministic`.
 Existing workflows default to `legacy`; their free-form replacement behavior and output sockets stay compatible.
 Restart ComfyUI and refresh the browser to expose the new options.
 
-Use these six section headings, on their own lines, in this order:
-`subject_definitions`, `summary`, `retention_analysis`, `detailed_description`,
-`overall_soundscape`, `non_diegetic_music`. Each heading ends with a colon.
-The compiler replaces semantic tags; it does not write the scene, dialogue, timing,
-or music description for you. It can fill a missing, mechanically known character
-voice-timbre retention entry; other retention instructions remain authored.
+## Validate a complete prompt list before a loop
+
+Add **SKEBA H3 Prompt List Validator** before the prompt splitter:
+
+1. Connect the complete prompt-list string to the validator's `text` input.
+2. Connect its `text` output to **Skeba Batch Text (Prompt Loop)**. This dependency
+   prevents the loop from receiving any prompt until the whole list has passed.
+3. Connect `compiler_mode` to the corresponding input on **H3 Tagged Reference Prompt**,
+   directly or through your Setter/Getter pair. Convert the compiler_mode widget to an
+   input if needed. The output uses the same combo type as the reference node.
+4. Optionally connect `report` to a text display. `validation_enabled` also has a Boolean
+   output for other workflow controls.
+
+With validation on, each prompt is compiled independently against the current library;
+the node reports all failing prompt numbers together and stops before releasing the list.
+With validation off, it passes the original text untouched and outputs `legacy` mode.
+With validation on and successful, it outputs `deterministic` mode. Use the toggle widget,
+not ComfyUI's generic node bypass, to switch the mode output correctly.
+
+Set the same delimiter and skip_empty behavior on validator and splitter (defaults are
+`|` and true). Match the video usage, audio usage, and voice isolation settings to the
+reference compiler. Validation passes the original semantic text through, not the compiled
+numbered output. Each prompt must redeclare its own temporary resources.
+
+Library revisions invalidate cached validation. The validator checks structural syntax,
+reference lookup, declarations, and allocation limits. It does not enforce voice placement,
+speech verbs, or character/voice matching, and does not decode media or guarantee render quality.
+
+Use these five headings, on their own lines, in this order:
+`subject_definitions`, `summary`, `detailed_description`, `overall_soundscape`,
+`non_diegetic_music`. Each heading ends with a colon. Existing six-section prompts can
+still include `retention_analysis` between summary and detailed_description. If omitted,
+it stays absent from the output. Authored retention entries are preserved and sorted;
+no retention entries or missing/invalid-marker warnings are generated.
+
+The preferred language-header voice syntax and omission of retention are local SKEBA
+choices based on render testing, rather than requirements of the official six-section guide.
 
 ## Authoring
 
@@ -22,12 +53,19 @@ voice-timbre retention entry; other retention instructions remain authored.
   Use `<character:cashier>` inside sections. Supported temporary types are character, voice, location, object.
 - A temporary voice and character share the same name; saved and temporary names remain separate.
 - Put each used character/location/object tag once in `subject_definitions`.
-- For speech, use `{saved_tag} says §saved_tag§, <d>[English]Hello.</d>`
-  or `<character:cashier> says <voice:cashier>, <d>[English]Hello.</d>`.
-  Also supported: asks, replies, whispers, shouts, sings, speaks, exclaims.
-  Add `(off-screen)` immediately after the entity tag for an off-screen turn;
-  its Speaker ID is reused when that character appears on-screen.
-- Keep reference tags outside dialogue. Author semantic tags, not numbered runtime tags, in this mode.
+- Preferred speech: `{saved_tag} says, <d>[English §saved_tag§]Hello.</d>`
+  or `<character:cashier> replies, <d>[English <voice:cashier>]Hello.</d>`.
+  In dialogue, an actual voice reference becomes a compact `<Audio N>` label;
+  a text-only voice becomes its literal description. Spoken words after `]` are unchanged.
+- Older before-dialogue voice tags and inline descriptions remain supported. Voice tags
+  can appear in other prose without a required speech verb or matching-character check.
+  Unknown references and unavailable video soundtracks still produce resource errors.
+- Speakers are inferred from dialogue events and explicit voice cues. Ambiguous prose is
+  accepted rather than rejected; use a clear character tag and voice header for predictable
+  speaker numbering. References in other sections activate audio without inventing speech.
+- Author semantic tags, not numbered runtime labels. Unbalanced dialogue tags and malformed
+  section structure still fail validation. Keep dialogue in detailed_description as an
+  authoring convention; its placement is no longer a parser restriction.
 
 See [the complete temporary-resource example](../example/reference_compiler_prompt.txt).
 For saved references, definitions include the saved name, literal description, and media provenance.
@@ -45,25 +83,44 @@ voice becomes its literal description. Prefer omitting text-only voice tags ther
 
 Used music, whole-video sources, and synchronized soundtracks receive role definitions
 automatically. Source-only image provenance does not create a separate Picture entry.
-Complete dialogue and lyrics are accepted only in detailed_description. Lyrics quoted
-as cues from reused music/soundtracks do not allocate an extra Speaker ID.
+Lyrics quoted as cues from reused music/soundtracks do not allocate an extra Speaker ID.
 
 ## Numbering and media
 
-The compiler discovers resources across all sections before assigning numbers.
-Subjects prioritize image plus audio, image, audio, then description-only resources.
-Ties follow library order, then temporary declaration order. Speakers follow their first
-explicit vocal event in detailed_description, independently of Subject numbers.
-Write those events in playback order.
+The compiler discovers resources and explicit vocal events before assigning numbers.
+Speaking characters come first, in first-speech order in detailed_description. Each
+speaking character has the same Subject and Speaker number: Subject 1 / S1, Subject 2 / S2.
+Write events in playback order. Silent subjects follow, retaining image-plus-audio,
+image, audio, then description-only priority, with library/declaration order for ties.
 
-Picture, Audio, Video, Subject, and Speaker counters are independent. Only real media
-allocates media slots. Enabled video soundtracks precede standalone audio, matching H3's
+Actual image and standalone audio outputs follow the same speaker-first order, so a cast
+with both media for every speaker aligns Subject, Speaker, Picture, and Audio numbers.
+Only real media allocates slots: missing images or text-only voices can offset media
+numbers. Enabled video soundtracks precede standalone audio, matching H3's
 encoder. The same allocation drives the node's direct outputs and deferred reference bundle.
+Numbers are local to each prompt and can change when a different character speaks first.
+The legacy replacement mode is unchanged.
 Limits remain 9 images, 3 standalone audio files, and 3 videos; exceeding them raises an error.
 
-A silent character can have an allocated audio file without adding an Audio reference or
-audio task to the prompt. Text-only voices do not allocate Audio slots. Music uses Audio;
+Silent characters retain their visual references but their attached standalone voice clips
+are not allocated, loaded, or counted toward the audio limit. Voice use is determined before
+numbering and limit checks. A voice tag only in subject_definitions does not activate audio;
+an explicit voice tag in speech, summary, retention, or soundscape does. Omit those voice
+tags for silent characters. Text-only voices do not allocate Audio slots. Music uses Audio;
 video uses Video and does not automatically become a Subject.
+
+`auto_crop_voice_references` defaults to true in both compiler modes. Each distinct
+selected character voice reference keeps its first `15 / voice_count` seconds:
+15 seconds for one voice, 7.5 each for two, or 5 each for three. Shorter sources
+stay unchanged; unused time is not redistributed. Disable the toggle for uncropped
+comparisons. Original library files, sample rates, channels, and reference ownership
+are preserved. Explicitly reused audio, music, and synchronized video soundtracks are
+excluded, so mixed audio can still exceed the overall 15-second allowance.
+
+The same crop applies to direct outputs and deferred reference bundles. The mapping
+reports the per-voice cap; cached nodes report it even on cache hits. Audio cache keys
+include the cap, so a changed voice count or toggle cannot retrieve an incompatible
+latent. Bundles without crop metadata retain their prior uncropped behavior.
 
 `compiler_video_usage` selects reference, motion_reference, continuation, or editing.
 Reference and motion_reference produce reference generation, not video continuation.
@@ -81,19 +138,15 @@ throughout this prompt. Keyframe completion is not inferred from an image.
 
 The existing `mapping` STRING output contains JSON with resource identities, physical slots,
 subject/speaker numbers, actual audio usage, task types, and warnings.
-Missing character voice-timbre entries are generated as `reference`, with Subject/Audio
-ownership and no Speaker IDs. Authored entries are preserved, including custom weak
-reference choices. Reused signal, music, video, and visual retention still require authored
-analysis; the compiler does not guess full versus partial copying or shot timing.
-`generated_voice_retention` lists the automatically added Audio slots in mapping JSON.
-Retention warnings identify remaining missing entries, duplicates, and markers from the
-wrong category. Speaker IDs are confined to vocal events and their audio definitions.
-Errors identify missing resources, malformed declarations, unsupported vocal patterns,
-missing sections/definitions, unresolved tags, and invalid slot use before media loading.
+`generated_voice_retention` remains an empty list for mapping compatibility. Retention
+analysis is optional and no longer contributes validation warnings. The optional
+`compiler_voice_isolation` setting still adds prompt guidance; it does not enforce a
+speech grammar or reject cross-character voice references. Disable it for a compact
+header-format experiment without extra ownership/exclusion prose.
 
-The compiler follows the section and reference-label conventions in the
-[official H3 reference prompt guide](https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md).
-It validates and compiles authoring syntax; generated-video quality still needs an H3 render check.
+Errors still identify unknown resources, malformed declarations, missing required
+sections/definitions, unresolved authoring tags, unbalanced dialogue, and invalid slots.
+Generated-video quality still needs a render check.
 
 For detailed writing rules and complete examples, use [the authoring skill](Skeba_Minimax_Skill.md).
 Concrete frame anchors, multi-source subjects, multiple subjects extracted from one

@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 
 SECTIONS = ("subject_definitions", "summary", "retention_analysis", "detailed_description",
             "overall_soundscape", "non_diegetic_music")
+REQUIRED_SECTIONS = tuple(section for section in SECTIONS if section != "retention_analysis")
 TEMP_TYPES = {"character", "voice", "location", "object"}
 ENTITY_TYPES = {"character", "location", "object"}
 TOKEN_PATTERN = r"\{[^{}\r\n]+\}|§[^§\r\n]+§|<[A-Za-z_]+:[^<>]*>"
@@ -14,10 +15,13 @@ TEMP = re.compile(r"<(?P<type>[A-Za-z_]+):(?P<name>[^=<>]*?)(?:\s*=\s*(?P<descri
 HEADER = re.compile(r"^([a-z][a-z_]*):[ \t]*(?:\r?\n|$)", re.M)
 DIALOGUE = re.compile(r"<d>.*?</d>", re.S)
 RUNTIME = re.compile(r"<(Subject|Picture|Audio|Video)\s+(\d+)>|\(S(\d+)\)")
+VOCAL_CLAUSE = r"(?:(?!\r?\n[ \t]*\r?\n|\[Shot\b)[^{}§<>.!?])*?"
+# Best-effort discovery for before-dialogue tags, not a grammar validator.
 EVENT = re.compile(
-    rf"(?P<entity>{TOKEN_PATTERN})(?P<offscreen>\s+\(off-screen\))?"
-    rf"(?P<verb>\s+(?:says|asks|replies|whispers|shouts|sings|speaks|exclaims)\s+)"
-    rf"(?P<voice>§[^§\r\n]+§|<voice:[^<>]+>)(?P<gap>\s*,?\s*)(?P<dialogue><d>.*?</d>)", re.S)
+    r"(?P<entity>\{[^{}\r\n]+\}|<character:[^<>]+>)"
+    rf"(?P<before>{VOCAL_CLAUSE})"
+    rf"(?:(?P<voice>§[^§\r\n]+§|<voice:[^<>]+>)(?P<after>{VOCAL_CLAUSE}))?"
+    r"(?P<dialogue><d>.*?</d>)", re.S)
 TASKS = ("reference generation", "keyframe completion", "video editing", "video continuation",
          "audio reuse", "audio reference")
 
@@ -42,6 +46,24 @@ def _sort_summary_entries(text):
         newline = "\r\n" if lines[index].endswith("\r\n") else "\n" if lines[index].endswith("\n") else ""
         lines[index] = value + newline
     return "".join(lines)
+
+
+def _sort_retention_entries(text):
+    """Sort labeled blocks, keeping annotations and wrapped prose with their owner."""
+    starts = list(re.finditer(
+        r"^[ \t]*(?:[-*] )?<(Subject|Picture|Video|Audio) (\d+)>"
+        r"(?:[ \t]*\([^\n]*?\))?[ \t]*:", text, re.M))
+    if not starts:
+        return text
+    kinds = {"Subject": 0, "Picture": 1, "Video": 2, "Audio": 3}
+    blocks = []
+    for index, match in enumerate(starts):
+        end = starts[index + 1].start() if index + 1 < len(starts) else len(text)
+        blocks.append((kinds[match[1]], int(match[2]), text[match.start():end].strip()))
+    prefix = text[:starts[0].start()].strip()
+    return "\n\n".join(block for block in [prefix] + [
+        entry[2] for entry in sorted(blocks, key=lambda entry: entry[:2])
+    ] if block)
 
 
 @dataclass
@@ -99,16 +121,13 @@ def _temp_parts(match):
 
 
 def _parse(prompt):
-    for spoken in DIALOGUE.finditer(prompt):
-        if TOKEN.search(spoken[0]) or RUNTIME.search(spoken[0]):
-            fail("REFERENCE_TAG_INSIDE_DIALOGUE", "Move reference tags outside <d>...</d>.")
     if prompt.count("<d>") != len(list(DIALOGUE.finditer(prompt))) or prompt.count("</d>") != prompt.count("<d>"):
         fail("INVALID_DIALOGUE", "Unbalanced or nested <d> tags.")
     if RUNTIME.search(prompt):
         fail("AUTHORED_RUNTIME_SLOT", "Use semantic tags in compiler mode; numbered H3 tags belong to legacy mode.")
     headers = list(HEADER.finditer(prompt))
-    if tuple(m[1] for m in headers) != SECTIONS:
-        fail("INVALID_SECTION", "Provide exactly the six H3 sections in their documented order.")
+    if tuple(m[1] for m in headers) not in (SECTIONS, REQUIRED_SECTIONS):
+        fail("INVALID_SECTION", "Provide the five H3 sections in order; retention_analysis is optional between summary and detailed_description.")
     prefix = prompt[:headers[0].start()]
     temporary = {}
     warnings = []
@@ -140,8 +159,6 @@ def _parse(prompt):
     for i, header in enumerate(headers):
         end = headers[i+1].start() if i+1 < len(headers) else len(prompt)
         sections[header[1]] = prompt[header.end():end].strip()
-        if header[1] != "detailed_description" and DIALOGUE.search(sections[header[1]]):
-            fail("DIALOGUE_OUTSIDE_DETAIL", "Put complete dialogue and lyrics in detailed_description only.")
     return prefix.strip(), sections, temporary, warnings
 
 
@@ -208,31 +225,10 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     for section, start, end, rid, voice in usages:
         r = resources[rid]
         if voice:
-            if r.type not in ("character", "voice", "video"):
-                fail("INVALID_VOICE_RESOURCE", r.key)
             if r.type == "video" and not r.embedded_audio:
                 fail("MISSING_VIDEO_AUDIO", f"{r.key}: a soundtrack tag requires an enabled video audio track.")
-            if r.type == "voice" and r.owner not in resources:
-                fail("VOICE_WITHOUT_MATCHING_CHARACTER", r.id)
-            if not (r.audio or r.embedded_audio or r.voice_description):
-                fail("MISSING_VOICE_REFERENCE", r.id)
         else:
             r.visual_used = True
-    ordered = sorted(resources.values(), key=lambda r: r.priority())
-    images = [r for r in ordered if r.image]
-    videos = [r for r in ordered if r.video]
-    embedded = [r for r in videos if r.embedded_audio]
-    audios = [r for r in ordered if r.audio]
-    for label, values, limit in (("images", images, max_images), ("audio files", audios, max_audio), ("videos", videos, max_videos)):
-        if len(values) > limit:
-            fail("REFERENCE_LIMIT", f"{len(values)} {label}; supported maximum is {limit}.")
-    for i, r in enumerate(images, 1): r.picture = i
-    for i, r in enumerate(videos, 1): r.video_slot = i
-    # H3 emits enabled video soundtrack labels before standalone audio labels.
-    for i, r in enumerate(embedded, 1): r.embedded_slot = i
-    for i, r in enumerate(audios, len(embedded)+1): r.audio_slot = i
-    subjects = [r for r in ordered if r.type in ENTITY_TYPES]
-    for i, r in enumerate(subjects, 1): r.subject = i
     def lookup(token):
         if token.startswith("<"):
             m = TEMP.fullmatch(token)
@@ -240,33 +236,70 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         return resources[f"saved:{token[1:-1].strip()}"]
     detail = sections["detailed_description"]
     speaker_events = {}
-    voice_events = set()
+    nonisolated_events = set()
+    inline_voice_positions = set()
+    for section, text in sections.items():
+        for dialogue in DIALOGUE.finditer(text):
+            for token in TOKEN.finditer(dialogue[0]):
+                inline_voice_positions.add((section, dialogue.start() + token.start()))
     speakers = []
-    for event in EVENT.finditer(detail):
-        entity, voice = lookup(event["entity"]), lookup(event["voice"])
-        owner = voice.owner or voice.id
-        if entity.type != "character" or owner != entity.id:
-            fail("VOICE_WITHOUT_MATCHING_CHARACTER", event[0])
+    events = {event.start("dialogue"): event for event in EVENT.finditer(detail)}
+    previous_end = 0
+    for dialogue in DIALOGUE.finditer(detail):
+        event = events.get(dialogue.start())
+        entity = lookup(event["entity"]) if event else None
+        voice = lookup(event["voice"]) if event and event["voice"] else None
+        header = re.match(r"<d>\s*\[([^\]]*)\]", dialogue[0])
+        header_voices = [lookup(token[0]) for token in TOKEN.finditer(header[1])
+                         if token[0].startswith(("\u00a7", "<voice:"))] if header else []
+        if header_voices:
+            voice = header_voices[0]
+        if entity is None and voice is None:
+            # Recognize a separated voice cue without crossing another turn or shot.
+            preceding = detail[previous_end:dialogue.start()]
+            preceding = re.split(r"\[Shot\b", preceding)[-1]
+            voices = [lookup(token[0]) for token in TOKEN.finditer(preceding)
+                      if token[0].startswith(("\u00a7", "<voice:"))]
+            voice = voices[-1] if voices else None
+        previous_end = dialogue.end()
+        if entity is None and voice is not None:
+            entity = resources.get(voice.owner, voice)
+        if entity is None or entity.type != "character":
+            continue
         if entity.speaker is None:
             speakers.append(entity)
             entity.speaker = len(speakers)
-        speaker_events[event.start("entity")] = entity.speaker
-        voice_events.add(event.start("voice"))
-        voice.audio_used = bool(voice.audio_slot or voice.embedded_slot)
+        if event:
+            position = event.start("entity")
+            speaker_events[position] = entity.speaker
+            if voice is not None and (voice.owner or voice.id) != entity.id:
+                nonisolated_events.add(position)
     for section, start, end, rid, voice in usages:
         r = resources[rid]
-        if voice and r.type != "video" and section == "detailed_description" and start not in voice_events:
-            fail("UNSUPPORTED_VOCAL_EVENT", "Use {character} says §character§, <d>...</d> (or matching temporary tags).")
-        if voice and r.type != "video" and section == "non_diegetic_music":
-            fail("INVALID_SECTION", "Character voice tags cannot supply non-diegetic music.")
-        if r.type == "video" and not voice and section == "non_diegetic_music":
-            fail("INVALID_SECTION", "Use a music resource for non-diegetic music.")
-        if voice and r.type == "video" and section != "subject_definitions":
-            r.audio_used = True
-        if not voice and r.type in ("music", "voice") and r.audio_slot and section != "subject_definitions":
-            r.audio_used = True
-        if voice and section in ("summary", "retention_analysis", "overall_soundscape"):
-            r.audio_used = bool(r.audio_slot or r.embedded_slot)
+        if section != "subject_definitions" and (voice or r.type in ("music", "voice")):
+            r.audio_used = bool(r.audio or r.embedded_audio)
+    # Allocate every stream after identifying speakers. Spoken subjects share their
+    # Speaker ID; their real images and audio follow the same first-speech order.
+    # Silent resources retain media priority and library/declaration tie-breakers.
+    ordered = sorted(resources.values(), key=lambda r: (
+        resources.get(r.owner, r).speaker or float("inf"), r.priority()))
+    images = [r for r in ordered if r.image]
+    videos = [r for r in ordered if r.video]
+    embedded = [r for r in videos if r.embedded_audio]
+    subjects = [r for r in ordered if r.type in ENTITY_TYPES]
+    for label, values, limit in (("images", images, max_images), ("videos", videos, max_videos)):
+        if len(values) > limit:
+            fail("REFERENCE_LIMIT", f"{len(values)} {label}; supported maximum is {limit}.")
+    for i, r in enumerate(subjects, 1): r.subject = i
+    for i, r in enumerate(images, 1): r.picture = i
+    for i, r in enumerate(videos, 1): r.video_slot = i
+    # H3 emits enabled video soundtrack labels before standalone audio labels.
+    for i, r in enumerate(embedded, 1): r.embedded_slot = i
+    audios = [r for r in ordered if r.audio and (r.type != "character" or r.audio_used)]
+    if len(audios) > max_audio:
+        fail("REFERENCE_LIMIT", f"{len(audios)} audio files; supported maximum is {max_audio}.")
+    for i, r in enumerate(audios, len(embedded)+1):
+        r.audio_slot = i
     task_types = set()
     for r in ordered:
         if r.picture and r.visual_used:
@@ -299,6 +332,8 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     def render(r, section, voice, position):
         audio_slot = r.embedded_slot if r.type == "video" else r.audio_slot or r.embedded_slot
         if voice:
+            if (section, position) in inline_voice_positions:
+                return f"<Audio {audio_slot}>" if audio_slot and r.audio_used else (r.voice_description or r.description or r.name)
             if r.type == "video":
                 if section == "subject_definitions":
                     if not r.audio_used:
@@ -307,7 +342,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                     usage = "is reused in the target video" if r.audio_usage == "reuse" else "is referenced without copying the original signal"
                     return f"<Audio {audio_slot}> is the synchronized audio track of <Video {r.video_slot}> and {usage}."
                 return f"<Audio {audio_slot}>"
-            owner = resources.get(r.owner) if r.owner else r
+            owner = resources.get(r.owner, r)
             if section == "subject_definitions":
                 if not r.audio_used or not audio_slot:
                     return ""
@@ -321,11 +356,16 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
             if section == "summary":
                 return f"<Audio {audio_slot}>" if audio_slot and r.audio_used else r.voice_description
             if section == "detailed_description":
+                introduced = re.search(r"\b(?:using|in|with)\s*$", detail[:position], re.I)
                 if audio_slot:
                     if r.audio_usage == "reuse":
-                        return f"using vocal audio directly reused from <Audio {audio_slot}>"
-                    return f"using the recognizable voice timbre referenced from <Audio {audio_slot}>"
-                description = r.voice_description.rstrip(".")
+                        phrase = f"vocal audio directly reused from <Audio {audio_slot}>"
+                    else:
+                        phrase = f"the recognizable voice timbre referenced from <Audio {audio_slot}>"
+                    return phrase if introduced else "using " + phrase
+                description = (r.voice_description or r.description or r.name).rstrip(".")
+                if introduced:
+                    return re.sub(r"^(?:in|using|with)\s+", "", description, flags=re.I)
                 return description if description.lower().startswith(("in ", "using ")) else f"in {description}"
             return f"<Audio {audio_slot}>" if audio_slot and r.audio_used else ""
         if r.subject:
@@ -346,7 +386,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                         description += ", " + r.description
                 return f"{subject} is {description.rstrip('.')}."
             if section == "detailed_description" and position in speaker_events:
-                return isolate_speaker(r) + f"{subject} (S{speaker_events[position]})"
+                return ("" if position in nonisolated_events else isolate_speaker(r)) + f"{subject} (S{speaker_events[position]})"
             return subject
         if r.type == "video":
             if section == "subject_definitions":
@@ -422,43 +462,9 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     if task_list:
         summary = "[" + " + ".join(task_list) + "]" + (" " + summary if summary else "")
     rendered["summary"] = summary
-    # Fill only known voice-timbre relationships; other retention decisions remain authored.
-    tracked = {("Subject", r.subject) for r in subjects}
-    tracked.update(("Video", r.video_slot) for r in videos if r.type == "video" and r.visual_used)
-    tracked.update(("Audio", r.embedded_slot if r.type == "video" else r.audio_slot or r.embedded_slot)
-                   for r in ordered if r.audio_used)
-    analyzed = set()
-    for line in rendered["retention_analysis"].splitlines():
-        entry = re.match(r"^\s*<(Subject|Picture|Video|Audio) (\d+)>(?:\s*\([^\n]*?\))?\s*:\s*([a-z_]+)\b", line)
-        if not entry:
-            continue
-        label = (entry[1], int(entry[2]))
-        allowed = {"fully_copy", "partially_copy", "reference", "weak_reference"} if entry[1] == "Audio" else {
-            "fully_preserved", "partially_preserved", "attribute_transfer", "weak_reference"}
-        if entry[3] not in allowed:
-            warnings.append(f"INVALID_RETENTION_MARKER: <{entry[1]} {entry[2]}> uses {entry[3]}.")
-        if label in analyzed:
-            warnings.append(f"DUPLICATE_RETENTION_ENTRY: <{entry[1]} {entry[2]}>.")
-        analyzed.add(label)
-    generated_retention = []
-    for r in ordered:
-        slot = r.audio_slot or r.embedded_slot
-        label = ("Audio", slot)
-        if r.type != "character" or not r.audio_used or r.audio_usage != "reference" or label in analyzed:
-            continue
-        exclusivity = " exclusively" if voice_isolation else ""
-        line = f"<Audio {slot}>: reference - voice timbre and delivery guide <Subject {r.subject}>{exclusivity}; the source signal is not copied directly."
-        if voice_isolation:
-            line += " This voice reference must not transfer to any other vocal source."
-        existing = rendered["retention_analysis"]
-        if existing.strip() == "N/A":
-            existing = ""
-        rendered["retention_analysis"] = (existing + "\n" + line).strip()
-        analyzed.add(label)
-        generated_retention.append(slot)
-    for kind, slot in sorted(tracked - analyzed):
-        warnings.append(f"MISSING_RETENTION_ENTRY: <{kind} {slot}> needs authored retention analysis.")
-    output = "\n\n".join(f"{section}:\n\n{rendered[section]}" for section in SECTIONS)
+    if "retention_analysis" in rendered:
+        rendered["retention_analysis"] = _sort_retention_entries(rendered["retention_analysis"])
+    output = "\n\n".join(f"{section}:\n\n{rendered[section]}" for section in sections)
     if prefix:
         output = prefix + "\n\n" + output
     if TOKEN.search(output) or re.search(r"[{}§]|<(?:character|voice|location|object):", output):
@@ -480,5 +486,5 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         "audio": {**{str(r.embedded_slot): r.id for r in embedded}, **{str(r.audio_slot): r.id for r in audios}},
         "video": {str(r.video_slot): r.id for r in videos},
         "speakers": {str(r.speaker): r.id for r in speakers}, "task_types": task_list, "warnings": warnings,
-        "voice_isolation": bool(voice_isolation), "generated_voice_retention": generated_retention}
+        "voice_isolation": bool(voice_isolation), "generated_voice_retention": []}
     return CompiledPrompt(output, debug, [r.key for r in images], [r.key for r in audios], [r.key for r in videos])

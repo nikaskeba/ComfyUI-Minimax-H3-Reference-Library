@@ -20,6 +20,7 @@ from .reference_cache import (
     source_fingerprint,
     vae_fingerprint,
 )
+from .reference_audio import crop_voice_reference
 
 
 ReferenceBundle = io.Custom("SKEBA_H3_REFERENCE_BUNDLE")
@@ -631,6 +632,10 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
             audio = audio_values[audio_index] if audio_index < len(audio_values) else None
             entry = audio_entries[audio_index] if audio_index < len(audio_entries) else None
             tag = (entry or {}).get("tag") or f"Audio {audio_index + 1}"
+            max_seconds = (entry or {}).get("max_duration_seconds")
+            crop_metadata = {"max_duration_seconds": max_seconds} if max_seconds is not None else {}
+            if max_seconds is not None:
+                report(tag, "Voice crop", f"first up to {max_seconds:g}s")
             vae_sr = int(getattr(audio_vae, "audio_sample_rate", 32000))
             source_hash = (_entry_source_hash(entry)
                            if cache_mode != "disabled" else None)
@@ -640,6 +645,7 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                     "audio", source_hash,
                     audio_vae=audio_vae_id,
                     audio_processing=_AUDIO_PROCESSING_VERSION,
+                    **crop_metadata,
                 )
                 if cache_mode != "rebuild":
                     compiled = _CACHE.load_compiled(entry, compiled_key, "audio")
@@ -662,6 +668,7 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                 report(tag, "Source Media", "LOADED (cache miss)")
             if audio is None:
                 continue
+            audio = crop_voice_reference(audio, max_seconds)
             if audio_vae_id is None:
                 audio_latent, ref_audio_t = h3._encode_ref_audio(audio_vae, audio)
                 reason = "DISABLED" if cache_mode == "disabled" else "DISABLED (VAE identity unavailable)"
@@ -676,6 +683,7 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                     "source_sample_rate": source_sr,
                     "audio_sample_rate": vae_sr,
                     "processing_version": _AUDIO_PROCESSING_VERSION,
+                    **crop_metadata,
                 }
 
                 def encode_audio():

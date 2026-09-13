@@ -547,9 +547,9 @@ class PromptResolutionTests(unittest.TestCase):
              patch.object(MODULE, "load_audio", side_effect=lambda p:p), \
              patch.object(MODULE, "load_video", return_value=("frames", "soundtrack")):
             node = MODULE.H3TaggedReferencePrompt()
-            output = node.build(source, compiler_mode="deterministic")
-            deferred = node.build(source, compiler_mode="deterministic", defer_media_loading=True)
-            isolation_off = node.build(source, compiler_mode="deterministic", defer_media_loading=True,
+            output = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic")
+            deferred = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic", defer_media_loading=True)
+            isolation_off = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic", defer_media_loading=True,
                                        compiler_voice_isolation=False)
         mapping = json.loads(output[1])
         self.assertEqual(output[2:4], ("hero.png", "plain.png"))
@@ -571,9 +571,164 @@ class PromptResolutionTests(unittest.TestCase):
         self.assertNotEqual(node.IS_CHANGED(source, compiler_voice_isolation=True),
                             node.IS_CHANGED(source, compiler_voice_isolation=False))
 
+    def test_large_cast_loads_only_requested_voice_in_outputs_and_bundle(self):
+        from unittest.mock import patch
+        import json
+        records = {name: dict(reference_type="character", name=name, image_file=name+".png", audio_file=name+".wav")
+                   for name in ("a", "b", "c", "d")}
+        source = "subject_definitions:\n{a}\n{b}\n{c}\n{d}\nsummary:\n{d} speaks.\nretention_analysis:\nN/A\ndetailed_description:\n{d} says \u00a7d\u00a7, <d>[English]Hello.</d>\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
+        with patch.object(MODULE, "records_by_tag", side_effect=lambda:dict(records)), \
+             patch.object(MODULE, "library_built_in_records", return_value={}), \
+             patch.object(MODULE, "media_path", side_effect=lambda r,k:r[k+"_file"]), \
+             patch.object(MODULE, "load_image", side_effect=lambda p:p), \
+             patch.object(MODULE, "load_audio", return_value="speaker audio") as load:
+            node = MODULE.H3TaggedReferencePrompt()
+            result = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic")
+            deferred = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic", defer_media_loading=True)
+        load.assert_called_once_with("d.wav")
+        self.assertEqual(result[2:6], ("d.png", "a.png", "b.png", "c.png"))
+        self.assertEqual(result[11:14], ("speaker audio", None, None))
+        self.assertEqual(result[20]["audios"], deferred[20]["audios"])
+        self.assertEqual([a["tag"] for a in deferred[20]["audios"]], ["d"])
+        self.assertEqual(json.loads(result[1])["audio"], {"1":"saved:d"})
+        self.assertEqual(result[:2], deferred[:2])
+
+    def test_speaking_order_reorders_real_media_and_deferred_bundle_together(self):
+        from unittest.mock import patch
+        import json
+        records = {name: dict(reference_type="character", name=name,
+                             image_file=name+".png", audio_file=name+".wav")
+                   for name in ("george", "jerry", "silent")}
+        headings = ("subject_definitions", "summary", "retention_analysis", "detailed_description",
+                    "overall_soundscape", "non_diegetic_music")
+        for first, second in (("jerry", "george"), ("george", "jerry")):
+            with self.subTest(first=first):
+                detail = (f"{{{first}}} says \u00a7{first}\u00a7, <d>[English]First.</d>\n"
+                          f"{{{second}}} replies \u00a7{second}\u00a7, <d>[English]Second.</d>\n"
+                          f"{{{first}}} says \u00a7{first}\u00a7, <d>[English]Third.</d>")
+                sections = ("{george}\n{silent}\n{jerry}", "", "N/A", detail, "Room tone.", "N/A")
+                source = "\n\n".join(f"{h}:\n{s}" for h,s in zip(headings,sections))
+                with patch.object(MODULE, "records_by_tag", side_effect=lambda:dict(records)), \
+                     patch.object(MODULE, "library_built_in_records", return_value={}), \
+                     patch.object(MODULE, "media_path", side_effect=lambda r,k:r[k+"_file"]), \
+                     patch.object(MODULE, "load_image", side_effect=lambda p:p), \
+                     patch.object(MODULE, "load_audio", side_effect=lambda p:p):
+                    node = MODULE.H3TaggedReferencePrompt()
+                    output = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic")
+                    deferred = node.build(source, auto_crop_voice_references=False, compiler_mode="deterministic", defer_media_loading=True)
+                mapping = json.loads(output[1])
+                self.assertEqual(output[2:5], (first+".png", second+".png", "silent.png"))
+                self.assertEqual(output[11:14], (first+".wav", second+".wav", None))
+                self.assertEqual(output[:2], deferred[:2])
+                for kind in ("images", "audios", "videos"):
+                    self.assertEqual(output[20][kind], deferred[20][kind])
+                self.assertEqual([r["tag"] for r in deferred[20]["images"]], [first, second, "silent"])
+                self.assertEqual([r["tag"] for r in deferred[20]["audios"]], [first, second])
+                for slot, name in enumerate((first, second), 1):
+                    resource = mapping["resources"]["saved:"+name]
+                    self.assertEqual([resource[k] for k in ("subject", "speaker", "picture", "audio")], [slot]*4)
+                    self.assertIn(f"<Subject {slot}> is {name} in <Picture {slot}>", output[0])
+                    self.assertIn(f"<Audio {slot}> is the voice-timbre reference for <Subject {slot}> (S{slot})", output[0])
+                self.assertEqual(mapping["resources"]["saved:silent"]["subject"], 3)
+                self.assertIsNone(mapping["resources"]["saved:silent"]["speaker"])
+                self.assertIsNone(mapping["resources"]["saved:silent"]["audio"])
+                self.assertIn("<Subject 1> (S1) says using the recognizable voice timbre referenced from <Audio 1>, <d>[English]Third.</d>", output[0])
+
     def test_unknown_voice_tag_is_clear(self):
         with self.assertRaisesRegex(ValueError, "§missing_voice§"):
             MODULE.resolve_prompt("§missing_voice§ speaks.", {})
+
+
+class PromptListValidatorTests(unittest.TestCase):
+    def test_eight_prompts_without_retention_accept_header_voices(self):
+        from unittest.mock import patch
+        import json
+        records = {"George Costanza_BC":dict(reference_type="character", built_in=True,
+                                             name="George Costanza", audio_file="george.wav")}
+        source = "subject_definitions:\n{George Costanza_BC}\nsummary:\nA nervous conversation.\ndetailed_description:\n[Shot 2] At 00:03.000, {George Costanza_BC} says, <d>[English \u00a7George Costanza_BC\u00a7]They did? Because I can be more intimidating.</d>\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
+        with patch.object(MODULE,"records_by_tag",return_value=records), \
+             patch.object(MODULE,"library_built_in_records",return_value={}), \
+             patch.object(MODULE,"media_path",return_value="george.wav"), \
+             patch.object(MODULE,"load_audio",side_effect=AssertionError("must not load media")):
+            validation = MODULE.H3PromptListValidator().validate_list("|".join([source]*8))
+            output = MODULE.H3TaggedReferencePrompt().build(source,compiler_mode=validation[1],defer_media_loading=True)
+        self.assertIn("Validated all 8 prompts",validation[3])
+        self.assertNotIn("retention_analysis:",output[0])
+        self.assertIn("<d>[English <Audio 1>]They did? Because I can be more intimidating.</d>",output[0])
+        self.assertEqual(output[20]["audios"][0]["tag"],"George Costanza_BC")
+        self.assertEqual(output[20]["audios"][0]["max_duration_seconds"],15)
+        self.assertEqual(json.loads(output[1])["speakers"],{"1":"saved:George Costanza_BC"})
+
+    @staticmethod
+    def prompt():
+        return "<character:guest = A guest.>\nsubject_definitions:\n<character:guest>\nsummary:\nA guest arrives.\nretention_analysis:\n<character:guest>: fully_preserved - retain appearance.\ndetailed_description:\n<character:guest> says in a cheerful voice, <d>[English]Hello.</d>\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
+
+    def test_passes_original_list_and_compatible_mode_after_all_prompts_compile(self):
+        from unittest.mock import patch
+        source = "  " + self.prompt() + "\n|\n\n|\n" + self.prompt() + "\n|  "
+        with patch.object(MODULE, "compile_prompt", wraps=MODULE.compile_prompt) as compile_spy:
+            result = MODULE.H3PromptListValidator().validate_list(source)
+        self.assertEqual(compile_spy.call_count, 2)
+        self.assertEqual(result[:3], (source, "deterministic", True))
+        self.assertIn("Validated all 2 prompts", result[3])
+        self.assertEqual(MODULE.H3PromptListValidator.RETURN_TYPES[1],
+                         MODULE.H3TaggedReferencePrompt.INPUT_TYPES()["optional"]["compiler_mode"][0])
+
+    def test_collects_late_errors_before_releasing_any_list(self):
+        from unittest.mock import patch
+        source = "|".join((self.prompt(), "bad second", self.prompt(), "bad fourth"))
+        with patch.object(MODULE, "compile_prompt", wraps=MODULE.compile_prompt) as compile_spy:
+            with self.assertRaises(ValueError) as error:
+                MODULE.H3PromptListValidator().validate_list(source)
+        self.assertEqual(compile_spy.call_count, 4)
+        self.assertIn("2 of 4 prompts", str(error.exception))
+        self.assertIn("Prompt 2: INVALID_SECTION", str(error.exception))
+        self.assertIn("Prompt 4: INVALID_SECTION", str(error.exception))
+
+    def test_temporary_registry_resets_for_each_prompt(self):
+        undeclared = self.prompt().split("\n", 1)[1]
+        with self.assertRaisesRegex(ValueError, "Prompt 2: UNKNOWN_TEMPORARY_RESOURCE"):
+            MODULE.H3PromptListValidator().validate_list(self.prompt()+"|"+undeclared)
+
+    def test_disabled_skips_compiler_and_library_and_outputs_legacy(self):
+        from unittest.mock import patch
+        with patch.object(MODULE, "compile_prompt", side_effect=AssertionError("must not compile")), \
+             patch.object(MODULE, "records_by_tag", side_effect=AssertionError("must not load library")), \
+             patch.object(MODULE, "library_revision", side_effect=AssertionError("must not inspect library")):
+            result = MODULE.H3PromptListValidator().validate_list("broken | prompt", validation_enabled=False, delimiter="")
+            MODULE.H3PromptListValidator.IS_CHANGED(validation_enabled=False)
+        self.assertEqual(result[:3], ("broken | prompt", "legacy", False))
+
+    def test_delimiters_empty_parts_and_warnings_match_loop_behavior(self):
+        source = self.prompt()+"\n---\n"+self.prompt()
+        result = MODULE.H3PromptListValidator().validate_list(source, delimiter="\n---\n")
+        self.assertIn("Validated all 2 prompts", result[3])
+        with self.assertRaisesRegex(ValueError, "Prompt 2: INVALID_SECTION"):
+            MODULE.H3PromptListValidator().validate_list(self.prompt()+"|", skip_empty=False)
+        with self.assertRaisesRegex(ValueError, "no prompts"):
+            MODULE.H3PromptListValidator().validate_list(" | ")
+        with self.assertRaisesRegex(ValueError, "delimiter must not be empty"):
+            MODULE.H3PromptListValidator().validate_list(source, delimiter="")
+        result = MODULE.H3PromptListValidator().validate_list(self.prompt().replace("<character:guest>: fully_preserved - retain appearance.", "N/A"))
+        self.assertNotIn("MISSING_RETENTION_ENTRY", result[3])
+        self.assertEqual(result[1], "deterministic")
+
+    def test_compiler_options_and_library_revision_are_used_without_decoding(self):
+        from unittest.mock import patch
+        records = {"clip": dict(reference_type="video", video_file="clip.mp4", video_has_audio=True)}
+        source = "subject_definitions:\nsummary:\nFollow {clip}.\nretention_analysis:\n{clip}: partially_preserved - edit color.\ndetailed_description:\nFollow {clip}.\noverall_soundscape:\nReference the ambience from \u00a7clip\u00a7.\nnon_diegetic_music:\nN/A"
+        with patch.object(MODULE, "records_by_tag", return_value=records), \
+             patch.object(MODULE, "compile_prompt", wraps=MODULE.compile_prompt) as compile_spy, \
+             patch.object(MODULE, "load_video", side_effect=AssertionError("must not decode")):
+            result = MODULE.H3PromptListValidator().validate_list(source, compiler_video_usage="editing", compiler_audio_usage="reuse", compiler_voice_isolation=False)
+        self.assertEqual(result[1], "deterministic")
+        self.assertEqual(compile_spy.call_args.kwargs["video_usage"], "editing")
+        self.assertEqual(compile_spy.call_args.kwargs["audio_usage"], "reuse")
+        self.assertFalse(compile_spy.call_args.kwargs["voice_isolation"])
+        with patch.object(MODULE, "library_revision", side_effect=[1,2]):
+            first = MODULE.H3PromptListValidator.IS_CHANGED()
+            second = MODULE.H3PromptListValidator.IS_CHANGED()
+        self.assertNotEqual(first, second)
 
 
 if __name__ == "__main__":

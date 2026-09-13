@@ -1,15 +1,19 @@
 ---
 name: skeba-minimax-prompts
 description: Write and revise MiniMax H3 video prompt sequences for SKEBA's deterministic H3 Tagged Reference Prompt compiler, using saved and temporary semantic references with explicit dialogue and clip continuity.
+metadata:
+  updated: 9/11/2026 5:30 PM
 ---
 
 # SKEBA MiniMax H3 prompt writing
 
 Write authoring prompts for **H3 Tagged Reference Prompt** with **compiler_mode = deterministic**. This mode must be selected on the node; restarting ComfyUI does not change a saved legacy setting. Legacy mode leaves temporary tags unchanged.
 
-The prompt writer owns the story, scene descriptions, dialogue, timing, retention instructions, and continuity. The compiler owns reference discovery, definitions, runtime numbering, voice relationships, and summary task headers. It also fills a missing character voice-timbre retention entry when its meaning is mechanically known; other retention decisions remain authored. Preserve the user's creative intent when revising a prompt; do not change dialogue or staging just to repair syntax.
+The prompt writer owns the story, scene descriptions, dialogue, timing, and continuity. The compiler owns reference discovery, definitions, runtime numbering, and summary task headers. Preserve the user's creative intent and spoken words.
 
-The supplied Full-Reference Mode Rewrite Output Format Guide governs the final six-section output. Our saved/temporary tags are an authoring layer that compiles to that output; do not paste the guide's already-numbered examples into deterministic mode. Write all six sections in English, preserving the original language of dialogue, lyrics, and visible scene text.
+Use the five-section SKEBA format below. Do not generate `retention_analysis`. Put appearance and continuity requirements directly in the relevant scene descriptions. This is a deliberate local variation from the official six-section guide, based on the user's render tests. Voice references go inside the dialogue's language brackets: `<d>[English §saved_tag§]Spoken words.</d>`. Do not describe that placement as an official MiniMax requirement.
+
+Write section prose in English, preserving the original language of dialogue, lyrics, and visible scene text. Do not paste already-numbered official examples into deterministic compiler input.
 
 For implementation details or debugging, read [reference_compiler.md](reference_compiler.md). The local `../reference_compiler.py` is the authority for currently accepted syntax. This skill targets that implementation, not arbitrary raw H3 prompts.
 
@@ -31,9 +35,23 @@ Use these separate namespaces:
 
 Preserve saved tag spelling exactly, including spaces and `_BC` suffixes. Do not invent a saved tag or assume a built-in character has an attached image/audio file. Confirm available resources from the supplied catalog or library when accessible. Missing saved identities needed by the user require clarification; incidental new characters can use temporary declarations.
 
-Repeat semantic entity tags in summary, retention, and action descriptions when referring to those entities. Repeated tags reuse one identity; they do not load another copy of the asset. The old rule to invoke a tag only once and then manually use Subject numbers no longer applies.
+Repeat semantic entity tags in summary and action descriptions when referring to those entities. Repeated tags reuse one identity; they do not load another copy of the asset. The old rule to invoke a tag only once and then manually use Subject numbers no longer applies.
 
 Use ordinary human-readable names when those names are spoken aloud. Do not emit caret/tilde legacy tags, backslash-escaped syntax, or HTML entities in place of literal `<`, `>`, `{`, `}`, or section signs.
+## Voice tag placement
+
+Put the semantic voice reference inside the opening language brackets, after the language name:
+
+```text
+{George Costanza_BC} says, <d>[English §George Costanza_BC§]They did? Because I can be more intimidating.</d>
+<character:cashier> replies, <d>[English <voice:cashier>]Your order is ready.</d>
+```
+
+With attached audio the compiler emits a compact label such as `[English <Audio 1>]`. Without attached audio it substitutes the available voice description. The text after `]` is the spoken content; preserve all its words and punctuation. Repeat the voice reference inside the language brackets for each new dialogue block, including repeated turns by the same speaker.
+
+The compiler accepts older before-dialogue voice tags and flexible prose without enforcing a speech-verb list, matching character/voice pairs, or voice placement. That tolerance is for experimentation, not permission to accidentally assign another person's voice. Normally keep the character and voice tags associated with the intended performer; honor deliberate voice imitation when the user requests it. Do not move a header voice tag outside the brackets to satisfy the old rules.
+
+Do not add voice tags for silent characters. Additional explicit voice references elsewhere can activate audio inputs even without spoken dialogue. Prefer ordinary prose when merely describing silence, ambience, or voice behavior.
 
 ## Temporary declarations
 
@@ -48,7 +66,7 @@ Put declarations before `subject_definitions`, one per line:
 
 After this prefix, reference resources without `= description`. Names must start with an ASCII letter and contain only ASCII letters, digits, or underscores. Types are exactly `character`, `voice`, `location`, and `object`, in lowercase. Descriptions must be nonempty literal prose without nested reference tags or angle brackets.
 
-Declare each type/name pair once per prompt. Temporary voice and character names must match. `<voice:cashier>` cannot voice `<character:customer>` or a saved character. Saved `{cashier}` and temporary `<character:cashier>` are different resources, even when their names match. Avoid reusing a temporary name across unrelated types.
+Declare each type/name pair once per prompt. Use matching temporary voice and character names for ordinary speech. Explicitly requested alternate voice references are permitted. Saved `{cashier}` and temporary `<character:cashier>` are different resources, even when their names match. Avoid reusing a temporary name across unrelated types.
 
 Temporary resources are description-only. They do not create media inputs. Use declarations only for resources active in this clip.
 
@@ -56,23 +74,49 @@ Temporary resources are description-only. They do not create media inputs. Use d
 
 Each prompt is compiled separately with a fresh temporary registry. Nothing declared or defined in Prompt 1 is available to Prompt 2. This applies to every clip, including direct same-location continuations without `[new_location]`. Inherited video frames carry visual state; they do not carry prompt declarations, definitions, or reference numbering.
 
+EVERY temporary reference used in a prompt must be fully redeclared inside that prompt.
+
+This applies to all temporary types:
+
+- `<character:name>`
+
+- `<voice:name>`
+
+- `<location:name>`
+
+- `<object:name>`
+
+A temporary reference declaration from an earlier prompt NEVER carries forward at the compiler level.
+
+For example, if several prompts take place in the same bar, every prompt that uses `<location:bar>` must repeat the complete declaration:
+
+<location:bar = A dim neighborhood bar with a long wooden counter, red vinyl stools, mirrored liquor shelves, warm amber pendant lights, and dark wood-paneled walls.>
+
+The later prompt must NOT use only:
+
+<location:bar>
+
+unless the full `= description` declaration has already appeared earlier in that SAME prompt.
+
+Likewise, an object such as `<object:cup>` must be fully redeclared in every prompt where it appears.
+
 For every individual prompt:
 
-- Repeat the full `= description` declaration for every temporary character, voice, location, or object referenced anywhere in that prompt. Put these declarations before subject_definitions.
+- Repeat the full `= description` declaration for every temporary character, voice, location, or object referenced anywhere in that prompt.
+
+- Never rely on a temporary declaration from another prompt, even when the resource represents the same continuing physical person, place, or object.
+
 - Include each used character, location, and object tag once in that prompt's subject_definitions, including saved library entities. A previous prompt's definition does not count.
+
 - Saved library entries remain available by their exact saved tags; do not recreate them as temporary declarations. Invoke them again in the current prompt so its compiler can discover their media and generate local definitions.
+
 - Repeat the matching voice tag at every speaking event. If it is a temporary voice, repeat both its voice declaration and its matching character declaration in this prompt.
+
 - Carry forward the full concrete description of a continuing temporary resource. Do not substitute “same as before,” “previously defined,” or a bare tag for its declaration. Keep identity details consistent and change state details only when the story requires it.
 
-For example, if both Prompt 1 and Prompt 2 use a package, **both prompts** must contain this full declaration before their sections:
+IMPORTANT: redeclaring a temporary location does NOT mean the story has entered a new physical location. Declaration scope and physical-location continuity are separate concepts. `[new_location]` is determined by story geography, not by whether the temporary location had to be redeclared for compilation.al appearance constraints, rather than shortening it to this example.
 
-```text
-<object:tegridy_package = A sealed commercial marijuana package labeled Tegridy Farms, with a printed 2D cartoon portrait of Randy Marsh and a transparent window revealing green marijuana inside.>
-```
-
-Both prompts must also include `<object:tegridy_package>` once in subject_definitions and use that tag for the package in their own actions and retention analysis. Prompt 2 needs this declaration even when the package is already visible in its inherited starting frames. In a real sequence, repeat the complete established package description, including any additional appearance constraints, rather than shortening it to this example.
-
-## Six required sections
+## Five required sections
 
 Each prompt contains these headings exactly once, in this order, with the colon and heading on their own line. Do not add titles, commentary, numbered prefixes, or additional section headings inside the prompt.
 
@@ -84,23 +128,27 @@ The compiler sorts these definitions by the assigned Subject number and places u
 
 Used whole-video and music references receive separate role definitions automatically, even when first invoked later. They may also be listed once as their saved tag in subject_definitions. Their physical slots do not become Subjects. An image used only as an entity's provenance does not need a separate Picture definition.
 
-Temporary voices do not need their own definition line. Do not write `S1 VOICE:` blocks or manually bind speaker numbers. Explicit speech events supply the binding, and the compiler adds used saved-audio relationships automatically. Put shot-specific clothing, posture, and placement in retention and detailed description.
+Temporary voices do not need their own definition line. Do not write `S1 VOICE:` blocks or manually bind speaker numbers. Explicit speech events supply the binding, and the compiler adds used saved-audio relationships automatically. Put shot-specific clothing, posture, placement, and continuity requirements in detailed_description.
 
 ### summary
 
-Write one short English paragraph describing the target video and its main reference relationships, using semantic entity tags. A known actual voice-audio reference can be cited with its section-sign tag, for example `The voice timbre of §hero§ guides {hero}.`; it compiles to an Audio label. Omit voice tags for text-only voices and omit full dialogue. Leave out bracketed task headers; the compiler computes them from actual media usage.
+Write one short English paragraph describing the target video and its main reference relationships, using semantic entity tags. Keep voice tags in the dialogue's language brackets and omit full dialogue from the summary. Leave out bracketed task headers; the compiler computes them from actual media usage.
 
 When a summary should be sorted by subject, write separate self-contained lines, each starting with an entity tag and mentioning only that entity. The compiler sorts this format by assigned Subject number, then joins the lines into one paragraph. The task header and paragraph share one line. For video editing, the compiler supplies the required opening identifying the edited source video. Ordinary narrative sentences involving multiple subjects keep their authored order; do not split an interaction merely to force sorting.
 
-### retention_analysis
+### Timing: allow natural dialogue to finish
 
-Author the desired retention behavior for each active entity using its semantic tag. Available visual relationship vocabulary includes `fully_preserved`, `partially_preserved`, `attribute_transfer`, and `weak_reference`. Include the shots or phases where the content applies, such as `{hero} (appears in [Shot 1], [Shot 3]): fully_preserved - retain the supplied identity.` State concretely what is retained or intentionally changed within the defined reference role. New actions, backgrounds, or plot events are not automatically losses of reference fidelity.
+Encourage explicit shot timestamps, especially when dialogue or a change of speaker is involved. Use `[Shot N] At MM:SS.mmm, ...`, including `At 00:00.000` for the opening shot when timing the sequence. The user's latest tests favor well-paced timing: cuts scheduled too quickly may cause the next character to pick up another character's unfinished dialogue. Treat this as a local authoring preference, not a guarantee about model behavior.
 
-For used actual saved voice audio, a retention line can use `§saved_tag§: reference - retain the supplied voice timbre for {saved_tag}.` Only include it when that audio is intentionally used. For text-only voices, put the voice reference in the explicit speech event; a voice tag in retention otherwise disappears and can leave a dangling sentence. Do not invent numbered media retention entries. Include one retention line for every independently tracked Subject, whole-video reference, and used Audio reference; do not add a Picture line for image provenance alone. Audio markers are `fully_copy` (the complete final soundtrack is copied), `partially_copy` (selected time/layers or a modified mix), `reference` (signal not copied), and `weak_reference` (broad similarity). Do not use visual markers on audio or audio markers on visible entities. Never put Speaker IDs in retention. For a used character voice in reference mode, the compiler fills a missing Audio retention line with its known timbre/delivery relationship and exclusive Subject ownership. It leaves authored entries unchanged and reports remaining missing, duplicate, or invalid retention entries in mapping warnings. It does not guess full versus partial reuse, shot applicability, or visual retention.
+Set the next shot's start from the current line's natural speaking length, not from evenly divided shot intervals. Read the line at its intended delivery pace and allow for punctuation, pauses, emphasis, and any action before speech starts. Leave a brief natural beat after the line ends so the speaker can close their mouth before the cut. Slow, emotional, or hesitant delivery needs more time; do not force fast delivery just to meet a timestamp.
+
+For example, a silent arrival at 00:00.000 followed by a speaker at 00:01.500 and the next speaker at 00:05.000 gives the first speaking shot 3.5 seconds. That spacing worked in the user's test; it is not a fixed allowance for every line. Longer dialogue needs a later cut. Give the final speaker enough time before the clip ends as well.
+
+Pair timing with clear handoffs: "[Character] alone delivers the complete line. [Character] finishes speaking and closes their mouth before the next shot begins." Keep shots and speaking turns in playback order. Respect the requested overall clip length; if the dialogue cannot fit naturally, use fewer turns or split across clips when permitted, rather than crowding the timestamps or silently changing the spoken words. Untimed shots remain acceptable when precise timing adds no value or the user requests natural untimed pacing.
 
 ### detailed_description
 
-Begin with one or two English sentences establishing presentation/style before `[Shot 1]`. The opening shot has no timestamp. Later cuts use `[Shot N] At MM:SS.mmm, ...`. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
+Begin with one or two English sentences establishing presentation/style before `[Shot 1]`. Use sequential `[Shot N]` labels and encourage timestamps, especially for dialogue; follow the natural speaking-length guidance above before placing each cut. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
 
 For generation prompts, normally aim for 350-500 English words here. Dialogue-heavy scenes prioritize a feasible complete spoken timeline over reaching that range. Editing detail scales with the changes. One shot alone is not a reason to omit necessary detail; do not invent additional action to pad a word count. Write events in playback order, because the compiler assigns speakers in source order rather than sorting timestamps.
 
@@ -114,53 +162,179 @@ Describe diegetic sound: room tone, footsteps, clothing, cups, doors, impacts, w
 
 Describe audience-only music with instrumentation, tempo, and dynamic development, or write `N/A`. A supplied music resource uses its saved `{music_tag}` and must have a real audio file. Do not use character voice tags or a visual `{video_tag}` as music resources. If a synchronized video soundtrack actually supplies the score layer, cite `§video_tag§` and state whether that layer is copied or referenced. Describe ambience/effects layers in overall_soundscape and audience-only score in non_diegetic_music, even when they share one source.
 
-## Explicit dialogue grammar
+## Dialogue and voice guidance
 
-Every intelligible spoken line uses a language marker and literal speech inside `<d>...</d>`. Use English for newly authored dialogue by default. Preserve supplied dialogue/lyrics in their original language unless the user requests translation.
+Use the language-header placement above for saved and temporary voices. A character without a voice reference can still speak with an inline description, for example `<character:guest> says in a cheerful voice, <d>[English]Hello.</d>`. No audio file is invented. Natural delivery verbs and action clauses are accepted; `says` is a useful convention rather than a compiler requirement.
 
-Saved character:
+Keep each complete spoken turn with its intended performer. The compiler discovers speakers in first-vocal-event order and gives them matching Subject/Speaker numbers. Write events in playback order. A voice tag in a language header can identify a speaker even when surrounding prose is unconventional. Music and video soundtrack cues do not automatically become character speakers.
 
-```text
-{saved_tag} says §saved_tag§, <d>[English]Literal spoken words.</d>
-```
+`compiler_voice_isolation` is an optional prompt augmentation, not a validation gate. Set it to false when testing the compact header format without additional generated voice-exclusion prose. The new voice syntax does not require that option. Do not author numbered ownership or exclusion rules yourself.
 
-Temporary character:
+Use `<scenetrans>` and `<cutoff>` only for intentionally continuous dialogue across a cut or intentionally truncated speech. For ordinary turn-taking, finish the line before the next shot. Keep each entire dialogue block on the same speaking face when practical.
 
-```text
-<character:cashier> says <voice:cashier>, <d>[English]Your order is ready.</d>
-```
+### One speaking character per shot
 
-The supported lowercase verbs are `says`, `asks`, `replies`, `whispers`, `shouts`, `sings`, `speaks`, and `exclaims`. Prefer `says`. Keep the entity, verb, voice tag, comma, and dialogue together in that order. For example, put “turns toward the counter” in a preceding sentence, rather than between the entity and `says`. Include the matching voice tag on every speaking turn, including repeated turns by the same character. For the same character off-screen, use `{saved_tag} (off-screen) says §saved_tag§, <d>[English]Hello.</d>` (or matching temporary tags); the compiler reuses the same speaker. This explicit authoring grammar is narrower than the guide's final rendered prose.
+A single `[Shot N]` may contain intelligible dialogue from AT MOST ONE character.
 
-Inside dialogue, include only language metadata and words spoken aloud. No semantic tags, runtime labels, actions, camera instructions, or sound effects. A spoken mention of another character uses their readable name. Do not add reference tags to existing literal dialogue; move misplaced reference instructions outside it while preserving the spoken words.
+This is a hard authoring rule.
 
-Use a saved voice only if that saved character has audio or a voice description. Do not silently invent a missing saved voice or attach another character's voice. A temporary character can have a newly authored temporary voice description consistent with the user's premise. The compiler inserts text voice descriptions literally, so write fluent phrasing such as “a warm mid-pitched voice with a relaxed cadence.”
+If two different characters speak, their dialogue MUST occur in separate shots, even when the exchange is very short.
 
-For direct reuse or explicitly requested reperformance, preserve source words and language; use `[unclear]` for genuinely unintelligible spans rather than guessing. Use basic punctuation with complete utterances ending before `</d>`. When revising user-supplied dialogue, do not silently change its words or translate it. When only voice timbre or delivery is referenced, do not import the source clip's dialogue. The compiler preserves dialogue literally and does not transcribe audio.
+INVALID:
 
-A verbal cue embedded in reused music/soundtrack is not automatically a new speaker: `When {music_tag} reaches <d>[English]Go!</d>, {hero} raises a hand.` Use an explicit character speech event if a person actually produces the voice. The compiler leaves such audio-only cues without a Speaker ID. `<scenetrans>` and `<cutoff>` are preserved control markers, not resource tags; do not invent their placement without a supplied example or the basic video guide. Prefer complete turns before cuts for the currently supported simple authoring path.
+[Shot 2] {Jerry} says, <d>[English §Jerry§]What happened?</d> {George} replies, <d>[English §George§]I don't know.</d>
 
-For clear turn-taking, finish a line before the next speaker begins. Keep non-speakers silent and their mouths closed when useful. Prefer a shot focused on the active speaking face when confusion is likely, especially if the line names another character or their catchphrase. Cut to a listener's reaction after the whole line finishes. These are staging preferences; honor an explicit request for overlap or different framing.
+VALID:
 
-Replace vague shorthand such as “they chat” with explicit lines or visible silent actions when it would otherwise invite unintended speech. Do not let the compiler's lack of an error substitute for checking that every intended speaker has an explicit event.
+[Shot 2] At 00:01.500, frame {Jerry}. {George} remains silent. {Jerry} says, <d>[English §Jerry§]What happened?</d> Jerry finishes and closes his mouth.
 
-## Voice-reference isolation
+[Shot 3] At 00:04.000, cut to {George}. {Jerry} remains silent. {George} replies, <d>[English §George§]I don't know.</d> George finishes and closes his mouth.
 
-Keep `compiler_voice_isolation = true` (the default) for explicit ownership guidance. Each character voice clip applies only to its assigned Subject and Speaker. Its timbre, accent, cadence, pitch, and delivery must not transfer to another speaker, even during alternating dialogue, shared framing, or lines naming another character.
+A character may have multiple dialogue clauses within one shot only when every clause belongs to that SAME character. Introducing dialogue from another character requires a new `[Shot N]`.
 
-Continue authoring the normal semantic speech event. The compiler adds the numbered ownership statement before each event, repeats the owner's exclusive audio assignment, and tells other speakers not to use or imitate that clip. It uses the real allocation: the first Subject may be the second or third Speaker. Text-only speakers retain their own literal voice descriptions. Do not manually insert `S1 speaks` blocks, numbered exclusions, or guessed Audio ownership into compiler input.
+Listeners may remain visible in the speaking character's shot, but they must remain silent and should keep their mouths closed. When useful for voice isolation, frame only the active speaker.
 
-Keep Speaker IDs out of retention_analysis, including negative exclusions. The official format uses Subject and Audio labels there; the compiler's generated voice-retention line follows that rule. Definitions and actual vocal events can include the global Speaker ID.
+Shot boundaries therefore also act as dialogue-speaker boundaries:
 
-Do not apply character-voice exclusivity to score or synchronized soundtrack cues, and do not manufacture an Audio slot for a text-only voice. Do not add an unused voice reference just to mention its exclusion. These are prompt instructions, not an acoustic isolation mechanism; judge effectiveness with a generation comparison, using the isolation option to turn the extra wording off if necessary.
+ONE SHOT = ZERO OR ONE SPEAKING CHARACTER.
 
-When drafting scenes, prefer a clear active speaking face with listeners silent or off-camera for confusing turns. A printed portrait, package image, or screen depiction is an object representation rather than another live character or vocal source unless the user explicitly requests otherwise. Describe the depicted identity and medium in its temporary object declaration; keep it out of the speaking-event list.
+For this SKEBA authoring convention, put each speaking character in a separate shot unless the user explicitly requests another structure. This is a staging choice, not a compiler validation rule.
+
+### Character isolation within shots
+
+When a shot is explicitly framed around only one character, do NOT mention any other character anywhere inside that `[Shot N]`.
+
+This is a hard authoring rule.
+
+If a shot says or implies:
+
+- "shows only {character}"
+
+- "frame only {character}"
+
+- "a close-up of {character}"
+
+- "a solo shot of {character}"
+
+- "isolates {character}"
+
+- or otherwise establishes that only one character is present in the shot
+
+then all subsequent prose inside that shot must refer only to that visible character, relevant objects, the environment, camera behavior, and sound.
+
+Do NOT mention another character merely to establish that they are:
+
+- off-camera
+
+- off-screen
+
+- silent
+
+- listening
+
+- unseen
+
+- outside the frame
+
+- waiting nearby
+
+- being looked toward
+
+- being spoken toward
+
+The absence of another character should be expressed by omission, not by naming that character.
+
+INVALID:
+
+[Shot 1] A close medium shot shows only {George Costanza_BC} at the dining area holding <object:odd_snack_bag>. Jerry is off-camera and silent. George removes one small dried piece and confidently holds it toward the unseen Jerry. {George Costanza_BC} says, <d>[English §George Costanza_BC§]They came from a guy who said they improve your perspective.</d>
+
+VALID:
+
+[Shot 1] A close medium shot shows only {George Costanza_BC} at the dining area holding <object:odd_snack_bag>. George removes one small dried piece and confidently holds it outward toward the edge of the frame. {George Costanza_BC} says, <d>[English §George Costanza_BC§]They came from a guy who said they improve your perspective.</d> George finishes speaking and closes his mouth. The camera performs an unnecessarily slow two-second zoom toward the snack.
+
+When interaction direction is necessary, describe it without identifying the absent character.
+
+Prefer:
+
+- "looks toward the edge of the frame"
+
+- "holds it toward someone outside the frame"
+
+- "gestures toward the empty side of the composition"
+
+- "looks just past the camera"
+
+- "directs the remark outside the frame"
+
+Avoid:
+
+- "looks toward Jerry off-camera"
+
+- "holds it toward the unseen Jerry"
+
+- "Elaine remains off-screen"
+
+- "Kramer listens outside the frame"
+
+This rule applies only within the individual shot. Other characters may still be defined in subject_definitions, summary, other shots, and other required sections when they are active in the overall prompt.
+
+SHOT CHARACTER ISOLATION RULE:
+
+SOLO CHARACTER SHOT → DO NOT NAME ANY OTHER CHARACTER INSIDE THAT SHOT.
+
+### Solo-shot environmental grounding
+
+A solo character shot means that only one CHARACTER is referenced in that shot. It does NOT mean the character should be visually isolated from the established environment.
+
+When framing a saved reference character alone, especially when the source image is a character sheet, portrait, studio photograph, or plain-background reference, explicitly place the character inside the current physical location before specifying the camera framing.
+
+Prefer:
+
+"shows {character} in the room in a crooked medium close-up"
+
+"shows {character} standing inside {location} in a medium shot"
+
+"shows {character} near the kitchen counter in a close medium shot"
+
+"finds {character} seated on the sofa inside {location}"
+
+Avoid using visual-isolation language such as:
+
+"isolates {character}"
+
+"an isolated shot of {character}"
+
+"separates {character} from the background"
+
+unless actual environmental isolation is intentionally desired.
+
+IMPORTANT:
+
+SOLO CHARACTER SHOT ≠ VISUALLY ISOLATED CHARACTER.
+
+The character should remain naturally embedded in the established physical environment, with the location providing the visible background, lighting, perspective, and spatial context.
+
+For saved reference characters, use this preferred construction:
+
+CHARACTER + PLACEMENT IN CURRENT LOCATION + CAMERA FRAMING
+
+Example:
+
+[Shot 3] An abrupt amateurish cut shows {Mr_Roarke} in the room in a crooked medium close-up.
+
+This keeps the shot restricted to {Mr_Roarke} without encouraging the generator to reproduce the isolated composition or plain background of the character reference image.
+
+Do not mention another character merely to establish the current character's spatial relationship. Ground the character relative to the room, furniture, architecture, or other environmental features instead.
+
+A character does not need to be explicitly described as silent or off-camera to prevent them from speaking. Their absence from the shot prose is preferred because it reduces unintended character, identity, and voice mixing.
 
 ## Media and task ownership
 
-The compiler discovers all used resources before allocating slots. Subject priority is image plus audio, image, audio, then description-only; ties use stable library order followed by temporary declaration order. Subject, Speaker, Picture, Audio, and Video numbers are independent and local to each prompt. Reusing the same semantic identity across clips does not guarantee the same number.
+The compiler discovers resources and vocal events before allocating slots. Speaking characters come first in first-speech order and receive matching Subject and Speaker numbers. Their actual image and voice outputs follow the same order. Silent subjects follow using existing media priority and library/declaration order. Missing media and synchronized video soundtracks can offset Picture or Audio numbers. All numbers are local to the current prompt; never guess them from an earlier clip.
 
-Actual media alone allocates physical slots. A voice description does not create an Audio slot, and speech alone does not imply an audio-reference task. A silent character can have an allocated audio file without a textual audio reference. Never force a voice tag onto a silent character just to account for their attached audio.
+Only actual media allocates physical slots. A text-only voice creates no Audio slot. Unused attached character voices are not loaded in deterministic mode. Do not add voice tags for silent characters merely because they have an audio attachment.
+
+`auto_crop_voice_references` defaults to true. Used character voice clips share a 15-second budget: 15 seconds for one, 7.5 each for two, 5 each for three. Keep shorter clips unchanged without padding or redistribution. Cropping applies to direct and deferred loading and never edits library files. Music, explicitly reused audio, and video soundtracks remain outside this voice-only budget. Disable the toggle for an uncropped comparison.
 
 Music becomes an Audio reference, `{video_tag}` becomes a Video reference, and `§video_tag§` explicitly selects that video's enabled soundtrack; neither automatically becomes a Subject or speaker. A video's available soundtrack does not create an audio task/definition until explicitly used. A soundtrack-only tag does not imply editing or continuation of the visual track. Some Audio slots represent music or video soundtracks, so the old rule that every Audio slot belongs to a speaking character is incorrect. Enabled video soundtracks are numbered before standalone audio. Use the node's JSON `mapping` output to inspect actual ownership; never infer ownership from matching numbers.
 
@@ -172,7 +346,7 @@ Set task purpose using node options when the task calls for it:
 
 These options apply across the prompt unless resource metadata overrides them. Same-location continuity through the workflow does not by itself mean a saved video is a continuation input. Do not write a task header to override node options. Audio used as generation guidance adds reference generation plus audio reference; directly reused audio adds audio reuse. Voice-reuse wording explicitly describes signal reuse rather than timbre-only guidance. Keyframe completion is not inferred by this compiler. A text-only prompt may have no task header; that is valid.
 
-Current physical limits are 9 images, 3 standalone audio files, and 3 videos, including assets allocated for used silent characters. Do not drop requested references merely to fit: identify the limit and adapt the resource selection with the user when needed.
+Current physical limits are 9 images, 3 standalone audio files, and 3 videos, counting only allocated media. Do not drop requested references merely to fit: identify the limit and adapt the resource selection with the user when needed.
 
 ## Full-reference features outside the current authoring model
 
@@ -189,14 +363,56 @@ For those requests, identify the missing representation and adapt the workflow e
 
 For SKEBA sequence authoring, keep one physical location per clip. Use multiple angles and movement within that environment. Start a new clip for a different physical location unless the user explicitly requests another structure.
 
-Use `[new_location]` as the first line when initializing a new location, normally including the first clip. Temporary declarations follow this marker, then the six sections. Do not use the marker for a close-up, camera change, entrance, same-location continuation, or same-location time jump. It is a workflow control marker, not a section or a video-task header.
+`[new_location]` means that the sequence is entering a DIFFERENT physical place from the immediately preceding clip. It does NOT mean that a location declaration is new to the current prompt.
 
-For sequences consumed by a prompt-splitting workflow, put a single `|` on its own line between complete prompts. The workflow must split these before the tagged-reference node: the compiler accepts one six-section prompt per invocation. Do not use `|` inside descriptions or dialogue in that sequence format. For a single direct node input, omit the separator.
+Use `[new_location]` as the first line when:
 
-Preserve inherited character instances, wardrobe, positions, posture, held objects, mouth state, and nearby geometry in direct continuations. Do not make an already-present character enter again or duplicate them. Establish a same-location time/state jump immediately in Shot 1. For a location change, end the old clip in its old location and start the new clip already in the destination.
+- the sequence begins with its first physical location; or
+- the current clip takes place in a physically different location from the immediately preceding clip.
 
-Use the workflow's configured duration and inherited-frame count. The previous skill's 15-second clips and 22-frame handoff are workflow defaults, not compiler guarantees. If no timing is specified, plan approximately 15 seconds with 2-5 shots. Keep timestamps within the chosen duration. For direct dialogue continuations, normally finish speech before the final 1-2 seconds and leave a short stable, closed-mouth handoff. Preserve that inherited state at the start of the next clip before a new action or speech event.
+Do NOT use `[new_location]` when returning to or continuing in a location that has already been established as the current physical place.
 
+Most importantly, when consecutive prompts use the same location identity, they are the SAME physical place even though the temporary location declaration must be repeated because each prompt compiles independently.
+
+Example:
+
+Prompt 1:
+[new_location]
+<location:bar = A dim neighborhood bar with a long wooden counter...>
+
+Prompt 2:
+<location:bar = A dim neighborhood bar with a long wooden counter...>
+
+Prompt 2 MUST repeat the full declaration, but MUST NOT use `[new_location]`, because `<location:bar>` still represents the same established physical bar.
+
+Therefore:
+
+TEMPORARY DECLARATION SCOPE:
+Every prompt starts fresh and must redeclare `<location:bar = ...>`.
+
+STORY LOCATION IDENTITY:
+Repeated use of `<location:bar>` represents the same physical location unless the story explicitly establishes otherwise.
+
+These concepts must never be confused.
+
+Do not use `[new_location]` for:
+
+- a repeated location declaration;
+- a same-location continuation;
+- a new camera angle;
+- a close-up or reverse angle;
+- movement to another part of the same room or continuous physical environment;
+- a character entering or leaving;
+- a same-location time jump;
+- a change in lighting, staging, furniture state, or character positions.
+
+If Prompt 1 uses `<location:bar>` and Prompt 2 also uses `<location:bar>`, Prompt 2 does not receive `[new_location]`.
+
+If Prompt 3 changes to `<location:street>`, Prompt 3 begins with `[new_location]`.
+
+If Prompt 4 continues at `<location:street>`, Prompt 4 does not begin with `[new_location]`.
+
+`[new_location]` is a workflow control marker based on physical scene transitions. It is not a declaration marker, section heading, or video-task header.
 ## Complete example: temporary resources only
 
 This example can compile without any saved library entries. It intentionally creates no physical media slots.
@@ -214,15 +430,11 @@ subject_definitions:
 summary:
 <character:cashier> announces a ready order in <location:coffee_shop>.
 
-retention_analysis:
-<character:cashier> (appears in [Shot 1], [Shot 2], [Shot 3]): fully_preserved - retain the red uniform.
-<location:coffee_shop> (appears throughout): fully_preserved - retain the wooden tables and counter layout.
-
 detailed_description:
 The target video uses a realistic, quietly observed cafe style with warm indoor light.
-[Shot 1] A medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
-[Shot 2] At 00:04.000, a closer view retains the counter in the background. <character:cashier> looks toward the waiting area. <character:cashier> says <voice:cashier>, <d>[English]Your order is ready.</d> The cashier finishes and closes his mouth. The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the empty waiting area while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the unseen customer. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
-[Shot 3] At 00:11.000, return to the medium shot. <character:cashier> waits with relaxed hands and a closed mouth. The camera returns to the established counter-height viewpoint without changing which side of the counter he occupies. His shoulders settle after the announcement, and his gaze remains on the waiting area. The room's low ambience continues without added dialogue or music. Keep the visible table edges, empty space on the left, and light on the uniform consistent with the opening. During the final two seconds he stays still, with no fresh gesture, mouth movement, or camera drift. Hold this same position through 00:15.000 so the following clip can inherit a clear, settled state.
+[Shot 1] At 00:00.000, a medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
+[Shot 2] At 00:03.000, a closer view retains the counter in the background. <character:cashier> looks toward the waiting area. <character:cashier> says, <d>[English <voice:cashier>]Your order is ready.</d> The cashier finishes and closes his mouth. The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the empty waiting area while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the unseen customer. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
+[Shot 3] At 00:07.000, return to the medium shot. <character:cashier> waits with relaxed hands and a closed mouth. The camera returns to the established counter-height viewpoint without changing which side of the counter he occupies. His shoulders settle after the announcement, and his gaze remains on the waiting area. The room's low ambience continues without added dialogue or music. Keep the visible table edges, empty space on the left, and light on the uniform consistent with the opening. At the end of the clip he stays still, with no fresh gesture, mouth movement, or camera drift. Hold this same position through the end of the clip so the following clip can inherit a clear, settled state.
 
 overall_soundscape:
 Low room tone and faint cups touching saucers. Only the cashier produces intelligible speech during the explicit line.
@@ -233,7 +445,7 @@ N/A
 
 ## Complete example: saved character with a temporary speaker
 
-This example requires an existing saved `hero` character with an image and attached voice audio, with compiler_audio_usage set to reference. Replace both forms of `hero` with the user's exact saved tag. The temporary cashier speaks first, even if media priority makes the saved hero the first Subject. Do not predict either number in the authored prompt.
+This example requires an existing saved `hero` character with an image and attached voice audio, with compiler_audio_usage set to reference. Replace both forms of `hero` with the user's exact saved tag. The temporary cashier speaks first and receives the first Subject/Speaker identity; the hero follows. Do not predict either number in the authored prompt.
 
 ```text
 [new_location]
@@ -247,20 +459,14 @@ subject_definitions:
 <location:coffee_shop>
 
 summary:
-{hero} collects an order from <character:cashier> in <location:coffee_shop>. The voice timbre of §hero§ guides the hero's reply.
-
-retention_analysis:
-{hero} (appears in [Shot 1], [Shot 3], [Shot 4]): fully_preserved - retain the supplied identity and wardrobe.
-§hero§: reference - preserve the voice timbre without copying the original words or signal.
-<character:cashier>: fully_preserved - retain the red uniform.
-<location:coffee_shop> (appears throughout): fully_preserved - retain the wooden tables and counter layout.
+{hero} collects an order from <character:cashier> in <location:coffee_shop>.
 
 detailed_description:
 The target video uses a realistic, quietly observed cafe style with warm indoor light.
-[Shot 1] A medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
-[Shot 2] At 00:03.000, frame only <character:cashier> with the counter visible. {hero} remains off-camera and silent. <character:cashier> says <voice:cashier>, <d>[English]Your order is ready.</d> The cashier finishes and closes his mouth. The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the hero while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the unseen customer. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
-[Shot 3] At 00:07.000, frame only {hero}, retaining the wooden tables in the background. The cashier remains off-camera and silent. {hero} says §hero§, <d>[English]Thank you.</d> The hero finishes and closes their mouth. Keep the hero on the same side of the counter as before, with the angle clearly motivated by the established geography. The camera remains stationary during the whole line; do not cut to the cashier while the hero is speaking. The hero's expression softens briefly in thanks, with a small change in gaze toward the off-camera cashier. Neither the supplied wardrobe nor the visible table layout changes. The underlying room tone remains consistent across the cut.
-[Shot 4] At 00:11.000, return to the medium shot. {hero} remains LEFT of the counter and <character:cashier> remains on the RIGHT, both silent with closed mouths through 00:15.000. Restore the original counter-height framing and spacing. Their hands and shoulders settle without a new exchange or object transfer. Keep the warm light and visible table edges stable; the final two seconds hold this composition with only quiet room tone, providing a clear state for a same-location continuation.
+[Shot 1] At 00:00.000, a medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
+[Shot 2] At 00:03.000, frame only <character:cashier> with the counter visible. <character:cashier> says, <d>[English <voice:cashier>]Your order is ready.</d> The cashier finishes and closes his mouth. The camera remains steady for the complete line, keeping his face unobstructed and holding the same face through the whole line. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the unseen customer. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
+[Shot 3] At 00:07.000, frame only {hero}, retaining the wooden tables in the background. {hero} says, <d>[English §hero§]Thank you.</d> The hero finishes and closes their mouth. Keep the hero on the same side of the counter as before, with the angle clearly motivated by the established geography. The camera remains stationary during the whole line; hold this face through the whole line. The hero's expression softens briefly in thanks, with a small change in gaze toward the edge of the frame. Neither the supplied wardrobe nor the visible table layout changes. The underlying room tone remains consistent across the cut.
+[Shot 4] At 00:10.000, return to the medium shot. {hero} remains LEFT of the counter and <character:cashier> remains on the RIGHT, both silent with closed mouths through the end of the clip. Restore the original counter-height framing and spacing. Their hands and shoulders settle without a new exchange or object transfer. Keep the warm light and visible table edges stable; hold this final composition with only quiet room tone, providing a clear state for a same-location continuation.
 
 overall_soundscape:
 Quiet room tone and faint cups touching saucers. One active speaking voice at a time, with no additional intelligible background speech.
@@ -269,17 +475,83 @@ non_diegetic_music:
 N/A
 ```
 
-For a text-only saved voice, remove the summary's audio-reference sentence and the voice retention line; keep the explicit speech event. For a silent version, omit the hero's speech event and all voice tags; keep the entity definition and authored silent actions. Attached audio alone does not require an audio relationship or task header.
+For a text-only saved voice, keep the same header-tag format; the compiler substitutes its voice description. For a silent version, omit the hero's speech event and all voice tags; keep the entity definition and authored silent actions. Attached audio alone does not require an audio relationship or task header.
+## Multi-prompt sequence delimiter — critical
 
+When returning more than one prompt, separate individual prompts using ONLY this exact delimiter on its own line:
+
+|
+
+Do not write:
+
+PROMPT 1
+PROMPT 2
+PROMPT 3
+Scene 1
+Scene 2
+Clip 1
+Clip 2
+---
+===
+or any other prompt labels or separators.
+
+The first prompt begins directly with its normal content, such as:
+
+[new_location]
+...
+
+The next prompt begins immediately after the delimiter:
+
+|
+<location:example = ...>
+...
+
+The delimiter `|` is outside the five required sections and exists only to separate independently compiled prompts.
+
+Each prompt on either side of `|` must remain fully self-contained and independently valid.
+
+When splitting or revising an existing sequence, preserve the `|` delimiter exactly.
+
+FINAL OUTPUT RULE:
+
+MULTIPLE PROMPTS → ONE plain-text code block with each prompt separated by exactly:
+
+|
+
+Never add prompt numbers, prompt titles, scene labels, clip labels, explanatory text, or Markdown headings inside the code block.
 ## Validate and deliver
 
 Before returning a prompt:
 
 1. Confirm deterministic mode is the target. Preserve exact known saved tags, and declare all temporary references before the sections.
-2. Check English section prose, the six headings and their order, a single-paragraph summary, a style opening before Shot 1, and no opening-shot timestamp. Put each used character/location/object entity exactly once in subject_definitions. Do not define voices as visible entities.
-3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and retention.
-4. Check every explicit speaking turn against the supported grammar and matching character/voice identity. Leave generated voice-isolation rules to the compiler, and keep Speaker IDs out of retention. Keep events in playback order and dialogue literal.
-5. Validate every prompt in isolation: split at each sequence separator and pretend all earlier prompts are unavailable. Every temporary tag must have its own full declaration in that same prompt, and every used entity must have its own subject_definitions entry there. Then check scene geography, duration, silence and handoff timing, and location markers. Same-location continuation never exempts a prompt from this check.
-6. If local compiler execution is available, compile each complete clip against the real record mapping. Do not fabricate production records to make unknown tags pass. Inspect JSON mapping, retention warnings, and errors; repair semantic source or node options rather than editing compiled slot numbers. Compilation checks syntax and allocation, not generated video/audio quality.
+2. Check English section prose, the five headings and their order, a single-paragraph summary, a style opening before Shot 1, and feasible shot timestamps, especially for dialogue. Check that each line can finish naturally before the next shot or the clip ends. Put each used character/location/object entity exactly once in subject_definitions. Do not define voices as visible entities.
+3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and voice tags inside language brackets.
+4. Check the intended performer for each speaking turn and place its voice tag inside the language brackets. Preserve spoken words after the brackets. Keep events in playback order and omit retention_analysis.
+5. Validate every prompt in isolation. For multi-prompt sequences, the ONLY valid sequence separator is a single `|` on its own line. Split at each `|` and pretend all earlier prompt declarations and definitions are unavailable. Never use labels such as `PROMPT 1`, `PROMPT 2`, `Scene 1`, or `Clip 1` as separators.
+   TEMPORARY REFERENCES:
+   - Every temporary character, voice, location, and object used anywhere in the prompt must have its complete `= description` declaration in that same prompt.
+   - A declaration in an earlier prompt never satisfies this requirement.
+   - Every used character, location, and object must have its own subject_definitions entry.
 
-For prompt-only requests, return the complete authoring prompt or sequence in one plain-text code block, with no commentary inside it. Do not include example labels, Markdown headings, compiled output, JSON diagnostics, or this skill's instructions in the node input. If a missing saved resource or incompatible workflow setting prevents a usable result, explain that outside the prompt rather than hiding it in the six sections.
+   LOCATION CONTINUITY:
+   - Evaluate `[new_location]` from physical story geography, independently from declaration scope.
+   - Repeating `<location:name = description>` because the compiler registry resets does NOT trigger `[new_location]`.
+   - Consecutive prompts using the same location tag represent the same physical place and must not introduce `[new_location]`.
+   - Add `[new_location]` only when the sequence actually enters a different physical location, including the initial location when required by the workflow.
+
+   SHOT/SPEAKER ISOLATION:
+   - Scan each `[Shot N]` independently.
+   - Count the distinct characters with explicit dialogue events inside that shot.
+   - The allowed count is 0 or 1.
+   - If two or more different characters speak inside one shot, split their turns into separate sequential shots while preserving the original dialogue and staging. Set timestamps far enough apart for each complete line at a natural speaking pace, including pauses and a brief handoff beat; let each speaker finish before the next turn.
+   - Multiple dialogue clauses from the same character may remain in one shot.
+   - Keep listeners silent with closed mouths where useful.
+
+   Then check scene geography, duration, silence, handoff timing, and location markers. Same-location continuation never exempts a prompt from temporary-reference redeclaration.
+6. If local compiler execution is available, compile each complete clip against the real record mapping. Do not fabricate production records to make unknown tags pass. Inspect JSON mapping and resource errors; repair semantic source or node options rather than editing compiled slot numbers. Compilation checks syntax and allocation, not generated video/audio quality.
+
+For prompt-only requests, return the complete authoring prompt or sequence in one plain-text code block, with no commentary inside it.
+For a single prompt, output only that prompt.
+For multiple prompts, separate prompts using a single `|` on its own line.
+Do not add prompt numbers, titles, scene labels, clip labels, Markdown headings, or alternative delimiters.
+Do not include example labels, compiled output, JSON diagnostics, or this skill's instructions in the node input.
