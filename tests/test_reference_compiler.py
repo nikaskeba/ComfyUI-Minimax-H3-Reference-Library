@@ -22,6 +22,61 @@ def character(image=None, audio=None, **values):
 
 
 class CompilerTests(unittest.TestCase):
+    def test_inline_definitions_and_duration_marker(self):
+        defs = "<character:guest = A guest.>\n<voice:guest = A warm voice.>\n<object:coffee_cup = A white porcelain cup.>"
+        detail = "<character:guest> holds <object:coffee_cup> and says, <d>[English <voice:guest>]Hello.</d>"
+        for marker in ("", "[s=15]", "[new_location] [s=12.5]", "[s=15] [new_location]"):
+            result = compiler.compile_prompt(marker + "\n" + prompt(defs, detail), {})
+            self.assertIn("is A white porcelain cup.", result.prompt)
+            self.assertIn("<d>[English A warm voice.]Hello.</d>", result.prompt)
+            if marker:
+                self.assertTrue(result.prompt.startswith(marker))
+        with self.assertRaisesRegex(ValueError, "DUPLICATE_TEMPORARY_DECLARATION"):
+            compiler.compile_prompt(prompt(defs, declarations="<object:coffee_cup = Another cup.>"), {})
+        with self.assertRaisesRegex(ValueError, "MISSING_TEMPORARY_DESCRIPTION"):
+            compiler.compile_prompt(prompt("<object:cup = >"), {})
+
+    def test_timeline_subheading_stays_inside_detail(self):
+        source = prompt("{hero}", "Sitcom presentation.\n\ntimeline:\n\n[Shot 1] At 00:00.000, {hero} says, <d>[English \u00a7hero\u00a7]Hello.</d>")
+        result = compiler.compile_prompt(source, {"hero":character(audio="hero.wav")})
+        self.assertIn("Sitcom presentation.\n\ntimeline:\n\n[Shot 1]", result.prompt)
+        self.assertIn("<d>[English <Audio 1>]Hello.</d>", result.prompt)
+        self.assertEqual(result.audios, ["hero"])
+        for invalid in (source.replace("timeline:", "timline:"), source.replace("subject_definitions:", "timeline:\nsubject_definitions:")):
+            with self.assertRaisesRegex(ValueError, "INVALID_SECTION"):
+                compiler.compile_prompt(invalid, {"hero":character()})
+
+    def test_flexible_temporary_names(self):
+        for name in ("1920s_street", "123", "café entrance", "東京-通り", "guest #2", "O'Brien", "voice.v2", "_guest"):
+            source = prompt(f"<character:{name}>",
+                            f"<character:{name}> says, <d>[English <voice:{name}>]Hello.</d>",
+                            declarations=f"<character:{name} = A guest.>\n<voice:{name} = A warm voice.>")
+            result = compiler.compile_prompt(source, {})
+            self.assertIn("<d>[English A warm voice.]Hello.</d>", result.prompt)
+            self.assertEqual(result.debug["speakers"], {"1":f"temporary:character:{name}"})
+        for name in ("", "bad|name", "bad[name]", "bad{name}", "bad\nname"):
+            with self.assertRaisesRegex(ValueError, "INVALID_TEMPORARY_NAME"):
+                compiler.compile_prompt(prompt("", declarations=f"<object:{name} = Thing.>"), {})
+
+    def test_optional_summary_and_retention_combinations(self):
+        for keep_summary in (False, True):
+            for keep_retention in (False, True):
+                source = prompt("", "Follow {clip}.", summary="Keep framing.", retention="Keep color.")
+                if not keep_summary:
+                    source = source.replace("summary:\nKeep framing.\n\n", "")
+                if not keep_retention:
+                    source = source.replace("retention_analysis:\nKeep color.\n\n", "")
+                result = compiler.compile_prompt(source, {"clip": dict(reference_type="video", video_file="clip.mp4")}, video_usage="editing")
+                self.assertEqual("summary:" in result.prompt, keep_summary)
+                self.assertEqual("retention_analysis:" in result.prompt, keep_retention)
+                self.assertIn("The target video is an edited version of <Video 1>.", result.prompt)
+                if not keep_summary:
+                    self.assertIn("detailed_description:\n\nThe target video", result.prompt)
+        for source in ("subject_definitions:\ndetailed_description:\nnon_diegetic_music:\nN/A",
+                       "subject_definitions:\nsummary:\nsummary:\ndetailed_description:\noverall_soundscape:\nnon_diegetic_music:\nN/A"):
+            with self.assertRaisesRegex(ValueError, "INVALID_SECTION"):
+                compiler.compile_prompt(source, {})
+
     def test_five_sections_and_language_header_voice_preserve_entire_line(self):
         records = {"Jerry Seinfeld_BC": character("jerry.png", "jerry.wav"),
                    "George Costanza_BC": character("george.png", "george.wav")}
@@ -70,7 +125,7 @@ class CompilerTests(unittest.TestCase):
         result = compiler.compile_prompt(source, {"binary_thott": character("image.png", "voice.wav")})
         self.assertIn("<Subject 1> is Binary Thott in <Picture 1>, A young man with black dreadlocks.", result.prompt)
         self.assertIn("<Subject 2> is A cozy coffee shop with wooden tables.", result.prompt)
-        self.assertIn("[reference generation]", result.prompt)
+        self.assertNotIn("[reference generation]", result.prompt)
         self.assertNotIn("<Audio", result.prompt)
         self.assertEqual(result.audios, [])
         self.assertIsNone(result.debug["resources"]["saved:binary_thott"]["audio"])
@@ -165,7 +220,7 @@ class CompilerTests(unittest.TestCase):
         summary = "{jerry}: waits.\n\n{kramer}: stands.\n{randy}: sits.\n{apartment}: unchanged."
         result = compiler.compile_prompt(prompt("{jerry}\n{kramer}\n{randy}\n{apartment}", detail, summary), records)
         section = result.prompt.split("summary:\n\n", 1)[1].split("\n\nretention_analysis:", 1)[0]
-        self.assertEqual(section, "[reference generation + audio reference] <Subject 1>: waits. <Subject 2>: sits. <Subject 3>: unchanged. <Subject 4>: stands.")
+        self.assertEqual(section, "<Subject 1>: waits. <Subject 2>: sits. <Subject 3>: unchanged. <Subject 4>: stands.")
         self.assertEqual(result.debug["speakers"], {"1": "saved:jerry", "2": "saved:randy"})
         self.assertEqual(result.images, ["jerry", "randy", "apartment", "kramer"])
         self.assertIn("<Subject 1> (S1) says", result.prompt)
@@ -229,7 +284,7 @@ class CompilerTests(unittest.TestCase):
         self.assertIn("<Audio 1> is the music reference reused in the target video. Slow piano.", definitions)
         self.assertNotIn("<Subject", definitions)
         summary = result.prompt.split("summary:\n\n")[1].split("\n\nretention_analysis:")[0]
-        self.assertEqual(summary, "[video editing + audio reuse] The target video is an edited version of <Video 1>. Keep the framing. Use <Audio 1> as score.")
+        self.assertEqual(summary, "The target video is an edited version of <Video 1>. Keep the framing. Use <Audio 1> as score.")
         explicit = compiler.compile_prompt(prompt("{clip}\n{score}", "Follow {clip}.", music="Use {score}."), records)
         self.assertEqual(explicit.prompt.count("<Video 1> is"), 1)
         self.assertEqual(explicit.prompt.count("<Audio 1> is"), 1)
@@ -366,10 +421,10 @@ class CompilerTests(unittest.TestCase):
             (prompt("{missing}"), "UNKNOWN_SAVED_RESOURCE"),
             (prompt("<location:missing>"), "UNKNOWN_TEMPORARY_RESOURCE"),
             (prompt("", declarations="<planet:world = Round.>"), "INVALID_TEMPORARY_TYPE"),
-            (prompt("", declarations="<object:2bad = Thing.>"), "INVALID_TEMPORARY_NAME"),
+            (prompt("", declarations="<object: = Thing.>"), "INVALID_TEMPORARY_NAME"),
             (prompt("", declarations="<object:box = >"), "MISSING_TEMPORARY_DESCRIPTION"),
             (prompt("", declarations="<object:box = Box.><object:box = Box.>"), "DUPLICATE_TEMPORARY_DECLARATION"),
-            (prompt("<object:box = Box.>"), "INVALID_DECLARATION"),
+            (prompt("", detail="<object:box = Box.>"), "INVALID_DECLARATION"),
             (prompt("<Subject 1> is {hero}"), "AUTHORED_RUNTIME_SLOT"),
             ("summary:\n{hero}", "INVALID_SECTION"),
             (prompt("", "{hero} walks."), "MISSING_SUBJECT_DEFINITION"),

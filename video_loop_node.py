@@ -4,6 +4,7 @@ import torch
 import torchaudio
 
 from comfy_api.latest import InputImpl, Types
+from .disk_video import DiskClip, combine_disk_clips
 
 
 class CombineVideoClipsNode:
@@ -26,6 +27,8 @@ class CombineVideoClipsNode:
 
     def combine(self, accumulation, starting_video=None, ending_video=None):
         videos = list(accumulation.get("accum", []))
+        if videos and all(isinstance(video, DiskClip) for video in videos):
+            return combine_disk_clips(videos, starting_video, ending_video)
         target_index = int(starting_video is not None) if videos else 0
         if starting_video is not None:
             videos.insert(0, starting_video)

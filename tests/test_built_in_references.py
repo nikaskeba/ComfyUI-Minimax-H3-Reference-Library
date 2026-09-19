@@ -1,3 +1,5 @@
+import sys
+import types
 import importlib.util
 import tempfile
 import unittest
@@ -5,8 +7,12 @@ from pathlib import Path
 from unittest import mock
 
 
+sys.path.insert(0, str(Path(__file__).parents[3]))
 MODULE_PATH = Path(__file__).parents[1] / "built_in_references.py"
-SPEC = importlib.util.spec_from_file_location("h3_built_in_references", MODULE_PATH)
+package = types.ModuleType("h3_built_in_test_package")
+package.__path__ = [str(MODULE_PATH.parent)]
+sys.modules["h3_built_in_test_package"] = package
+SPEC = importlib.util.spec_from_file_location("h3_built_in_test_package.built_in_references", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 

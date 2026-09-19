@@ -687,3 +687,7 @@ Auto Extract and Snap are deferred; the quantization algorithm is unchanged.
 ### Deterministic reference compiler
 
 H3 Tagged Reference Prompt now offers `compiler_mode = deterministic` for six-section semantic prompts, independent Subject/Speaker/media numbering, and JSON mapping diagnostics. Existing workflows default to legacy mode. See [the compiler guide](docs/reference_compiler.md) and [example prompt](example/reference_compiler_prompt.txt).
+
+## Tagged RefMods
+
+Appearance and voice RefMods, library creation, protected Apply controls and a two-pass example are documented in [Tagged RefMods](docs/refmods.md).

@@ -1,3 +1,5 @@
+from .refmod_library import project_records, revision as refmod_revision
+from .refmod_support import build_mods
 from .reference_compiler import compile_prompt
 from .reference_audio import crop_voice_reference
 import re
@@ -103,7 +105,7 @@ def resolve_prompt(prompt_template, records):
     video_tags = [
         tag for tag in reference_tags if records[tag].get("video_file")
     ]
-    if len(video_tags) > MAX_VIDEOS:
+    if sum(not records[tag].get("_refmod_video") for tag in video_tags) > MAX_VIDEOS:
         raise ValueError(
             f"H3 supports at most {MAX_VIDEOS} reference videos; "
             f"this prompt uses {len(video_tags)}.")
@@ -152,7 +154,7 @@ def resolve_prompt(prompt_template, records):
         tag: len(video_audio_tags) + index
         for index, tag in enumerate(audio_tags)
     }
-    if len(image_tags) > MAX_IMAGES:
+    if sum(not records[tag].get("_refmod_image") for tag in image_tags) > MAX_IMAGES:
         raise ValueError(f"H3 supports at most {MAX_IMAGES} reference images; this prompt uses {len(image_tags)}.")
 
     def replacement(kind, tag):
@@ -316,7 +318,7 @@ class H3TaggedReferencePrompt:
         + ("AUDIO",) * MAX_AUDIO
         + ("IMAGE",) * MAX_VIDEOS
         + ("AUDIO",) * MAX_VIDEOS
-        + ("SKEBA_H3_REFERENCE_BUNDLE",)
+        + ("SKEBA_H3_REFERENCE_BUNDLE", "H3_REF_MODS")
     )
     RETURN_NAMES = (
         ("prompt", "mapping")
@@ -324,7 +326,7 @@ class H3TaggedReferencePrompt:
         + tuple(f"audio_{i}" for i in range(1, MAX_AUDIO + 1))
         + tuple(f"video_{i}" for i in range(1, MAX_VIDEOS + 1))
         + tuple(f"video_audio_{i}" for i in range(1, MAX_VIDEOS + 1))
-        + ("reference_bundle",)
+        + ("reference_bundle", "mods")
     )
     FUNCTION = "build"
     CATEGORY = "Skeba AI Nodes - Reference"
@@ -337,7 +339,7 @@ class H3TaggedReferencePrompt:
                    compiler_voice_isolation=True, auto_crop_voice_references=True):
         return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
                 f"{prompt_template}:{video_fps}:"
-                f"{video_max_side}:{defer_media_loading}:{compiler_mode}:"
+                f"{video_max_side}:{defer_media_loading}:{compiler_mode}:{refmod_revision()}:"
                 f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}:"
                 f"{auto_crop_voice_references}")
 
@@ -348,6 +350,7 @@ class H3TaggedReferencePrompt:
               compiler_voice_isolation=True, auto_crop_voice_references=True):
         records = records_by_tag()
         records.update(library_built_in_records())
+        records = project_records(records, prompt_template or "")
         if compiler_mode == "deterministic":
             compiled = compile_prompt(
                 prompt_template or "", records, video_usage=compiler_video_usage,
@@ -388,6 +391,9 @@ class H3TaggedReferencePrompt:
             source_kind = kind
             if kind == "audio" and not record.get("audio_file"):
                 source_kind = "video"
+            if record.get("_refmod_" + kind):
+                return {"record_id": record.get("id") or tag, "tag": tag, "refmod": record["_refmod_" + kind],
+                        "max_duration_seconds": voice_caps.get(tag) if kind == "audio" else None}
             entry = {
                 "record_id": record.get("id") or tag,
                 "tag": tag,
@@ -413,7 +419,16 @@ class H3TaggedReferencePrompt:
             "media_deferred": bool(defer_media_loading),
         }
 
-        if defer_media_loading:
+        mods = build_mods(reference_bundle)
+        if mods:
+            reference_bundle["media_deferred"] = True
+            message = "Connect reference_bundle to the SKEBA cached encoder and mods to SKEBA Apply H3 RefMod."
+            if compiler_mode == "deterministic":
+                compiled.debug["refmods"] = {"count": len(mods), "bindings": mods.bindings, "wiring": message}
+                mapping = compiled.mapping
+            else:
+                mapping += "\nRefMods: " + message
+        if defer_media_loading or mods:
             return (
                 prompt,
                 mapping,
@@ -421,7 +436,7 @@ class H3TaggedReferencePrompt:
                 *([None] * MAX_AUDIO),
                 *([None] * MAX_VIDEOS),
                 *([None] * MAX_VIDEOS),
-                reference_bundle,
+                reference_bundle, mods,
             )
 
         images = [load_image(media_path(records[tag], "image")) for tag in image_tags]
@@ -459,7 +474,7 @@ class H3TaggedReferencePrompt:
         video_audios.extend([None] * (MAX_VIDEOS - len(video_audios)))
         return (
             prompt, mapping, *images, *audios, *videos, *video_audios,
-            reference_bundle,
+            reference_bundle, mods,
         )
 
 
@@ -490,7 +505,7 @@ class H3PromptListValidator:
     def IS_CHANGED(cls, validation_enabled=True, **kwargs):
         if not validation_enabled:
             return "validation-disabled"
-        return f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}"
+        return f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:{refmod_revision()}"
 
     def validate_list(self, text, validation_enabled=True, delimiter="|", skip_empty=True,
                       compiler_video_usage="reference", compiler_audio_usage="reference",
@@ -510,7 +525,7 @@ class H3PromptListValidator:
         for number, prompt in enumerate(prompts, 1):
             try:
                 compiled = compile_prompt(
-                    prompt, records, video_usage=compiler_video_usage,
+                    prompt, project_records(records, prompt), video_usage=compiler_video_usage,
                     audio_usage=compiler_audio_usage, voice_isolation=compiler_voice_isolation,
                     max_images=MAX_IMAGES, max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS)
             except ValueError as error:

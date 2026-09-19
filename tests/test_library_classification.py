@@ -1,3 +1,5 @@
+import sys
+import types
 import importlib.util
 import json
 import sys
@@ -12,7 +14,10 @@ sys.modules.setdefault(
     types.SimpleNamespace(get_user_directory=lambda: "unused"),
 )
 MODULE_PATH = Path(__file__).parents[1] / "library.py"
-SPEC = importlib.util.spec_from_file_location("h3_reference_library", MODULE_PATH)
+package = types.ModuleType("h3_library_test_package")
+package.__path__ = [str(MODULE_PATH.parent)]
+sys.modules["h3_library_test_package"] = package
+SPEC = importlib.util.spec_from_file_location("h3_library_test_package.library", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(MODULE)
 

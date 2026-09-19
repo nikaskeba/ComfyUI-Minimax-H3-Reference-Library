@@ -1,3 +1,4 @@
+from .refmod_support import source_identity
 import math
 import logging
 from collections import OrderedDict
@@ -21,6 +22,7 @@ from .reference_cache import (
     vae_fingerprint,
 )
 from .reference_audio import crop_voice_reference
+from .refmod_runtime import load_cached
 
 
 ReferenceBundle = io.Custom("SKEBA_H3_REFERENCE_BUNDLE")
@@ -181,10 +183,74 @@ def _unpack_visual(tensors, prefix, deepstack_count):
 def _entry_source_hash(entry):
     if not entry or not entry.get("source_path"):
         return None
+
     try:
         return source_fingerprint(entry, lambda: None)
     except (OSError, TypeError):
         return None
+
+
+def _prepare_refmod(entry, clip, vae, audio_vae, cache_mode, fps):
+    selected = entry["refmod"]
+    mod = load_cached(selected["path"][:-len(".safetensors")], selected["member"])
+    kind = mod.kind
+    cap = entry.get("max_duration_seconds")
+    vae_id = vae_fingerprint(audio_vae if kind == "audio" else vae)
+    clip_id = clip_fingerprint(clip) if kind != "audio" else None
+    key = fingerprint({"refmod_version": 1, "source": source_identity(selected["path"]), "channel": selected["channel"],
+                       "member": selected["member"], "kind": kind, "cap": cap, "fps": fps,
+                       "vae": vae_id, "clip": clip_id})
+    identifiable = vae_id and (kind == "audio" or clip_id)
+    cached = _CACHE.load_compiled(entry, key, "refmod") if cache_mode == "auto" and identifiable else None
+    if cached:
+        tensors, meta = cached
+        state = "HIT"
+    else:
+        tensors = {"latent": mod.latent}
+        meta = {"kind": kind, "counts": [], "timestamps": []}
+        if kind == "audio":
+            # Preserve the stored latent unless the voice budget requires cropping.
+            if cap is not None and mod.latent_t / 40.0 > cap:
+                waveform = audio_vae.decode(mod.latent).movedim(-1, 1)
+                sr = int(getattr(audio_vae, "audio_sample_rate_output", getattr(audio_vae, "audio_sample_rate", 32000)))
+                audio = crop_voice_reference({"waveform": waveform, "sample_rate": sr}, cap)
+                tensors["latent"], _ = h3._encode_ref_audio(audio_vae, audio)
+        else:
+            pixels = vae.decode(mod.latent)
+            if pixels.ndim == 5:
+                pixels = pixels.reshape(-1, *pixels.shape[-3:])
+            if kind == "image":
+                blocks = [pixels[:1]]
+            else:
+                times = [i / 2 for i in range(max(1, math.ceil(pixels.shape[0] * 2 / fps)))]
+                sampled = pixels[[min(round(t * fps), pixels.shape[0] - 1) for t in times]]
+                if len(sampled) % 2:
+                    sampled = torch.cat([sampled, sampled[-1:]], dim=0)
+                    times.append(times[-1])
+                blocks = [sampled[i:i + 2] for i in range(0, len(sampled), 2)]
+                meta["timestamps"] = times
+            for i, pixels_block in enumerate(blocks):
+                visual = _encode_qwen_visual(clip, pixels_block, video_block=kind == "video")
+                meta["counts"].append(_pack_visual(tensors, f"qwen_{i}", visual))
+        if cache_mode != "disabled" and identifiable:
+            _CACHE.save_compiled(entry, key, "refmod", tensors, meta)
+        state = "DISABLED" if cache_mode == "disabled" or not identifiable else ("REBUILT" if cache_mode == "rebuild" else "CREATED")
+    latent = tensors["latent"]
+    if kind == "audio":
+        block = {"kind": kind, "audio_latent": latent, "ref_audio_t": latent.shape[-1]}
+        item = {"type": "audio"}
+    else:
+        block = {"kind": kind, "latent": latent, "latent_h": mod.latent_h, "latent_w": mod.latent_w}
+        visuals = [_unpack_visual(tensors, f"qwen_{i}", count) for i, count in enumerate(meta["counts"])]
+        item = {"type": kind, "data": visuals[0] if kind == "image" else _CachedVideoVisualBlocks(visuals)}
+        if kind == "video":
+            block.update(latent_t=mod.latent_t, ref_audio_t=0, audio_latent=None)
+            item["timestamps"] = meta["timestamps"]
+    block.update(refmod=True, skeba_refmod_binding=entry["binding_id"])
+    block["skeba_refmod_base"] = dict(block)
+    if cap is not None:
+        state += f" (voice cap {cap:g}s)"
+    return item, block, state
 
 
 class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
@@ -259,6 +325,13 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
         for image_index in range(image_count):
             img = image_values[image_index] if image_index < len(image_values) else None
             entry = image_entries[image_index] if image_index < len(image_entries) else None
+            if entry and entry.get("refmod"):
+                item, block, state = _prepare_refmod(entry, clip, vae, audio_vae, cache_mode, float(bundle.get("video_fps", 24)))
+                ref_items.append(item)
+                block["skeba_refmod_slot"] = len(ref_blocks)
+                ref_blocks.append(block)
+                report(entry["tag"], "RefMod", state)
+                continue
             tag = (entry or {}).get("tag") or f"Picture {image_index + 1}"
             source_hash = (_entry_source_hash(entry)
                            if cache_mode != "disabled" else None)
@@ -393,6 +466,13 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
             else:
                 name, video_frames = f"ref_video_{video_index}", None
             entry = video_entries[video_index] if video_index < len(video_entries) else None
+            if entry and entry.get("refmod"):
+                item, block, state = _prepare_refmod(entry, clip, vae, audio_vae, cache_mode, float(bundle.get("video_fps", 24)))
+                ref_items.append(item)
+                block["skeba_refmod_slot"] = len(ref_blocks)
+                ref_blocks.append(block)
+                report(entry["tag"], "RefMod", state)
+                continue
             tag = (entry or {}).get("tag") or f"Video {video_index + 1}"
             soundtrack = ref_video_audios.get("ref_video_audio_" + name.rsplit("_", 1)[-1])
             has_soundtrack = bool((entry or {}).get("has_audio") or soundtrack is not None)
@@ -631,6 +711,13 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
         for audio_index in range(audio_count):
             audio = audio_values[audio_index] if audio_index < len(audio_values) else None
             entry = audio_entries[audio_index] if audio_index < len(audio_entries) else None
+            if entry and entry.get("refmod"):
+                item, block, state = _prepare_refmod(entry, clip, vae, audio_vae, cache_mode, float(bundle.get("video_fps", 24)))
+                ref_items.append(item)
+                block["skeba_refmod_slot"] = len(ref_blocks)
+                ref_blocks.append(block)
+                report(entry["tag"], "RefMod", state)
+                continue
             tag = (entry or {}).get("tag") or f"Audio {audio_index + 1}"
             max_seconds = (entry or {}).get("max_duration_seconds")
             crop_metadata = {"max_duration_seconds": max_seconds} if max_seconds is not None else {}

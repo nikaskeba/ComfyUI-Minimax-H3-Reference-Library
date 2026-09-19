@@ -13,6 +13,34 @@ const openBuiltInCharacters = () => {
 
 app.registerExtension({
     name: "H3ReferenceLibrary.Toolbar",
+    setup() {
+        if (document.getElementById("h3-reference-library-icon-style")) return;
+        const style = document.createElement("style");
+        style.id = "h3-reference-library-icon-style";
+        const iconUrl = new URL("./library-icon.svg", import.meta.url).href;
+        style.textContent = `
+            .h3-reference-library-icon {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 1.75rem;
+                height: 1.75rem;
+                flex-shrink: 0;
+                background-color: #000;
+                border-radius: 6px;
+            }
+            .h3-reference-library-icon::before {
+                content: "";
+                display: block;
+                width: 1rem;
+                height: 1rem;
+                background-color: #fff;
+                -webkit-mask: url("${iconUrl}") center / contain no-repeat;
+                mask: url("${iconUrl}") center / contain no-repeat;
+            }
+        `;
+        document.head.appendChild(style);
+    },
     beforeRegisterNodeDef(nodeType, nodeData) {
         if (!["H3TaggedReferencePrompt", "H3BuiltInReference"].includes(nodeData.name)) {
             return;
@@ -33,7 +61,7 @@ app.registerExtension({
     },
     actionBarButtons: [
         {
-            icon: "icon-[lucide--library] size-4",
+            icon: "h3-reference-library-icon",
             tooltip: "Open H3 Reference Library",
             onClick: openReferenceLibrary,
         },

@@ -1,3 +1,7 @@
+from .refmod_preview import SkebaRefModPreview
+from .refmod_studio import SkebaRefModStudio
+from .refmod_create import SkebaCreateH3RefMod
+from .refmod_apply import SkebaH3RefModApply
 from .palette_sampling import PaletteFramePreview
 from .fixed_palette import FixedPaletteQuantize
 from .h3_tag_references import H3TaggedReferencePrompt, H3PromptListValidator
@@ -25,12 +29,18 @@ from .prompt_loop_node import PromptFromListNode, PromptLoopNode
 from .skeba_io_tags import SkebaBypass
 from .universal_bypass import SkebaUniversalBypass
 from .video_loop_node import CombineVideoClipsNode
+from .disk_video import SaveClipToFile
 from .server import register_routes
 
 
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaRefModPreview": SkebaRefModPreview,
+    "SkebaRefModStudio": SkebaRefModStudio,
+    "SkebaCreateH3RefMod": SkebaCreateH3RefMod,
+    "SkebaH3RefModApply": SkebaH3RefModApply,
+    "SkebaSaveClipToFile": SaveClipToFile,
     "SkebaPaletteFramePreview": PaletteFramePreview,
     "SkebaFixedPaletteQuantize": FixedPaletteQuantize,
     "H3TaggedReferencePrompt": H3TaggedReferencePrompt,
@@ -58,6 +68,11 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaRefModPreview": "SKEBA RefMod Frame / Audio Preview",
+    "SkebaRefModStudio": "SKEBA RefMod Studio Create / Edit",
+    "SkebaCreateH3RefMod": "SKEBA Create H3 RefMod",
+    "SkebaH3RefModApply": "SKEBA Apply H3 RefMod",
+    "SkebaSaveClipToFile": "Skeba Save Clip to File",
     "SkebaPaletteFramePreview": "Palette Frame Preview",
     "SkebaFixedPaletteQuantize": "Fixed Palette Quantize",
     "H3TaggedReferencePrompt": "H3 Tagged Reference Prompt",

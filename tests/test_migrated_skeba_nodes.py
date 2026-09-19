@@ -61,23 +61,27 @@ class MigratedSkebaNodeTests(unittest.TestCase):
         folder_paths = types.SimpleNamespace(get_input_directory=lambda: "input")
         comfy_latest = types.ModuleType("comfy_api.latest")
         comfy_latest.InputImpl = types.SimpleNamespace(
+            VideoFromFile=type("VideoFromFile", (), {}),
             VideoFromComponents=lambda components, bit_depth: (components, bit_depth)
         )
         comfy_latest.Types = types.SimpleNamespace(VideoComponents=types.SimpleNamespace)
         comfy_api = types.ModuleType("comfy_api")
         comfy_api.latest = comfy_latest
+        package = types.ModuleType("skeba_video_tests")
+        package.__path__ = [str(ROOT)]
         cls.folder_paths_patch = mock.patch.dict(
             sys.modules,
             {
                 "folder_paths": folder_paths,
                 "comfy_api": comfy_api,
                 "comfy_api.latest": comfy_latest,
+                "skeba_video_tests": package,
             },
         )
         cls.folder_paths_patch.start()
         cls.images = load_module("batch_image_nodes_test", "batch_image_nodes.py")
         cls.io_tags = load_module("skeba_io_tags_test", "skeba_io_tags.py")
-        cls.video = load_module("video_loop_node_test", "video_loop_node.py")
+        cls.video = load_module("skeba_video_tests.video_loop_node", "video_loop_node.py")
         cls.images.np = np
         cls.images.torch = FakeTorch
         cls.images.Image = FakeImageApi

@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import folder_paths
+from .refmod_library import selection_fields
 
 
 TAG_RE = re.compile(r"^[A-Za-z0-9_-]+$")
@@ -116,12 +117,13 @@ def get_record(record_id):
 
 def create_record(tag, category="other", image_description="", audio_description="",
                   image_file=None, audio_file=None, reference_type="uncategorized",
-                  video_description="", video_file=None, video_has_audio=False):
+                  video_description="", video_file=None, video_has_audio=False, refmod_settings=None):
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
     text_voice = reference_type == "character" and bool((audio_description or "").strip())
-    if image_file is None and audio_file is None and video_file is None and not text_voice:
+    refmods = selection_fields(refmod_settings or {})
+    if image_file is None and audio_file is None and video_file is None and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"]):
         raise ValueError(
             "A reference record needs media, or a Character needs a voice description.")
 
@@ -130,6 +132,7 @@ def create_record(tag, category="other", image_description="", audio_description
         _require_unique_tag(manifest["records"], tag)
         now = _timestamp()
         record = {
+            **refmods,
             "id": uuid.uuid4().hex,
             "tag": tag,
             "category": category,
@@ -152,7 +155,7 @@ def create_record(tag, category="other", image_description="", audio_description
 def update_record(record_id, tag, category="other", image_description="", audio_description="",
                   image_file=None, audio_file=None, remove_image=False, remove_audio=False,
                   reference_type="uncategorized", video_description="", video_file=None,
-                  video_has_audio=None, remove_video=False):
+                  video_has_audio=None, remove_video=False, refmod_settings=None):
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
@@ -161,6 +164,9 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         record = next((item for item in manifest["records"] if item["id"] == record_id), None)
         if record is None:
             raise KeyError(record_id)
+        refmods = selection_fields(refmod_settings) if refmod_settings is not None else {
+            key: record.get(key, "media" if key.endswith("source") else None)
+            for key in ("appearance_source", "voice_source", "appearance_refmod", "voice_refmod")}
         _require_unique_tag(manifest["records"], tag, record_id)
 
         old_image = record.get("image_file")
@@ -171,7 +177,7 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         next_video = video_file if video_file is not None else (None if remove_video else old_video)
         text_voice = reference_type == "character" and bool((audio_description or "").strip())
         if (next_image is None and next_audio is None and next_video is None
-                and not text_voice):
+                and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"])):
             raise ValueError(
                 "A reference record needs media, or a Character needs a voice description.")
         if video_file is not None:
@@ -182,6 +188,7 @@ def update_record(record_id, tag, category="other", image_description="", audio_
             next_video_has_audio = bool(record.get("video_has_audio"))
 
         record.update({
+            **refmods,
             "tag": tag,
             "category": category,
             "reference_type": reference_type,

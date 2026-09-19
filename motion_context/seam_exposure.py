@@ -123,7 +123,9 @@ class H3SeamExposureMatch:
         if not clips:
             return (images,)
         try:
-            previous = clips[-1].get_components().images
+            previous = (clips[-1].seam_frames(_ANALYSIS_FRAMES)
+                        if hasattr(clips[-1], "seam_frames")
+                        else clips[-1].get_components().images)
         except (AttributeError, TypeError):
             raise ValueError(
                 "h3_motion_context: seam exposure accumulation does not "

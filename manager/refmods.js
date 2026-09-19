@@ -1,0 +1,101 @@
+import {groupCatalog} from "./refmod-catalog.js";
+const $ = id => document.getElementById(id);
+const fields=["name","file","subject_name","appearance","voice_description","description","frames","appearance_action","audio_action","mode","resolution","grid","steps","video_frames","audio_seconds","vae","audio_vae"];
+const numeric=new Set(["resolution","grid","steps","video_frames","audio_seconds"]);
+let sources=[],existing=null,companion=null,catalog=[],groups=[],folder="",uploading=0,busy=false,frameRows=[],storedVoice=null,previewData={frames:[],audio:null},baseline="";
+const status=(message,error=false)=>{$("status").textContent=message;$("status").className=error?"error":"";};
+async function request(url,options={}){const response=await fetch(url,options),text=await response.text();let result;try{result=JSON.parse(text);}catch{throw new Error(`${url} returned ${response.status} with a non-JSON response. Restart ComfyUI after updating the nodes, then refresh this page.`);}if(!response.ok)throw new Error(typeof result.error==="string"?result.error:JSON.stringify(result));return result;}
+const selection=row=>({file:row.file,member:row.member??null});
+const previewURL=row=>`/api/h3-refmods/preview?file=${encodeURIComponent(row.file)}&member=${row.member??""}`;
+const mediaURL=data=>"/view?"+new URLSearchParams(data);
+function button(label,action){const el=document.createElement("button");el.type="button";el.textContent=label;el.onclick=action;return el;}
+function values(){return Object.fromEntries(fields.map(id=>[id,numeric.has(id)?Number($(id).value):$(id).value]));}
+function spec(){return {...values(),sources,existing,companion,overwrite:Boolean(existing)&&!$("overwrite").checked,retrain:$("retrain").checked,frame_order:existing?frameRows.filter(row=>row.keep).map(row=>row.index):null};}
+function snapshot(){return JSON.stringify(spec());}
+const modelFields=["vae","audio_vae"];
+function saveModels(){localStorage.setItem("skeba-refmod-models",JSON.stringify(Object.fromEntries(modelFields.map(id=>[id,$(id).value]))));}
+function restoreModels(){const saved=JSON.parse(localStorage.getItem("skeba-refmod-models")||"null");if(saved)for(const id of modelFields)if([...$(id).options].some(option=>option.value===saved[id]))$(id).value=saved[id];}
+function remember(){localStorage.setItem("skeba-refmod-draft",JSON.stringify({...spec(),frameRows,storedVoice,previewData}));summary();}
+function summary(){const kept=frameRows.filter(row=>row.keep).length;$("edit-summary").textContent=`${kept} kept frames · ${sources.length} new sources${storedVoice?" · stored voice":""}`;const unchanged=existing&&baseline===snapshot();$("save").disabled=busy||uploading>0||Boolean(unchanged);$("save").textContent=unchanged?"No changes":existing&&!sources.length&&!$("retrain").checked?"Save changes":"Train / Encode & Save";}
+function showView(editor){$("library-view").hidden=editor;$("edit-view").hidden=!editor;$("show-library").classList.toggle("active",!editor);$("show-editor").classList.toggle("active",editor);}
+function modeChanged(){document.querySelectorAll(".compressed").forEach(el=>el.hidden=$("mode").value!=="training");$("retrain-row").hidden=!existing||!frameRows.length||$("mode").value!=="training";if($("retrain-row").hidden)$("retrain").checked=false;}
+function syncFrames(){$("frames").value=frameRows.filter(row=>row.keep).map(row=>row.index).join(",");}
+function move(list,index,offset){const next=index+offset;if(next>=0&&next<list.length)[list[index],list[next]]=[list[next],list[index]];}
+function renderStored(){
+ $("stored-frames").replaceChildren();$("stored-audio").replaceChildren();$("stored").hidden=!existing;
+ frameRows.forEach((item,index)=>{
+  const row=document.createElement("div");row.className="stored-row"+(item.keep?"":" omitted");row.draggable=true;row.dataset.index=index;
+  row.ondragstart=event=>event.dataTransfer.setData("application/x-skeba-frame",String(index));row.ondragover=event=>{if([...event.dataTransfer.types].includes("application/x-skeba-frame"))event.preventDefault();};row.ondrop=event=>{const value=event.dataTransfer.getData("application/x-skeba-frame");if(!value)return;event.preventDefault();const from=Number(value);const [moved]=frameRows.splice(from,1);frameRows.splice(index,0,moved);syncFrames();renderStored();remember();};
+  const keep=document.createElement("input");keep.type="checkbox";keep.checked=item.keep;keep.setAttribute("aria-label",`Keep frame ${item.index+1}`);keep.onchange=()=>{item.keep=keep.checked;syncFrames();renderStored();remember();};
+  const box=document.createElement("div"),data=previewData.frames?.[item.index];
+  const preview=document.createElement(data?"img":"div");preview.className="frame-preview"+(data?"":" frame-placeholder");if(data){preview.src=mediaURL(data);preview.alt=`Stored frame ${item.index+1}`;}else preview.textContent=`Frame ${item.index+1}
+Preview not generated`;
+  const badge=document.createElement("span");badge.className="stored-tag";badge.textContent="STORED";box.append(preview,badge);
+  const body=document.createElement("div"),title=document.createElement("div"),meta=document.createElement("p"),controls=document.createElement("div");title.className="source-title";title.textContent=`Frame ${item.index+1}`;meta.className="frame-meta";meta.textContent=item.keep?"Kept exactly as stored · 1 latent frame":"Omitted from saved copy";controls.className="source-controls";
+  controls.append(button("Up",()=>{move(frameRows,index,-1);syncFrames();renderStored();remember();}),button("Down",()=>{move(frameRows,index,1);syncFrames();renderStored();remember();}),button(item.keep?"Remove":"Restore",()=>{item.keep=!item.keep;syncFrames();renderStored();remember();}));body.append(title,meta,controls);row.append(keep,box,body);$("stored-frames").append(row);
+ });
+ if(storedVoice){const row=document.createElement("div");row.className="stored-row stored-voice";const keep=document.createElement("input");keep.type="checkbox";keep.checked=$("audio_action").value!=="remove";keep.setAttribute("aria-label","Keep stored voice");keep.onchange=()=>{$("audio_action").value=keep.checked?"keep":"remove";remember();};const body=document.createElement("div"),title=document.createElement("div"),info=document.createElement("p");title.className="source-title";title.textContent="Stored voice";info.className="frame-meta";info.textContent=`${((storedVoice.latent_t||0)/40).toFixed(2)} seconds · ${storedVoice.token_count??(storedVoice.latent_t||0)*2} tokens`;body.append(title,info);if(previewData.audio){const audio=document.createElement("audio");audio.controls=true;audio.preload="none";audio.src=mediaURL(previewData.audio);body.append(audio);}else{const note=document.createElement("p");note.className="muted";note.textContent="Generate previews to listen to the stored voice.";body.append(note);}row.append(keep,body);$("stored-audio").append(row);}
+}
+function renderSources(){
+ $("sources").replaceChildren();
+ sources.forEach((source,index)=>{const row=document.createElement("div");row.className="source-row";const preview=document.createElement(source.kind==="image"?"img":source.kind==="video"?"video":"audio");preview.src=`/api/h3-refmods/sources/${encodeURIComponent(source.file)}`;preview.alt=source.name;if(source.kind!=="image"){preview.controls=true;preview.preload="metadata";}
+ const body=document.createElement("div"),title=document.createElement("div"),controls=document.createElement("div");title.className="source-title";title.textContent=`${source.name} · new ${source.kind}`;controls.className="source-controls";
+ controls.append(button("Up",()=>{move(sources,index,-1);renderSources();remember();}),button("Down",()=>{move(sources,index,1);renderSources();remember();}),button("Remove",()=>{sources.splice(index,1);renderSources();remember();}));
+ if(source.kind!=="image")for(const key of ["start","end"]){const label=document.createElement("label");label.textContent=key;const input=document.createElement("input");input.type="number";input.min="0";input.step="any";input.value=source[key]||0;input.oninput=()=>{source[key]=Number(input.value);remember();};label.append(input);controls.append(label);}body.append(title,controls);row.append(preview,body);$("sources").append(row);});
+}
+async function upload(files){if(busy)return;uploading++;summary();try{for(const file of files){status(`Uploading ${file.name}...`);const data=new FormData();data.append("file",file);const source=await request("/api/h3-refmods/sources",{method:"POST",body:data});sources.push({...source,start:0,end:0});if(source.kind==="audio"&&$("audio_action").value==="keep")$("audio_action").value="replace";renderSources();remember();}status("Sources ready.");}catch(error){status(error.message,true);}finally{uploading--;summary();$("upload").value="";}}
+function chip(text,kind="neutral"){const el=document.createElement("span");el.className="chip "+kind;el.textContent=text;return el;}
+function renderFolders(){const names=[...new Set(groups.map(group=>group.folder))].sort();$("folders").replaceChildren();for(const name of ["",...names]){const control=button(name||"All RefMods",()=>{folder=name;renderFolders();renderCatalog();});control.classList.toggle("active",folder===name);$("folders").append(control);}}
+function renderCatalog(){
+ $("assets").replaceChildren();const query=$("search").value.toLowerCase(),kind=$("kind-filter").value;
+ const shown=groups.filter(group=>(!folder||group.folder===folder)&&(!kind||(kind==="paired"?group.visual&&group.audio:kind==="visual"?group.visual:group.audio))&&`${group.name} ${group.files.join(" ")} ${group.rows.map(row=>row.description||"").join(" ")}`.toLowerCase().includes(query));
+ for(const group of shown){const card=document.createElement("article");card.className="asset";const thumb=group.rows.find(row=>row.preview),preview=document.createElement(thumb?"img":"div");preview.className="asset-preview"+(thumb?"":" asset-placeholder");if(thumb){preview.src=previewURL(thumb);preview.alt=group.name;preview.loading="lazy";}else preview.textContent=group.audio&&!group.visual?"Audio":"RefMod";
+ const body=document.createElement("div"),name=document.createElement("div"),badges=document.createElement("div"),files=document.createElement("div"),actions=document.createElement("div"),details=document.createElement("details");body.className="asset-body";name.className="asset-name";name.textContent=group.name;badges.className="badges";files.className="asset-files";files.textContent=group.files.join(" + ");actions.className="asset-actions";
+ if(group.visual){const v=group.visual;badges.append(chip(`${v.kind} · ${Number(v.token_count).toLocaleString()} tokens`,"visual"),chip(`${v.mode==="encode"?"full":"compressed"} · ${v.latent_t??"?"} frames · ${v.latent_h??"?"}×${v.latent_w??"?"}`));}
+ if(group.audio){const a=group.audio;badges.append(chip(`audio · ${((a.latent_t||0)/40).toFixed(1)} s · ${Number(a.token_count).toLocaleString()} tokens`,"audio"));}
+ if(group.visual&&group.audio)badges.append(chip(group.paired?"paired files":"appearance + voice"));
+ const summary=document.createElement("summary");summary.textContent="Characteristics";details.append(summary);
+ for(const [label,value] of [["Subject",group.primary.subject_name],["Appearance",group.visual?.appearance],["Voice",group.audio?.voice_description],["Notes",group.primary.description]])if(value){const p=document.createElement("p");p.textContent=`${label}: ${value}`;details.append(p);}
+ const detailButton=button("Details",()=>{details.open=!details.open;});const editButton=button("Edit",()=>edit(group).catch(error=>status(error.message,true)));editButton.setAttribute("aria-label",`Edit ${group.name}`);actions.append(detailButton,editButton,button("Delete",()=>removeGroup(group).catch(error=>status(error.message,true))));body.append(name,badges,files,actions,details);card.append(preview,body);$("assets").append(card);}
+ $("empty").hidden=shown.length>0;$("library-count").textContent=`${groups.length} RefMods · ${groups.filter(group=>group.visual&&group.audio).length} appearance + voice`;
+}
+async function removeGroup(group){
+ if(busy)return;
+ if(!confirm(`Delete ${group.name}?\n\n${group.files.join("\n")}\n\nThis deletes the entire RefMod, including all bundle members. Characters using it will need another attachment. Source media and thumbnails are kept.`))return;
+ const selections=group.files.map(file=>selection(group.rows.find(row=>row.file===file)));
+ await request("/api/h3-refmods/records",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({selections})});
+ if(existing&&group.files.includes(existing.file)){reset();showView(false);}await refresh();status(`Deleted ${group.name}.`);
+}
+async function refresh(){catalog=await request("/api/h3-refmods/records");groups=groupCatalog(catalog);renderFolders();renderCatalog();}
+async function edit(group){
+ if(busy)return;if(group.primary.error)throw new Error(group.primary.error);const row=group.primary;
+ const meta=await request(`/api/h3-refmods/detail?file=${encodeURIComponent(row.file)}&member=${row.member??""}`);const members=meta.kind==="bundle"?meta.members:[meta];const visual=members.find(m=>m.kind!=="audio");
+ let voice=members.find(m=>m.kind==="audio");existing=selection(row);companion=group.paired&&group.audio?selection(group.audio):null;
+ if(companion){const voiceMeta=await request(`/api/h3-refmods/detail?file=${encodeURIComponent(companion.file)}&member=${companion.member??""}`);voice=voiceMeta.kind==="bundle"?voiceMeta.members[companion.member]:voiceMeta;}
+ sources=[];frameRows=Array.from({length:visual?.latent_t||0},(_,index)=>({index,keep:true}));storedVoice=voice||null;previewData={frames:[],audio:null};syncFrames();
+ $("name").value=group.name;$("file").value=group.paired?group.key+"_edited.safetensors":row.file.replace(/\.safetensors$/i,"_edited.safetensors");$("subject_name").value=visual?.subject_name||voice?.subject_name||"";$("appearance").value=visual?.appearance||"";$("voice_description").value=voice?.voice_description||"";$("description").value=visual?.description||voice?.description||"";$("mode").value=visual?.mode==="encode"?"encode":"training";
+ for(const key of ["resolution","grid","video_frames","steps","audio_seconds"])if(meta.skeba_studio?.[key]!=null)$(key).value=meta.skeba_studio[key];
+ $("appearance_action").value="append";$("audio_action").value="keep";$("overwrite").checked=false;$("overwrite-row").hidden=false;$("retrain").checked=false;$("clip-note").hidden=!visual||visual.latent_t<=1;
+ $("stored-info").textContent=`${frameRows.length} stored frames${voice?" + voice":""}${companion?" · saves changes to both paired files":""}`;$("editor-title").textContent=`Editing ${group.name}`;$("show-editor").textContent=`Editing ${group.name}`;
+ renderStored();renderSources();modeChanged();baseline=snapshot();remember();showView(true);status("Kept frames are copied exactly. Generate previews to inspect the stored appearance and voice.");
+}
+function reset(){if(busy)return;$("editor").reset();restoreModels();sources=[];existing=null;companion=null;frameRows=[];storedVoice=null;previewData={frames:[],audio:null};baseline="";$("overwrite-row").hidden=true;$("editor-title").textContent="Create RefMod";$("show-editor").textContent="Create / Edit";$("stored-info").textContent="Add sources to build an appearance and/or voice reference.";renderStored();renderSources();modeChanged();remember();showView(true);status("");}
+function setBusy(value){busy=value;$("editor-fields").disabled=value;$("new").disabled=value;summary();}
+async function poll(job){try{const history=await request(`/history/${job.id}`),run=history[job.id];if(!run){setTimeout(()=>poll(job),1500);return;}if(run.status?.status_str==="error"){const event=run.status.messages?.find(([type])=>type==="execution_error");throw new Error(event?.[1]?.exception_message||JSON.stringify(run.status.messages));}
+ localStorage.removeItem("skeba-refmod-job");setBusy(false);
+ if(job.kind==="preview"){const data=run.outputs?.["3"]?.refmod_preview?.[0];if(!data)throw new Error("Preview job returned no preview data.");previewData=data;renderStored();remember();status("Stored-frame and voice previews are ready.");return;}
+ const file=run.outputs?.["3"]?.text?.[0];if(!file)throw new Error("Job ended without a saved RefMod. Check ComfyUI history.");await refresh();const saved=groups.find(group=>group.files.includes(file));if(saved)await edit(saved);else {baseline=snapshot();summary();}status(`Saved ${file}. Refresh attachments in the character editor to select it.`);$("result").replaceChildren();const link=document.createElement("a");link.href="/h3-references";link.textContent="Open character reference library";$("result").append(link);
+ }catch(error){localStorage.removeItem("skeba-refmod-job");setBusy(false);status(error.message,true);}}
+async function queue(kind){if(busy||uploading)return;try{const data=spec();delete data.vae;delete data.audio_vae;const inputs={spec:JSON.stringify(data)},prompt={};const visual=kind==="preview"?frameRows.length>0:sources.some(source=>source.kind!=="audio"),voice=kind==="preview"?Boolean(storedVoice):sources.some(source=>source.kind==="audio");
+ for(const [needed,field,id]of [[visual,"vae","1"],[voice,"audio_vae","2"]])if(needed){if(!$(field).value)throw new Error(`Select an H3 ${field==="vae"?"video":"audio"} VAE.`);prompt[id]={class_type:"VAELoader",inputs:{vae_name:$(field).value}};inputs[field]=[id,0];}
+ prompt["3"]={class_type:kind==="preview"?"SkebaRefModPreview":"SkebaRefModStudio",inputs};remember();const result=await request("/prompt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});const job={id:result.prompt_id,kind};localStorage.setItem("skeba-refmod-job",JSON.stringify(job));setBusy(true);status(kind==="preview"?"Queued stored-frame and audio preview decoding...":"Queued training / encoding. Watch progress in ComfyUI's queue.");poll(job);
+ }catch(error){status(error.message,true);}}
+for(const id of modelFields)$(id).addEventListener("change",saveModels);
+$("editor").onsubmit=event=>{event.preventDefault();queue("save");};$("preview").onclick=()=>queue("preview");$("upload").onchange=()=>upload([...$("upload").files]);
+const zone=document.querySelector(".upload-zone");zone.ondragover=event=>event.preventDefault();zone.ondrop=event=>{event.preventDefault();upload([...event.dataTransfer.files]);};
+$("new").onclick=reset;$("refresh").onclick=()=>refresh().catch(error=>status(error.message,true));$("search").oninput=renderCatalog;$("kind-filter").onchange=renderCatalog;$("mode").onchange=modeChanged;$("audio_action").onchange=renderStored;
+$("show-library").onclick=$("back").onclick=()=>showView(false);$("show-editor").onclick=()=>showView(true);$("editor").addEventListener("change",remember);
+async function init(){const models=await request("/object_info/VAELoader");for(const name of models.VAELoader?.input?.required?.vae_name?.[0]||[])for(const id of ["vae","audio_vae"])$(id).add(new Option(name,name));const draft=JSON.parse(localStorage.getItem("skeba-refmod-draft")||"null");
+ if(draft){for(const id of fields)if(draft[id]!=null)$(id).value=draft[id];sources=draft.sources||[];existing=draft.existing||null;companion=draft.companion||null;frameRows=draft.frameRows||[];storedVoice=draft.storedVoice||null;previewData=draft.previewData||{frames:[],audio:null};$("overwrite").checked=Boolean(existing)&&!draft.overwrite;$("overwrite-row").hidden=!existing;$("retrain").checked=Boolean(draft.retrain);}
+ restoreModels();saveModels();renderStored();renderSources();modeChanged();summary();await refresh();const raw=localStorage.getItem("skeba-refmod-job");if(raw){const job=raw.startsWith("{")?JSON.parse(raw):{id:raw,kind:"save"};setBusy(true);status("Watching queued RefMod job...");poll(job);}}
+init().catch(error=>status(error.message,true));

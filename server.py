@@ -1,3 +1,8 @@
+from .refmod_studio import source_root, source_path, SOURCE_EXTENSIONS
+from .refmod_library import preview_path as refmod_preview_path, read_meta as read_refmod_meta
+import json
+from .refmod_library import delete_files as delete_refmod_files, catalog as refmod_catalog, resolve as resolve_refmod
+from .built_in_references import set_built_in_refmods
 import asyncio
 from .palette_sampling import sample_preview
 import io
@@ -10,6 +15,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 from comfy_extras.nodes_audio import load as load_audio_file
 from server import PromptServer
+from .disk_video import playlist_projects, playlist_manifest, playlist_media
 
 from .library import (
     audio_directory,
@@ -53,6 +59,35 @@ def register_routes():
     ROUTES_REGISTERED = True
     routes = PromptServer.instance.routes
 
+    @routes.get("/h3-video-playlist")
+    async def video_playlist_page(request):
+        return web.FileResponse(WEB_DIRECTORY_PATH / "playlist.html")
+
+    @routes.get("/api/h3-video-playlist/projects")
+    async def video_playlist_projects(request):
+        return web.json_response([
+            {"id": token, "name": Path(path).parent.name + " / " + Path(path).name}
+            for token, path in reversed(list(playlist_projects().items()))
+            if (Path(path) / "manifest.json").is_file()
+        ], headers={"Cache-Control": "no-store"})
+
+    @routes.get("/api/h3-video-playlist/{token}")
+    async def video_playlist_manifest(request):
+        try:
+            directory, manifest = playlist_manifest(request.match_info["token"])
+            return web.json_response({**manifest, "directory": str(directory)},
+                                     headers={"Cache-Control": "no-store"})
+        except FileNotFoundError:
+            raise web.HTTPNotFound()
+
+    @routes.get("/api/h3-video-playlist/{token}/clip/{clip_id}")
+    async def video_playlist_clip(request):
+        try:
+            path = playlist_media(request.match_info["token"], request.match_info["clip_id"])
+            return web.FileResponse(path)
+        except (FileNotFoundError, ValueError):
+            raise web.HTTPNotFound()
+
     @routes.post("/api/skeba-palette/sample")
     async def sample_palette_pixel(request):
         try:
@@ -63,6 +98,86 @@ def register_routes():
         except FileNotFoundError:
             return web.json_response({"error": "Preview expired. Click Preview / Pick Colors again."}, status=404)
         except (ValueError, TypeError, KeyError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/h3-refmods")
+    async def refmod_studio_page(request):
+        return web.FileResponse(WEB_DIRECTORY_PATH / "refmods.html")
+
+    @routes.delete("/api/h3-refmods/records")
+    async def delete_refmods(request):
+        try:
+            payload = await request.json()
+            deleted = await asyncio.to_thread(delete_refmod_files, payload.get("selections"))
+            return web.json_response({"deleted": deleted})
+        except (OSError, ValueError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/api/h3-refmods/detail")
+    async def refmod_studio_detail(request):
+        try:
+            member = request.query.get("member")
+            path, _ = resolve_refmod({"file": request.query.get("file", ""), "member": int(member) if member else None})
+            meta, _ = read_refmod_meta(str(path.with_suffix("")))
+            return web.json_response(meta)
+        except (OSError, ValueError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.post("/api/h3-refmods/sources")
+    async def refmod_studio_upload(request):
+        target = None
+        try:
+            reader = await request.multipart()
+            part = await reader.next()
+            if part is None or not part.filename:
+                raise ValueError("Choose an image, video or audio file.")
+            extension = Path(part.filename).suffix.lower()
+            if extension not in SOURCE_EXTENSIONS:
+                raise ValueError("Unsupported RefMod source file type.")
+            root = source_root(); root.mkdir(parents=True, exist_ok=True)
+            filename = uuid.uuid4().hex + extension
+            target = root / filename
+            with target.open("wb") as handle:
+                while chunk := await part.read_chunk(1024 * 1024):
+                    handle.write(chunk)
+            return web.json_response({"file": filename, "name": Path(part.filename).name, "kind": SOURCE_EXTENSIONS[extension]})
+        except (OSError, ValueError) as error:
+            if target is not None: target.unlink(missing_ok=True)
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/api/h3-refmods/sources/{name}")
+    async def refmod_studio_source(request):
+        try:
+            return web.FileResponse(source_path(request.match_info["name"]))
+        except (OSError, ValueError):
+            raise web.HTTPNotFound()
+
+    @routes.get("/api/h3-refmods/records")
+    async def get_refmods(request):
+        try:
+            return web.json_response(await asyncio.to_thread(refmod_catalog))
+        except (OSError, ValueError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/api/h3-refmods/preview")
+    async def refmod_preview(request):
+        try:
+            member = request.query.get("member")
+            path, _ = resolve_refmod({"file": request.query.get("file", ""), "member": int(member) if member else None})
+            preview = refmod_preview_path(path)
+            if preview is not None:
+                return web.FileResponse(preview)
+        except (ValueError, OSError):
+            pass
+        raise web.HTTPNotFound()
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/refmods")
+    async def update_built_in_refmods(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            set_built_in_refmods(library_built_in_tag_value(record), await request.json())
+            return web.json_response({"ok": True})
+        except (ValueError, KeyError, OSError) as error:
             return web.json_response({"error": str(error)}, status=400)
 
     @routes.get("/h3-references")
@@ -76,7 +191,7 @@ def register_routes():
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"manager.css", "manager.js"}:
+        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 
@@ -110,6 +225,7 @@ def register_routes():
                 "records": [
                     {
                         **{key: value for key, value in record.items() if key != "clips"},
+                        **{key: attached_records[library_built_in_tag_value(record)].get(key) for key in ("appearance_source", "voice_source", "appearance_refmod", "voice_refmod")},
                         "library_tag": library_built_in_tag_value(record),
                         "attachment_id": built_in_attachment_id(record),
                         "has_audio": bool(attached_records[library_built_in_tag_value(record)].get("audio_file")),
@@ -239,6 +355,7 @@ def register_routes():
             if "video" in files:
                 video_filename, video_has_audio = _save_video(*files["video"])
             record = create_record(
+                refmod_settings=json.loads(fields.get("refmod_settings", "{}")),
                 tag=fields.get("tag"),
                 category=fields.get("category", "other"),
                 image_description=fields.get("image_description"),
@@ -272,6 +389,7 @@ def register_routes():
             if "video" in files:
                 video_filename, video_has_audio = _save_video(*files["video"])
             record, old_image, old_audio, old_video = update_record(
+                refmod_settings=json.loads(fields["refmod_settings"]) if "refmod_settings" in fields else None,
                 record_id=record_id,
                 tag=fields.get("tag", current["tag"]),
                 category=fields.get("category", current.get("category", "other")),
@@ -423,6 +541,7 @@ def _public_record(record):
     return {
         "id": record_id,
         "tag": record["tag"],
+        **{key: record.get(key) for key in ("appearance_source", "voice_source", "appearance_refmod", "voice_refmod")},
         "category": record.get("category", "other"),
         "reference_type": record.get("reference_type", "uncategorized"),
         "image_description": record.get("image_description", ""),

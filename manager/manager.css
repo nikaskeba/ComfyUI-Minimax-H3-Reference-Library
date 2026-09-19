@@ -283,3 +283,9 @@ code { letter-spacing: 0; }
     #built-in-tab-panel .built-in-meta { justify-content: space-between; }
     .dialog-heading-actions { justify-content: space-between; }
 }
+
+.reference-source-tabs { display: flex; gap: 10px; margin: 16px 0; }
+#refmod-fields[hidden], #record-form .form-grid[hidden] { display: none; }
+#refmod-fields label { display: grid; gap: 6px; margin: 12px 0; }
+
+a.manager-tab { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 4px; text-decoration: none; }

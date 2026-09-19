@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 
 SECTIONS = ("subject_definitions", "summary", "retention_analysis", "detailed_description",
             "overall_soundscape", "non_diegetic_music")
-REQUIRED_SECTIONS = tuple(section for section in SECTIONS if section != "retention_analysis")
+REQUIRED_SECTIONS = tuple(section for section in SECTIONS if section not in ("summary", "retention_analysis"))
 TEMP_TYPES = {"character", "voice", "location", "object"}
 ENTITY_TYPES = {"character", "location", "object"}
 TOKEN_PATTERN = r"\{[^{}\r\n]+\}|§[^§\r\n]+§|<[A-Za-z_]+:[^<>]*>"
@@ -115,8 +115,8 @@ def _temp_parts(match):
     name = match["name"].strip()
     if kind not in TEMP_TYPES:
         fail("INVALID_TEMPORARY_TYPE", kind)
-    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", name):
-        fail("INVALID_TEMPORARY_NAME", name)
+    if not name or re.search(r"[<>=\[\]{}§|\x00-\x1f\x7f\u0085\u2028\u2029]", name):
+        fail("INVALID_TEMPORARY_NAME", f"{name!r}: use a nonempty name without tag delimiters, |, or line breaks.")
     return kind, name
 
 
@@ -125,9 +125,14 @@ def _parse(prompt):
         fail("INVALID_DIALOGUE", "Unbalanced or nested <d> tags.")
     if RUNTIME.search(prompt):
         fail("AUTHORED_RUNTIME_SLOT", "Use semantic tags in compiler mode; numbered H3 tags belong to legacy mode.")
-    headers = list(HEADER.finditer(prompt))
-    if tuple(m[1] for m in headers) not in (SECTIONS, REQUIRED_SECTIONS):
-        fail("INVALID_SECTION", "Provide the five H3 sections in order; retention_analysis is optional between summary and detailed_description.")
+    headers = []
+    for header in HEADER.finditer(prompt):
+        if header[1] == "timeline" and headers and headers[-1][1] == "detailed_description":
+            continue
+        headers.append(header)
+    names = tuple(m[1] for m in headers)
+    if not all(section in names for section in REQUIRED_SECTIONS) or names != tuple(section for section in SECTIONS if section in names):
+        fail("INVALID_SECTION", "Provide subject_definitions, detailed_description, overall_soundscape, and non_diegetic_music in order; summary and retention_analysis are optional, in that order before detailed_description.")
     prefix = prompt[:headers[0].start()]
     temporary = {}
     warnings = []
@@ -145,8 +150,19 @@ def _parse(prompt):
         return ""
     prefix = TEMP.sub(declaration, prefix)
     # This marker belongs to the existing prompt-loop subsystem.
-    if prefix.replace("[new_location]", "").strip():
-        fail("INVALID_DECLARATION", "Only declarations and [new_location] may precede subject_definitions.")
+    if re.sub(r"\[s=\d+(?:\.\d+)?\]", "", prefix.replace("[new_location]", "")).strip():
+        fail("INVALID_DECLARATION", "Only declarations, [new_location], and [s=seconds] may precede subject_definitions.")
+    sections = {}
+    for i, header in enumerate(headers):
+        end = headers[i+1].start() if i+1 < len(headers) else len(prompt)
+        sections[header[1]] = prompt[header.end():end].strip()
+    def inline_declaration(match):
+        if match["description"] is None:
+            return match[0]
+        declaration(match)
+        kind, name = _temp_parts(match)
+        return f"<{kind}:{name}>"
+    sections["subject_definitions"] = TEMP.sub(inline_declaration, sections["subject_definitions"])
     names = {}
     for r in temporary.values():
         names.setdefault(r.key, set()).add(r.type)
@@ -155,10 +171,6 @@ def _parse(prompt):
     for name, kinds in names.items():
         if len(kinds) > 1 and kinds != {"character", "voice"}:
             warnings.append(f"TEMPORARY_NAME_COLLISION: {name} uses {', '.join(sorted(kinds))}.")
-    sections = {}
-    for i, header in enumerate(headers):
-        end = headers[i+1].start() if i+1 < len(headers) else len(prompt)
-        sections[header[1]] = prompt[header.end():end].strip()
     return prefix.strip(), sections, temporary, warnings
 
 
@@ -179,7 +191,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                 parsed = TEMP.fullmatch(token)
                 kind, key = _temp_parts(parsed)
                 if parsed["description"] is not None:
-                    fail("INVALID_DECLARATION", "Temporary declarations must precede subject_definitions.")
+                    fail("INVALID_DECLARATION", "Temporary declarations belong before or inside subject_definitions.")
                 rid = f"temporary:{kind}:{key}"
                 if rid not in temporary:
                     fail("UNKNOWN_TEMPORARY_RESOURCE", token)
@@ -288,7 +300,8 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     embedded = [r for r in videos if r.embedded_audio]
     subjects = [r for r in ordered if r.type in ENTITY_TYPES]
     for label, values, limit in (("images", images, max_images), ("videos", videos, max_videos)):
-        if len(values) > limit:
+        raw_values = [r for r in values if not records.get(r.key, {}).get("_refmod_" + ("image" if label == "images" else "video"))]
+        if len(raw_values) > limit:
             fail("REFERENCE_LIMIT", f"{len(values)} {label}; supported maximum is {limit}.")
     for i, r in enumerate(subjects, 1): r.subject = i
     for i, r in enumerate(images, 1): r.picture = i
@@ -446,7 +459,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
             entry[2] for entry in sorted(definition_blocks, key=lambda entry: entry[:2])
         ] if block.strip())
     task_list = [task for task in TASKS if task in task_types]
-    summary = rendered["summary"]
+    summary = rendered.get("summary", "")
     header = re.match(r"^\[([^]\n]+)\]", summary)
     if header and all(t.strip() in TASKS for t in header[1].split("+")):
         summary = summary[header.end():].lstrip()
@@ -459,9 +472,10 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         opening = f"The target video is an edited version of {sources}."
         if not summary.startswith(opening):
             summary = opening + (" " + summary if summary else "")
-    if task_list:
-        summary = "[" + " + ".join(task_list) + "]" + (" " + summary if summary else "")
-    rendered["summary"] = summary
+    if "summary" in rendered:
+        rendered["summary"] = summary
+    elif summary:
+        rendered["detailed_description"] = summary + "\n\n" + rendered["detailed_description"]
     if "retention_analysis" in rendered:
         rendered["retention_analysis"] = _sort_retention_entries(rendered["retention_analysis"])
     output = "\n\n".join(f"{section}:\n\n{rendered[section]}" for section in sections)

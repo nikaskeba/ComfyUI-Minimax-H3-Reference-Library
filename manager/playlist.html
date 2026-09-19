@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>H3 Live Playlist</title>
+<style>
+body{margin:0;background:#11151b;color:#e7edf4;font:15px system-ui}main{max-width:1400px;margin:auto;padding:24px}h1{margin:0 0 18px;font-size:25px}header,.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap}select,button{background:#243140;color:inherit;border:1px solid #48596d;border-radius:7px;padding:10px;font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}select{max-width:100%}.layout{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:20px;margin-top:20px}video{width:100%;max-height:65vh;background:#000;border-radius:10px}#clips{max-height:78vh;overflow:auto;display:flex;flex-direction:column;gap:8px}#clips button{text-align:left;overflow-wrap:anywhere}#clips button.active{border-color:#71c8ff;background:#21405a}#status,#directory{color:#aebdcd;margin:12px 0;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#1b222c;padding:16px;border-radius:8px;max-height:38vh;overflow:auto}small{display:block;color:#abb9c8;margin-top:5px}@media(max-width:800px){.layout{grid-template-columns:1fr}}
+</style>
+<main>
+<h1>H3 Live Playlist</h1>
+<header><label>Project <select id="projects"><option value="">Waiting for a saved clip…</option></select></label><button id="refresh">Refresh</button></header>
+<div id="directory"></div>
+<div class="controls"><button id="sequence" disabled>Play sequence</button><button id="stop">Stop playback</button><span>Completed clips appear automatically. Stop generation in ComfyUI when needed.</span></div>
+<div id="status" role="status">Enable live_playlist on Skeba Save Clip to File, then generate a clip.</div>
+<div class="layout"><section><video id="player" controls playsinline preload="metadata"></video><h2 id="title">No clip selected</h2><pre id="prompt">Select a clip to read its recorded prompt.</pre></section><aside id="clips" aria-label="Completed clips"></aside></div>
+</main>
+<script type="module">
+const $ = id => document.getElementById(id);
+const projects = $("projects"), player = $("player");
+let project = new URL(location.href).searchParams.get("project") || "";
+let clips = [], selected = -1, sequence = false, waiting = false, signature = "", busy = false;
+const endpoint = path => new URL("api/h3-video-playlist/" + path, location.href);
+async function read(path) {
+    const response = await fetch(endpoint(path), {cache:"no-store"});
+    if (!response.ok) throw new Error(`Unable to read project (${response.status}).`);
+    return response.json();
+}
+function highlight() {
+    [...$("clips").children].forEach((button, index) => button.classList.toggle("active", index === selected));
+}
+async function play(index) {
+    if (!clips[index]) return;
+    selected = index; waiting = false;
+    const clip = clips[index];
+    player.src = endpoint(encodeURIComponent(project) + "/clip/" + encodeURIComponent(clip.clip_id));
+    $("title").textContent = `Clip ${clip.index} · ${clip.duration_seconds.toFixed(2)} seconds`;
+    $("prompt").textContent = clip.prompt || "No prompt recorded for this clip.";
+    highlight();
+    try { await player.play(); }
+    catch { sequence = false; $("status").textContent = "Press the video play button to start playback."; }
+}
+function stop() { sequence = false; waiting = false; player.pause(); }
+player.addEventListener("ended", () => {
+    if (!sequence) return;
+    if (selected + 1 < clips.length) play(selected + 1);
+    else { waiting = true; $("status").textContent = "End of completed clips. Waiting for the next clip…"; }
+});
+player.addEventListener("error", () => { sequence = false; waiting = false; $("status").textContent = "This clip could not be played. Check that its MP4 file is still available."; });
+$("sequence").onclick = () => { sequence = true; play(selected < 0 || player.ended ? 0 : selected); };
+$("stop").onclick = stop;
+projects.onchange = () => {
+    stop(); project = projects.value; clips = []; selected = -1; signature = "";
+    player.removeAttribute("src"); player.load();
+    $("clips").replaceChildren(); $("prompt").textContent = "Select a clip to read its recorded prompt.";
+    $("title").textContent = "No clip selected";
+    const url = new URL(location.href); url.searchParams.set("project", project); history.replaceState(null,"",url);
+    refresh();
+};
+async function refresh() {
+    if (busy) return;
+    busy = true;
+    try {
+        const available = await read("projects");
+        if (!project && available.length) project = available[0].id;
+        projects.replaceChildren();
+        for (const item of available) {
+            const option = document.createElement("option"); option.value = item.id; option.textContent = item.name;
+            projects.append(option);
+        }
+        projects.value = project;
+        if (!project) return;
+        const currentProject = project;
+        const manifest = await read(encodeURIComponent(project));
+        if (project !== currentProject) return;
+        clips = manifest.clips;
+        $("directory").textContent = manifest.directory;
+        $("sequence").disabled = !clips.length;
+        const nextSignature = JSON.stringify(clips);
+        if (signature !== nextSignature) {
+            signature = nextSignature; $("clips").replaceChildren();
+            clips.forEach((clip, index) => {
+                const button = document.createElement("button");
+                button.textContent = `Clip ${clip.index} · ${clip.duration_seconds.toFixed(2)}s`;
+                const filename = document.createElement("small"); filename.textContent = clip.filename; button.append(filename);
+                button.onclick = () => { sequence = false; play(index); };
+                $("clips").append(button);
+            });
+            highlight();
+        }
+        if (sequence && waiting && selected + 1 < clips.length) await play(selected + 1);
+        if (!waiting) $("status").textContent = `${clips.length} completed clips · ${clips.reduce((sum, c) => sum + c.duration_seconds, 0).toFixed(2)} seconds. Updates every 2 seconds.`;
+    } catch (error) { $("status").textContent = error.message; }
+    finally { busy = false; }
+}
+$("refresh").onclick = refresh;
+refresh(); setInterval(refresh, 2000);
+</script>
+</html>

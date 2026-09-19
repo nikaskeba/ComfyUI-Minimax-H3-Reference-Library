@@ -32,15 +32,17 @@ Library revisions invalidate cached validation. The validator checks structural 
 reference lookup, declarations, and allocation limits. It does not enforce voice placement,
 speech verbs, or character/voice matching, and does not decode media or guarantee render quality.
 
-Use these five headings, on their own lines, in this order:
-`subject_definitions`, `summary`, `detailed_description`, `overall_soundscape`,
-`non_diegetic_music`. Each heading ends with a colon. Existing six-section prompts can
-still include `retention_analysis` between summary and detailed_description. If omitted,
-it stays absent from the output. Authored retention entries are preserved and sorted;
-no retention entries or missing/invalid-marker warnings are generated.
+Use these four headings, on their own lines, in this order:
+`subject_definitions`, `detailed_description`, `overall_soundscape`, `non_diegetic_music`.
+Each heading ends with a colon. Older prompts may include `summary` and/or
+`retention_analysis`, in that order between subject_definitions and detailed_description.
+Omitted sections stay absent from the output. Without summary, the computed task header
+and any video-editing source identification precede the detailed description instead.
+Authored retention entries are preserved and sorted; no retention entries or
+missing/invalid-marker warnings are generated.
 
-The preferred language-header voice syntax and omission of retention are local SKEBA
-choices based on render testing, rather than requirements of the official six-section guide.
+The preferred language-header voice syntax and omission of summary and retention are
+local SKEBA choices based on render testing, rather than official format requirements.
 
 ## Authoring
 

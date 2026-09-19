@@ -1,3 +1,5 @@
+import {refmodFields} from "./refmod-picker.js";
+let refmodEditor = null;
 const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
@@ -151,6 +153,7 @@ function renderRecords() {
 }
 
 function matchesMediaFilter(record, media) {
+    if (media === "refmod") return Boolean(record.appearance_refmod || record.voice_refmod);
     if (media === "paired") return record.has_image && record.has_audio;
     if (media === "image") return record.has_image && !record.has_audio && !record.has_video;
     if (media === "audio") return record.has_audio && !record.has_image && !record.has_video;
@@ -323,11 +326,12 @@ function recordCard(record) {
     badges.append(badge(categoryLabel(record.category || "other"), "category"));
     badges.append(badge(referenceTypeLabel(normalizedReferenceType(record)), "reference-type"));
     if (record.has_image) badges.append(badge("Image", ""));
+    if (record.appearance_refmod || record.voice_refmod) badges.append(badge("RefMod", "video"));
     if (record.has_audio) badges.append(badge("Audio", "audio"));
     if (record.has_video) badges.append(badge("Video", "video"));
     if (record.has_video_audio) badges.append(badge("Video audio", "audio"));
     title.append(code);
-    if (record.has_audio || record.has_video_audio || record.audio_description) title.append(voiceCode);
+    if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) title.append(voiceCode);
     title.append(badges);
 
     const description = document.createElement("div");
@@ -350,7 +354,7 @@ function recordCard(record) {
     const edit = button("Edit", "secondary", () => openEditor(record));
     const remove = button("Delete", "danger", () => removeRecord(record));
     actions.append(select);
-    if (record.has_audio || record.has_video_audio || record.audio_description) actions.append(copyVoice);
+    if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) actions.append(copyVoice);
     actions.append(edit, remove);
     body.append(actions);
     card.append(preview, body);
@@ -800,8 +804,17 @@ function clearDrafts() {
     renderDrafts();
 }
 
-function openEditor(record = null) {
+async function openEditor(record = null) {
     elements["record-form"].reset();
+    refmodEditor = null;
+    document.getElementById("refmod-fields")?.remove();
+    document.getElementById("refmod-source-tabs")?.remove();
+    try {
+        refmodEditor = await refmodFields(record || {});
+        refmodEditor.element.id = "refmod-fields";
+        document.querySelector("#record-form .form-grid").before(refmodEditor.element);
+        refmodEditor.addTabs(document.querySelector("#record-form .form-grid"));
+    } catch (error) { toast(error.message, true); return; }
     setUploadError(elements["record-error"]);
     elements["record-id"].value = record?.id || "";
     elements["dialog-title"].textContent = record ? "Edit reference" : "Add reference";
@@ -869,12 +882,14 @@ async function saveRecord(event) {
     });
     const textOnlyVoice = selectedReferenceType === "character"
         && Boolean(elements["audio-description"].value.trim());
-    if (!hasExistingOrNewMedia && !textOnlyVoice) {
+    const refmodSettings = refmodEditor?.read() || {};
+    if (!hasExistingOrNewMedia && !textOnlyVoice && !Object.values(refmodSettings).includes("refmod")) {
         return rejectRecord(
             `${referenceTypeLabel(selectedReferenceType)} needs allowed media or a voice description.`);
     }
     const data = new FormData();
     data.append("tag", tag);
+    data.append("refmod_settings", JSON.stringify(refmodEditor?.read() || {}));
     data.append("category", category);
     data.append("reference_type", selectedReferenceType);
     data.append("image_description", permitted.includes("image") ? elements["image-description"].value.trim() : "");
@@ -992,7 +1007,7 @@ function selectionItem(record) {
         if (record.has_image) item.append(descriptionLine("Image", "Attached"));
         return item;
     }
-    if (record.has_audio || record.has_video_audio || record.audio_description) {
+    if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
         voiceTag.textContent = `Voice: §${record.tag}§`;
@@ -1026,7 +1041,7 @@ function selectionGuideText() {
                     lines.push("");
                     continue;
                 }
-                if (record.has_audio || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
+                if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
                 if (record.image_description) lines.push(`Image: ${record.image_description}`);
                 if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
                 if (record.video_description) lines.push(`Video: ${record.video_description}`);
@@ -1139,7 +1154,7 @@ elements["drop-zone"].addEventListener("drop", (event) => {
     addDraftFiles(event.dataTransfer.files);
 });
 
-const managerTabs = [...document.querySelectorAll(".manager-tab")];
+const managerTabs = [...document.querySelectorAll(".manager-tab[data-tab]")];
 const managerPanels = [...document.querySelectorAll(".manager-tab-panel")];
 function activateManagerTab(panelId) {
     for (const buttonElement of managerTabs) {
@@ -1158,3 +1173,5 @@ for (const buttonElement of managerTabs) {
 }
 
 loadRecords();
+
+if (location.hash === "#built-in-tab-panel") activateManagerTab("built-in-tab-panel");

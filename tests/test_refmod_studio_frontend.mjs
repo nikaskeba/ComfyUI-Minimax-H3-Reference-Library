@@ -1,0 +1,73 @@
+import assert from "node:assert/strict";
+import fs from "node:fs/promises";
+import path from "node:path";
+import os from "node:os";
+import {createRequire} from "node:module";
+const require=createRequire(import.meta.url);
+const {chromium}=require("playwright");
+const browser=await chromium.launch({headless:true,channel:"chrome"});
+try {
+ const page=await browser.newPage({viewport:{width:1400,height:1000}});
+ const errors=[];page.on("pageerror",error=>errors.push(error.message));
+ let queued=null, uploads=0, catalogHTML=false;
+ const catalog=[{file:"library/actor.safetensors",member:0,kind:"video",name:"Actor appearance",token_count:128,preview:false},{file:"library/actor.safetensors",member:1,kind:"audio",name:"Actor voice",latent_t:400,token_count:800}];
+ const metadata={kind:"bundle",members:[{name:"Actor appearance",kind:"video",latent_t:2,mode:"training",description:"Two views"},{name:"Actor voice",kind:"audio",latent_t:400,mode:"encode"}],skeba_studio:{grid:16,steps:500}};
+ await page.route("http://studio.test/**",async route=>{
+  const url=new URL(route.request().url());
+  const json=body=>route.fulfill({contentType:"application/json",body:JSON.stringify(body)});
+  if(url.pathname==="/api/h3-refmods/records")return catalogHTML ? route.fulfill({contentType:"text/html",body:"<!doctype html><html>Wrong route</html>"}) : json(catalog);
+  if(url.pathname==="/api/h3-refmods/detail")return json(metadata);
+  if(url.pathname==="/object_info/VAELoader")return json({VAELoader:{input:{required:{vae_name:[["h3_video.safetensors","h3_audio.safetensors"]]}}}});
+  if(url.pathname==="/api/h3-refmods/sources" && route.request().method()==="POST"){
+   uploads++;return json({file:uploads===3?"voice.wav":`photo${uploads}.png`,name:uploads===3?"voice.wav":`photo${uploads}.png`,kind:uploads===3?"audio":"image"});
+  }
+  if(url.pathname==="/prompt"){queued=route.request().postDataJSON();return json({prompt_id:"test-job"});}
+  if(url.pathname.startsWith("/history/") && queued.prompt["3"].class_type==="SkebaRefModPreview")return json({"test-job":{status:{status_str:"success"},outputs:{"3":{refmod_preview:[{frames:[{filename:"one.png",type:"temp"},{filename:"two.png",type:"temp"}],audio:{filename:"voice.wav",type:"temp"}}]}}}});
+  if(url.pathname==="/view")return route.fulfill({status:204});
+  if(url.pathname.startsWith("/history/"))return json({"test-job":{status:{status_str:"success"},outputs:{"3":{text:["library/new_reference.safetensors"]}}}});
+  if(url.pathname.startsWith("/api/h3-refmods/sources/"))return route.fulfill({status:204});
+  const file=url.pathname==="/h3-refmods"?"refmods.html":url.pathname.split("/").pop();
+  if(!["refmods.html","refmods.css","refmods.js","refmod-catalog.js","manager.css"].includes(file))return route.fulfill({status:404});
+  const contentType=file.endsWith(".js")?"text/javascript":file.endsWith(".css")?"text/css":"text/html";
+  return route.fulfill({contentType,body:await fs.readFile(new URL("../manager/"+file,import.meta.url))});
+ });
+ await page.goto("http://studio.test/h3-refmods");
+ await page.getByRole("button",{name:/Actor appearance/}).waitFor();
+ assert.equal(await page.locator(".asset").count(),1,"Bundle should have one card");
+ await page.locator("#new").click();
+ await page.locator("#upload").setInputFiles([{name:"one.png",mimeType:"image/png",buffer:Buffer.from("test")},{name:"two.png",mimeType:"image/png",buffer:Buffer.from("test")},{name:"voice.wav",mimeType:"audio/wav",buffer:Buffer.from("test")}]);
+ await page.getByText("Sources ready.",{exact:true}).waitFor();
+ assert.equal(await page.locator(".source-row").count(),3);
+ await page.locator(".source-row").nth(1).getByRole("button",{name:"Up",exact:true}).click();
+ await page.locator("#vae").selectOption("h3_video.safetensors");await page.locator("#audio_vae").selectOption("h3_audio.safetensors");
+ await page.locator("#save").click();
+ await page.getByRole("status").filter({hasText:"Saved library/new_reference"}).waitFor();
+ const spec=JSON.parse(queued.prompt["3"].inputs.spec);
+ assert.deepEqual(spec.sources.map(s=>s.file),["photo2.png","photo1.png","voice.wav"]);
+ assert.equal(spec.mode,"training");assert.equal(spec.steps,500);
+ assert.deepEqual(queued.prompt["3"].inputs.audio_vae,["2",0]);
+ await page.locator("#show-library").click();
+ await page.getByRole("button",{name:/Actor appearance/}).click();
+ await page.locator("#preview").click();
+ await page.getByRole("status").filter({hasText:"previews are ready"}).waitFor();
+ assert.equal(await page.locator("#stored-frames img").count(),2);
+ assert.equal(await page.locator("#stored-audio audio").count(),1);
+ await page.locator("#stored-frames .stored-row").nth(1).getByRole("button",{name:"Up",exact:true}).click();await page.locator("#description").fill("Updated description");
+ await page.screenshot({path:path.join(os.tmpdir(),"skeba-refmod-studio.png"),fullPage:true});
+ await page.locator("#save").click();
+ await page.getByRole("status").filter({hasText:"Saved library/new_reference"}).waitFor();
+ assert.equal(Object.keys(queued.prompt).length,1,"Metadata edits should not load a VAE");
+ assert.equal(JSON.parse(queued.prompt["3"].inputs.spec).frames,"1,0");
+ assert.equal(JSON.parse(queued.prompt["3"].inputs.spec).overwrite,true);
+ await page.locator("#new").click();
+ assert.equal(await page.locator("#vae").inputValue(),"h3_video.safetensors");
+ assert.equal(await page.locator("#audio_vae").inputValue(),"h3_audio.safetensors");
+ await page.reload();await page.getByRole("button",{name:/Actor appearance/}).waitFor();
+ assert.equal(await page.locator("#vae").inputValue(),"h3_video.safetensors");
+ assert.equal(await page.locator("#audio_vae").inputValue(),"h3_audio.safetensors");
+ catalogHTML=true; await page.locator("#refresh").click();
+ await page.getByRole("status").filter({hasText:"/api/h3-refmods/records returned 200 with a non-JSON response"}).waitFor();
+ assert.deepEqual(errors,[]);
+ console.log("Studio browser checks passed: multi-upload, ordering, training queue, metadata-only editing.");
+ console.log(path.join(os.tmpdir(),"skeba-refmod-studio.png"));
+} finally {await browser.close();}

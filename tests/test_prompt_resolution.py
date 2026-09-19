@@ -47,6 +47,9 @@ _stub_module(
     library_built_in_records=lambda: {},
 )
 
+_stub_module(f"{PACKAGE_NAME}.refmod_support", build_mods=lambda bundle: [])
+_stub_module(f"{PACKAGE_NAME}.refmod_library", project_records=lambda records, prompt: records, revision=lambda: "0")
+
 SPEC = importlib.util.spec_from_file_location(
     f"{PACKAGE_NAME}.h3_tag_references", MODULE_PATH)
 MODULE = importlib.util.module_from_spec(SPEC)
@@ -640,12 +643,23 @@ class PromptResolutionTests(unittest.TestCase):
 
 
 class PromptListValidatorTests(unittest.TestCase):
+    def test_inline_subject_and_duration_in_list(self):
+        source = "[new_location] [s=15]\nsubject_definitions:\n<object:coffee_cup = A white porcelain cup.>\ndetailed_description:\ntimeline:\n[Shot 1] A view of <object:coffee_cup>.\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
+        result = MODULE.H3PromptListValidator().validate_list(source + "|" + source.replace("[new_location] [s=15]", ""))
+        self.assertIn("Validated all 2 prompts", result[3])
+        self.assertIn("[s=15]", result[0])
+
+    def test_digit_leading_location_in_prompt_three(self):
+        source = "<location:1920s_street = A street in the 1920s.>\nsubject_definitions:\n<location:1920s_street>\ndetailed_description:\ntimeline:\n[Shot 1] At 00:00.000, a view of <location:1920s_street>.\noverall_soundscape:\nTraffic.\nnon_diegetic_music:\nN/A"
+        result = MODULE.H3PromptListValidator().validate_list("|".join([self.prompt(), self.prompt(), source]))
+        self.assertIn("Validated all 3 prompts", result[3])
+
     def test_eight_prompts_without_retention_accept_header_voices(self):
         from unittest.mock import patch
         import json
         records = {"George Costanza_BC":dict(reference_type="character", built_in=True,
                                              name="George Costanza", audio_file="george.wav")}
-        source = "subject_definitions:\n{George Costanza_BC}\nsummary:\nA nervous conversation.\ndetailed_description:\n[Shot 2] At 00:03.000, {George Costanza_BC} says, <d>[English \u00a7George Costanza_BC\u00a7]They did? Because I can be more intimidating.</d>\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
+        source = "subject_definitions:\n{George Costanza_BC}\ndetailed_description:\n[Shot 2] At 00:03.000, {George Costanza_BC} says, <d>[English \u00a7George Costanza_BC\u00a7]They did? Because I can be more intimidating.</d>\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
         with patch.object(MODULE,"records_by_tag",return_value=records), \
              patch.object(MODULE,"library_built_in_records",return_value={}), \
              patch.object(MODULE,"media_path",return_value="george.wav"), \

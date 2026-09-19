@@ -5,6 +5,7 @@ import os
 import re
 import threading
 import uuid
+from .refmod_library import selection_fields
 from collections import Counter
 from pathlib import Path
 
@@ -283,6 +284,7 @@ def library_built_in_records():
     for record in list_built_in_references():
         tag = library_built_in_tag_value(record)
         result[tag] = {
+            **manifest.get("refmods", {}).get(tag, {}),
             "id": f"built-in:{tag}",
             "tag": tag,
             "category": "built-in-characters",
@@ -304,6 +306,15 @@ def library_built_in_records():
             "franchise": record["franchise"],
         }
     return result
+
+
+def set_built_in_refmods(tag, settings):
+    settings = selection_fields(settings)
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        manifest.setdefault("refmods", {})[tag] = settings
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
 
 
 def resolve_built_in_prompt(prompt_template, records=None):

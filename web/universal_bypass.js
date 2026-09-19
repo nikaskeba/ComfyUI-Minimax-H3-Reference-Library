@@ -177,7 +177,6 @@ app.registerExtension({
             nodeData.name !== NODE_NAME
             && nodeData.name !== DISPLAY_NAME
             && nodeData.display_name !== DISPLAY_NAME
-            && nodeData.category !== "Skeba AI Nodes - Utilities"
         ) return;
 
         const onNodeCreated = nodeType.prototype.onNodeCreated;

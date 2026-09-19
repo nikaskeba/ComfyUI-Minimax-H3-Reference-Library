@@ -1,3 +1,4 @@
+import {editBuiltInRefmods} from "/h3-references/static/refmod-picker.js";
 const apiRoot = "/api/h3-built-in-references/records";
 const state = { records: [], selected: new Set() };
 const libraryTagMode = document.body.dataset.builtInTagMode === "library";
@@ -8,6 +9,11 @@ const elements = Object.fromEntries([
     "built-in-selection-empty", "built-in-selection-guide",
     "built-in-sort-field", "built-in-sort-direction", "toast",
 ].map((id) => [id, document.getElementById(id)]));
+
+const onlyRefmods = document.createElement("input"); onlyRefmods.type = "checkbox";
+const refmodFilter = document.createElement("label"); refmodFilter.textContent = "RefMod attachments "; refmodFilter.prepend(onlyRefmods);
+elements["built-in-folder"].parentElement.after(refmodFilter);
+onlyRefmods.addEventListener("change", renderRecords);
 
 async function request(url, options = {}) {
     const response = await fetch(url, options);
@@ -62,7 +68,7 @@ function filteredRecords() {
     const query = elements["built-in-search"].value.trim().toLowerCase();
     const sortField = elements["built-in-sort-field"].value;
     const direction = elements["built-in-sort-direction"].value === "desc" ? -1 : 1;
-    return state.records.filter((record) => (!folder || record.folder === folder)
+    return state.records.filter((record) => (!onlyRefmods.checked || record.appearance_refmod || record.voice_refmod) && (!folder || record.folder === folder)
         && [record.name, record.actor, record.franchise, record.status, record.image_context]
             .some((value) => (value || "").toLowerCase().includes(query)))
         .sort((left, right) => direction * compareRecords(left, right, sortField));
@@ -165,6 +171,7 @@ function recordRow(record) {
             preview.alt = `${record.name} reference`;
             actions.append(preview);
         }
+        actions.append(button("RefMods / sources", () => editBuiltInRefmods(record, loadRecords).catch(error => toast(error.message, true))));
         actions.append(button(record.has_image ? "Replace image" : "Add image", () => chooseImage(record)));
         if (record.has_image) actions.append(button("Remove image", () => removeImage(record)));
         if (record.audio_url) {
