@@ -115,6 +115,36 @@ class StudioTests(unittest.TestCase):
         _,_,mods=studio.members_from_file({"file":result["result"][0],"member":None})
         self.assertEqual([m.kind for m in mods],["audio"])
 
+    def test_multiple_video_sections_and_crop(self):
+        frames=torch.arange(48*8*12*3,dtype=torch.float32).reshape(48,8,12,3)
+        with patch.object(studio,"source_path",return_value=self.root/"clip.mp4"), patch.object(studio,"load_video",return_value=(frames,None)):
+            kind, cropped=studio._trimmed_source({"file":"clip.mp4","start":1,"end":1.5,"mirror":True,"crop":{"x":0,"y":0,"w":.5,"h":1}})
+        self.assertEqual(kind,"video")
+        self.assertTrue(torch.equal(cropped,frames[24:36].flip(2)[:,:,:6]))
+        calls=[]
+        def source(item):
+            calls.append(item)
+            return "video",torch.ones(1,320,320,3)
+        with patch.object(studio,"roots",return_value=[self.root]),patch.object(studio,"_trimmed_source",side_effect=source):
+            result=studio.SkebaRefModStudio().save(self.spec(sources=[{"file":"clip.mp4","sections":[{"start":1,"end":2},{"start":5,"end":6}]}]),vae=self.vae)
+        self.assertEqual([item["start"] for item in calls],[1,5])
+        _,_,mods=studio.members_from_file({"file":result["result"][0],"member":None})
+        self.assertEqual(mods[0].latent_t,2)
+
+    def test_video_sections_include_matching_soundtracks(self):
+        calls=[]
+        def source(item):
+            calls.append(item)
+            if item.get("soundtrack_only"):
+                return "audio", {"waveform":torch.ones(1,2,32000),"sample_rate":32000}
+            return "video",torch.ones(1,320,320,3)
+        with patch.object(studio,"roots",return_value=[self.root]),patch.object(studio,"_trimmed_source",side_effect=source):
+            result=studio.SkebaRefModStudio().save(self.spec(sources=[{"file":"clip.mp4","include_audio":True,"sections":[{"start":1,"end":2},{"start":5,"end":6}]}]),vae=self.vae,audio_vae=self.audio_vae)
+        self.assertEqual([item["start"] for item in calls if item.get("soundtrack_only")],[1,5])
+        _,_,mods=studio.members_from_file({"file":result["result"][0],"member":0})
+        self.assertEqual([mod.kind for mod in mods],["video","audio"])
+        self.assertEqual(mods[1].latent_t,80)
+
     def test_paths_stay_in_managed_roots(self):
         with patch.object(studio,"roots",return_value=[self.root]),patch.object(studio,"source_root",return_value=self.root):
             for name in ("../escape.safetensors","C:/escape.safetensors"):

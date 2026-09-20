@@ -164,10 +164,13 @@ function recordRow(record) {
     const actions = document.createElement("div");
     actions.className = "built-in-meta";
     if (libraryTagMode) {
-        if (record.image_url) {
+        const refmod = record.appearance_source === "refmod" ? record.appearance_refmod : null;
+        const imageURL = refmod ? `/api/h3-refmods/preview?file=${encodeURIComponent(refmod.file)}&member=${refmod.member ?? ""}` : record.image_url;
+        if (imageURL) {
             const preview = document.createElement("img");
             preview.className = "built-in-image-preview";
-            preview.src = record.image_url;
+            preview.src = imageURL;
+            preview.onerror = () => { preview.replaceWith(document.createTextNode("RefMod · no preview")); };
             preview.alt = `${record.name} reference`;
             actions.append(preview);
         }

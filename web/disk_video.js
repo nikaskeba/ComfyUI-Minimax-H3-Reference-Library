@@ -15,6 +15,30 @@ app.registerExtension({
             }, { serialize: false });
             return result;
         };
+        // Store by name as well as Comfy's positional widget array. Optional
+        // widgets and frontend-added controls can change positional restoration.
+        const serialized = nodeType.prototype.onSerialize;
+        nodeType.prototype.onSerialize = function (data) {
+            const result = serialized?.apply(this, arguments);
+            const toggles = {};
+            for (const name of ["preview_clip", "live_playlist"]) {
+                const widget = this.widgets?.find(item => item.name === name);
+                if (typeof widget?.value === "boolean") toggles[name] = widget.value;
+            }
+            data.properties ||= {};
+            data.properties.skeba_clip_toggles = toggles;
+            return result;
+        };
+        const configured = nodeType.prototype.onConfigure;
+        nodeType.prototype.onConfigure = function (data) {
+            const result = configured?.apply(this, arguments);
+            const toggles = data.properties?.skeba_clip_toggles;
+            for (const name of ["preview_clip", "live_playlist"]) {
+                const widget = this.widgets?.find(item => item.name === name);
+                if (widget && typeof toggles?.[name] === "boolean") widget.value = toggles[name];
+            }
+            return result;
+        };
         const executed = nodeType.prototype.onExecuted;
         nodeType.prototype.onExecuted = function (message) {
             executed?.apply(this, arguments);

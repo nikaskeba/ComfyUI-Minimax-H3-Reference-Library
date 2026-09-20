@@ -191,7 +191,7 @@ def register_routes():
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js"}:
+        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "video-selector.js"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 

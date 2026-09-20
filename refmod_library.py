@@ -75,8 +75,48 @@ def selection_fields(values):
     return result
 
 
+def direct_refmod_records(records, prompt):
+    """Resolve filename-based _rm tags without changing the saved library."""
+    requested = {a or b for a,b in re.findall(r"\{([^{}]+_rm)\}|§([^§]+_rm)§", prompt)} - records.keys()
+    if not requested:
+        return records
+    groups = {}
+    for row in catalog():
+        stem = row["file"][:-len(".safetensors")]
+        key = re.sub(r"_(visual|video|audio)$", "", stem, flags=re.IGNORECASE) if row["member"] is None else stem
+        groups.setdefault(key, []).append(row)
+    result = dict(records)
+    for tag in requested:
+        name = tag[:-3]
+        matches = [key for key in groups if key == name or ("/" not in name and key.rsplit("/",1)[-1] == name)]
+        if not matches:
+            raise ValueError(f"REFMOD_NOT_FOUND: {tag}; use the RefMod filename without .safetensors, followed by _rm.")
+        if len(matches) != 1:
+            raise ValueError(f"AMBIGUOUS_REFMOD: {tag}; include the folder in the tag.")
+        rows = groups[matches[0]]
+        record = {"id":"refmod:"+matches[0], "tag":tag, "reference_type":"character"}
+        for channel,kinds in (("appearance",("image","video")),("voice",("audio",))):
+            choices = [row for row in rows if row["kind"] in kinds]
+            if channel == "voice" and "§"+tag+"§" not in prompt:
+                continue
+            if len(choices)>1:
+                raise ValueError(f"AMBIGUOUS_REFMOD: {tag} has multiple {channel} members; select one through a library entry.")
+            if choices:
+                row=choices[0]
+                record[channel+"_source"]="refmod"
+                record[channel+"_refmod"]={"file":row["file"],"member":row["member"]}
+                record["audio_description" if channel=="voice" else "image_description"]=row.get("voice_description" if channel=="voice" else "appearance") or row.get("description") or row.get("name") or name
+        if "§"+tag+"§" in prompt and "voice_refmod" not in record:
+            raise ValueError(f"REFMOD_VOICE_MISSING: {tag} has no audio member.")
+        if not record.get("appearance_refmod") and not record.get("voice_refmod"):
+            raise ValueError(f"REFMOD_INVALID: {tag} has no usable reference member.")
+        result[tag]=record
+    return result
+
+
 def project_records(records, prompt):
     """Expose selected RefMod modalities to the existing tag/ownership resolver."""
+    records = direct_refmod_records(records, prompt)
     result = dict(records)
     for tag, original in records.items():
         if "{" + tag + "}" not in prompt and "§" + tag + "§" not in prompt:

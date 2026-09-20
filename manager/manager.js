@@ -293,7 +293,15 @@ function recordCard(record) {
     card.className = "record-card";
     const preview = document.createElement("div");
     preview.className = "record-preview";
-    if (record.has_video) {
+    const refmod = record.appearance_source === "refmod" ? record.appearance_refmod : null;
+    if (refmod) {
+        const image = document.createElement("img");
+        image.src = `/api/h3-refmods/preview?file=${encodeURIComponent(refmod.file)}&member=${refmod.member ?? ""}&v=${encodeURIComponent(record.updated_at || "")}`;
+        image.alt = `${record.tag} RefMod preview`;
+        image.loading = "lazy";
+        image.onerror = () => { const label = document.createElement("span"); label.className = "audio-only"; label.textContent = "RefMod · no preview"; preview.replaceChildren(label); };
+        preview.append(image);
+    } else if (record.has_video) {
         const video = document.createElement("video");
         video.src = `${record.video_url}?v=${encodeURIComponent(record.updated_at || "")}`;
         video.controls = true;

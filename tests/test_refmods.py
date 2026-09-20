@@ -65,6 +65,18 @@ class RefModTests(unittest.TestCase):
         with patch.object(builder, "records_by_tag", return_value=records), patch.object(builder, "library_built_in_records", return_value={}):
             return builder.H3TaggedReferencePrompt().build(prompt, compiler_mode=mode)
 
+    def test_direct_refmod_tags_both_modes(self):
+        self.asset("celestial_visual","video")
+        self.asset("celestial_audio","audio",seconds=1)
+        for mode in ("legacy","deterministic"):
+            prompt="subject_definitions:\n{celestial_rm}\ndetailed_description:\n{celestial_rm} says, <d>[English §celestial_rm§]Hello.</d>\noverall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A"
+            with patch.object(builder,"records_by_tag",return_value={}),patch.object(builder,"library_built_in_records",return_value={}):
+                output=builder.H3TaggedReferencePrompt().build(prompt,compiler_mode=mode)
+            self.assertEqual(len(output[21]),2)
+        projected=library.project_records({},"{celestial_rm}")
+        self.assertIn("_refmod_video",projected["celestial_rm"])
+        self.assertNotIn("_refmod_audio",projected["celestial_rm"])
+
     def test_delete_selected_files_preserves_thumbnail_and_checks_all_paths(self):
         visual=self.asset("delete_visual","video")
         audio=self.asset("delete_audio","audio",seconds=1)

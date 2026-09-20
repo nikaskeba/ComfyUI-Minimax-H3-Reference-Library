@@ -64,3 +64,13 @@ Editing updates the existing asset by default. Enable **Save as a copy** to crea
 After saving, return to the character editor, click **Refresh attachments**, select the appearance and/or audio member, and save the character. Voice-isolation guarantees and continuation behavior are unchanged; assess reference quality through render tests.
 
 VAE dropdowns are saved as browser defaults and survive new-item creation and page reloads. They remain changeable. Gallery thumbnails prefer an exact sidecar (such as `celestial_visual.png`), then a shared pair image (`celestial.png` for `celestial_visual.safetensors` and `celestial_audio.safetensors`). PNG, JPG, JPEG and WebP are supported.
+
+For uploaded videos, **Edit sections** opens a large preview with a scrubber, frame stepping, start/end controls and section playback. Add, reorder or remove multiple sections from the same upload. Each section has its own drawn crop and mirror setting; Apply saves selections, Cancel discards changes. Sections encode separately in listed order, with the clip-frame setting applied to each. Crops use the mirrored picture coordinates when mirroring is enabled.
+
+New video uploads include voice by default. Use **Include Voice** on a video source to enable or disable encoding its soundtrack using the selected audio VAE. Audio uses each selected section’s start/end, joins in section order, and follows the new-voice duration cap. Existing voice can be replaced or appended using Voice edit. Previously saved visual-only latents cannot recover their soundtrack; add the original source again.
+
+New RefMods default to Full reference. New/copy filenames derive from the Name field (copies get `_copy`); editing keeps existing filenames and attachments stable. Processing shows a queued/running indicator and elapsed time; this is not a percentage estimate.
+
+## Direct RefMod tags
+
+Use `{celestial_rm}` for appearance and `§celestial_rm§` inside dialogue for voice, without creating a character entry. The name comes from `celestial.safetensors` or the paired `celestial_visual.safetensors` / `celestial_audio.safetensors`. Include `{celestial_rm}` in subject_definitions as usual. A silent appearance tag does not load its voice. Use `{folder/celestial_rm}` (and matching voice tag) when filenames repeat across folders. Existing saved tags take precedence. Bundles with multiple members for the same channel require an explicit library attachment.

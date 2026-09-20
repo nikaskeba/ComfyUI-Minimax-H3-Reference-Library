@@ -82,7 +82,7 @@ def save_members(target, mods, settings):
 
 def _trimmed_source(item):
     path = source_path(item["file"])
-    kind = SOURCE_EXTENSIONS[path.suffix.lower()]
+    kind = "audio" if item.get("soundtrack_only") else SOURCE_EXTENSIONS[path.suffix.lower()]
     start = float(item.get("start", 0)); end = float(item.get("end", 0))
     if not math.isfinite(start) or not math.isfinite(end) or start < 0 or (end and end <= start):
         raise ValueError("Source trim must have a nonnegative start and an end after start (0 means full length).")
@@ -91,6 +91,16 @@ def _trimmed_source(item):
         frames, _ = load_video(path, 24, 2048)
         frames = frames[int(start*24):int(end*24) if end else None]
         if not len(frames): raise ValueError("Video trim contains no frames.")
+        if item.get("mirror"):
+            frames = frames.flip(2)
+        crop = item.get("crop")
+        if crop:
+            x,y,w,h = (float(crop[key]) for key in ("x","y","w","h"))
+            if not all(math.isfinite(v) for v in (x,y,w,h)) or min(x,y)<0 or min(w,h)<=0 or x+w>1.00001 or y+h>1.00001:
+                raise ValueError("Video crop must be inside the frame.")
+            height,width=frames.shape[1:3]
+            left,top=min(width-1,int(x*width)),min(height-1,int(y*height))
+            frames=frames[:,top:max(top+1,min(height,round((y+h)*height))),left:max(left+1,min(width,round((x+w)*width)))].clone()
         return kind, frames
     audio = load_audio(path)
     audio = {**audio, "waveform": audio["waveform"][..., int(start*audio["sample_rate"]):int(end*audio["sample_rate"]) if end else None]}
@@ -172,10 +182,19 @@ class SkebaRefModStudio:
             if mods[selected].kind == "audio": audio_i = selected
             else: visual_i = selected
         looks = []; voices = []
-        for item in settings.get("sources", []):
-            kind, data = _trimmed_source(item)
-            if kind == "audio": voices.append(data)
-            else: looks.append((data, kind == "video"))
+        for source in settings.get("sources", []):
+            sections=source.get("sections")
+            if sections is not None and (not isinstance(sections,list) or not sections):
+                raise ValueError("Choose at least one video section.")
+            for section in sections if sections is not None else [{}]:
+                item={**source, **{key:section[key] for key in ("start","end","crop","mirror") if key in section}}
+                kind, data = _trimmed_source(item)
+                if kind == "audio": voices.append(data)
+                else:
+                    looks.append((data, kind == "video"))
+                    if kind == "video" and source.get("include_audio"):
+                        _, soundtrack = _trimmed_source({**item, "soundtrack_only": True})
+                        voices.append(soundtrack)
         if looks and vae is None: raise ValueError("Select the H3 video VAE for images and video.")
         if voices and audio_vae is None: raise ValueError("Select the H3 audio VAE for audio.")
         progress = comfy.utils.ProgressBar(100)
