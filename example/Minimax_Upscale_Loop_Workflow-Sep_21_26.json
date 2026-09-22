@@ -1,8 +1,8 @@
 {
   "id": "2de050e6-615c-41f7-9159-dd0ac65d878f",
   "revision": 0,
-  "last_node_id": 922,
-  "last_link_id": 1684,
+  "last_node_id": 929,
+  "last_link_id": 1685,
   "nodes": [
     {
       "id": 334,
@@ -515,7 +515,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 89,
+      "order": 88,
       "mode": 0,
       "inputs": [
         {
@@ -586,7 +586,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 90,
+      "order": 89,
       "mode": 0,
       "inputs": [
         {
@@ -657,7 +657,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 91,
+      "order": 90,
       "mode": 0,
       "inputs": [
         {
@@ -728,7 +728,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 103,
+      "order": 102,
       "mode": 0,
       "inputs": [
         {
@@ -1006,193 +1006,6 @@
       }
     },
     {
-      "id": 566,
-      "type": "Getter",
-      "pos": [
-        -4178.094910762419,
-        3643.9992568395783
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            1103
-          ]
-        }
-      ],
-      "title": "Get_prompt_start",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#323",
-        "__skeba_bgcolor_base": "#535"
-      },
-      "widgets_values": [
-        "prompt_start",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "prompt_start",
-        "var_name": ""
-      },
-      "color": "#323",
-      "bgcolor": "#535",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
-      "id": 258,
-      "type": "SkebaPromptLoopNode",
-      "pos": [
-        -4159.865088560076,
-        3339.347942382229
-      ],
-      "size": [
-        253.8853515625,
-        216
-      ],
-      "flags": {
-        "collapsed": false
-      },
-      "order": 87,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "text",
-          "type": "STRING",
-          "widget": {
-            "name": "text"
-          },
-          "link": 1103
-        },
-        {
-          "name": "original_1",
-          "type": "*",
-          "link": null
-        },
-        {
-          "name": "processed_1",
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "prompts_list",
-          "shape": 6,
-          "type": "STRING",
-          "links": null
-        },
-        {
-          "name": "count",
-          "type": "INT",
-          "links": [
-            521,
-            543
-          ]
-        },
-        {
-          "name": "prompt_numbers",
-          "shape": 6,
-          "type": "INT",
-          "links": null
-        },
-        {
-          "name": "prompt_batch",
-          "type": "SKEBA_PROMPT_LIST",
-          "links": [
-            520
-          ]
-        },
-        {
-          "name": "output_1",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "comfyui_fearnworksnodes",
-        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
-        "Node name for S&R": "SkebaPromptLoopNode",
-        "aux_id": "Hahihula/ComfyUI-batching-nodes",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "skeba_bypass_lane_count": 1,
-        "skeba_bypass_lane_types": {}
-      },
-      "widgets_values": [
-        "integrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw and Samantha Jones are the only principal characters. Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style silver space suit with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted metallic-gold designer-style space suit with matching boots and a transparent bubble helmet. They stand together inside an absurdly luxurious pink-and-silver spacecraft approaching MARS, with the enormous red planet filling the windows. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] This summer... two women are going where no Manhattan socialite has gone before.</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:06.000, the camera cuts to Carrie and Samantha dramatically walking down the spacecraft ramp onto the dusty red surface of Mars. Their fashionable boots immediately sink awkwardly into the Martian dirt. Carrie looks down at her boots in horror. Carrie Bradshaw, with a sophisticated adult female voice (S2), says: <d>[English] Samantha, these boots are ruined.</d> [Shot 3] At 00:11.000, the camera cuts to Samantha standing beside Carrie beneath the enormous Martian sky. Samantha examines the completely barren landscape and gestures at the rocks surrounding them. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] Forget the boots. Where are all the men?</d>\n\noverall_soundscape: Spaceship engines and electronic controls transition into the muffled mechanical hiss of an airlock, metallic ramp movement, boots sinking into Martian soil, light suit movement, and a persistent artificial life-support hum.\n\nnon_diegetic_music: Oversized romantic-comedy trailer music with dramatic orchestral strings, electronic drums, glossy synthesizer accents, and a large brass flourish as Mars is revealed.\n\n|\n\nintegrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style SILVER SPACE SUIT with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted METALLIC-GOLD SPACE SUIT with matching boots and a transparent bubble helmet. Both women stand on the dusty red surface of MARS beside their luxurious pink-and-silver spacecraft. The barren landscape contains red rocks, distant mountains, craters, and absolutely no other people. At the EXACT BEGINNING, Samantha is still looking around the empty landscape after asking where all the men are. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] They came looking for adventure...</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:04.000, the camera cuts to Carrie and Samantha trudging across the red desert. Carrie struggles to walk in her ridiculous high-heeled space boots. She stops and stares down at the Martian dust covering them. Carrie Bradshaw, with a sophisticated adult female voice (S2), says: <d>[English] I hate Mars. The footing is terrible.</d> [Shot 3] At 00:09.000, the camera cuts to Samantha climbing onto a rock and scanning the horizon. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] No restaurants. No cocktails. No men.</d> [Shot 4] At 00:13.000, a distant Martian rover suddenly drives over a ridge. Carrie and Samantha simultaneously turn toward it as dramatic sunlight silhouettes the approaching vehicle.\n\noverall_soundscape: Constant spacesuit life-support hum, boots crunching through Martian soil, occasional wind-like suit vibration, rocks shifting beneath their feet, and the distant mechanical rumble of an approaching rover.\n\nnon_diegetic_music: Glossy romantic-comedy trailer score with rhythmic strings, electronic percussion, bright synthesizers, and an exaggerated orchestral swell when the mysterious rover appears.\n\n|\n\nintegrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style SILVER SPACE SUIT with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted METALLIC-GOLD SPACE SUIT with matching boots and a transparent bubble helmet. Both women stand together on the dusty red surface of MARS surrounded by red rocks, distant mountains, and craters. Their luxurious pink-and-silver spacecraft is visible far behind them. At the EXACT BEGINNING, Carrie and Samantha are staring toward a Martian rover that has just appeared over a distant ridge. The rover rapidly approaches them through clouds of red dust. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] But sometimes... finding yourself means leaving the entire planet.</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:06.000, the rover stops beside them. Its hatch opens dramatically. Carrie and Samantha eagerly lean forward, expecting someone glamorous to emerge. Instead, a tiny NASA exploration robot rolls out and mechanically scans them. Samantha's expression collapses. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] I'm going back to Manhattan.</d> [Shot 3] At 00:11.000, the camera cuts extremely wide as Carrie and Samantha march back toward their spacecraft while the tiny rover follows them. Carrie struggles through the dust in her high-heeled space boots. Giant glittering movie-trailer lettering fills the Martian sky: \"SEX AND THE CITY GOES TO MARS.\" The deep male narrator (S1) says in an off-screen voiceover: <d>[English] Coming soon... unfortunately.</d> while Carrie and Samantha's lips remain completely closed.\n\noverall_soundscape: Martian soil crunches beneath their boots, the rover motor whines, mechanical servos move, the spacecraft hums in the distance, and the women's suits produce subtle life-support and fabric sounds.\n\nnon_diegetic_music: Bombastic romantic-comedy trailer music with sweeping strings, glossy synthesizers, electronic drums, triumphant brass, and an excessively large orchestral ending beneath the final title.",
-        "|",
-        true
-      ],
-      "widgets_values_named": {
-        "text": "integrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw and Samantha Jones are the only principal characters. Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style silver space suit with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted metallic-gold designer-style space suit with matching boots and a transparent bubble helmet. They stand together inside an absurdly luxurious pink-and-silver spacecraft approaching MARS, with the enormous red planet filling the windows. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] This summer... two women are going where no Manhattan socialite has gone before.</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:06.000, the camera cuts to Carrie and Samantha dramatically walking down the spacecraft ramp onto the dusty red surface of Mars. Their fashionable boots immediately sink awkwardly into the Martian dirt. Carrie looks down at her boots in horror. Carrie Bradshaw, with a sophisticated adult female voice (S2), says: <d>[English] Samantha, these boots are ruined.</d> [Shot 3] At 00:11.000, the camera cuts to Samantha standing beside Carrie beneath the enormous Martian sky. Samantha examines the completely barren landscape and gestures at the rocks surrounding them. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] Forget the boots. Where are all the men?</d>\n\noverall_soundscape: Spaceship engines and electronic controls transition into the muffled mechanical hiss of an airlock, metallic ramp movement, boots sinking into Martian soil, light suit movement, and a persistent artificial life-support hum.\n\nnon_diegetic_music: Oversized romantic-comedy trailer music with dramatic orchestral strings, electronic drums, glossy synthesizer accents, and a large brass flourish as Mars is revealed.\n\n|\n\nintegrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style SILVER SPACE SUIT with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted METALLIC-GOLD SPACE SUIT with matching boots and a transparent bubble helmet. Both women stand on the dusty red surface of MARS beside their luxurious pink-and-silver spacecraft. The barren landscape contains red rocks, distant mountains, craters, and absolutely no other people. At the EXACT BEGINNING, Samantha is still looking around the empty landscape after asking where all the men are. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] They came looking for adventure...</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:04.000, the camera cuts to Carrie and Samantha trudging across the red desert. Carrie struggles to walk in her ridiculous high-heeled space boots. She stops and stares down at the Martian dust covering them. Carrie Bradshaw, with a sophisticated adult female voice (S2), says: <d>[English] I hate Mars. The footing is terrible.</d> [Shot 3] At 00:09.000, the camera cuts to Samantha climbing onto a rock and scanning the horizon. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] No restaurants. No cocktails. No men.</d> [Shot 4] At 00:13.000, a distant Martian rover suddenly drives over a ridge. Carrie and Samantha simultaneously turn toward it as dramatic sunlight silhouettes the approaching vehicle.\n\noverall_soundscape: Constant spacesuit life-support hum, boots crunching through Martian soil, occasional wind-like suit vibration, rocks shifting beneath their feet, and the distant mechanical rumble of an approaching rover.\n\nnon_diegetic_music: Glossy romantic-comedy trailer score with rhythmic strings, electronic percussion, bright synthesizers, and an exaggerated orchestral swell when the mysterious rover appears.\n\n|\n\nintegrated_multimodal_description: [Shot 1] Live-action, deliberately overdramatic early-2000s romantic-comedy movie trailer titled \"SEX AND THE CITY GOES TO MARS.\" Carrie Bradshaw has shoulder-length curly blonde hair, a slim figure, glamorous makeup, and wears an extravagant designer-style SILVER SPACE SUIT with fashionable high-heeled space boots and a transparent bubble helmet. Samantha Jones has shoulder-length blonde hair, glamorous makeup, and wears a fitted METALLIC-GOLD SPACE SUIT with matching boots and a transparent bubble helmet. Both women stand together on the dusty red surface of MARS surrounded by red rocks, distant mountains, and craters. Their luxurious pink-and-silver spacecraft is visible far behind them. At the EXACT BEGINNING, Carrie and Samantha are staring toward a Martian rover that has just appeared over a distant ridge. The rover rapidly approaches them through clouds of red dust. A deep, gravelly male movie-trailer narrator (S1) says in an off-screen voiceover: <d>[English] But sometimes... finding yourself means leaving the entire planet.</d> while Carrie and Samantha's lips remain completely closed. [Shot 2] At 00:06.000, the rover stops beside them. Its hatch opens dramatically. Carrie and Samantha eagerly lean forward, expecting someone glamorous to emerge. Instead, a tiny NASA exploration robot rolls out and mechanically scans them. Samantha's expression collapses. Samantha Jones, with a confident adult female voice (S3), says: <d>[English] I'm going back to Manhattan.</d> [Shot 3] At 00:11.000, the camera cuts extremely wide as Carrie and Samantha march back toward their spacecraft while the tiny rover follows them. Carrie struggles through the dust in her high-heeled space boots. Giant glittering movie-trailer lettering fills the Martian sky: \"SEX AND THE CITY GOES TO MARS.\" The deep male narrator (S1) says in an off-screen voiceover: <d>[English] Coming soon... unfortunately.</d> while Carrie and Samantha's lips remain completely closed.\n\noverall_soundscape: Martian soil crunches beneath their boots, the rover motor whines, mechanical servos move, the spacecraft hums in the distance, and the women's suits produce subtle life-support and fabric sounds.\n\nnon_diegetic_music: Bombastic romantic-comedy trailer music with sweeping strings, glossy synthesizers, electronic drums, triumphant brass, and an excessively large orchestral ending beneath the final title.",
-        "delimiter": "|",
-        "skip_empty": true
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 257,
       "type": "ForLoopOpen | akatz-loops",
       "pos": [
@@ -1204,7 +1017,7 @@
         190
       ],
       "flags": {},
-      "order": 112,
+      "order": 122,
       "mode": 0,
       "inputs": [
         {
@@ -1332,7 +1145,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 130,
+      "order": 135,
       "mode": 0,
       "inputs": [
         {
@@ -1399,7 +1212,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 128,
+      "order": 133,
       "mode": 0,
       "inputs": [
         {
@@ -1466,7 +1279,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 152,
+      "order": 154,
       "mode": 0,
       "inputs": [
         {
@@ -1533,7 +1346,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 151,
+      "order": 153,
       "mode": 0,
       "inputs": [
         {
@@ -1600,7 +1413,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 153,
+      "order": 155,
       "mode": 0,
       "inputs": [
         {
@@ -1753,7 +1566,7 @@
         254
       ],
       "flags": {},
-      "order": 7,
+      "order": 6,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -1919,7 +1732,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 8,
+      "order": 7,
       "mode": 0,
       "inputs": [
         {
@@ -1995,7 +1808,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 9,
+      "order": 8,
       "mode": 0,
       "inputs": [
         {
@@ -2067,7 +1880,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 114,
+      "order": 113,
       "mode": 0,
       "inputs": [
         {
@@ -2138,7 +1951,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 10,
+      "order": 9,
       "mode": 0,
       "inputs": [
         {
@@ -2210,7 +2023,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 11,
+      "order": 10,
       "mode": 0,
       "inputs": [
         {
@@ -2282,7 +2095,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 115,
+      "order": 114,
       "mode": 0,
       "inputs": [
         {
@@ -2353,7 +2166,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 12,
+      "order": 11,
       "mode": 0,
       "inputs": [
         {
@@ -2429,7 +2242,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 13,
+      "order": 12,
       "mode": 0,
       "inputs": [
         {
@@ -2501,7 +2314,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 139,
+      "order": 141,
       "mode": 0,
       "inputs": [
         {
@@ -2574,7 +2387,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 138,
+      "order": 140,
       "mode": 0,
       "inputs": [
         {
@@ -2673,7 +2486,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 14,
+      "order": 13,
       "mode": 0,
       "inputs": [
         {
@@ -2749,7 +2562,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 15,
+      "order": 14,
       "mode": 0,
       "inputs": [
         {
@@ -2819,7 +2632,7 @@
         110
       ],
       "flags": {},
-      "order": 95,
+      "order": 94,
       "mode": 0,
       "inputs": [
         {
@@ -2890,7 +2703,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 16,
+      "order": 15,
       "mode": 0,
       "inputs": [
         {
@@ -2966,7 +2779,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 17,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
@@ -3042,7 +2855,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 146,
+      "order": 149,
       "mode": 0,
       "inputs": [
         {
@@ -3109,7 +2922,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 18,
+      "order": 17,
       "mode": 0,
       "inputs": [
         {
@@ -3181,7 +2994,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 19,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
@@ -3253,7 +3066,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 20,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
@@ -3323,7 +3136,7 @@
         720.0290784013564
       ],
       "flags": {},
-      "order": 92,
+      "order": 91,
       "mode": 0,
       "inputs": [
         {
@@ -3418,7 +3231,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 21,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
@@ -3494,7 +3307,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 22,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -3566,7 +3379,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 23,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -3638,7 +3451,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 24,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -3928,7 +3741,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 25,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -4004,7 +3817,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 26,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -4143,7 +3956,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 27,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -4215,7 +4028,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 28,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -4350,7 +4163,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 29,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -4487,7 +4300,7 @@
         114
       ],
       "flags": {},
-      "order": 88,
+      "order": 87,
       "mode": 0,
       "inputs": [
         {
@@ -4557,7 +4370,7 @@
         86
       ],
       "flags": {},
-      "order": 113,
+      "order": 112,
       "mode": 0,
       "inputs": [
         {
@@ -4625,7 +4438,7 @@
         114
       ],
       "flags": {},
-      "order": 131,
+      "order": 127,
       "mode": 0,
       "inputs": [
         {
@@ -4695,7 +4508,7 @@
         114
       ],
       "flags": {},
-      "order": 140,
+      "order": 137,
       "mode": 0,
       "inputs": [
         {
@@ -4768,7 +4581,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 147,
+      "order": 143,
       "mode": 0,
       "inputs": [
         {
@@ -4835,7 +4648,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 148,
+      "order": 144,
       "mode": 0,
       "inputs": [
         {
@@ -4902,7 +4715,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 30,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -4978,7 +4791,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 143,
+      "order": 146,
       "mode": 0,
       "inputs": [
         {
@@ -5045,7 +4858,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 127,
+      "order": 132,
       "mode": 0,
       "inputs": [
         {
@@ -5132,7 +4945,7 @@
         86
       ],
       "flags": {},
-      "order": 137,
+      "order": 139,
       "mode": 0,
       "inputs": [
         {
@@ -5224,7 +5037,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 144,
+      "order": 147,
       "mode": 0,
       "inputs": [
         {
@@ -5291,7 +5104,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 31,
+      "order": 30,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5358,7 +5171,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 32,
+      "order": 31,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5424,7 +5237,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 96,
+      "order": 95,
       "mode": 0,
       "inputs": [
         {
@@ -5489,7 +5302,7 @@
         88
       ],
       "flags": {},
-      "order": 33,
+      "order": 32,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -5554,7 +5367,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 34,
+      "order": 33,
       "mode": 0,
       "inputs": [
         {
@@ -5626,7 +5439,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 35,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
@@ -5702,7 +5515,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 36,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
@@ -5778,7 +5591,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 37,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -5850,7 +5663,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 38,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -5926,7 +5739,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 39,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -6002,7 +5815,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 40,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -6074,7 +5887,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 41,
+      "order": 40,
       "mode": 0,
       "inputs": [
         {
@@ -6233,7 +6046,7 @@
         130
       ],
       "flags": {},
-      "order": 93,
+      "order": 92,
       "mode": 0,
       "inputs": [
         {
@@ -6310,7 +6123,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 116,
+      "order": 115,
       "mode": 0,
       "inputs": [
         {
@@ -6394,7 +6207,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 42,
+      "order": 41,
       "mode": 0,
       "inputs": [
         {
@@ -6464,7 +6277,7 @@
         66
       ],
       "flags": {},
-      "order": 145,
+      "order": 148,
       "mode": 0,
       "inputs": [
         {
@@ -6532,116 +6345,6 @@
       }
     },
     {
-      "id": 851,
-      "type": "SkebaSaveClipToFile",
-      "pos": [
-        -5176.52470253712,
-        3499.5033908827136
-      ],
-      "size": [
-        881.6811682927182,
-        783.8178104529818
-      ],
-      "flags": {},
-      "order": 94,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "link": 1584
-        },
-        {
-          "name": "accumulation",
-          "shape": 7,
-          "type": "ACCUMULATION",
-          "link": 1586
-        },
-        {
-          "name": "prompt",
-          "shape": 7,
-          "type": "STRING",
-          "widget": {
-            "name": "prompt"
-          },
-          "link": 1587
-        },
-        {
-          "name": "original_1",
-          "type": "*",
-          "link": null
-        },
-        {
-          "name": "processed_1",
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "links": [
-            1585
-          ]
-        },
-        {
-          "name": "output_1",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "ffcbe23d7429738a2aa8076a517889d2af830594",
-        "Node name for S&R": "SkebaSaveClipToFile",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "skeba_bypass_lane_count": 1,
-        "skeba_bypass_lane_types": {},
-        "skeba_playlist": "a94ae15e2d3e4a2abd99cc29856c5495",
-        "skeba_clip_toggles": {
-          "preview_clip": true
-        }
-      },
-      "widgets_values": [
-        18,
-        true,
-        true,
-        true,
-        "",
-        null
-      ],
-      "widgets_values_named": {
-        "crf": 18,
-        "output_folder": true,
-        "project_name": true,
-        "preview_clip": true,
-        "prompt": "",
-        "Open Live Playlist": null
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      }
-    },
-    {
       "id": 882,
       "type": "PrimitiveBoolean",
       "pos": [
@@ -6653,7 +6356,7 @@
         58
       ],
       "flags": {},
-      "order": 43,
+      "order": 42,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6716,7 +6419,7 @@
         58
       ],
       "flags": {},
-      "order": 44,
+      "order": 43,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6779,7 +6482,7 @@
         82
       ],
       "flags": {},
-      "order": 45,
+      "order": 44,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -6846,7 +6549,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 101,
+      "order": 100,
       "mode": 0,
       "inputs": [
         {
@@ -6913,7 +6616,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 100,
+      "order": 99,
       "mode": 0,
       "inputs": [
         {
@@ -6980,7 +6683,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 102,
+      "order": 101,
       "mode": 0,
       "inputs": [
         {
@@ -7045,7 +6748,7 @@
         150
       ],
       "flags": {},
-      "order": 46,
+      "order": 45,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7120,7 +6823,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 98,
+      "order": 97,
       "mode": 0,
       "inputs": [
         {
@@ -7488,7 +7191,7 @@
         314.00000000000045
       ],
       "flags": {},
-      "order": 47,
+      "order": 46,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7555,7 +7258,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 104,
+      "order": 103,
       "mode": 0,
       "inputs": [
         {
@@ -7643,7 +7346,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -7715,7 +7418,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 119,
+      "order": 118,
       "mode": 0,
       "inputs": [
         {
@@ -7802,7 +7505,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 133,
+      "order": 129,
       "mode": 0,
       "inputs": [
         {
@@ -7869,7 +7572,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 97,
+      "order": 96,
       "mode": 0,
       "inputs": [
         {
@@ -7936,7 +7639,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 49,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
@@ -8012,7 +7715,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 50,
+      "order": 49,
       "mode": 0,
       "inputs": [
         {
@@ -8088,7 +7791,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 51,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -8164,7 +7867,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 52,
+      "order": 51,
       "mode": 0,
       "inputs": [
         {
@@ -8240,7 +7943,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 53,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
@@ -8316,7 +8019,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 54,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
@@ -8388,7 +8091,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 55,
+      "order": 54,
       "mode": 0,
       "inputs": [
         {
@@ -8464,7 +8167,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 56,
+      "order": 55,
       "mode": 0,
       "inputs": [
         {
@@ -8534,7 +8237,7 @@
         122
       ],
       "flags": {},
-      "order": 105,
+      "order": 104,
       "mode": 0,
       "inputs": [
         {
@@ -8614,7 +8317,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 57,
+      "order": 56,
       "mode": 0,
       "inputs": [
         {
@@ -8686,7 +8389,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 135,
+      "order": 131,
       "mode": 0,
       "inputs": [
         {
@@ -8837,7 +8540,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 58,
+      "order": 57,
       "mode": 0,
       "inputs": [
         {
@@ -9005,7 +8708,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 59,
+      "order": 58,
       "mode": 0,
       "inputs": [
         {
@@ -9081,7 +8784,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 120,
+      "order": 119,
       "mode": 0,
       "inputs": [
         {
@@ -9167,7 +8870,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 60,
+      "order": 59,
       "mode": 0,
       "inputs": [
         {
@@ -9243,7 +8946,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 106,
+      "order": 105,
       "mode": 0,
       "inputs": [
         {
@@ -9330,7 +9033,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 61,
+      "order": 60,
       "mode": 0,
       "inputs": [
         {
@@ -9564,7 +9267,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 62,
+      "order": 61,
       "mode": 0,
       "inputs": [
         {
@@ -9701,7 +9404,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 63,
+      "order": 62,
       "mode": 0,
       "inputs": [
         {
@@ -9862,7 +9565,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 64,
+      "order": 63,
       "mode": 0,
       "inputs": [
         {
@@ -10267,7 +9970,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 65,
+      "order": 64,
       "mode": 0,
       "inputs": [
         {
@@ -10343,7 +10046,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 66,
+      "order": 65,
       "mode": 0,
       "inputs": [
         {
@@ -10484,7 +10187,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 67,
+      "order": 66,
       "mode": 0,
       "inputs": [
         {
@@ -10560,7 +10263,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 68,
+      "order": 67,
       "mode": 0,
       "inputs": [
         {
@@ -10632,7 +10335,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 69,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -10796,7 +10499,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 107,
+      "order": 106,
       "mode": 0,
       "inputs": [
         {
@@ -10884,7 +10587,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 70,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -10956,7 +10659,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 71,
+      "order": 70,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -11020,7 +10723,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 72,
+      "order": 71,
       "mode": 0,
       "inputs": [
         {
@@ -11159,7 +10862,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 132,
+      "order": 128,
       "mode": 0,
       "inputs": [
         {
@@ -11226,7 +10929,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 118,
+      "order": 117,
       "mode": 0,
       "inputs": [
         {
@@ -11293,7 +10996,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 117,
+      "order": 116,
       "mode": 0,
       "inputs": [
         {
@@ -11360,7 +11063,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 73,
+      "order": 72,
       "mode": 0,
       "inputs": [
         {
@@ -11436,7 +11139,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 74,
+      "order": 73,
       "mode": 0,
       "inputs": [
         {
@@ -11510,7 +11213,7 @@
         130
       ],
       "flags": {},
-      "order": 122,
+      "order": 121,
       "mode": 0,
       "inputs": [
         {
@@ -11602,7 +11305,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 108,
+      "order": 107,
       "mode": 0,
       "inputs": [
         {
@@ -11690,7 +11393,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 75,
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
@@ -11764,7 +11467,7 @@
         130
       ],
       "flags": {},
-      "order": 121,
+      "order": 120,
       "mode": 0,
       "inputs": [
         {
@@ -11996,7 +11699,7 @@
         142
       ],
       "flags": {},
-      "order": 109,
+      "order": 108,
       "mode": 0,
       "inputs": [
         {
@@ -12070,7 +11773,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 76,
+      "order": 75,
       "mode": 0,
       "inputs": [
         {
@@ -12144,7 +11847,7 @@
         346
       ],
       "flags": {},
-      "order": 149,
+      "order": 145,
       "mode": 0,
       "inputs": [
         {
@@ -12278,7 +11981,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 77,
+      "order": 76,
       "mode": 0,
       "inputs": [
         {
@@ -12354,7 +12057,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 78,
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
@@ -12430,7 +12133,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 155,
+      "order": 152,
       "mode": 0,
       "inputs": [
         {
@@ -12497,7 +12200,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 154,
+      "order": 151,
       "mode": 0,
       "inputs": [
         {
@@ -12562,7 +12265,7 @@
         342
       ],
       "flags": {},
-      "order": 141,
+      "order": 138,
       "mode": 0,
       "inputs": [
         {
@@ -12660,7 +12363,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 79,
+      "order": 78,
       "mode": 0,
       "inputs": [
         {
@@ -12730,7 +12433,7 @@
         746
       ],
       "flags": {},
-      "order": 134,
+      "order": 130,
       "mode": 0,
       "inputs": [
         {
@@ -12997,7 +12700,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 80,
+      "order": 79,
       "mode": 0,
       "inputs": [
         {
@@ -13069,7 +12772,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 81,
+      "order": 80,
       "mode": 0,
       "inputs": [
         {
@@ -13297,7 +13000,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 82,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -13445,7 +13148,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 83,
+      "order": 82,
       "mode": 0,
       "inputs": [
         {
@@ -13649,7 +13352,7 @@
         124.94008356037602
       ],
       "flags": {},
-      "order": 129,
+      "order": 134,
       "mode": 0,
       "inputs": [
         {
@@ -13741,30 +13444,75 @@
       }
     },
     {
-      "id": 292,
-      "type": "String",
+      "id": 258,
+      "type": "SkebaPromptLoopNode",
       "pos": [
-        -5778.029754480434,
-        3620.749699747221
+        -4159.865088560076,
+        3339.347942382229
       ],
       "size": [
-        340.2254018313397,
-        365.144567489353
+        253.8853515625,
+        216
       ],
-      "flags": {},
-      "order": 84,
+      "flags": {
+        "collapsed": false
+      },
+      "order": 109,
       "mode": 0,
-      "inputs": [],
-      "outputs": [
+      "inputs": [
         {
-          "name": "STRING",
+          "name": "text",
           "type": "STRING",
-          "links": [
-            1432
-          ]
+          "widget": {
+            "name": "text"
+          },
+          "link": 1685
+        },
+        {
+          "name": "original_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "processed_1",
+          "type": "*",
+          "link": null
         }
       ],
-      "title": "Prompt (Each Divided With a | )",
+      "outputs": [
+        {
+          "name": "prompts_list",
+          "shape": 6,
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "count",
+          "type": "INT",
+          "links": [
+            521,
+            543
+          ]
+        },
+        {
+          "name": "prompt_numbers",
+          "shape": 6,
+          "type": "INT",
+          "links": null
+        },
+        {
+          "name": "prompt_batch",
+          "type": "SKEBA_PROMPT_LIST",
+          "links": [
+            520
+          ]
+        },
+        {
+          "name": "output_1",
+          "type": "*",
+          "links": null
+        }
+      ],
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -13773,9 +13521,10 @@
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
         "secondTabWidth": 65,
-        "cnr_id": "ComfyLiterals",
-        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
-        "Node name for S&R": "String",
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "e531b0901e1111fd0b66dbcbcea33799d8af877f",
+        "Node name for S&R": "SkebaPromptLoopNode",
+        "aux_id": "Hahihula/ComfyUI-batching-nodes",
         "ue_properties": {
           "widget_ue_connectable": {},
           "input_ue_unconnectable": {},
@@ -13785,17 +13534,95 @@
           "inputs": [],
           "outputs": []
         },
-        "__skeba_color_base": "#232",
-        "__skeba_bgcolor_base": "#353"
+        "skeba_bypass_lane_count": 1,
+        "skeba_bypass_lane_types": {}
       },
       "widgets_values": [
-        "[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{conference_room}\n\ndetailed_description:\n\nRealistic live-action mid-2000s American workplace mockumentary comedy inside {conference_room}. Slightly desaturated digital-video color, fluorescent office lighting, mundane corporate furniture, handheld documentary camerawork, awkward reaction pauses, quick restrained zooms, and dry observational comedy.\n\n{Michael Scott_BC} stands at the front of the conference room, convinced he is entertaining the employees. {Jerry Seinfeld_BC} sits among the chairs and immediately recognizes that Michael thinks of himself as a comedian. The scene becomes an increasingly competitive argument over which man is actually funnier.\n\ntimeline:\n\n[Shot 1] At 00:00.000, a medium handheld shot shows only {Michael Scott_BC} at the front of {conference_room}. He has just finished performing an obviously terrible improvised comedy bit for the employees. He looks enormously pleased with himself. {Michael Scott_BC} says, <d>[English §Michael Scott_BC§]Comedy is really about confidence. And I've always had too much.</d>\n\n[Shot 2] At 00:04.500, cut to a medium shot showing only {Jerry Seinfeld_BC} sitting in a conference chair. Jerry stares toward Michael with amused disbelief, then says, <d>[English §Jerry Seinfeld_BC§]That's interesting. Usually comedy involves something funny.</d>\n\n[Shot 3] At 00:08.000, cut back to only {Michael Scott_BC}. His smile disappears. He points toward himself and says, <d>[English §Michael Scott_BC§]I've been making this office laugh for years.</d>\n\n[Shot 4] At 00:11.000, cut to only {Jerry Seinfeld_BC}. Jerry gives the documentary camera a tiny skeptical glance, then says, <d>[English §Jerry Seinfeld_BC§]Were they allowed to leave?</d>\n\n[Shot 5] At 00:13.500, Michael is shown silently absorbing the insult while Jerry remains off-camera. A quick uncomfortable documentary zoom pushes toward Michael's wounded expression.\n\noverall_soundscape:\n\nNatural quiet conference-room ambience with restrained workplace-comedy room tone. No laugh track. Dialogue is clean and dry.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{Michael Scott_BC}\n\n{theoffice360}\n\ndetailed_description:\n\nRealistic mid-2000s workplace mockumentary comedy inside the main office reconstructed from {theoffice360}. Use the reference only to reconstruct the physical office. NEVER display an equirectangular panorama, panoramic distortion, curved horizon, stretched edges, fisheye view, or 360 projection. Every frame uses a normal undistorted rectilinear camera.\n\n{George Costanza_BC} sits at his desk wearing extremely dark black shaded sunglasses. George is actually asleep upright in his office chair, but his posture makes him look vaguely contemplative from a distance.\n\n{Michael Scott_BC} walks through the office, notices George, and completely misinterprets what he sees.\n\ntimeline:\n\n[Shot 1] At 00:00.000, a normal rectilinear wide office shot follows {Michael Scott_BC} walking between the desks. He suddenly notices George and stops.\n\n[Shot 2] At 00:02.500, medium shot showing only {George Costanza_BC} sitting motionless behind his desk wearing opaque black sunglasses. His hands rest near paperwork on the desk. His head is slightly tilted. He is completely asleep.\n\n[Shot 3] At 00:05.500, medium close-up showing only {Michael Scott_BC}. Michael looks impressed and quietly says, <d>[English §Michael Scott_BC§]Look at George. Completely focused. That is a man thinking about paper.</d>\n\n[Shot 4] At 00:10.000, close shot showing only George. He remains asleep and completely motionless behind the dark glasses.\n\n[Shot 5] At 00:12.000, Michael silently nods proudly toward the documentary camera as though George has just validated his management philosophy.\n\noverall_soundscape:\n\nQuiet office ambience, distant keyboards, ventilation and subtle workplace room tone. George does not speak.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{the_office_interview_wall}\n\ndetailed_description:\n\nClassic workplace mockumentary talking-head interview in front of {the_office_interview_wall}. Static normal rectilinear medium framing, blinds behind the subject, flat fluorescent office illumination, slightly desaturated mid-2000s digital-video appearance.\n\n{George Costanza_BC} still wears the same extremely dark black shaded sunglasses. He is perfectly serious and openly proud of having discovered a better way to sleep at work.\n\ntimeline:\n\n[Shot 1] At 00:00.000, static medium interview shot of only {George Costanza_BC}. George sits facing the documentary camera wearing the opaque black sunglasses.\n\n[Shot 2] At 00:02.000, George slightly adjusts the sunglasses with one finger and says, <d>[English §George Costanza_BC§]Yeah, these shades help me even more to sleep.</d>\n\n[Shot 3] At 00:06.000, George leans forward confidentially and says, <d>[English §George Costanza_BC§]Without them, people can see your eyes are closed. That's amateur hour.</d>\n\n[Shot 4] At 00:11.000, George settles back proudly. He remains completely serious.\n\n[Shot 5] At 00:13.000, his head slowly droops forward. He has fallen asleep during his own interview. Hold the awkward silent shot.\n\noverall_soundscape:\n\nExtremely quiet interview-room ambience. No other voices. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{Jerry Seinfeld_BC}\n\n{theoffice360}\n\ndetailed_description:\n\nRealistic workplace mockumentary scene inside the main office reconstructed from {theoffice360}. NEVER show the source panorama itself. All shots use normal undistorted rectilinear perspective.\n\n{George Costanza_BC} is asleep upright at his desk wearing the same opaque black shaded sunglasses. {Jerry Seinfeld_BC} approaches and realizes exactly what George is doing.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {George Costanza_BC} asleep upright behind his desk. His dark sunglasses hide his closed eyes. His head is tilted slightly backward.\n\nA clearly audible snore escapes him.\n\n[Shot 2] At 00:03.000, medium shot showing only {Jerry Seinfeld_BC} approaching the desk. Jerry stops when he hears another snore and looks directly at the documentary camera.\n\n[Shot 3] At 00:05.500, Jerry reaches into frame and sharply knocks his knuckles against the top of George's desk. Jerry says, <d>[English §Jerry Seinfeld_BC§]You're snoring again, George!</d>\n\n[Shot 4] At 00:08.500, cut to only {George Costanza_BC}. George jolts awake, straightens himself without removing the sunglasses, and says, <d>[English §George Costanza_BC§]I was thinking with my eyes closed.</d>\n\n[Shot 5] At 00:12.000, cut to Jerry alone. Jerry looks down toward George and says, <d>[English §Jerry Seinfeld_BC§]Your thinking has a respiratory problem.</d>\n\noverall_soundscape:\n\nNatural office ambience. George's snoring is clearly audible before Jerry wakes him. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Elaine Benes_BC}\n\n{Jerry Seinfeld_BC}\n\n{the_office_receptionist_desk}\n\ndetailed_description:\n\nRealistic mid-2000s workplace mockumentary comedy at {the_office_receptionist_desk}. {Elaine Benes_BC} works as the receptionist/secretary, surrounded by a ringing telephone, paperwork, computer, pens and message slips.\n\nElaine is increasingly irritated by having both Jerry and Michael in the same workplace. {Jerry Seinfeld_BC} casually stops at reception while Elaine handles calls.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Elaine Benes_BC} at {the_office_receptionist_desk}. Elaine finishes a telephone call, hangs up and immediately sees another line blinking. Her frustration is obvious.\n\n[Shot 2] At 00:03.000, Elaine looks directly toward the documentary camera and says, <d>[English §Elaine Benes_BC§]It's like I have two Jerrys now.</d>\n\n[Shot 3] At 00:05.500, remain on Elaine alone as she gestures toward the office and says, <d>[English §Elaine Benes_BC§]This guy Michael—I don't know who's worse, Jerry or Michael.</d>\n\n[Shot 4] At 00:10.000, cut to a medium shot showing only {Jerry Seinfeld_BC} standing beside reception. Jerry looks offended and says, <d>[English §Jerry Seinfeld_BC§]You can't compare us. I do this professionally.</d>\n\n[Shot 5] At 00:13.000, cut back to Elaine alone. Without looking up, she answers another ringing telephone and gives the documentary camera an exhausted stare.\n\noverall_soundscape:\n\nNatural reception-area ambience, occasional telephone rings, distant office activity and clean dialogue. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{michaels_desk}\n\ndetailed_description:\n\nRealistic workplace mockumentary comedy at {michaels_desk}. {Michael Scott_BC} sits behind his desk while {Jerry Seinfeld_BC} stands opposite him.\n\nTheir disagreement over who is the better comedian has now become ridiculously serious. Michael treats comedy as another category in which the regional manager should automatically outrank his employees.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Michael Scott_BC} behind {michaels_desk}. He has written two names on a yellow legal pad with tally marks underneath them: MICHAEL and JERRY.\n\nMichael says, <d>[English §Michael Scott_BC§]I think the fairest thing is a comedy contest.</d>\n\n[Shot 2] At 00:04.000, cut to only {Jerry Seinfeld_BC}. Jerry studies Michael for a moment and says, <d>[English §Jerry Seinfeld_BC§]I've been doing comedy for twenty years. You manage a paper company.</d>\n\n[Shot 3] At 00:08.000, cut back to only Michael. Michael confidently adds another tally mark beneath his own name and says, <d>[English §Michael Scott_BC§]Exactly. Wider range.</d>\n\n[Shot 4] At 00:11.000, Jerry alone stares into the documentary camera, then says, <d>[English §Jerry Seinfeld_BC§]I'm beginning to understand George's sunglasses.</d>\n\n[Shot 5] At 00:14.000, Michael silently adds yet another tally beneath his own name.\n\noverall_soundscape:\n\nQuiet manager-office ambience and clean dialogue. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{conference_room}\n\ndetailed_description:\n\nThe comedy rivalry culminates in {conference_room}. Realistic mid-2000s workplace mockumentary style with fluorescent lighting, handheld documentary framing and awkward zooms.\n\n{Michael Scott_BC} and {Jerry Seinfeld_BC} have arranged a tiny office comedy competition for the employees. The unseen employees remain silent and are never given dialogue. Only Jerry and Michael speak.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Michael Scott_BC} standing at the front of the conference room. Michael finishes an elaborate physical comedy pose and waits confidently for laughter.\n\nThere is complete silence.\n\n[Shot 2] At 00:03.000, Michael remains frozen. The documentary camera slowly zooms closer as his confidence begins to collapse.\n\n[Shot 3] At 00:05.000, cut to only {Jerry Seinfeld_BC} standing at the front of the room. Jerry looks around at the employees and says, <d>[English §Jerry Seinfeld_BC§]What's the deal with office meetings? You spend an hour discussing how nobody has an hour.</d>\n\n[Shot 4] At 00:09.000, loud unseen employee laughter erupts from around the conference room.\n\n[Shot 5] At 00:10.500, cut to only Michael. He looks personally betrayed and says, <d>[English §Michael Scott_BC§]They're laughing because I'm a good boss. I created a safe laughing environment.</d>\n\n[Shot 6] At 00:14.000, cut to Jerry alone giving the documentary camera a tiny victorious smile.\n\noverall_soundscape:\n\nNatural conference-room ambience. Unseen employees may laugh but have no spoken dialogue. No canned laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Elaine Benes_BC}\n\n{George Costanza_BC}\n\n{the_office_receptionist_desk}\n\ndetailed_description:\n\nFinal workplace mockumentary scene at {the_office_receptionist_desk}. The office has returned to its ordinary workday rhythm after Jerry and Michael's absurd comedy competition.\n\n{Elaine Benes_BC} is taking calls at reception. {George Costanza_BC} walks past still wearing the same opaque black shaded sunglasses and looking exhausted.\n\nOnly Elaine and George speak.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Elaine Benes_BC} behind {the_office_receptionist_desk}. She answers a telephone, listens briefly, then places the caller on hold.\n\n[Shot 2] At 00:03.000, medium shot showing only {George Costanza_BC} walking past reception wearing his black sunglasses. Elaine's voice remains silent while George is framed.\n\nGeorge stops and says, <d>[English §George Costanza_BC§]Is the comedy contest over?</d>\n\n[Shot 3] At 00:06.000, cut to only Elaine. She says, <d>[English §Elaine Benes_BC§]Jerry won. Michael says that means Michael won as a manager.</d>\n\n[Shot 4] At 00:10.000, cut to only George. George considers this for a moment and says, <d>[English §George Costanza_BC§]Good. Wake me when somebody gets fired.</d>\n\n[Shot 5] At 00:13.000, George walks out of frame. Elaine silently watches him go, then looks directly into the documentary camera as another telephone line begins blinking.\n\noverall_soundscape:\n\nNatural quiet reception ambience with telephone sounds and distant office activity. No laugh track.\n\nnon_diegetic_music:\n\nA short quirky instrumental workplace-sitcom closing sting begins during the final two seconds."
+        "",
+        "|",
+        true
       ],
       "widgets_values_named": {
-        "String": "[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{conference_room}\n\ndetailed_description:\n\nRealistic live-action mid-2000s American workplace mockumentary comedy inside {conference_room}. Slightly desaturated digital-video color, fluorescent office lighting, mundane corporate furniture, handheld documentary camerawork, awkward reaction pauses, quick restrained zooms, and dry observational comedy.\n\n{Michael Scott_BC} stands at the front of the conference room, convinced he is entertaining the employees. {Jerry Seinfeld_BC} sits among the chairs and immediately recognizes that Michael thinks of himself as a comedian. The scene becomes an increasingly competitive argument over which man is actually funnier.\n\ntimeline:\n\n[Shot 1] At 00:00.000, a medium handheld shot shows only {Michael Scott_BC} at the front of {conference_room}. He has just finished performing an obviously terrible improvised comedy bit for the employees. He looks enormously pleased with himself. {Michael Scott_BC} says, <d>[English §Michael Scott_BC§]Comedy is really about confidence. And I've always had too much.</d>\n\n[Shot 2] At 00:04.500, cut to a medium shot showing only {Jerry Seinfeld_BC} sitting in a conference chair. Jerry stares toward Michael with amused disbelief, then says, <d>[English §Jerry Seinfeld_BC§]That's interesting. Usually comedy involves something funny.</d>\n\n[Shot 3] At 00:08.000, cut back to only {Michael Scott_BC}. His smile disappears. He points toward himself and says, <d>[English §Michael Scott_BC§]I've been making this office laugh for years.</d>\n\n[Shot 4] At 00:11.000, cut to only {Jerry Seinfeld_BC}. Jerry gives the documentary camera a tiny skeptical glance, then says, <d>[English §Jerry Seinfeld_BC§]Were they allowed to leave?</d>\n\n[Shot 5] At 00:13.500, Michael is shown silently absorbing the insult while Jerry remains off-camera. A quick uncomfortable documentary zoom pushes toward Michael's wounded expression.\n\noverall_soundscape:\n\nNatural quiet conference-room ambience with restrained workplace-comedy room tone. No laugh track. Dialogue is clean and dry.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{Michael Scott_BC}\n\n{theoffice360}\n\ndetailed_description:\n\nRealistic mid-2000s workplace mockumentary comedy inside the main office reconstructed from {theoffice360}. Use the reference only to reconstruct the physical office. NEVER display an equirectangular panorama, panoramic distortion, curved horizon, stretched edges, fisheye view, or 360 projection. Every frame uses a normal undistorted rectilinear camera.\n\n{George Costanza_BC} sits at his desk wearing extremely dark black shaded sunglasses. George is actually asleep upright in his office chair, but his posture makes him look vaguely contemplative from a distance.\n\n{Michael Scott_BC} walks through the office, notices George, and completely misinterprets what he sees.\n\ntimeline:\n\n[Shot 1] At 00:00.000, a normal rectilinear wide office shot follows {Michael Scott_BC} walking between the desks. He suddenly notices George and stops.\n\n[Shot 2] At 00:02.500, medium shot showing only {George Costanza_BC} sitting motionless behind his desk wearing opaque black sunglasses. His hands rest near paperwork on the desk. His head is slightly tilted. He is completely asleep.\n\n[Shot 3] At 00:05.500, medium close-up showing only {Michael Scott_BC}. Michael looks impressed and quietly says, <d>[English §Michael Scott_BC§]Look at George. Completely focused. That is a man thinking about paper.</d>\n\n[Shot 4] At 00:10.000, close shot showing only George. He remains asleep and completely motionless behind the dark glasses.\n\n[Shot 5] At 00:12.000, Michael silently nods proudly toward the documentary camera as though George has just validated his management philosophy.\n\noverall_soundscape:\n\nQuiet office ambience, distant keyboards, ventilation and subtle workplace room tone. George does not speak.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{the_office_interview_wall}\n\ndetailed_description:\n\nClassic workplace mockumentary talking-head interview in front of {the_office_interview_wall}. Static normal rectilinear medium framing, blinds behind the subject, flat fluorescent office illumination, slightly desaturated mid-2000s digital-video appearance.\n\n{George Costanza_BC} still wears the same extremely dark black shaded sunglasses. He is perfectly serious and openly proud of having discovered a better way to sleep at work.\n\ntimeline:\n\n[Shot 1] At 00:00.000, static medium interview shot of only {George Costanza_BC}. George sits facing the documentary camera wearing the opaque black sunglasses.\n\n[Shot 2] At 00:02.000, George slightly adjusts the sunglasses with one finger and says, <d>[English §George Costanza_BC§]Yeah, these shades help me even more to sleep.</d>\n\n[Shot 3] At 00:06.000, George leans forward confidentially and says, <d>[English §George Costanza_BC§]Without them, people can see your eyes are closed. That's amateur hour.</d>\n\n[Shot 4] At 00:11.000, George settles back proudly. He remains completely serious.\n\n[Shot 5] At 00:13.000, his head slowly droops forward. He has fallen asleep during his own interview. Hold the awkward silent shot.\n\noverall_soundscape:\n\nExtremely quiet interview-room ambience. No other voices. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{George Costanza_BC}\n\n{Jerry Seinfeld_BC}\n\n{theoffice360}\n\ndetailed_description:\n\nRealistic workplace mockumentary scene inside the main office reconstructed from {theoffice360}. NEVER show the source panorama itself. All shots use normal undistorted rectilinear perspective.\n\n{George Costanza_BC} is asleep upright at his desk wearing the same opaque black shaded sunglasses. {Jerry Seinfeld_BC} approaches and realizes exactly what George is doing.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {George Costanza_BC} asleep upright behind his desk. His dark sunglasses hide his closed eyes. His head is tilted slightly backward.\n\nA clearly audible snore escapes him.\n\n[Shot 2] At 00:03.000, medium shot showing only {Jerry Seinfeld_BC} approaching the desk. Jerry stops when he hears another snore and looks directly at the documentary camera.\n\n[Shot 3] At 00:05.500, Jerry reaches into frame and sharply knocks his knuckles against the top of George's desk. Jerry says, <d>[English §Jerry Seinfeld_BC§]You're snoring again, George!</d>\n\n[Shot 4] At 00:08.500, cut to only {George Costanza_BC}. George jolts awake, straightens himself without removing the sunglasses, and says, <d>[English §George Costanza_BC§]I was thinking with my eyes closed.</d>\n\n[Shot 5] At 00:12.000, cut to Jerry alone. Jerry looks down toward George and says, <d>[English §Jerry Seinfeld_BC§]Your thinking has a respiratory problem.</d>\n\noverall_soundscape:\n\nNatural office ambience. George's snoring is clearly audible before Jerry wakes him. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Elaine Benes_BC}\n\n{Jerry Seinfeld_BC}\n\n{the_office_receptionist_desk}\n\ndetailed_description:\n\nRealistic mid-2000s workplace mockumentary comedy at {the_office_receptionist_desk}. {Elaine Benes_BC} works as the receptionist/secretary, surrounded by a ringing telephone, paperwork, computer, pens and message slips.\n\nElaine is increasingly irritated by having both Jerry and Michael in the same workplace. {Jerry Seinfeld_BC} casually stops at reception while Elaine handles calls.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Elaine Benes_BC} at {the_office_receptionist_desk}. Elaine finishes a telephone call, hangs up and immediately sees another line blinking. Her frustration is obvious.\n\n[Shot 2] At 00:03.000, Elaine looks directly toward the documentary camera and says, <d>[English §Elaine Benes_BC§]It's like I have two Jerrys now.</d>\n\n[Shot 3] At 00:05.500, remain on Elaine alone as she gestures toward the office and says, <d>[English §Elaine Benes_BC§]This guy Michael—I don't know who's worse, Jerry or Michael.</d>\n\n[Shot 4] At 00:10.000, cut to a medium shot showing only {Jerry Seinfeld_BC} standing beside reception. Jerry looks offended and says, <d>[English §Jerry Seinfeld_BC§]You can't compare us. I do this professionally.</d>\n\n[Shot 5] At 00:13.000, cut back to Elaine alone. Without looking up, she answers another ringing telephone and gives the documentary camera an exhausted stare.\n\noverall_soundscape:\n\nNatural reception-area ambience, occasional telephone rings, distant office activity and clean dialogue. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{michaels_desk}\n\ndetailed_description:\n\nRealistic workplace mockumentary comedy at {michaels_desk}. {Michael Scott_BC} sits behind his desk while {Jerry Seinfeld_BC} stands opposite him.\n\nTheir disagreement over who is the better comedian has now become ridiculously serious. Michael treats comedy as another category in which the regional manager should automatically outrank his employees.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Michael Scott_BC} behind {michaels_desk}. He has written two names on a yellow legal pad with tally marks underneath them: MICHAEL and JERRY.\n\nMichael says, <d>[English §Michael Scott_BC§]I think the fairest thing is a comedy contest.</d>\n\n[Shot 2] At 00:04.000, cut to only {Jerry Seinfeld_BC}. Jerry studies Michael for a moment and says, <d>[English §Jerry Seinfeld_BC§]I've been doing comedy for twenty years. You manage a paper company.</d>\n\n[Shot 3] At 00:08.000, cut back to only Michael. Michael confidently adds another tally mark beneath his own name and says, <d>[English §Michael Scott_BC§]Exactly. Wider range.</d>\n\n[Shot 4] At 00:11.000, Jerry alone stares into the documentary camera, then says, <d>[English §Jerry Seinfeld_BC§]I'm beginning to understand George's sunglasses.</d>\n\n[Shot 5] At 00:14.000, Michael silently adds yet another tally beneath his own name.\n\noverall_soundscape:\n\nQuiet manager-office ambience and clean dialogue. No laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC}\n\n{Michael Scott_BC}\n\n{conference_room}\n\ndetailed_description:\n\nThe comedy rivalry culminates in {conference_room}. Realistic mid-2000s workplace mockumentary style with fluorescent lighting, handheld documentary framing and awkward zooms.\n\n{Michael Scott_BC} and {Jerry Seinfeld_BC} have arranged a tiny office comedy competition for the employees. The unseen employees remain silent and are never given dialogue. Only Jerry and Michael speak.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Michael Scott_BC} standing at the front of the conference room. Michael finishes an elaborate physical comedy pose and waits confidently for laughter.\n\nThere is complete silence.\n\n[Shot 2] At 00:03.000, Michael remains frozen. The documentary camera slowly zooms closer as his confidence begins to collapse.\n\n[Shot 3] At 00:05.000, cut to only {Jerry Seinfeld_BC} standing at the front of the room. Jerry looks around at the employees and says, <d>[English §Jerry Seinfeld_BC§]What's the deal with office meetings? You spend an hour discussing how nobody has an hour.</d>\n\n[Shot 4] At 00:09.000, loud unseen employee laughter erupts from around the conference room.\n\n[Shot 5] At 00:10.500, cut to only Michael. He looks personally betrayed and says, <d>[English §Michael Scott_BC§]They're laughing because I'm a good boss. I created a safe laughing environment.</d>\n\n[Shot 6] At 00:14.000, cut to Jerry alone giving the documentary camera a tiny victorious smile.\n\noverall_soundscape:\n\nNatural conference-room ambience. Unseen employees may laugh but have no spoken dialogue. No canned laugh track.\n\nnon_diegetic_music:\n\nNone.\n\n|\n\n[new_location]\n\n[s=15]\n\nsubject_definitions:\n\n{Elaine Benes_BC}\n\n{George Costanza_BC}\n\n{the_office_receptionist_desk}\n\ndetailed_description:\n\nFinal workplace mockumentary scene at {the_office_receptionist_desk}. The office has returned to its ordinary workday rhythm after Jerry and Michael's absurd comedy competition.\n\n{Elaine Benes_BC} is taking calls at reception. {George Costanza_BC} walks past still wearing the same opaque black shaded sunglasses and looking exhausted.\n\nOnly Elaine and George speak.\n\ntimeline:\n\n[Shot 1] At 00:00.000, medium shot showing only {Elaine Benes_BC} behind {the_office_receptionist_desk}. She answers a telephone, listens briefly, then places the caller on hold.\n\n[Shot 2] At 00:03.000, medium shot showing only {George Costanza_BC} walking past reception wearing his black sunglasses. Elaine's voice remains silent while George is framed.\n\nGeorge stops and says, <d>[English §George Costanza_BC§]Is the comedy contest over?</d>\n\n[Shot 3] At 00:06.000, cut to only Elaine. She says, <d>[English §Elaine Benes_BC§]Jerry won. Michael says that means Michael won as a manager.</d>\n\n[Shot 4] At 00:10.000, cut to only George. George considers this for a moment and says, <d>[English §George Costanza_BC§]Good. Wake me when somebody gets fired.</d>\n\n[Shot 5] At 00:13.000, George walks out of frame. Elaine silently watches him go, then looks directly into the documentary camera as another telephone line begins blinking.\n\noverall_soundscape:\n\nNatural quiet reception ambience with telephone sounds and distant office activity. No laugh track.\n\nnon_diegetic_music:\n\nA short quirky instrumental workplace-sitcom closing sting begins during the final two seconds."
+        "text": "",
+        "delimiter": "|",
+        "skip_empty": true
       },
-      "color": "#232",
-      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 566,
+      "type": "Getter",
+      "pos": [
+        -4182.170635220227,
+        3589.442856368124
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 83,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            1685
+          ]
+        }
+      ],
+      "title": "Get_prompt_start",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#323",
+        "__skeba_bgcolor_base": "#535"
+      },
+      "widgets_values": [
+        "prompt_start",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "prompt_start",
+        "var_name": ""
+      },
+      "color": "#323",
+      "bgcolor": "#535",
       "_meta": {
         "skeba_tags": {
           "inputs": [],
@@ -13815,7 +13642,7 @@
         786
       ],
       "flags": {},
-      "order": 99,
+      "order": 98,
       "mode": 0,
       "inputs": [
         {
@@ -14043,6 +13870,179 @@
         "compiler_voice_isolation": true,
         "auto_crop_voice_references": true,
         "Open Reference Library": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 292,
+      "type": "String",
+      "pos": [
+        -5778.029754480434,
+        3620.749699747221
+      ],
+      "size": [
+        340.2254018313397,
+        365.144567489353
+      ],
+      "flags": {},
+      "order": 84,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": [
+            1432
+          ]
+        }
+      ],
+      "title": "Prompt (Each Divided With a | )",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "ComfyLiterals",
+        "ver": "bdddb08ca82d90d75d97b1d437a652e0284a32ac",
+        "Node name for S&R": "String",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": [
+        "[new_location] [s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC} Wardrobe: wearing a light blue button-up shirt tucked into dark blue jeans, white athletic sneakers, and a black belt. This exact wardrobe remains fixed throughout the clip.\n\n{George Costanza_BC} Wardrobe: wearing a pale blue long-sleeve dress shirt tucked into dark charcoal trousers, black leather shoes, and a dark belt. This exact wardrobe remains fixed throughout the clip.\n\n{Jerry_Apartment}\n\ndetailed_description:\n\nLive-action Seinfeld inside {Jerry_Apartment}, photographed like an enormously expensive Hollywood dramatic feature rather than conventional sitcom television. Preserve the recognizable 1990s apartment and completely natural Seinfeld performances, but elevate every mundane moment with cinematic 35mm film texture, anamorphic lenses, motivated warm practical lighting, rich contrast, shallow depth of field, foreground layering, subtle atmospheric haze, controlled lens flares, and precisely coordinated multi-camera coverage. The joke is that {George Costanza_BC} merely has a job interview, yet his announcement is filmed with the gravity of revealing an impending war.\n\ntimeline:\n\n[Shot 1] Live-action, cinematic, an extremely low 24mm dolly shot begins inches above the floor of {Jerry_Apartment}, slowly tracking past the coffee table. {Jerry Seinfeld_BC} stands beside the sofa while {George Costanza_BC} stands near the dining area. Foreground furniture sweeps dramatically across the lens as the camera cranes upward into a grand wide composition. A second cinematic camera angle is suggested through a sharp cutaway perspective across the room, giving this ordinary afternoon the scale of a major Hollywood production.\n\n[Shot 2] At 00:02.500, camera cuts to only {George Costanza_BC} near the dining area inside {Jerry_Apartment}. An 85mm anamorphic lens frames him through a heavily blurred foreground doorway. The camera performs an extremely slow push in as warm backlight creates a heroic rim around his head. He looks toward the edge of frame with extraordinary seriousness, pauses as though preparing to disclose classified information, and {George Costanza_BC} says, <d>[English §George Costanza_BC§]I've got an interview.</d>\n\n[Shot 3] At 00:05.500, camera cuts to only {Jerry Seinfeld_BC} beside the sofa inside {Jerry_Apartment}. An extreme 100mm close-up captures his understated reaction with razor-thin depth of field. The camera makes an almost imperceptible push toward his face. {Jerry Seinfeld_BC} processes this supposedly monumental revelation, then says with ordinary disbelief, <d>[English §Jerry Seinfeld_BC§]A job interview?</d>\n\n[Shot 4] At 00:08.000, camera cuts to only {George Costanza_BC} near the dining area inside {Jerry_Apartment}. The viewpoint is now absurdly heroic: an extreme low-angle 21mm shot looking upward as though George is about to lead an assault. The camera performs a slow arc around him while a practical lamp blooms into a controlled anamorphic flare behind his shoulder. {George Costanza_BC} stares toward the edge of frame and says with grave conviction, <d>[English §George Costanza_BC§]A real one, Jerry.</d>\n\n[Shot 5] At 00:10.500, camera cuts to an overhead master shot looking almost vertically down into {Jerry_Apartment}. {Jerry Seinfeld_BC} remains beside the sofa and {George Costanza_BC} remains near the dining area. The camera slowly rotates clockwise, using the sofa, coffee table, kitchen, and dining area as geometric divisions between them while the orchestral score swells far beyond what the situation deserves.\n\n[Shot 6] At 00:12.500, camera cuts to an immaculate 32mm Hollywood master shot across {Jerry_Apartment}. {Jerry Seinfeld_BC} remains beside the sofa and {George Costanza_BC} remains near the dining area. Multiple layers of foreground architecture give the frame enormous depth as the camera slowly cranes backward and upward. Neither man moves dramatically. They simply stand there contemplating George having a job interview while the cinematography treats the moment like the final revelation of an epic motion picture. Hold the grand composition through the end.\n\noverall_soundscape:\n\nAuthentic quiet apartment room tone, subtle refrigerator hum, distant Manhattan traffic, gentle clothing movement, and natural interior reflections. Dialogue remains dry, intimate, and completely natural with one voice at a time. No laugh track. The restrained performances sharply contrast with the enormous visual treatment.\n\nnon_diegetic_music:\n\nAn absurdly prestigious Hollywood dramatic score beginning with a low sustained cello, distant piano notes, and barely audible orchestral texture. The music begins building beneath George's announcement, adds deep strings after Jerry's reaction, and swells into enormous brass, timpani, and sweeping strings when George declares, \"A real one, Jerry.\" The final overhead and master shots receive a ridiculously emotional cinematic crescendo, treating George's ordinary job interview as though civilization itself depends upon its outcome."
+      ],
+      "widgets_values_named": {
+        "String": "[new_location] [s=15]\n\nsubject_definitions:\n\n{Jerry Seinfeld_BC} Wardrobe: wearing a light blue button-up shirt tucked into dark blue jeans, white athletic sneakers, and a black belt. This exact wardrobe remains fixed throughout the clip.\n\n{George Costanza_BC} Wardrobe: wearing a pale blue long-sleeve dress shirt tucked into dark charcoal trousers, black leather shoes, and a dark belt. This exact wardrobe remains fixed throughout the clip.\n\n{Jerry_Apartment}\n\ndetailed_description:\n\nLive-action Seinfeld inside {Jerry_Apartment}, photographed like an enormously expensive Hollywood dramatic feature rather than conventional sitcom television. Preserve the recognizable 1990s apartment and completely natural Seinfeld performances, but elevate every mundane moment with cinematic 35mm film texture, anamorphic lenses, motivated warm practical lighting, rich contrast, shallow depth of field, foreground layering, subtle atmospheric haze, controlled lens flares, and precisely coordinated multi-camera coverage. The joke is that {George Costanza_BC} merely has a job interview, yet his announcement is filmed with the gravity of revealing an impending war.\n\ntimeline:\n\n[Shot 1] Live-action, cinematic, an extremely low 24mm dolly shot begins inches above the floor of {Jerry_Apartment}, slowly tracking past the coffee table. {Jerry Seinfeld_BC} stands beside the sofa while {George Costanza_BC} stands near the dining area. Foreground furniture sweeps dramatically across the lens as the camera cranes upward into a grand wide composition. A second cinematic camera angle is suggested through a sharp cutaway perspective across the room, giving this ordinary afternoon the scale of a major Hollywood production.\n\n[Shot 2] At 00:02.500, camera cuts to only {George Costanza_BC} near the dining area inside {Jerry_Apartment}. An 85mm anamorphic lens frames him through a heavily blurred foreground doorway. The camera performs an extremely slow push in as warm backlight creates a heroic rim around his head. He looks toward the edge of frame with extraordinary seriousness, pauses as though preparing to disclose classified information, and {George Costanza_BC} says, <d>[English §George Costanza_BC§]I've got an interview.</d>\n\n[Shot 3] At 00:05.500, camera cuts to only {Jerry Seinfeld_BC} beside the sofa inside {Jerry_Apartment}. An extreme 100mm close-up captures his understated reaction with razor-thin depth of field. The camera makes an almost imperceptible push toward his face. {Jerry Seinfeld_BC} processes this supposedly monumental revelation, then says with ordinary disbelief, <d>[English §Jerry Seinfeld_BC§]A job interview?</d>\n\n[Shot 4] At 00:08.000, camera cuts to only {George Costanza_BC} near the dining area inside {Jerry_Apartment}. The viewpoint is now absurdly heroic: an extreme low-angle 21mm shot looking upward as though George is about to lead an assault. The camera performs a slow arc around him while a practical lamp blooms into a controlled anamorphic flare behind his shoulder. {George Costanza_BC} stares toward the edge of frame and says with grave conviction, <d>[English §George Costanza_BC§]A real one, Jerry.</d>\n\n[Shot 5] At 00:10.500, camera cuts to an overhead master shot looking almost vertically down into {Jerry_Apartment}. {Jerry Seinfeld_BC} remains beside the sofa and {George Costanza_BC} remains near the dining area. The camera slowly rotates clockwise, using the sofa, coffee table, kitchen, and dining area as geometric divisions between them while the orchestral score swells far beyond what the situation deserves.\n\n[Shot 6] At 00:12.500, camera cuts to an immaculate 32mm Hollywood master shot across {Jerry_Apartment}. {Jerry Seinfeld_BC} remains beside the sofa and {George Costanza_BC} remains near the dining area. Multiple layers of foreground architecture give the frame enormous depth as the camera slowly cranes backward and upward. Neither man moves dramatically. They simply stand there contemplating George having a job interview while the cinematography treats the moment like the final revelation of an epic motion picture. Hold the grand composition through the end.\n\noverall_soundscape:\n\nAuthentic quiet apartment room tone, subtle refrigerator hum, distant Manhattan traffic, gentle clothing movement, and natural interior reflections. Dialogue remains dry, intimate, and completely natural with one voice at a time. No laugh track. The restrained performances sharply contrast with the enormous visual treatment.\n\nnon_diegetic_music:\n\nAn absurdly prestigious Hollywood dramatic score beginning with a low sustained cello, distant piano notes, and barely audible orchestral texture. The music begins building beneath George's announcement, adds deep strings after Jerry's reaction, and swells into enormous brass, timpani, and sweeping strings when George declares, \"A real one, Jerry.\" The final overhead and master shots receive a ridiculously emotional cinematic crescendo, treating George's ordinary job interview as though civilization itself depends upon its outcome."
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 851,
+      "type": "SkebaSaveClipToFile",
+      "pos": [
+        -5176.52470253712,
+        3499.5033908827136
+      ],
+      "size": [
+        881.6811682927182,
+        783.8178104529818
+      ],
+      "flags": {},
+      "order": 93,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 1584
+        },
+        {
+          "name": "accumulation",
+          "shape": 7,
+          "type": "ACCUMULATION",
+          "link": 1586
+        },
+        {
+          "name": "prompt",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 1587
+        },
+        {
+          "name": "original_1",
+          "type": "*",
+          "link": null
+        },
+        {
+          "name": "processed_1",
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            1585
+          ]
+        },
+        {
+          "name": "output_1",
+          "type": "*",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "ffcbe23d7429738a2aa8076a517889d2af830594",
+        "Node name for S&R": "SkebaSaveClipToFile",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "skeba_bypass_lane_count": 1,
+        "skeba_bypass_lane_types": {},
+        "skeba_playlist": "e91e450b32a74641b074d222d2a075c8",
+        "skeba_clip_toggles": {
+          "preview_clip": true
+        }
+      },
+      "widgets_values": [
+        18,
+        true,
+        true,
+        true,
+        "",
+        null
+      ],
+      "widgets_values_named": {
+        "crf": 18,
+        "output_folder": true,
+        "project_name": true,
+        "preview_clip": true,
+        "prompt": "",
+        "Open Live Playlist": null
       },
       "_meta": {
         "skeba_tags": {
@@ -14740,14 +14740,6 @@
       553,
       2,
       "VAE"
-    ],
-    [
-      1103,
-      566,
-      0,
-      258,
-      0,
-      "STRING"
     ],
     [
       1105,
@@ -15620,6 +15612,14 @@
       265,
       2,
       "INT"
+    ],
+    [
+      1685,
+      566,
+      0,
+      258,
+      0,
+      "STRING"
     ]
   ],
   "groups": [
@@ -15775,8 +15775,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 29,
-          "lastNodeId": 922,
-          "lastLinkId": 1684,
+          "lastNodeId": 929,
+          "lastLinkId": 1685,
           "lastRerouteId": 6
         },
         "revision": 0,
@@ -16270,8 +16270,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 29,
-          "lastNodeId": 922,
-          "lastLinkId": 1684,
+          "lastNodeId": 929,
+          "lastLinkId": 1685,
           "lastRerouteId": 6
         },
         "revision": 0,
@@ -18163,10 +18163,10 @@
     },
     "links_added_by_ue": [],
     "ds": {
-      "scale": 0.8391358126596898,
+      "scale": 0.37190082644628153,
       "offset": [
-        2784.595491595259,
-        -2818.541564939387
+        6313.756204884467,
+        -1872.3297859021477
       ]
     },
     "reroutes": [
