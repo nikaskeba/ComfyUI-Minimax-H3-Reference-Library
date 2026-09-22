@@ -1,0 +1,5448 @@
+{
+  "id": "d4689e65-5a3a-44a4-a20f-ae6853a7a2af",
+  "revision": 0,
+  "last_node_id": 1002,
+  "last_link_id": 100,
+  "nodes": [
+    {
+      "id": 217,
+      "type": "ResolutionSelector",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            55,
+            64
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            56,
+            65
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "ResolutionSelector",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#346434",
+        "__skeba_bgcolor_base": "rgba(24,24,27,.9)",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "16:9 (Widescreen)",
+        0.3,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "16:9 (Widescreen)",
+        "megapixels": 0.3,
+        "multiple": 32
+      },
+      "color": "#346434",
+      "bgcolor": "rgba(24,24,27,.9)",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 238,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        1290,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 24
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            25
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
+      },
+      "widgets_values": [
+        "MiniMax\\minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
+        1
+      ],
+      "widgets_values_named": {
+        "lora_name": "MiniMax\\minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors",
+        "strength_model": 1
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 244,
+      "type": "c57e31c1-b7b3-42b6-9bbf-d4e33f292a4c",
+      "pos": [
+        0,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            22
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            32,
+            58
+          ]
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            8,
+            13,
+            33,
+            59,
+            69,
+            75
+          ]
+        },
+        {
+          "name": "VAE_1",
+          "type": "VAE",
+          "links": [
+            15,
+            34,
+            60,
+            70,
+            76
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "previewExposures": [],
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax_h3_video_vae_int8_convrot.safetensors",
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors",
+        "vae_name_1": "minimax_h3_audio_vae_fp32.safetensors"
+      },
+      "color": "#322",
+      "bgcolor": "#533"
+    },
+    {
+      "id": 272,
+      "type": "ModelPreviewOverrideKJ",
+      "pos": [
+        2150,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 7
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 8
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1,
+            5,
+            16
+          ]
+        }
+      ],
+      "title": "Generation Progress Preview For Current Scene",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
+        "Node name for S&R": "ModelPreviewOverrideKJ",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
+      },
+      "widgets_values": [
+        2600,
+        80,
+        true,
+        10,
+        1,
+        "taeh3.safetensors",
+        ""
+      ],
+      "widgets_values_named": {
+        "max_resolution": 2600,
+        "jpeg_quality": 80,
+        "suppress_default_preview": true,
+        "preview_frames": 10,
+        "preview_fps": 1,
+        "tiny_vae": "taeh3.safetensors",
+        "preview": ""
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 294,
+      "type": "BasicScheduler",
+      "pos": [
+        2580,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 5
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            80
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "Node name for S&R": "BasicScheduler",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "rgba(0,0,0,.8)",
+        "__skeba_bgcolor_base": "rgba(24,24,27,.9)"
+      },
+      "widgets_values": [
+        "simple",
+        8,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 8,
+        "denoise": 1
+      },
+      "color": "rgba(0,0,0,.8)",
+      "bgcolor": "rgba(24,24,27,.9)",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 298,
+      "type": "VAEDecode",
+      "pos": [
+        7740,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 12
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            87
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "VAEDecode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 300,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        3440,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "link": 77
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 78
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 79
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 80
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 81
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "LATENT",
+          "links": []
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "Node name for S&R": "SamplerCustomAdvanced",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 302,
+      "type": "KSamplerSelect",
+      "pos": [
+        0,
+        780
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "Node name for S&R": "KSamplerSelect",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 316,
+      "type": "CFGGuider",
+      "pos": [
+        3010,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 2
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            78
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "Node name for S&R": "CFGGuider",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        1
+      ],
+      "widgets_values_named": {
+        "cfg": 1
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 321,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        2580,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "ConditioningZeroOut",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 322,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        3870,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            31
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "Node name for S&R": "LTXVSeparateAVLatent",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 323,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        7740,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 14
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            89
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "VAEDecodeAudio",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 325,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        7310,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "link": 17
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 18
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 19
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 20
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            12,
+            14
+          ]
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.33.2",
+        "Node name for S&R": "SamplerCustomAdvanced",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {},
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 326,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        4730,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 30
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 31
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            61
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "Node name for S&R": "LTXVConcatAVLatent",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 327,
+      "type": "BasicScheduler",
+      "pos": [
+        2580,
+        780
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "BasicScheduler",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "simple",
+        4,
+        0.4
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 4,
+        "denoise": 0.4
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 328,
+      "type": "CFGGuider",
+      "pos": [
+        6880,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 26
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 27
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 28
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.31.0",
+        "Node name for S&R": "CFGGuider",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        1
+      ],
+      "widgets_values_named": {
+        "cfg": 1
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 329,
+      "type": "MinimaxH3LatentUpscaler3D",
+      "pos": [
+        4300,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "latent",
+          "type": "*",
+          "link": 9
+        },
+        {
+          "name": "mode.scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.scale"
+          },
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "*",
+          "links": [
+            30
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "aux_id": "LBH-123-AI/Comfyui_Minimax_h3_latent_Upscaler",
+        "ver": "64fc9d4c7e2c03e8c61d6886182e3309365a1962",
+        "Node name for S&R": "MinimaxH3LatentUpscaler3D",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "minimax_h3_latent_upscaler_3d_bf16.safetensors",
+        "scale by multiplier",
+        1.5,
+        32,
+        true,
+        "cuda",
+        "fp16"
+      ],
+      "widgets_values_named": {
+        "model_name": "minimax_h3_latent_upscaler_3d_bf16.safetensors",
+        "mode": "scale by multiplier",
+        "mode.scale": 1.5,
+        "align": 32,
+        "keep_proportion": true,
+        "device": "cuda",
+        "precision": "fp16"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 330,
+      "type": "LoraLoaderModelOnly",
+      "pos": [
+        1720,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            7,
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "LoraLoaderModelOnly",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
+      },
+      "widgets_values": [
+        "MiniMax\\MiniMax-H3-Ref2VA-Acc-8Step.safetensors",
+        0
+      ],
+      "widgets_values_named": {
+        "lora_name": "MiniMax\\MiniMax-H3-Ref2VA-Acc-8Step.safetensors",
+        "strength_model": 0
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 331,
+      "type": "ConditioningZeroOut",
+      "pos": [
+        6450,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 29
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.0",
+        "Node name for S&R": "ConditioningZeroOut",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 384,
+      "type": "PrimitiveInt",
+      "pos": [
+        0,
+        1170
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "title": "Steps",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "PrimitiveInt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": [
+        8,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 8,
+        "fixed": "fixed"
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 390,
+      "type": "PrimitiveFloat",
+      "pos": [
+        0,
+        1560
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FLOAT",
+          "type": "FLOAT",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "title": "Upscale Percent (1.5, 2, 2.5, 3...)",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "PrimitiveFloat",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": [
+        1.5
+      ],
+      "widgets_values_named": {
+        "value": 1.5
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 398,
+      "type": "ModelAttentionBackend",
+      "pos": [
+        860,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "links": [
+            24
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.34.0",
+        "Node name for S&R": "ModelAttentionBackend",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
+      },
+      "widgets_values": [
+        "comfy kitchen attention"
+      ],
+      "widgets_values_named": {
+        "attention": "comfy kitchen attention"
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 411,
+      "type": "RandomNoise",
+      "pos": [
+        430,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise_seed",
+          "type": "INT",
+          "link": 86,
+          "widget": {
+            "name": "noise_seed"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            17,
+            77
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "Node name for S&R": "RandomNoise",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        50280432847566,
+        "fixed"
+      ],
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 412,
+      "type": "KSamplerSelect",
+      "pos": [
+        0,
+        1950
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            79
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.28.2",
+        "Node name for S&R": "KSamplerSelect",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 546,
+      "type": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+      "pos": [
+        1290,
+        390
+      ],
+      "size": [
+        360,
+        727
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 32
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 33
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 34
+        },
+        {
+          "name": "target_latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": null
+        },
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 35
+        },
+        {
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 36
+        },
+        {
+          "name": "ref_images.ref_image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 37
+        },
+        {
+          "name": "ref_images.ref_image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 38
+        },
+        {
+          "name": "ref_images.ref_image_4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 39
+        },
+        {
+          "name": "ref_images.ref_image_5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 40
+        },
+        {
+          "name": "ref_images.ref_image_6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 41
+        },
+        {
+          "name": "ref_images.ref_image_7",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 42
+        },
+        {
+          "name": "ref_images.ref_image_8",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 43
+        },
+        {
+          "label": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 44
+        },
+        {
+          "name": "ref_videos.ref_video_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 45
+        },
+        {
+          "name": "ref_videos.ref_video_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 46
+        },
+        {
+          "label": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 47
+        },
+        {
+          "name": "ref_video_audios.ref_video_audio_1",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 48
+        },
+        {
+          "name": "ref_video_audios.ref_video_audio_2",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 49
+        },
+        {
+          "label": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 50
+        },
+        {
+          "name": "ref_audios.ref_audio_1",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 51
+        },
+        {
+          "name": "ref_audios.ref_audio_2",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 52
+        },
+        {
+          "name": "reference_bundle",
+          "shape": 7,
+          "type": "SKEBA_H3_REFERENCE_BUNDLE",
+          "link": 53
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 54
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 55
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 56
+        },
+        {
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 57
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            84
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            68
+          ]
+        },
+        {
+          "name": "cache_status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "BASE PASS - Cached References + First/Last",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "Node name for S&R": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "",
+        1344,
+        768,
+        124,
+        "match",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 1344,
+        "height": 768,
+        "length": 124,
+        "ref_image_size": "match",
+        "cache_mode": "auto"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 553,
+      "type": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+      "pos": [
+        5160,
+        0
+      ],
+      "size": [
+        360,
+        405
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 58
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 59
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 60
+        },
+        {
+          "name": "target_latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 61
+        },
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "reference_bundle",
+          "shape": 7,
+          "type": "SKEBA_H3_REFERENCE_BUNDLE",
+          "link": 62
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 63
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 64
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 65
+        },
+        {
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 66
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            71
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            74
+          ]
+        },
+        {
+          "name": "cache_status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "UPSCALE PASS - Cached References + First/Last",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "Node name for S&R": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#223",
+        "__skeba_bgcolor_base": "#335"
+      },
+      "widgets_values": [
+        "",
+        1344,
+        768,
+        124,
+        "match",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 1344,
+        "height": 768,
+        "length": 124,
+        "ref_image_size": "match",
+        "cache_mode": "auto"
+      },
+      "color": "#223",
+      "bgcolor": "#335",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 672,
+      "type": "SkebaMiniMaxH3AVConnectorGuideTest",
+      "pos": [
+        2150,
+        390
+      ],
+      "size": [
+        360,
+        244
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 67
+        },
+        {
+          "name": "latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 68
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 69
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 70
+        },
+        {
+          "name": "start_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 93
+        },
+        {
+          "name": "start_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 94
+        },
+        {
+          "name": "end_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 95
+        },
+        {
+          "name": "end_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 96
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            2,
+            4
+          ]
+        },
+        {
+          "name": "connector_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "links": []
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "Pinned Generation Latent",
+          "type": "LATENT",
+          "links": [
+            81
+          ]
+        }
+      ],
+      "title": "BASE PASS - AV Connector",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "Node name for S&R": "SkebaMiniMaxH3AVConnectorGuideTest",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "22",
+        "22",
+        true,
+        false,
+        false
+      ],
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 705,
+      "type": "SkebaMiniMaxH3AVConnectorGuideTest",
+      "pos": [
+        6020,
+        0
+      ],
+      "size": [
+        360,
+        244
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 73
+        },
+        {
+          "name": "latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 74
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 75
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 76
+        },
+        {
+          "name": "start_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 97
+        },
+        {
+          "name": "start_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 98
+        },
+        {
+          "name": "end_frames",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 99
+        },
+        {
+          "name": "end_audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 100
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            27,
+            29
+          ]
+        },
+        {
+          "name": "connector_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "links": [
+            88
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "Pinned Generation Latent",
+          "type": "LATENT",
+          "links": [
+            21
+          ]
+        }
+      ],
+      "title": "UPSCALE PASS - AV Connector (preserve endpoints)",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "Node name for S&R": "SkebaMiniMaxH3AVConnectorGuideTest",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "22",
+        "22",
+        true,
+        true,
+        true
+      ],
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 772,
+      "type": "H3TaggedReferencePrompt",
+      "pos": [
+        430,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt_template",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt_template"
+          },
+          "link": 83
+        },
+        {
+          "name": "video_fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "video_fps"
+          },
+          "link": null
+        },
+        {
+          "name": "compiler_mode",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "compiler_mode"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            82
+          ]
+        },
+        {
+          "name": "mapping",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "image_1",
+          "type": "IMAGE",
+          "links": [
+            35
+          ]
+        },
+        {
+          "name": "image_2",
+          "type": "IMAGE",
+          "links": [
+            36
+          ]
+        },
+        {
+          "name": "image_3",
+          "type": "IMAGE",
+          "links": [
+            37
+          ]
+        },
+        {
+          "name": "image_4",
+          "type": "IMAGE",
+          "links": [
+            38
+          ]
+        },
+        {
+          "name": "image_5",
+          "type": "IMAGE",
+          "links": [
+            39
+          ]
+        },
+        {
+          "name": "image_6",
+          "type": "IMAGE",
+          "links": [
+            40
+          ]
+        },
+        {
+          "name": "image_7",
+          "type": "IMAGE",
+          "links": [
+            41
+          ]
+        },
+        {
+          "name": "image_8",
+          "type": "IMAGE",
+          "links": [
+            42
+          ]
+        },
+        {
+          "name": "image_9",
+          "type": "IMAGE",
+          "links": [
+            43
+          ]
+        },
+        {
+          "name": "audio_1",
+          "type": "AUDIO",
+          "links": [
+            50
+          ]
+        },
+        {
+          "name": "audio_2",
+          "type": "AUDIO",
+          "links": [
+            51
+          ]
+        },
+        {
+          "name": "audio_3",
+          "type": "AUDIO",
+          "links": [
+            52
+          ]
+        },
+        {
+          "name": "video_1",
+          "type": "IMAGE",
+          "links": [
+            44
+          ]
+        },
+        {
+          "name": "video_2",
+          "type": "IMAGE",
+          "links": [
+            45
+          ]
+        },
+        {
+          "name": "video_3",
+          "type": "IMAGE",
+          "links": [
+            46
+          ]
+        },
+        {
+          "name": "video_audio_1",
+          "type": "AUDIO",
+          "links": [
+            47
+          ]
+        },
+        {
+          "name": "video_audio_2",
+          "type": "AUDIO",
+          "links": [
+            48
+          ]
+        },
+        {
+          "name": "video_audio_3",
+          "type": "AUDIO",
+          "links": [
+            49
+          ]
+        },
+        {
+          "name": "reference_bundle",
+          "type": "SKEBA_H3_REFERENCE_BUNDLE",
+          "links": [
+            53,
+            62
+          ]
+        },
+        {
+          "name": "mods",
+          "type": "H3_REF_MODS",
+          "links": [
+            72,
+            85
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "befd4adce7fceca39770a5f68b4168b2b2469858",
+        "Node name for S&R": "H3TaggedReferencePrompt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "[Shot 1] {news_anchor} is sitting at {news_desk}.",
+        24,
+        1536,
+        true,
+        "deterministic",
+        "reference",
+        "reuse",
+        true,
+        true,
+        null
+      ],
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 788,
+      "type": "MiniMaxH3SigmaShift",
+      "pos": [
+        430,
+        780
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 22
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            23
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.33.0",
+        "Node name for S&R": "MiniMaxH3SigmaShift",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.1",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533"
+      },
+      "widgets_values": [
+        12,
+        3
+      ],
+      "widgets_values_named": {
+        "shift_video": 12,
+        "shift_audio": 3
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 823,
+      "type": "VRGDG_PythonCodeRunner",
+      "pos": [
+        860,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "input_text",
+          "shape": 7,
+          "type": "STRING",
+          "link": 82
+        },
+        {
+          "name": "input_json",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_text",
+          "type": "STRING",
+          "links": [
+            54,
+            63
+          ]
+        },
+        {
+          "name": "result_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "has_error",
+          "type": "BOOLEAN",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "VRGDG_PythonCodeRunner",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "result = input_text.strip()\n\n# Remove [new_location] if present at beginning\n\nif result.lower().startswith(\"[new_location]\"):\n\n    result = result[len(\"[new_location]\"):].lstrip()\n\n# Remove [s=x] if present at beginning\n\nif result.lower().startswith(\"[s=\"):\n\n    end = result.find(\"]\")\n\n    if end != -1:\n\n        result = result[end + 1:].lstrip()"
+      ],
+      "widgets_values_named": {
+        "python_code": "result = input_text.strip()\n\n# Remove [new_location] if present at beginning\n\nif result.lower().startswith(\"[new_location]\"):\n\n    result = result[len(\"[new_location]\"):].lstrip()\n\n# Remove [s=x] if present at beginning\n\nif result.lower().startswith(\"[s=\"):\n\n    end = result.find(\"]\")\n\n    if end != -1:\n\n        result = result[end + 1:].lstrip()"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 908,
+      "type": "SkebaH3RefModApply",
+      "pos": [
+        1720,
+        390
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "MINIMAX_H3_COND,CONDITIONING",
+          "link": 84
+        },
+        {
+          "name": "mods",
+          "type": "H3_REF_MODS",
+          "link": 85
+        }
+      ],
+      "outputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            67
+          ]
+        },
+        {
+          "name": "curve graph",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "5e7a81b450f28949ad77741ab605b946d438899d",
+        "Node name for S&R": "SkebaH3RefModApply",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        false,
+        1,
+        "constant",
+        -1,
+        "fixed",
+        "linear",
+        1,
+        "(none)",
+        "shuffle",
+        1,
+        0,
+        ""
+      ],
+      "widgets_values_named": {
+        "override": false,
+        "retention": 1,
+        "curve_direction": "constant",
+        "scramble_seed": -1,
+        "fixed": "fixed",
+        "curve_shape": "linear",
+        "curve_value": 1,
+        "graph_preset": "(none)",
+        "scramble_mode": "shuffle",
+        "scramble_keep": 1,
+        "max_total_tokens": 0,
+        "save_preset_as": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 909,
+      "type": "SkebaH3RefModApply",
+      "pos": [
+        5590,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "MINIMAX_H3_COND,CONDITIONING",
+          "link": 71
+        },
+        {
+          "name": "mods",
+          "type": "H3_REF_MODS",
+          "link": 72
+        }
+      ],
+      "outputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "links": [
+            73
+          ]
+        },
+        {
+          "name": "curve graph",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "5e7a81b450f28949ad77741ab605b946d438899d",
+        "Node name for S&R": "SkebaH3RefModApply",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        false,
+        1,
+        "constant",
+        -1,
+        "fixed",
+        "linear",
+        1,
+        "(none)",
+        "shuffle",
+        1,
+        0,
+        ""
+      ],
+      "widgets_values_named": {
+        "override": false,
+        "retention": 1,
+        "curve_direction": "constant",
+        "scramble_seed": -1,
+        "fixed": "fixed",
+        "curve_shape": "linear",
+        "curve_value": 1,
+        "graph_preset": "(none)",
+        "scramble_mode": "shuffle",
+        "scramble_keep": 1,
+        "max_total_tokens": 0,
+        "save_preset_as": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      }
+    },
+    {
+      "id": 1000,
+      "type": "SkebaPlaylistRedoInput",
+      "title": "Playlist Redo Input - supplied by live editor",
+      "pos": [
+        0,
+        2340
+      ],
+      "size": [
+        360,
+        330
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "request",
+          "type": "STRING",
+          "links": [
+            91
+          ]
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            83
+          ]
+        },
+        {
+          "name": "generation_length",
+          "type": "INT",
+          "links": [
+            57,
+            66
+          ]
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            86
+          ]
+        },
+        {
+          "name": "previous_frames",
+          "type": "IMAGE",
+          "links": [
+            93,
+            97
+          ]
+        },
+        {
+          "name": "previous_audio",
+          "type": "AUDIO",
+          "links": [
+            94,
+            98
+          ]
+        },
+        {
+          "name": "next_frames",
+          "type": "IMAGE",
+          "links": [
+            95,
+            99
+          ]
+        },
+        {
+          "name": "next_audio",
+          "type": "AUDIO",
+          "links": [
+            96,
+            100
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaPlaylistRedoInput"
+      },
+      "widgets_values": [
+        "{}"
+      ]
+    },
+    {
+      "id": 1001,
+      "type": "SkebaH3AVConnectorFinalizeTest",
+      "title": "Remove hidden neighbor overlaps",
+      "pos": [
+        8170,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "generated_images",
+          "type": "IMAGE",
+          "link": 87
+        },
+        {
+          "name": "connector_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "link": 88
+        },
+        {
+          "name": "generated_audio",
+          "type": "AUDIO",
+          "link": 89
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            90
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            92
+          ]
+        },
+        {
+          "name": "seam_bundle",
+          "type": "SKEBA_H3_AV_CONNECTOR_SEAM",
+          "links": []
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaH3AVConnectorFinalizeTest"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 1002,
+      "type": "SkebaPlaylistRedoSave",
+      "title": "Save alternate - Register redo workflow here",
+      "pos": [
+        8600,
+        0
+      ],
+      "size": [
+        360,
+        210
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 90
+        },
+        {
+          "name": "request",
+          "type": "STRING",
+          "link": 91
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 92
+        }
+      ],
+      "outputs": [
+        {
+          "name": "filename",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaPlaylistRedoSave"
+      },
+      "widgets_values": [
+        18
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      272,
+      0,
+      316,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      672,
+      0,
+      316,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      3,
+      321,
+      0,
+      316,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      4,
+      672,
+      0,
+      321,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      5,
+      272,
+      0,
+      294,
+      0,
+      "MODEL"
+    ],
+    [
+      6,
+      384,
+      0,
+      294,
+      1,
+      "INT"
+    ],
+    [
+      7,
+      330,
+      0,
+      272,
+      0,
+      "MODEL"
+    ],
+    [
+      8,
+      244,
+      2,
+      272,
+      1,
+      "VAE"
+    ],
+    [
+      9,
+      322,
+      0,
+      329,
+      0,
+      "*"
+    ],
+    [
+      10,
+      390,
+      0,
+      329,
+      1,
+      "FLOAT"
+    ],
+    [
+      11,
+      300,
+      1,
+      322,
+      0,
+      "LATENT"
+    ],
+    [
+      12,
+      325,
+      0,
+      298,
+      0,
+      "LATENT"
+    ],
+    [
+      13,
+      244,
+      2,
+      298,
+      1,
+      "VAE"
+    ],
+    [
+      14,
+      325,
+      0,
+      323,
+      0,
+      "LATENT"
+    ],
+    [
+      15,
+      244,
+      3,
+      323,
+      1,
+      "VAE"
+    ],
+    [
+      16,
+      272,
+      0,
+      327,
+      0,
+      "MODEL"
+    ],
+    [
+      17,
+      411,
+      0,
+      325,
+      0,
+      "NOISE"
+    ],
+    [
+      18,
+      328,
+      0,
+      325,
+      1,
+      "GUIDER"
+    ],
+    [
+      19,
+      302,
+      0,
+      325,
+      2,
+      "SAMPLER"
+    ],
+    [
+      20,
+      327,
+      0,
+      325,
+      3,
+      "SIGMAS"
+    ],
+    [
+      21,
+      705,
+      3,
+      325,
+      4,
+      "LATENT"
+    ],
+    [
+      22,
+      244,
+      0,
+      788,
+      0,
+      "MODEL"
+    ],
+    [
+      23,
+      788,
+      0,
+      398,
+      0,
+      "MODEL"
+    ],
+    [
+      24,
+      398,
+      0,
+      238,
+      0,
+      "MODEL"
+    ],
+    [
+      25,
+      238,
+      0,
+      330,
+      0,
+      "MODEL"
+    ],
+    [
+      26,
+      330,
+      0,
+      328,
+      0,
+      "MODEL"
+    ],
+    [
+      27,
+      705,
+      0,
+      328,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      28,
+      331,
+      0,
+      328,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      29,
+      705,
+      0,
+      331,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      30,
+      329,
+      0,
+      326,
+      0,
+      "LATENT"
+    ],
+    [
+      31,
+      322,
+      1,
+      326,
+      1,
+      "LATENT"
+    ],
+    [
+      32,
+      244,
+      1,
+      546,
+      0,
+      "CLIP"
+    ],
+    [
+      33,
+      244,
+      2,
+      546,
+      1,
+      "VAE"
+    ],
+    [
+      34,
+      244,
+      3,
+      546,
+      2,
+      "VAE"
+    ],
+    [
+      35,
+      772,
+      2,
+      546,
+      6,
+      "IMAGE"
+    ],
+    [
+      36,
+      772,
+      3,
+      546,
+      7,
+      "IMAGE"
+    ],
+    [
+      37,
+      772,
+      4,
+      546,
+      8,
+      "IMAGE"
+    ],
+    [
+      38,
+      772,
+      5,
+      546,
+      9,
+      "IMAGE"
+    ],
+    [
+      39,
+      772,
+      6,
+      546,
+      10,
+      "IMAGE"
+    ],
+    [
+      40,
+      772,
+      7,
+      546,
+      11,
+      "IMAGE"
+    ],
+    [
+      41,
+      772,
+      8,
+      546,
+      12,
+      "IMAGE"
+    ],
+    [
+      42,
+      772,
+      9,
+      546,
+      13,
+      "IMAGE"
+    ],
+    [
+      43,
+      772,
+      10,
+      546,
+      14,
+      "IMAGE"
+    ],
+    [
+      44,
+      772,
+      14,
+      546,
+      15,
+      "IMAGE"
+    ],
+    [
+      45,
+      772,
+      15,
+      546,
+      16,
+      "IMAGE"
+    ],
+    [
+      46,
+      772,
+      16,
+      546,
+      17,
+      "IMAGE"
+    ],
+    [
+      47,
+      772,
+      17,
+      546,
+      18,
+      "AUDIO"
+    ],
+    [
+      48,
+      772,
+      18,
+      546,
+      19,
+      "AUDIO"
+    ],
+    [
+      49,
+      772,
+      19,
+      546,
+      20,
+      "AUDIO"
+    ],
+    [
+      50,
+      772,
+      11,
+      546,
+      21,
+      "AUDIO"
+    ],
+    [
+      51,
+      772,
+      12,
+      546,
+      22,
+      "AUDIO"
+    ],
+    [
+      52,
+      772,
+      13,
+      546,
+      23,
+      "AUDIO"
+    ],
+    [
+      53,
+      772,
+      20,
+      546,
+      24,
+      "SKEBA_H3_REFERENCE_BUNDLE"
+    ],
+    [
+      54,
+      823,
+      0,
+      546,
+      25,
+      "STRING"
+    ],
+    [
+      55,
+      217,
+      0,
+      546,
+      26,
+      "INT"
+    ],
+    [
+      56,
+      217,
+      1,
+      546,
+      27,
+      "INT"
+    ],
+    [
+      57,
+      1000,
+      2,
+      546,
+      28,
+      "INT"
+    ],
+    [
+      58,
+      244,
+      1,
+      553,
+      0,
+      "CLIP"
+    ],
+    [
+      59,
+      244,
+      2,
+      553,
+      1,
+      "VAE"
+    ],
+    [
+      60,
+      244,
+      3,
+      553,
+      2,
+      "VAE"
+    ],
+    [
+      61,
+      326,
+      0,
+      553,
+      3,
+      "LATENT"
+    ],
+    [
+      62,
+      772,
+      20,
+      553,
+      10,
+      "SKEBA_H3_REFERENCE_BUNDLE"
+    ],
+    [
+      63,
+      823,
+      0,
+      553,
+      11,
+      "STRING"
+    ],
+    [
+      64,
+      217,
+      0,
+      553,
+      12,
+      "INT"
+    ],
+    [
+      65,
+      217,
+      1,
+      553,
+      13,
+      "INT"
+    ],
+    [
+      66,
+      1000,
+      2,
+      553,
+      14,
+      "INT"
+    ],
+    [
+      67,
+      908,
+      0,
+      672,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      68,
+      546,
+      1,
+      672,
+      1,
+      "LATENT"
+    ],
+    [
+      69,
+      244,
+      2,
+      672,
+      2,
+      "VAE"
+    ],
+    [
+      70,
+      244,
+      3,
+      672,
+      3,
+      "VAE"
+    ],
+    [
+      71,
+      553,
+      0,
+      909,
+      0,
+      "MINIMAX_H3_COND,CONDITIONING"
+    ],
+    [
+      72,
+      772,
+      21,
+      909,
+      1,
+      "H3_REF_MODS"
+    ],
+    [
+      73,
+      909,
+      0,
+      705,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      74,
+      553,
+      1,
+      705,
+      1,
+      "LATENT"
+    ],
+    [
+      75,
+      244,
+      2,
+      705,
+      2,
+      "VAE"
+    ],
+    [
+      76,
+      244,
+      3,
+      705,
+      3,
+      "VAE"
+    ],
+    [
+      77,
+      411,
+      0,
+      300,
+      0,
+      "NOISE"
+    ],
+    [
+      78,
+      316,
+      0,
+      300,
+      1,
+      "GUIDER"
+    ],
+    [
+      79,
+      412,
+      0,
+      300,
+      2,
+      "SAMPLER"
+    ],
+    [
+      80,
+      294,
+      0,
+      300,
+      3,
+      "SIGMAS"
+    ],
+    [
+      81,
+      672,
+      3,
+      300,
+      4,
+      "LATENT"
+    ],
+    [
+      82,
+      772,
+      0,
+      823,
+      0,
+      "STRING"
+    ],
+    [
+      83,
+      1000,
+      1,
+      772,
+      0,
+      "STRING"
+    ],
+    [
+      84,
+      546,
+      0,
+      908,
+      0,
+      "MINIMAX_H3_COND,CONDITIONING"
+    ],
+    [
+      85,
+      772,
+      21,
+      908,
+      1,
+      "H3_REF_MODS"
+    ],
+    [
+      86,
+      1000,
+      3,
+      411,
+      0,
+      "INT"
+    ],
+    [
+      87,
+      298,
+      0,
+      1001,
+      0,
+      "IMAGE"
+    ],
+    [
+      88,
+      705,
+      1,
+      1001,
+      1,
+      "SKEBA_H3_AV_CONNECTOR_BUNDLE"
+    ],
+    [
+      89,
+      323,
+      0,
+      1001,
+      2,
+      "AUDIO"
+    ],
+    [
+      90,
+      1001,
+      0,
+      1002,
+      0,
+      "IMAGE"
+    ],
+    [
+      91,
+      1000,
+      0,
+      1002,
+      1,
+      "STRING"
+    ],
+    [
+      92,
+      1001,
+      1,
+      1002,
+      2,
+      "AUDIO"
+    ],
+    [
+      93,
+      1000,
+      4,
+      672,
+      4,
+      "IMAGE"
+    ],
+    [
+      94,
+      1000,
+      5,
+      672,
+      5,
+      "AUDIO"
+    ],
+    [
+      95,
+      1000,
+      6,
+      672,
+      6,
+      "IMAGE"
+    ],
+    [
+      96,
+      1000,
+      7,
+      672,
+      7,
+      "AUDIO"
+    ],
+    [
+      97,
+      1000,
+      4,
+      705,
+      4,
+      "IMAGE"
+    ],
+    [
+      98,
+      1000,
+      5,
+      705,
+      5,
+      "AUDIO"
+    ],
+    [
+      99,
+      1000,
+      6,
+      705,
+      6,
+      "IMAGE"
+    ],
+    [
+      100,
+      1000,
+      7,
+      705,
+      7,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "c57e31c1-b7b3-42b6-9bbf-d4e33f292a4c",
+        "version": 1,
+        "state": {
+          "lastGroupId": 29,
+          "lastNodeId": 917,
+          "lastLinkId": 1678,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Model Loader",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -3088,
+            4431,
+            128,
+            128
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            -2470,
+            4391,
+            128,
+            128
+          ]
+        },
+        "inputs": [
+          {
+            "id": "d920e97f-7ac6-4ed7-9e4c-87d3c5b4fec4",
+            "name": "unet_name",
+            "type": "COMBO",
+            "linkIds": [
+              461
+            ],
+            "pos": [
+              -2984,
+              4455
+            ]
+          },
+          {
+            "id": "4d15c8ef-2c9c-48cb-961c-6a5af235e2c6",
+            "name": "clip_name",
+            "type": "COMBO",
+            "linkIds": [
+              462
+            ],
+            "pos": [
+              -2984,
+              4475
+            ]
+          },
+          {
+            "id": "79008d77-83be-4371-ac8d-e59f4de0dec3",
+            "name": "vae_name",
+            "type": "COMBO",
+            "linkIds": [
+              463
+            ],
+            "pos": [
+              -2984,
+              4495
+            ]
+          },
+          {
+            "id": "abef2d92-fabf-4927-985d-571dfc266fd6",
+            "name": "vae_name_1",
+            "type": "COMBO",
+            "linkIds": [
+              464
+            ],
+            "pos": [
+              -2984,
+              4515
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "abbd9aae-ceb2-487c-95d3-b4dd342f44b2",
+            "name": "MODEL",
+            "type": "MODEL",
+            "linkIds": [
+              361
+            ],
+            "localized_name": "MODEL",
+            "pos": [
+              -2446,
+              4415
+            ]
+          },
+          {
+            "id": "5a5d1d91-1bd2-4172-8203-60e2b3205a34",
+            "name": "CLIP",
+            "type": "CLIP",
+            "linkIds": [
+              346
+            ],
+            "localized_name": "CLIP",
+            "pos": [
+              -2446,
+              4435
+            ]
+          },
+          {
+            "id": "b8be3d9c-dd50-46fa-8bf9-334f7e963bc2",
+            "name": "VAE",
+            "type": "VAE",
+            "linkIds": [
+              347,
+              347,
+              347
+            ],
+            "localized_name": "VAE",
+            "pos": [
+              -2446,
+              4455
+            ]
+          },
+          {
+            "id": "aa02c768-3577-498d-9d66-767304e53e08",
+            "name": "VAE_1",
+            "type": "VAE",
+            "linkIds": [
+              350,
+              350,
+              350
+            ],
+            "localized_name": "VAE_1",
+            "pos": [
+              -2446,
+              4475
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 198,
+            "type": "UNETLoader",
+            "pos": [
+              -2900,
+              4250
+            ],
+            "size": [
+              370,
+              90
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "unet_name",
+                "name": "unet_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "unet_name"
+                },
+                "link": 461
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "MODEL",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  361
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
+              "Node name for S&R": "UNETLoader",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "MiniMax_H3_ref2va_pruned_int8_convrot.safetensors",
+              "default"
+            ],
+            "widgets_values_named": {
+              "unet_name": "MiniMax_H3_ref2va_pruned_int8_convrot.safetensors",
+              "weight_dtype": "default"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 192,
+            "type": "CLIPLoader",
+            "pos": [
+              -2900,
+              4380
+            ],
+            "size": [
+              370,
+              110
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "clip_name",
+                "name": "clip_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "clip_name"
+                },
+                "link": 462
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "CLIP",
+                "name": "CLIP",
+                "type": "CLIP",
+                "links": [
+                  346
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
+              "Node name for S&R": "CLIPLoader",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "Qwen3vl-32b-minimax-h3_int8_convrot.safetensors",
+              "stable_diffusion",
+              "default"
+            ],
+            "widgets_values_named": {
+              "clip_name": "Qwen3vl-32b-minimax-h3_int8_convrot.safetensors",
+              "type": "stable_diffusion",
+              "device": "default"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 193,
+            "type": "VAELoader",
+            "pos": [
+              -2900,
+              4530
+            ],
+            "size": [
+              370,
+              60
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "vae_name",
+                "name": "vae_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "vae_name"
+                },
+                "link": 463
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "VAE",
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  347
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
+              "Node name for S&R": "VAELoader",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "minimax_h3_video_vae_fp16.safetensors"
+            ],
+            "widgets_values_named": {
+              "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 194,
+            "type": "VAELoader",
+            "pos": [
+              -2900,
+              4630
+            ],
+            "size": [
+              370,
+              60
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "vae_name",
+                "name": "vae_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "vae_name"
+                },
+                "link": 464
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "VAE",
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  350
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.30.2",
+              "Node name for S&R": "VAELoader",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "minimax_h3_audio_vae_fp32.safetensors"
+            ],
+            "widgets_values_named": {
+              "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 361,
+            "origin_id": 198,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 346,
+            "origin_id": 192,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 1,
+            "type": "CLIP"
+          },
+          {
+            "id": 347,
+            "origin_id": 193,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 2,
+            "type": "VAE"
+          },
+          {
+            "id": 350,
+            "origin_id": 194,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 3,
+            "type": "VAE"
+          },
+          {
+            "id": 461,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 198,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 462,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 192,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 463,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 193,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 464,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 194,
+            "target_slot": 0,
+            "type": "COMBO"
+          }
+        ],
+        "extra": {
+          "ue_links": [],
+          "links_added_by_ue": []
+        }
+      },
+      {
+        "id": "c2682922-684b-4edc-9903-3d9d45aa9cba",
+        "version": 1,
+        "state": {
+          "lastGroupId": 29,
+          "lastNodeId": 917,
+          "lastLinkId": 1678,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Bool Logic",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -3552.5042578035327,
+            3642.3514828829584,
+            132.052734375,
+            108
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            -2160,
+            3642.3514828829584,
+            128,
+            108
+          ]
+        },
+        "inputs": [
+          {
+            "id": "e4015788-54c6-435b-ae35-0d4246d37362",
+            "name": "input_text",
+            "type": "STRING",
+            "linkIds": [
+              1525,
+              1524
+            ],
+            "localized_name": "input_text",
+            "shape": 7,
+            "pos": [
+              -3444.4515234285327,
+              3666.3514828829584
+            ]
+          },
+          {
+            "id": "031c0901-5c97-439c-8705-01e74c56de41",
+            "name": "on_true",
+            "type": "*",
+            "linkIds": [
+              1678
+            ],
+            "localized_name": "on_true",
+            "pos": [
+              -3444.4515234285327,
+              3686.3514828829584
+            ]
+          },
+          {
+            "id": "10dc324f-fee1-4970-a384-714c8d3f0f2d",
+            "name": "values.a",
+            "type": "FLOAT,INT,BOOLEAN",
+            "linkIds": [
+              1527,
+              1526
+            ],
+            "localized_name": "a",
+            "label": "cur_pmpt_num",
+            "pos": [
+              -3444.4515234285327,
+              3706.3514828829584
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "1e390047-b1e4-4905-8022-382949402906",
+            "name": "*",
+            "type": "*",
+            "linkIds": [
+              1665
+            ],
+            "localized_name": "*",
+            "pos": [
+              -2136,
+              3666.3514828829584
+            ]
+          },
+          {
+            "id": "0407fa6f-e04a-4fae-86c0-176682d5e043",
+            "name": "BOOL",
+            "type": "BOOLEAN",
+            "linkIds": [
+              1531
+            ],
+            "localized_name": "BOOL",
+            "pos": [
+              -2136,
+              3686.3514828829584
+            ]
+          },
+          {
+            "id": "b530ad5a-b292-460e-af10-135b79d5f855",
+            "name": "BOOL_1",
+            "type": "BOOLEAN",
+            "linkIds": [
+              1530
+            ],
+            "localized_name": "BOOL_1",
+            "pos": [
+              -2136,
+              3706.3514828829584
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 912,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              -3319.599987387775,
+              3843.7770448308574
+            ],
+            "size": [
+              149.4458984375,
+              46
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 1659
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": null
+              },
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  1660,
+                  1661
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "ComfyNumberConvert",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 831,
+            "type": "ComfyMathExpression",
+            "pos": [
+              -2958.3834046178613,
+              3810.7112828483464
+            ],
+            "size": [
+              225,
+              148
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "localized_name": "a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 1526
+              },
+              {
+                "localized_name": "b",
+                "name": "values.b",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 1661
+              },
+              {
+                "localized_name": "c",
+                "name": "values.c",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "localized_name": "BOOL",
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": [
+                  1530
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.34.0",
+              "Node name for S&R": "ComfyMathExpression",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              "a == 1 or b == 0"
+            ],
+            "widgets_values_named": {
+              "expression": "a == 1 or b == 0"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 913,
+            "type": "ComfySwitchNode",
+            "pos": [
+              -2223.6466388776494,
+              3291.059646034349
+            ],
+            "size": [
+              270,
+              78
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "on_false",
+                "name": "on_false",
+                "shape": 7,
+                "type": "*",
+                "link": 1677
+              },
+              {
+                "localized_name": "on_true",
+                "name": "on_true",
+                "shape": 7,
+                "type": "INT",
+                "link": 1678
+              },
+              {
+                "localized_name": "switch",
+                "name": "switch",
+                "type": "BOOLEAN",
+                "widget": {
+                  "name": "switch"
+                },
+                "link": 1664
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "output",
+                "name": "output",
+                "type": "INT",
+                "links": [
+                  1665
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "ComfySwitchNode",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              false
+            ],
+            "widgets_values_named": {
+              "switch": false
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 828,
+            "type": "VRGDG_PythonCodeRunner",
+            "pos": [
+              -3289.517274777781,
+              3377.5224603796983
+            ],
+            "size": [
+              225.577734375,
+              156.4761829811282
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "input_text",
+                "name": "input_text",
+                "shape": 7,
+                "type": "STRING",
+                "link": 1525
+              },
+              {
+                "localized_name": "input_json",
+                "name": "input_json",
+                "shape": 7,
+                "type": "STRING",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "result_text",
+                "name": "result_text",
+                "type": "STRING",
+                "links": [
+                  1666
+                ]
+              },
+              {
+                "localized_name": "result_json",
+                "name": "result_json",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "localized_name": "has_error",
+                "name": "has_error",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfyui_fearnworksnodes",
+              "ver": "0.1.2",
+              "Node name for S&R": "VRGDG_PythonCodeRunner",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              "start = input_text.lower().find(\"[s=\")\n\nif start != -1:\n\n    end = input_text.find(\"]\", start)\n\n    if end != -1:\n\n        result = input_text[start + 3:end].strip()\n\n    else:\n\n        result = \"0\"\n\nelse:\n\n    result = \"0\""
+            ],
+            "widgets_values_named": {
+              "python_code": "start = input_text.lower().find(\"[s=\")\n\nif start != -1:\n\n    end = input_text.find(\"]\", start)\n\n    if end != -1:\n\n        result = input_text[start + 3:end].strip()\n\n    else:\n\n        result = \"0\"\n\nelse:\n\n    result = \"0\""
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 820,
+            "type": "ComfyMathExpression",
+            "pos": [
+              -2682.9440947236594,
+              3484.519493822879
+            ],
+            "size": [
+              376.925476187429,
+              128
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 1673
+              },
+              {
+                "localized_name": "b",
+                "name": "values.b",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": null
+              },
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": null
+              },
+              {
+                "localized_name": "BOOL",
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": [
+                  1664
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.34.0",
+              "Node name for S&R": "ComfyMathExpression",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              "a == 0"
+            ],
+            "widgets_values_named": {
+              "expression": "a == 0"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 827,
+            "type": "VRGDG_PythonCodeRunner",
+            "pos": [
+              -3092.5799563819105,
+              3509.847775448212
+            ],
+            "size": [
+              225.577734375,
+              128
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 1,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "input_text",
+                "name": "input_text",
+                "shape": 7,
+                "type": "STRING",
+                "link": 1524
+              },
+              {
+                "localized_name": "input_json",
+                "name": "input_json",
+                "shape": 7,
+                "type": "STRING",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "result_text",
+                "name": "result_text",
+                "type": "STRING",
+                "links": [
+                  1659
+                ]
+              },
+              {
+                "localized_name": "result_json",
+                "name": "result_json",
+                "type": "STRING",
+                "links": []
+              },
+              {
+                "localized_name": "has_error",
+                "name": "has_error",
+                "type": "BOOLEAN",
+                "links": []
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfyui_fearnworksnodes",
+              "ver": "0.1.2",
+              "Node name for S&R": "VRGDG_PythonCodeRunner",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
+            ],
+            "widgets_values_named": {
+              "python_code": "has_new_location = \"[new_location]\" in input_text.lower()\n\nresult = \"0\" if has_new_location else \"22\""
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 832,
+            "type": "ComfyMathExpression",
+            "pos": [
+              -2960.5775226904457,
+              3631.6427892487877
+            ],
+            "size": [
+              225,
+              148
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+              {
+                "label": "a",
+                "localized_name": "a",
+                "name": "values.a",
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 1527
+              },
+              {
+                "localized_name": "b",
+                "name": "values.b",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": 1660
+              },
+              {
+                "localized_name": "c",
+                "name": "values.c",
+                "shape": 7,
+                "type": "FLOAT,INT,BOOLEAN",
+                "link": null
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": []
+              },
+              {
+                "localized_name": "BOOL",
+                "name": "BOOL",
+                "type": "BOOLEAN",
+                "links": [
+                  1531
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.32.0",
+              "Node name for S&R": "ComfyMathExpression",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "widgets_values": [
+              "a == 1 or b == 0"
+            ],
+            "widgets_values_named": {
+              "expression": "a == 1 or b == 0"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          },
+          {
+            "id": 914,
+            "type": "ComfyNumberConvert",
+            "pos": [
+              -2849.539186001528,
+              3283.5851006463354
+            ],
+            "size": [
+              149.4458984375,
+              46
+            ],
+            "flags": {
+              "collapsed": false
+            },
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "value",
+                "name": "value",
+                "type": "INT,FLOAT,STRING,BOOLEAN",
+                "link": 1666
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "FLOAT",
+                "name": "FLOAT",
+                "type": "FLOAT",
+                "links": []
+              },
+              {
+                "localized_name": "INT",
+                "name": "INT",
+                "type": "INT",
+                "links": [
+                  1673,
+                  1674,
+                  1677
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "ComfyNumberConvert",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "input_ue_unconnectable": {},
+                "version": "7.8"
+              },
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            }
+          }
+        ],
+        "groups": [],
+        "links": [
+          {
+            "id": 1525,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 828,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 1524,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 827,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 1527,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 832,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 1526,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 831,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 1531,
+            "origin_id": 832,
+            "origin_slot": 2,
+            "target_id": -20,
+            "target_slot": 1,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 1530,
+            "origin_id": 831,
+            "origin_slot": 2,
+            "target_id": -20,
+            "target_slot": 2,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 1659,
+            "origin_id": 827,
+            "origin_slot": 0,
+            "target_id": 912,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 1660,
+            "origin_id": 912,
+            "origin_slot": 1,
+            "target_id": 832,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 1661,
+            "origin_id": 912,
+            "origin_slot": 1,
+            "target_id": 831,
+            "target_slot": 1,
+            "type": "INT"
+          },
+          {
+            "id": 1664,
+            "origin_id": 820,
+            "origin_slot": 2,
+            "target_id": 913,
+            "target_slot": 2,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 1665,
+            "origin_id": 913,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 1666,
+            "origin_id": 828,
+            "origin_slot": 0,
+            "target_id": 914,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 1673,
+            "origin_id": 914,
+            "origin_slot": 1,
+            "target_id": 820,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 1677,
+            "origin_id": 914,
+            "origin_slot": 1,
+            "target_id": 913,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 1678,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 913,
+            "target_slot": 1,
+            "type": "*"
+          }
+        ],
+        "extra": {
+          "ue_links": [],
+          "links_added_by_ue": []
+        }
+      }
+    ]
+  },
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}

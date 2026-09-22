@@ -7,6 +7,8 @@ import asyncio
 from .palette_sampling import sample_preview
 import io
 import uuid
+import tempfile
+from .playlist_import import create_project, import_video
 from pathlib import Path
 
 import av
@@ -15,7 +17,9 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 
 from comfy_extras.nodes_audio import load as load_audio_file
 from server import PromptServer
-from .disk_video import playlist_projects, playlist_manifest, playlist_media
+from .disk_video import playlist_projects, playlist_manifest, playlist_media, playlist_final
+from .playlist_editor import (templates, register_template, edit_timeline, prepare_redo,
+                              update_job, reconcile_jobs, RevisionConflict)
 
 from .library import (
     audio_directory,
@@ -71,11 +75,69 @@ def register_routes():
             if (Path(path) / "manifest.json").is_file()
         ], headers={"Cache-Control": "no-store"})
 
+    @routes.post("/api/h3-video-playlist/projects")
+    async def playlist_create_project(request):
+        try:
+            data = await request.json()
+            return web.json_response(create_project(data.get("name")))
+        except ValueError as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.post("/api/h3-video-playlist/{token}/import")
+    async def playlist_import_video(request):
+        try:
+            token = request.match_info["token"]
+            playlist_manifest(token)
+            reader = await request.multipart()
+            part = await reader.next()
+            if part is None or not part.filename:
+                raise ValueError("Choose a video file to import.")
+            name = Path(part.filename.replace("\\", "/")).name
+            with tempfile.TemporaryDirectory(prefix="h3_import_") as temporary:
+                source = Path(temporary) / "upload"
+                with source.open("wb") as stream:
+                    while chunk := await part.read_chunk(1024 * 1024):
+                        stream.write(chunk)
+                clip = await asyncio.to_thread(import_video, token, source, name)
+            return web.json_response(clip)
+        except (ValueError, FileNotFoundError, av.FFmpegError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/api/h3-video-playlist/templates")
+    async def playlist_templates(request):
+        return web.json_response(templates())
+
+    @routes.post("/api/h3-video-playlist/templates")
+    async def playlist_register_template(request):
+        try:
+            data = await request.json()
+            return web.json_response(register_template(data.get("name", ""), data.get("graph")))
+        except (ValueError, TypeError, KeyError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.post("/api/h3-video-playlist/{token}/{action:timeline|redo|job}")
+    async def playlist_edit(request):
+        try:
+            payload = await request.json()
+            token = request.match_info["token"]
+            action = request.match_info["action"]
+            if action == "timeline":
+                result = edit_timeline(token, payload)
+            elif action == "redo":
+                result = await asyncio.to_thread(prepare_redo, token, payload)
+            else:
+                result = update_job(token, payload["id"], payload)
+            return web.json_response({**result, "section_editing": True, "clip_deletion": True})
+        except RevisionConflict as error:
+            return web.json_response({"error": str(error)}, status=409)
+        except (ValueError, TypeError, KeyError, FileNotFoundError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
     @routes.get("/api/h3-video-playlist/{token}")
     async def video_playlist_manifest(request):
         try:
-            directory, manifest = playlist_manifest(request.match_info["token"])
-            return web.json_response({**manifest, "directory": str(directory)},
+            directory, manifest = reconcile_jobs(request.match_info["token"], PromptServer.instance.prompt_queue)
+            return web.json_response({**manifest, "directory": str(directory), "section_editing": True, "clip_deletion": True},
                                      headers={"Cache-Control": "no-store"})
         except FileNotFoundError:
             raise web.HTTPNotFound()
@@ -85,6 +147,13 @@ def register_routes():
         try:
             path = playlist_media(request.match_info["token"], request.match_info["clip_id"])
             return web.FileResponse(path)
+        except (FileNotFoundError, ValueError):
+            raise web.HTTPNotFound()
+
+    @routes.get("/api/h3-video-playlist/{token}/final/{filename}")
+    async def video_playlist_final(request):
+        try:
+            return web.FileResponse(playlist_final(request.match_info["token"],request.match_info["filename"]))
         except (FileNotFoundError, ValueError):
             raise web.HTTPNotFound()
 

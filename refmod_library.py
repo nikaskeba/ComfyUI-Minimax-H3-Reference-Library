@@ -94,6 +94,9 @@ def direct_refmod_records(records, prompt):
         if len(matches) != 1:
             raise ValueError(f"AMBIGUOUS_REFMOD: {tag}; include the folder in the tag.")
         rows = groups[matches[0]]
+        bundled = [row for row in rows if row["member"] is not None]
+        if bundled:
+            rows = bundled
         record = {"id":"refmod:"+matches[0], "tag":tag, "reference_type":"character"}
         for channel,kinds in (("appearance",("image","video")),("voice",("audio",))):
             choices = [row for row in rows if row["kind"] in kinds]

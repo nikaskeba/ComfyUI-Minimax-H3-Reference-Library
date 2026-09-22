@@ -1,4 +1,5 @@
 import { app } from "../../scripts/app.js";
+import { api } from "../../scripts/api.js";
 
 app.registerExtension({
     name: "SKEBA.DiskVideo",
@@ -11,6 +12,7 @@ app.registerExtension({
             this.addWidget("button", "Open Live Playlist", null, () => {
                 const url = new URL("h3-video-playlist", window.location.href);
                 if (this.properties.skeba_playlist) url.searchParams.set("project", this.properties.skeba_playlist);
+                if (api.clientId) url.searchParams.set("client_id", api.clientId);
                 window.open(url.href, "_blank", "noopener");
             }, { serialize: false });
             return result;
@@ -21,7 +23,7 @@ app.registerExtension({
         nodeType.prototype.onSerialize = function (data) {
             const result = serialized?.apply(this, arguments);
             const toggles = {};
-            for (const name of ["preview_clip", "live_playlist"]) {
+            for (const name of ["preview_clip"]) {
                 const widget = this.widgets?.find(item => item.name === name);
                 if (typeof widget?.value === "boolean") toggles[name] = widget.value;
             }
@@ -33,7 +35,7 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function (data) {
             const result = configured?.apply(this, arguments);
             const toggles = data.properties?.skeba_clip_toggles;
-            for (const name of ["preview_clip", "live_playlist"]) {
+            for (const name of ["preview_clip"]) {
                 const widget = this.widgets?.find(item => item.name === name);
                 if (widget && typeof toggles?.[name] === "boolean") widget.value = toggles[name];
             }

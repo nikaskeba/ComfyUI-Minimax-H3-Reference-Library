@@ -2,6 +2,7 @@
 import json
 import math
 import os
+import re
 import shutil
 import uuid
 from pathlib import Path
@@ -168,8 +169,11 @@ class SkebaRefModStudio:
             if len(mods)!=1 or len(extra)!=1 or mods[0].kind=="audio" or extra[0].kind!="audio":
                 raise ValueError("Paired editing requires one visual file and one audio file.")
             mods.extend(extra)
-        target, relative = output_path(settings["file"])
-        if settings.get("overwrite"):
+        output_name = settings["file"]
+        if companion and settings.get("overwrite"):
+            output_name = str(Path(existing["file"]).with_name(re.sub(r"_(visual|video)$", "", Path(existing["file"]).stem, flags=re.IGNORECASE)+".safetensors"))
+        target, relative = output_path(output_name)
+        if settings.get("overwrite") and not companion:
             if original_path is None: raise ValueError("Select an existing RefMod before replacing it.")
             target = original_path; relative = existing["file"]
         elif target.exists():
@@ -271,13 +275,7 @@ class SkebaRefModStudio:
         if settings.get("overwrite") and old_count==1 and len(mods)>1:
             raise ValueError("Adding a second channel changes a standalone file into a bundle. Save a new file, then select its members on the character.")
         progress.update_absolute(95)
-        if companion and settings.get("overwrite"):
-            if len(mods)!=2 or mods[0].kind=="audio" or mods[1].kind!="audio":
-                raise ValueError("Save as a copy when removing a channel from paired files.")
-            save_members(companion_path,[mods[1]],settings)
-            save_members(target,[mods[0]],settings)
-        else:
-            save_members(target,mods,{**source_meta.get("skeba_studio",{}),**settings, "preserve_bundle": source_meta.get("kind")=="bundle"})
+        save_members(target,mods,{**source_meta.get("skeba_studio",{}),**settings, "preserve_bundle": source_meta.get("kind")=="bundle"})
         if preview is not None:
             Image.fromarray((preview.detach().cpu().clamp(0,1).numpy()*255).astype("uint8")).save(target.with_suffix(".png"))
         elif original_path is not None and original_path != target:

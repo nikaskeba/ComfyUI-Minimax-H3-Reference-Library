@@ -38,15 +38,21 @@ def inspect(path):
 
 
 class DiskVideoTests(unittest.TestCase):
+    def setUp(self):
+        self.user=tempfile.TemporaryDirectory()
+        self.addCleanup(self.user.cleanup)
+        patcher=patch.object(disk.folder_paths,"get_user_directory",return_value=self.user.name)
+        patcher.start();self.addCleanup(patcher.stop)
+
     def test_live_playlist_registration_and_media_access(self):
         with tempfile.TemporaryDirectory() as directory, \
                 patch.object(disk.folder_paths, "get_output_directory", return_value=directory), \
                 patch.object(disk.folder_paths, "get_user_directory", return_value=str(Path(directory) / "user")):
             saver = disk.SaveClipToFile()
-            first = saver.save(video(), live_playlist=True, prompt="First prompt")
+            first = saver.save(video(), prompt="First prompt")
             token = first["ui"]["skeba_playlist"][0]
             clip = first["result"][0]
-            second = saver.save(video(), accumulation={"accum": [clip]}, live_playlist=True, prompt="Second prompt")
+            second = saver.save(video(), accumulation={"accum": [clip]}, prompt="Second prompt")
             self.assertEqual(second["ui"]["skeba_playlist"], [token])
             root, manifest = disk.playlist_manifest(token)
             self.assertEqual(len(manifest["clips"]), 2)
@@ -62,17 +68,30 @@ class DiskVideoTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 disk.playlist_media(token, manifest["clips"][0]["clip_id"])
 
+    def test_manual_compile_and_finish(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths,"get_output_directory",return_value=directory):
+            saved=disk.SaveClipToFile().save(video(),prompt="First")
+            clip=saved["result"][0];token=saved["ui"]["skeba_playlist"][0]
+            disk.FinishPlaylist().finish({"accum":[clip]})
+            self.assertFalse(list(Path(clip.get_stream_source()).parent.glob("combined_*.mp4")))
+            _,manifest=disk.playlist_manifest(token)
+            result=disk.CompilePlaylist().compile(token,json.dumps([manifest["clips"][0]["clip_id"]]))
+            path=disk.playlist_final(token,result["result"][0])
+            self.assertTrue(path.is_file())
+            self.assertEqual(inspect(path)[0],24)
+            with self.assertRaises(FileNotFoundError):disk.playlist_final(token,"../bad.mp4")
+
     def test_prompt_manifest_and_temporary_concat(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
             saver = disk.SaveClipToFile()
             prompt = '[s=5]\n[Shot 1] A guest says "Hello!"\nSecond line.'
-            first, = saver.save(video(frames=17), prompt=prompt)
+            first, = saver.save(video(frames=17), prompt=prompt)["result"]
             bundle = Path(first.get_stream_source()).parent
             manifest = json.loads((bundle / "manifest.json").read_text())
             self.assertEqual(manifest["clips"][0]["prompt"], prompt)
             self.assertEqual(manifest["clips"][0]["frame_count"], 17)
             self.assertAlmostEqual(manifest["clips"][0]["duration_seconds"], 17 / 24)
-            second, = saver.save(video(), accumulation={"accum": [first]})
+            second, = saver.save(video(), accumulation={"accum": [first]})["result"]
             combined, _ = disk.combine_disk_clips([first, second], starting_video=video())
             manifest = json.loads((bundle / "manifest.json").read_text())
             self.assertEqual(len(manifest["clips"]), 2)
@@ -100,15 +119,15 @@ class DiskVideoTests(unittest.TestCase):
     def test_project_bundle_paths(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
             saver = disk.SaveClipToFile()
-            first, = saver.save(video(), output_folder="Videos", project_name="Episode's test")
+            first, = saver.save(video(), output_folder="Videos", project_name="Episode's test")["result"]
             bundle = Path(first.get_stream_source()).parent
             self.assertEqual(bundle.parent, Path(directory) / "Videos" / "Episode's test")
-            second, = saver.save(video(), accumulation={"accum": [first]}, output_folder="Videos", project_name="Episode's test")
+            second, = saver.save(video(), accumulation={"accum": [first]}, output_folder="Videos", project_name="Episode's test")["result"]
             self.assertEqual(Path(second.get_stream_source()).parent, bundle)
             combined, _ = disk.combine_disk_clips([first, second])
             self.assertEqual(Path(combined.get_stream_source()).parent, bundle)
             self.assertEqual(inspect(combined.get_stream_source())[0], 48)
-            other, = saver.save(video(), output_folder=str(Path(directory) / "absolute"), project_name="Project")
+            other, = saver.save(video(), output_folder=str(Path(directory) / "absolute"), project_name="Project")["result"]
             self.assertEqual(Path(other.get_stream_source()).parent.parent, Path(directory) / "absolute" / "Project")
             with self.assertRaises(ValueError):
                 saver.save(video(), project_name="../outside")
@@ -116,8 +135,8 @@ class DiskVideoTests(unittest.TestCase):
     def test_save_accumulate_combine_and_tail(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
             saver = disk.SaveClipToFile()
-            first, = saver.save(video())
-            second, = saver.save(video(audio=False), accumulation={"accum": [first]})
+            first, = saver.save(video())["result"]
+            second, = saver.save(video(audio=False), accumulation={"accum": [first]})["result"]
             self.assertEqual(Path(first.get_stream_source()).parent, Path(second.get_stream_source()).parent)
             self.assertEqual(inspect(first.get_stream_source())[0], 24)
             self.assertLess(abs(inspect(first.get_stream_source())[1] - 1.0), .025)
@@ -134,7 +153,7 @@ class DiskVideoTests(unittest.TestCase):
 
     def test_bookends_resize_fps_and_silence(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
-            clip, = disk.SaveClipToFile().save(video())
+            clip, = disk.SaveClipToFile().save(video())["result"]
             result, count = disk.combine_disk_clips([clip], video(12, 96, 64, 12, False), video(30, 48, 64, 30))
             self.assertEqual(count, 3)
             self.assertEqual(disk._geometry(result.get_stream_source())[:2], (64, 48))
@@ -145,8 +164,8 @@ class DiskVideoTests(unittest.TestCase):
     def test_mismatched_clips_rejected(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
             saver = disk.SaveClipToFile()
-            first, = saver.save(video())
-            second, = saver.save(video(width=96))
+            first, = saver.save(video())["result"]
+            second, = saver.save(video(width=96))["result"]
             with self.assertRaisesRegex(ValueError, "matching dimensions"):
                 disk.combine_disk_clips([first, second])
 
@@ -155,7 +174,7 @@ class DiskVideoTests(unittest.TestCase):
             clips = []
             saver = disk.SaveClipToFile()
             for _ in range(6):
-                clip, = saver.save(video(frames=17), accumulation={"accum": clips})
+                clip, = saver.save(video(frames=17), accumulation={"accum": clips})["result"]
                 clips.append(clip)
             result, _ = disk.combine_disk_clips(clips)
             destination = Path(directory) / "final.mp4"

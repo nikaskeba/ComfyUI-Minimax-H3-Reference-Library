@@ -100,11 +100,14 @@ class StudioTests(unittest.TestCase):
         for entry in data["frames"]+[data["audio"]]:
             self.assertTrue((self.root/entry["subfolder"]/entry["filename"]).is_file())
         self.assertEqual((self.root/visual["file"]).read_bytes(),original)
-        self.run_studio(self.spec(existing=visual,companion=audio,overwrite=True,description="Pair updated"))
-        for selected in (visual,audio):
-            _,meta,members=studio.members_from_file(selected)
-            self.assertNotEqual(meta["kind"],"bundle")
-            self.assertEqual(members[0].description,"Pair updated")
+        bundled=self.run_studio(self.spec(existing=visual,companion=audio,overwrite=True,description="Pair updated"))
+        self.assertEqual(bundled["result"][0],"actor.safetensors")
+        _,meta,members=studio.members_from_file({"file":"actor.safetensors","member":0})
+        self.assertEqual(meta["kind"],"bundle")
+        self.assertEqual([m.kind for m in members],["video","audio"])
+        self.assertEqual((self.root/visual["file"]).read_bytes(),original)
+        with self.assertRaisesRegex(ValueError,"already exists"):
+            self.run_studio(self.spec(existing=visual,companion=audio,overwrite=True))
 
     def test_retrain_stored_and_remove_visual(self):
         visual=self.asset("visual","video");audio=self.asset("voice","audio",seconds=1)

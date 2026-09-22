@@ -92,8 +92,10 @@ def _patched_extra_conds(self, **kwargs):
     kf_video = [kf["latent"] for kf in keyframes if "latent" in kf]
     ref_video = [r["latent"] for r in refs if "latent" in r]
     payload["cond_video_latents"] = kf_video + ref_video
-    payload["cond_audio_latents"] = [r["audio_latent"] for r in refs
-                                     if r.get("audio_latent") is not None]
+    payload["cond_audio_latents"] = (
+        [kf["audio_latent"] for kf in keyframes if kf.get("audio_latent") is not None]
+        + [r["audio_latent"] for r in refs if r.get("audio_latent") is not None]
+    )
     # only write frame_count when we actually have one. This wrapper fires
     # for ANY graph combining keyframes and refs, not just ours; a graph
     # that reaches here without minimax_frame_count may have a valid value

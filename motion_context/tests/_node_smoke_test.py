@@ -162,6 +162,7 @@ def main():
         "SKEBAMiniMaxH3MotionContextSaveLatent",
         "SKEBAMiniMaxH3MotionContextLoadLatent",
         "SKEBAH3SeamExposureMatch",
+        "SKEBAH3ContinuationTiming",
     }
     assert all(name.startswith("SKEBA ")
                for name in pkg.NODE_DISPLAY_NAME_MAPPINGS.values())
@@ -735,6 +736,19 @@ def main():
     print("indexed slots: re-roll overwrites its slot, loads previous "
           "clip's latent; auto mode confirmed to return the reject")
 
+    timing=nodes.H3ContinuationTiming()
+    assert timing.plan(124,0)==(124,0)
+    assert timing.plan(124,1)==(141,17)
+    assert timing.plan(124,34)==(158,34)
+    assert timing.plan(124,34,True)==(124,0)
+    captured.clear()
+    _,trim=node.apply(conditioning=[["c",{}]],vae=VAE(),latent=target,
+        context_length="22",context_latent=prev,audio_context_length=22,settling_frames=17)
+    assert trim==39
+    assert [kf[nodes.MC_KEY] for kf in captured["minimax_keyframes"]]==[17,18,22,26,30,34,35]
+    assert abs(captured["minimax_refs"][0][nodes.MC_AUDIO_KEY]-39)<1
+    assert node.apply(conditioning=[],vae=None,latent=None,context_length="22",settling_frames=17,bypass=True)==([],0)
+    print("settling timing: default, rounded length, bypass, video/audio placement and trim passed")
     print("smoke test passed")
 
 

@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import uuid
 import wave
+import threading
 
 import av
 import numpy as np
@@ -52,7 +53,7 @@ def playlist_manifest(token):
     if location is None:
         raise FileNotFoundError("Unknown video project")
     directory = Path(location).resolve()
-    return directory, json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
+    return directory, normalize_project(json.loads((directory / "manifest.json").read_text(encoding="utf-8")))
 
 
 def playlist_media(token, clip_id):
@@ -97,20 +98,50 @@ def _clip_metadata(path):
                 "width": stream.width, "height": stream.height}
 
 
+_MANIFEST_LOCK = threading.RLock()
+
+def normalize_project(document):
+    document.setdefault("timeline", [{"id":"original_"+c["clip_id"],"clip_id":c["clip_id"]}
+                                      for c in document.get("clips",[]) if not c.get("parent_clip_id")])
+    document.setdefault("revision",0)
+    document.setdefault("undo",[])
+    document.setdefault("redo",[])
+    document.setdefault("jobs",[])
+    document.setdefault("redo_template",None)
+    document["schema_version"]=2
+    return document
+
+
+def write_project(directory,document):
+    temporary=directory / f".manifest_{uuid.uuid4().hex}.tmp"
+    try:
+        temporary.write_text(json.dumps(document,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+        temporary.replace(directory/"manifest.json")
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def _update_manifest(directory, *, clip=None, combined=None):
+    with _MANIFEST_LOCK:
+        return _update_manifest_locked(directory, clip=clip, combined=combined)
+
+def _update_manifest_locked(directory, *, clip=None, combined=None):
     path = directory / "manifest.json"
     document = (json.loads(path.read_text(encoding="utf-8")) if path.exists()
                 else {"schema_version": 1, "clips": [], "combined_videos": []})
+    normalize_project(document)
     if clip is not None:
         document["clips"].append(clip)
+        if not clip.get("parent_clip_id"):
+            entry={"id":uuid.uuid4().hex,"clip_id":clip["clip_id"]}
+            document["timeline"].append(entry)
+            # Undo of a manual edit must not discard clips arriving from generation.
+            for snapshot in document["undo"]+document["redo"]:
+                snapshot.append(dict(entry))
+        document["revision"]+=1
     if combined is not None:
         document["combined_videos"].append(combined)
-    temporary = directory / f".manifest_{uuid.uuid4().hex}.tmp"
-    try:
-        temporary.write_text(json.dumps(document, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        temporary.replace(path)
-    finally:
-        temporary.unlink(missing_ok=True)
+    write_project(directory,document)
 
 
 def _write_clip(video, path, geometry=None, crf=18):
@@ -181,7 +212,6 @@ class SaveClipToFile:
                     "project_name": ("STRING", {"default": "", "tooltip": "Optional project subfolder. Each run creates a dated bundle containing its clips and final video."}),
                     "preview_clip": ("BOOLEAN", {"default": False, "tooltip": "Show each completed clip in the node. Creates a temporary MP4 preview with audio; the loop still uses the saved MP4."}),
                     "prompt": ("STRING", {"default": "", "multiline": True, "tooltip": "Optional prompt for this clip. Saved verbatim with its filename and measured duration in manifest.json. Can be connected to the current loop prompt."}),
-                    "live_playlist": ("BOOLEAN", {"default": False, "tooltip": "Publish this run to the live project playlist. Use Open Live Playlist to watch clips as they finish, without combining them."}),
                 }}
 
     RETURN_TYPES = ("VIDEO",)
@@ -189,7 +219,7 @@ class SaveClipToFile:
     FUNCTION = "save"
     CATEGORY = "Skeba AI Nodes - Utilities"
 
-    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt="", live_playlist=False):
+    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt=""):
         clips = (accumulation or {}).get("accum", [])
         if clips and isinstance(clips[-1], DiskClip):
             directory = Path(clips[-1].get_stream_source()).parent
@@ -214,9 +244,7 @@ class SaveClipToFile:
             "prompt": prompt, "crf": crf,
             "previous_file": str(Path(clips[-1].get_stream_source()).resolve()) if clips and isinstance(clips[-1], DiskClip) else None,
         })
-        ui = {}
-        if live_playlist:
-            ui["skeba_playlist"] = [register_playlist(directory)]
+        ui = {"skeba_playlist": [register_playlist(directory)]}
         if not preview_clip:
             if ui:
                 return {"result": (clip,), "ui": ui}
@@ -304,3 +332,49 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None):
                   for i, path in enumerate(paths)],
     })
     return DiskClip(str(output)), len(paths)
+
+
+class CompilePlaylist:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required":{"project":("STRING",),"clip_ids":("STRING",)}}
+    RETURN_TYPES=("STRING",)
+    FUNCTION="compile"
+    OUTPUT_NODE=True
+    CATEGORY="Skeba AI Nodes - Utilities"
+    @classmethod
+    def IS_CHANGED(cls,**kwargs): return float("nan")
+    def compile(self,project,clip_ids):
+        ids=json.loads(clip_ids)
+        if not isinstance(ids,list) or not ids or not all(isinstance(i,str) for i in ids):
+            raise ValueError("Choose completed clips to compile.")
+        clips=[DiskClip(str(playlist_media(project,i))) for i in ids]
+        result,count=combine_disk_clips(clips)
+        filename=Path(result.get_stream_source()).name
+        return {"ui":{"text":[filename]},"result":(filename,)}
+
+
+class FinishPlaylist:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required":{"accumulation":("ACCUMULATION",)}}
+    RETURN_TYPES=("STRING",)
+    FUNCTION="finish"
+    OUTPUT_NODE=True
+    CATEGORY="Skeba AI Nodes - Utilities"
+    def finish(self,accumulation):
+        clips=accumulation.get("accum",[])
+        if not clips or not all(isinstance(clip,DiskClip) for clip in clips):
+            raise ValueError("Connect the completed disk-clip accumulation.")
+        token=register_playlist(Path(clips[-1].get_stream_source()).parent)
+        return {"ui":{"text":[f"{len(clips)} clips ready. Use Create Video in H3 Live Playlist."],"skeba_playlist":[token]},"result":(token,)}
+
+
+def playlist_final(token,filename):
+    directory,manifest=playlist_manifest(token)
+    if not any(entry["filename"]==filename for entry in manifest.get("combined_videos",[])):
+        raise FileNotFoundError("Unknown compiled video")
+    path=(directory/filename).resolve()
+    if path.parent!=directory or path.suffix.lower()!=".mp4":
+        raise ValueError("Invalid compiled video path")
+    return path

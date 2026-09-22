@@ -29,7 +29,8 @@ from .prompt_loop_node import PromptFromListNode, PromptLoopNode
 from .skeba_io_tags import SkebaBypass
 from .universal_bypass import SkebaUniversalBypass
 from .video_loop_node import CombineVideoClipsNode
-from .disk_video import SaveClipToFile
+from .disk_video import SaveClipToFile, CompilePlaylist, FinishPlaylist
+from .playlist_editor import PlaylistRedoInput, PlaylistRedoSave
 from .server import register_routes
 
 
@@ -41,6 +42,10 @@ NODE_CLASS_MAPPINGS = {
     "SkebaCreateH3RefMod": SkebaCreateH3RefMod,
     "SkebaH3RefModApply": SkebaH3RefModApply,
     "SkebaSaveClipToFile": SaveClipToFile,
+    "SkebaCompilePlaylist": CompilePlaylist,
+    "SkebaFinishPlaylist": FinishPlaylist,
+    "SkebaPlaylistRedoInput": PlaylistRedoInput,
+    "SkebaPlaylistRedoSave": PlaylistRedoSave,
     "SkebaPaletteFramePreview": PaletteFramePreview,
     "SkebaFixedPaletteQuantize": FixedPaletteQuantize,
     "H3TaggedReferencePrompt": H3TaggedReferencePrompt,
@@ -73,6 +78,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaCreateH3RefMod": "SKEBA Create H3 RefMod",
     "SkebaH3RefModApply": "SKEBA Apply H3 RefMod",
     "SkebaSaveClipToFile": "Skeba Save Clip to File",
+    "SkebaCompilePlaylist": "Skeba Create Playlist Video",
+    "SkebaFinishPlaylist": "Skeba Finish Live Playlist",
+    "SkebaPlaylistRedoInput": "Skeba Playlist Redo Input",
+    "SkebaPlaylistRedoSave": "Skeba Playlist Redo Save",
     "SkebaPaletteFramePreview": "Palette Frame Preview",
     "SkebaFixedPaletteQuantize": "Fixed Palette Quantize",
     "H3TaggedReferencePrompt": "H3 Tagged Reference Prompt",

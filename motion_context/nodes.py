@@ -470,6 +470,8 @@ class MiniMaxH3MotionContext:
                                "when pre_cut_reinforcement is enabled. Try 2 "
                                "for stronger scene adherence. Higher values "
                                "may restrict motion or affect generated audio."}),
+                "settling_frames": ("INT", {"default": 0, "min": 0, "step": 17,
+                    "tooltip": "Extra hidden preroll, rounded up to 17-frame H3 cycles. Use the matching Continuation Timing length output. Requires head anchoring and video context."}),
                 "scene_reference": ("IMAGE", {
                     "tooltip": "Optional override for the automatically extracted scene image. "
                                "Only used in scene reference mode with video context enabled."}),
@@ -495,7 +497,7 @@ class MiniMaxH3MotionContext:
               video_context_enabled=True, audio_context_enabled=True,
               pre_cut_reinforcement=False, reencode_audio_context=False,
               pre_cut_reinforcement_copies=1, continuation_mode=None,
-              scene_reference=None):
+              scene_reference=None, settling_frames=0):
         if bypass:
             _LOG.info("h3_motion_context: Motion Context bypassed")
             return (conditioning, 0)
@@ -526,6 +528,9 @@ class MiniMaxH3MotionContext:
             raise ValueError("h3_motion_context: crop must be one of %s"
                              % (", ".join(CROP_MODES),))
         context_length = int(context_length)
+        settling_frames = max(0, (int(settling_frames) + 16) // 17 * 17)
+        if settling_frames and (anchor_mode != "head" or not video_context_enabled):
+            raise ValueError("Settling frames require head anchoring and video context.")
         _ensure_layout_patch()
 
         video = _video_from_latent(latent)
@@ -662,7 +667,7 @@ class MiniMaxH3MotionContext:
                     "the last %d instead (usable runs: 1, 5, 22, 39)", n, run)
             n = run
 
-        if n >= frame_count:
+        if n + settling_frames >= frame_count:
             raise ValueError(
                 "h3_motion_context: asked to pin %d frames into a %d frame clip. "
                 "The pinned run must be a small fraction of the timeline."
@@ -717,7 +722,7 @@ class MiniMaxH3MotionContext:
         if anchor_mode == "before":
             indices = [o - span for o in offsets]
         else:
-            indices = list(offsets)
+            indices = [o + settling_frames for o in offsets]
 
         keyframes = []
         for p, blk in zip(indices, blocks):
@@ -801,7 +806,7 @@ class MiniMaxH3MotionContext:
                 # step past A's last frame (H3 rounds its audio grid up),
                 # so the end coordinate moves by exactly that much; the
                 # layout patch takes a fractional frame index.
-                end_frame = float(span if anchor_mode == "head" else 0)
+                end_frame = float(span + settling_frames if anchor_mode == "head" else 0)
                 end_frame += overhang / FRAME_RESCALE
                 # then snap the window onto the target's own audio grid.
                 # The end coordinate is FRAME_RESCALE * end_frame, and
@@ -864,7 +869,7 @@ class MiniMaxH3MotionContext:
             out = node_helpers.conditioning_set_values(
                 out, {"minimax_refs": [audio_ref]}, append=True)
 
-        trim = span if anchor_mode == "head" else 0
+        trim = span + settling_frames if anchor_mode == "head" else 0
         _LOG.info("h3_motion_context: video from %s, %s/%s, %d frames -> %d "
                   "cond blocks at indices %d..%d, %d frame clip at %dx%d, "
                   "trim %d, audio %s",
@@ -1296,7 +1301,25 @@ class MiniMaxH3MotionContextLoadLatent:
         return ({"samples": [data["video"], data["audio"]]},)
 
 
+class H3ContinuationTiming:
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "length": ("INT", {"default":124,"min":1,"tooltip":"Existing generation length, already including normal context overlap."}),
+            "settling_frames": ("INT", {"default":0,"min":0,"step":17}),
+            "bypass": ("BOOLEAN", {"default":False,"tooltip":"Use the same first-clip/new-scene bypass as Motion Context."}),
+        }}
+    RETURN_TYPES=("INT","INT")
+    RETURN_NAMES=("generation_length","settling_frames")
+    FUNCTION="plan"
+    CATEGORY="Skeba AI Nodes - Reference"
+    def plan(self,length,settling_frames=0,bypass=False):
+        extra=0 if bypass else max(0,(int(settling_frames)+16)//17*17)
+        return (int(length)+extra,extra)
+
+
 NODE_CLASS_MAPPINGS = {
+    "SKEBAH3ContinuationTiming": H3ContinuationTiming,
     "SKEBAMiniMaxH3MotionContext": MiniMaxH3MotionContext,
     "SKEBAMiniMaxH3MotionContextTrim": MiniMaxH3MotionContextTrim,
     "SKEBAMiniMaxH3MotionContextSaveLatent": MiniMaxH3MotionContextSaveLatent,
@@ -1304,6 +1327,7 @@ NODE_CLASS_MAPPINGS = {
     "SKEBAH3SeamExposureMatch": H3SeamExposureMatch,
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SKEBAH3ContinuationTiming": "SKEBA H3 Continuation Timing",
     "SKEBAMiniMaxH3MotionContext": "SKEBA H3 Motion Context",
     "SKEBAMiniMaxH3MotionContextTrim": "SKEBA H3 Motion Context Trim",
     "SKEBAMiniMaxH3MotionContextSaveLatent": "SKEBA H3 Motion Context Save Latent",

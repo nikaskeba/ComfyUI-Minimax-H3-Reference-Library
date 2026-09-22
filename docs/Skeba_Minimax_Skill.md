@@ -125,19 +125,32 @@ Each prompt contains these headings exactly once, in this order, with the colon 
 
 ### subject_definitions
 
-List saved characters, locations, and objects as bare `{saved_tag}` entries. Define temporary entities with `<type:name = Complete description.>` entries. Put each entity on a separate line exactly once; do not add a second bare temporary tag. The compiler turns each entry into its complete definition. Do not wrap a tag in a manually authored definition such as `is {tag}` or append another copy of the library description.
+List saved characters, locations, and objects as `{saved_tag}` entries. For characters whose clothing matters to the scene, append a concrete `Wardrobe:` description on the same line (see below). Define temporary entities with `<type:name = Complete description.>` entries. Put each entity on a separate line exactly once; do not add a second bare temporary tag. The compiler turns each entry into its complete definition. Do not wrap a tag in a manually authored definition such as `is {tag}` or append another copy of the library description.
 
 The compiler sorts these definitions by the assigned Subject number and places used voice relationships beside their owning subjects. Keep authoring semantic tags; do not predict or manually arrange runtime numbers.
 
 Used whole-video and music references receive separate role definitions automatically, even when first invoked later. They may also be listed once as their saved tag in subject_definitions. Their physical slots do not become Subjects. An image used only as an entity's provenance does not need a separate Picture definition.
 
-Declare temporary voices as `<voice:name = Voice description.>` in subject_definitions alongside their characters. They describe speech and do not create a visible Subject; do not add a second bare voice entry. Do not write `S1 VOICE:` blocks or manually bind speaker numbers. Explicit speech events supply the binding, and the compiler adds used saved-audio relationships automatically. Put shot-specific clothing, posture, placement, and continuity requirements in detailed_description.
+Declare temporary voices as `<voice:name = Voice description.>` in subject_definitions alongside their characters. They describe speech and do not create a visible Subject; do not add a second bare voice entry. Do not write `S1 VOICE:` blocks or manually bind speaker numbers. Explicit speech events supply the binding, and the compiler adds used saved-audio relationships automatically. Put the starting wardrobe beside the character tag in subject_definitions. Put posture, placement, and shot-specific changes in detailed_description or timeline.
+
+### Scene-specific character wardrobe
+
+Actively consider wardrobe when writing a scene: work, formal events, weather, costumes, and a recurring story outfit benefit from explicit clothing descriptions even when the character already has a likeness reference. Do not assume an identity tag specifies the desired outfit. Honor the user's outfit first; otherwise choose concrete scene-appropriate clothing when useful, preserving any outfit already established in the story.
+
+Append `Wardrobe:` to the character's single subject_definitions entry. Describe visually important garments, colors, footwear, accessories, and layering. This supplements the likeness reference; do not duplicate its face/identity description or redefine the saved tag.
+
+```text
+subject_definitions:
+{Michael Scott_BC} Wardrobe: wearing a crisp white long-sleeve business dress shirt, dark patterned necktie, dark charcoal business trousers, and black leather dress shoes. This outfit remains fixed throughout the scene.
+```
+
+Use the same approach for other saved character tags, including direct RefMod characters. For temporary characters, include the outfit in their inline character declaration. Do not force business clothing or invent an outfit change when it is irrelevant. For an intentional mid-scene change, describe the starting outfit here and show the change in the timeline instead of claiming it stays fixed.
 
 ### HARD RULE — CROSS-PROMPT WARDROBE LOCK
 
 When a character has a story-specific outfit that must persist across multiple prompts, establish the outfit using one complete concrete wardrobe description.
 
-Repeat that exact complete wardrobe description in the opening `detailed_description` of EVERY independently compiled prompt in which the character appears, before `timeline:`. Bind it to the character's exact reference tag. Each prompt must contain the outfit in full even when the location, character reference, or video continuation stays the same.
+Repeat that exact complete wardrobe description beside the character's tag in `subject_definitions` of EVERY independently compiled prompt in which the character appears. It need not be duplicated in the opening `detailed_description`. Each prompt must contain the outfit in full even when the location, character reference, or video continuation stays the same.
 
 Do not shorten later descriptions to phrases such as:
 
@@ -152,15 +165,24 @@ Instead, restate every visually important garment, color, footwear, accessory, a
 
 Example:
 
-"{Cosmo Kramer_BC} wears a cream short-sleeve button-up shirt, dark brown trousers, black leather shoes, and a bright red sleeveless valet vest worn open over the shirt. This exact wardrobe remains fixed throughout the clip."
+"{Cosmo Kramer_BC} Wardrobe: wearing a cream short-sleeve button-up shirt, dark brown trousers, black leather shoes, and a bright red sleeveless valet vest worn open over the shirt. This exact wardrobe remains fixed throughout the clip."
 
-If the outfit intentionally changes, explicitly describe the new complete wardrobe at the point where the change begins. Otherwise, assume the established story wardrobe is locked across the sequence. For a change within a clip, describe the starting outfit before `timeline:` and the new complete outfit in the shot where it changes; use that new description in later prompts. Do not claim the outfit stays fixed throughout a clip that intentionally contains a change.
+If the outfit intentionally changes, explicitly describe the new complete wardrobe at the point where the change begins. Otherwise, assume the established story wardrobe is locked across the sequence. For a change within a clip, describe the starting outfit in `subject_definitions` and the new complete outfit in the shot where it changes; use that new description in later prompts. Do not claim the outfit stays fixed throughout a clip that intentionally contains a change.
 
 Keep the opening wardrobe descriptions separate from dialogue shots. In each speaking shot, describe only the active character and any relevant visible outfit details; do not repeat another character's wardrobe there. This is an authoring rule, not a new compiler validation requirement.
 
-### Timing: allow natural dialogue to finish
+### Shot timing and cuts
 
-Encourage explicit shot timestamps, especially when dialogue or a change of speaker is involved. Use `[Shot N] At MM:SS.mmm, ...`, including `At 00:00.000` for the opening shot when timing the sequence. The user's latest tests favor well-paced timing: cuts scheduled too quickly may cause the next character to pick up another character's unfinished dialogue. Treat this as a local authoring preference, not a guarantee about model behavior.
+Do not timestamp `[Shot 1]`; it begins at the start of the clip. Begin later shots with strictly increasing cut times inside the `[s=x]` duration:
+
+`[Shot 1] Live-action, cinematic, a medium-wide shot frames...`
+`[Shot 2] At 00:03.500, the camera cuts to...`
+
+Use timestamps to allow dialogue and actions to finish naturally before the next cut. Set the next shot from the current line's natural speaking length rather than evenly dividing the clip.
+
+Use `camera cuts to`, `shot cuts to`, `shot transitions to`, `shot changes to`, or `shot switches to` for ordinary cuts. Use cross-dissolve, fade, or wipe only when requested or narratively useful.
+
+A cut should introduce meaningful new information about subject, space, state, viewpoint, or time. If only framing distance or a slight angle changes, prefer camera movement instead of a cut.
 
 Set the next shot's start from the current line's natural speaking length, not from evenly divided shot intervals. Read the line at its intended delivery pace and allow for punctuation, pauses, emphasis, and any action before speech starts. Allow a natural pause before the cut through the shot timing; do not narrate the completion of speech or mouth closure. Slow, emotional, or hesitant delivery needs more time; do not force fast delivery just to meet a timestamp.
 
@@ -174,11 +196,47 @@ Use `timeline:` on its own line in every complete prompt, after the opening desc
 
 Before `timeline:`, describe the overall presentation, location, visual style, and persistent appearance or scene conditions. After `timeline:`, place the chronological shots, timed actions, camera changes, and dialogue. Do not put dialogue events in the opening description or use `timeline:` as a replacement for `detailed_description:`.
 
+### Visual style, camera, and movement
+
+At the beginning of `[Shot 1]`, state the overall visual style and initial composition. Use concrete style language such as `Live-action, cinematic`, `2D animation`, `3D CG`, `claymation`, `watercolor`, or `vintage film`.
+
+When useful, specify the camera system, lens, support, lighting, and palette:
+
+`[Shot 1] Live-action, cinematic, shot on an ARRI Alexa with a Cooke S4 75mm prime, a medium-wide composition under cold blue-green arctic lighting with a slightly desaturated palette.`
+
+Use precise camera terminology:
+
+- `Zoom In / Zoom Out` — lens changes focal length; camera stays stationary.
+- `Push In / Pull Out` — camera moves forward/backward.
+- `Pan Left / Pan Right` — camera pivots horizontally.
+- `Truck Left / Truck Right` — camera moves horizontally.
+- `Tilt Up / Tilt Down` — camera pivots vertically.
+- `Pedestal Up / Pedestal Down` — camera moves vertically.
+- `Arc Shot` — camera moves around the subject.
+- `Tracking Shot` — camera follows a moving subject.
+- `Static Shot` — camera and lens remain still.
+- `Shake Slightly / Shake Strongly` — controlled camera shake.
+- `POV` — subject's point of view.
+- `Roll Clockwise / Roll Counterclockwise` — camera rolls around the lens axis.
+
+Qualify movement when useful with `small/large amplitude` and `slow/fast speed`, e.g. `a slow push in with small amplitude`.
+
+Do not add technical camera specifications merely to make a prompt sound cinematic. Use them when they provide meaningful visual direction and keep them consistent across shots unless a change is intentional.
 Begin with one or two English sentences establishing presentation/style before `[Shot 1]`. Use sequential `[Shot N]` labels and encourage timestamps, especially for dialogue; follow the natural speaking-length guidance above before placing each cut. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
 
 For generation prompts, normally aim for 350-500 English words here. Dialogue-heavy scenes prioritize a feasible complete spoken timeline over reaching that range. Editing detail scales with the changes. One shot alone is not a reason to omit necessary detail; do not invent additional action to pad a word count. Write events in playback order, because the compiler assigns speakers in source order rather than sorting timestamps.
 
 Use semantic tags for entities in actions and speech. Additional staging belongs before or after the speech pattern, not inserted inside its required structure.
+
+### Prefer specific visual direction
+
+Avoid vague prestige/style language such as `award-winning`, `high quality`, or a generic `modern anime style`. Describe what should actually be visible.
+
+Prefer specific production, era, medium, studio, director, film, or series references when they communicate the intended look:
+
+`Japanese animation inspired by [specific studio/director/series], with early-2000s digital coloring and restrained character animation.`
+
+The detailed description should remain grounded in visible or audible information: visual style, composition, subject appearance and position, environment, props, action, reaction, camera behavior, dialogue, and synchronized diegetic sound.
 
 ### overall_soundscape
 
@@ -282,7 +340,7 @@ Keep the maximum of two spoken sentences per shot and allow natural speaking tim
 
 GOOD:
 
-[Shot 1] At 00:00.000, a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English §George Costanza_BC§]I'm not going!</d>
+[Shot 1] a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English §George Costanza_BC§]I'm not going!</d>
 
 [Shot 2] At 00:03.000, a medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen counter inside {Jerry_Seinfeld_Apartment}. {Jerry Seinfeld_BC} says, <d>[English §Jerry Seinfeld_BC§]You're going.</d>
 
@@ -395,7 +453,7 @@ Warm natural light and a quiet observational style inside <location:coffee_shop>
 
 timeline:
 
-[Shot 1] At 00:00.000, a slow push toward <object:coffee_cup> on a wooden table inside <location:coffee_shop> establishes the setting through the end of the five-second clip.
+[Shot 1]  a slow push toward <object:coffee_cup> on a wooden table inside <location:coffee_shop> establishes the setting through the end of the five-second clip.
 
 overall_soundscape:
 Quiet room tone and faint crockery sounds.
@@ -416,7 +474,7 @@ Warm natural light and a quiet observational style continue inside <location:cof
 
 timeline:
 
-[Shot 1] At 00:00.000, a close view of <object:coffee_cup> on the wooden table continues the established scene.
+[Shot 1] a close view of <object:coffee_cup> on the wooden table continues the established scene.
 [Shot 2] At 00:03.000, a medium shot shows only <character:cashier> behind the counter inside <location:coffee_shop>. <character:cashier> says, <d>[English <voice:cashier>]Your order is ready.</d>
 [Shot 3] At 00:08.000, the camera returns to <object:coffee_cup>, with the sunlit wooden table filling the background through the end of the clip.
 
@@ -559,7 +617,7 @@ The target video uses a realistic, quietly observed cafe style with warm indoor 
 
 timeline:
 
-[Shot 1] At 00:00.000, a medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
+[Shot 1]  a medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
 [Shot 2] At 00:03.000, a closer view retains the counter in the background. <character:cashier> looks toward the waiting area. <character:cashier> says, <d>[English <voice:cashier>]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the empty waiting area while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
 [Shot 3] At 00:07.000, return to the medium shot. <character:cashier> waits with relaxed hands and a closed mouth. The camera returns to the established counter-height viewpoint without changing which side of the counter he occupies. His shoulders settle after the announcement, and his gaze remains on the waiting area. The room's low ambience continues without added dialogue or music. Keep the visible table edges, empty space on the left, and light on the uniform consistent with the opening. At the end of the clip he stays still, with no fresh gesture, mouth movement, or camera drift. Hold this same position through the end of the clip so the following clip can inherit a clear, settled state.
 
@@ -589,7 +647,7 @@ The target video uses a realistic, quietly observed cafe style with warm indoor 
 
 timeline:
 
-[Shot 1] At 00:00.000, a medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
+[Shot 1] a medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
 [Shot 2] At 00:03.000, frame only <character:cashier> with the counter visible. <character:cashier> says, <d>[English <voice:cashier>]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and holding the same face through the whole line. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
 [Shot 3] At 00:07.000, frame only {hero}, retaining the wooden tables in the background. {hero} says, <d>[English §hero§]Thank you.</d> Keep the hero on the same side of the counter as before, with the angle clearly motivated by the established geography. The camera remains stationary during the whole line; hold this face through the whole line. The hero's expression softens briefly in thanks, with a small change in gaze toward the edge of the frame. Neither the supplied wardrobe nor the visible table layout changes. The underlying room tone remains consistent across the cut.
 [Shot 4] At 00:10.000, return to the medium shot. {hero} remains LEFT of the counter and <character:cashier> remains on the RIGHT, both silent with closed mouths through the end of the clip. Restore the original counter-height framing and spacing. Their hands and shoulders settle without a new exchange or object transfer. Keep the warm light and visible table edges stable; hold this final composition with only quiet room tone, providing a clear state for a same-location continuation.
@@ -650,7 +708,7 @@ Never add prompt numbers, prompt titles, scene labels, clip labels, explanatory 
 Before returning a prompt:
 
 1. Confirm deterministic mode is the target. Preserve exact known saved tags, and declare all temporary references directly in subject_definitions, with no separate declaration prefix or duplicate bare temporary entry.
-2. Check English section prose, the four headings and their order, no summary or retention_analysis, a description opening followed by `timeline:` on its own line before Shot 1, and feasible shot timestamps, especially for dialogue. Check that each line can finish naturally before the next shot or the clip ends. Put each used character/location/object entity exactly once in subject_definitions. Do not define voices as visible entities.
+2. Check English section prose, the four headings and their order, no summary or retention_analysis, and `timeline:` on its own line before Shot 1. Shot 1 has no timestamp and establishes the overall style and initial composition. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
 3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and voice tags inside language brackets.
 4. Check the intended performer for each speaking turn and place its voice tag inside the language brackets. Preserve spoken words after the brackets. Keep events in playback order and omit retention_analysis.
 5. Validate every prompt in isolation. For multi-prompt sequences, the ONLY valid sequence separator is a single `|` on its own line. Split at each `|` and pretend all earlier prompt declarations and definitions are unavailable. Never use labels such as `PROMPT 1`, `PROMPT 2`, `Scene 1`, or `Clip 1` as separators.
@@ -665,7 +723,7 @@ Before returning a prompt:
    - Check garments, colors, footwear, accessories, and layering against the established outfit. Only an intentional story change permits a new description; carry it forward from that point.
 
    CLIP DURATION:
-   - Use [s=x] for intentionally selected scene lengths, including short intros. Check that local shot timestamps and full dialogue fit within that clip. If absent, use the workflow default rather than inheriting a previous prompt marker.
+  - Use [s=x] for intentionally selected scene lengths. Shot 1 begins implicitly at the start of the clip without a timestamp; all later shot timestamps must fit within that duration.
 
    LOCATION CONTINUITY:
    - Evaluate `[new_location]` from physical story geography, independently from declaration scope.

@@ -146,6 +146,13 @@ def main():
     assert run(None, mixed_refs)["cond_video_latents"] == ["R1", "R2"]
     print("4. one mechanism only: unchanged")
 
+    audio_kfs = [dict(mc_kf[0], audio_latent="START_AUDIO"),
+                 {"resolved_frame_index": 102, "latent": "END", "audio_latent": "END_AUDIO"}]
+    got = run(audio_kfs, mixed_refs)
+    assert got["cond_audio_latents"] == ["START_AUDIO", "END_AUDIO", "A2", "A3"], got
+    assert run(audio_kfs, plain_ref)["cond_audio_latents"] == ["START_AUDIO", "END_AUDIO"]
+    print("5. connector audio precedes reference audio, including visual-only refs")
+
     print("payload gate test passed")
 
 
