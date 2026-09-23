@@ -52,6 +52,8 @@ app.registerExtension({
                     this.skebaClipVideo.removeAttribute("src");
                     this.skebaClipVideo.load();
                     this.skebaClipVideo.style.display = "none";
+                    if (this.size) this.setSize?.([this.size[0], this.computeSize()[1]]);
+                    this.setDirtyCanvas?.(true, true);
                 }
                 return;
             }
@@ -61,8 +63,23 @@ app.registerExtension({
                 video.playsInline = true;
                 video.preload = "metadata";
                 video.style.cssText = "width:100%;height:100%;object-fit:contain;background:#111;";
-                const widget = this.addDOMWidget("skeba_clip_preview", "video", video, { serialize: false });
-                widget.computeSize = width => [width, video.style.display === "none" ? 0 : 200];
+                const height = (width = this.size?.[0] || 320) => {
+                    if (video.style.display === "none") return 0;
+                    const ratio = video.videoWidth && video.videoHeight ? video.videoWidth / video.videoHeight : 16 / 9;
+                    return Math.max(1, Math.round((width - 20) / ratio));
+                };
+                const widget = this.addDOMWidget("skeba_clip_preview", "video", video, {
+                    serialize: false,
+                    getHeight: () => height(),
+                    getMinHeight: () => height(),
+                    getMaxHeight: () => height(),
+                });
+                // Legacy canvas and current DOM layout use different sizing hooks.
+                widget.computeSize = width => [width, height(width)];
+                video.onloadedmetadata = () => {
+                    if (this.size) this.setSize?.([this.size[0], this.computeSize()[1]]);
+                    this.setDirtyCanvas?.(true, true);
+                };
                 this.skebaClipVideo = video;
             }
             const video = this.skebaClipVideo;
@@ -70,7 +87,7 @@ app.registerExtension({
             video.src = api.apiURL(`/view?${new URLSearchParams(clip)}`);
             video.style.display = "block";
             video.load();
-            this.setSize?.([this.size[0], Math.max(this.size[1], this.computeSize()[1])]);
+            if (this.size) this.setSize?.([this.size[0], this.computeSize()[1]]);
             this.setDirtyCanvas?.(true, true);
         };
         const removed = nodeType.prototype.onRemoved;
