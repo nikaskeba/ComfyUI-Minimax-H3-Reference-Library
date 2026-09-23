@@ -288,8 +288,7 @@ class SaveClipToFile:
         shutil.copyfile(path, preview)
         return {"result": (clip,), "ui": {
             **ui,
-            "images": [{"filename": preview.name, "subfolder": "skeba_clip_previews", "type": "temp"}],
-            "animated": (True,),
+            "skeba_clip_preview": [{"filename": preview.name, "subfolder": "skeba_clip_previews", "type": "temp"}],
         }}
 
 

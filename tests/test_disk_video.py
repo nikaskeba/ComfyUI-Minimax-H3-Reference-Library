@@ -111,7 +111,7 @@ class DiskVideoTests(unittest.TestCase):
             result = disk.SaveClipToFile().save(video(), preview_clip=True)
             self.assertIsInstance(result["result"][0], disk.DiskClip)
             self.assertTrue(result["result"][0].get_stream_source().endswith(".mp4"))
-            descriptor = result["ui"]["images"][0]
+            descriptor = result["ui"]["skeba_clip_preview"][0]
             preview = Path(directory) / "temp" / descriptor["subfolder"] / descriptor["filename"]
             self.assertEqual(descriptor["type"], "temp")
             frames, seconds = inspect(preview)

@@ -3,7 +3,9 @@ import fs from 'node:fs/promises';
 let extension;
 const app={registerExtension(value){extension=value;}};
 const code=(await fs.readFile(new URL('../web/disk_video.js',import.meta.url),'utf8')).replace(/^import .*;$/gm,'');
-new Function('app',code)(app);
+const api={apiURL:path=>'/prefix'+path};
+const document={createElement:()=>({style:{},pause(){this.paused=true;},load(){this.loads=(this.loads||0)+1;},removeAttribute(name){delete this[name];}})};
+new Function('app','api','document',code)(app,api,document);
 class Node {constructor(){this.properties={};this.widgets=[{name:'preview_clip',value:false},{name:'live_playlist',value:false}];}onSerialize(){this.originalSerialize=true;}onConfigure(){this.originalConfigure=true;}}
 await extension.beforeRegisterNodeDef(Node,{name:'SkebaSaveClipToFile'});
 for(const values of [[true,true],[true,false],[false,true],[false,false]]){
@@ -14,3 +16,24 @@ for(const values of [[true,true],[true,false],[false,true],[false,false]]){
 }
 const legacy=new Node();legacy.widgets[0].value=true;legacy.onConfigure({properties:{}});assert.equal(legacy.widgets[0].value,true);
 console.log('Clip toggle named persistence: all combinations, reordered widgets, legacy workflows passed');
+const previewNode=new Node();
+let added=0;
+previewNode.addDOMWidget=()=>{added++;return {};};
+const first={filename:'clip one.mp4',subfolder:'skeba_clip_previews',type:'temp'};
+previewNode.onExecuted({skeba_playlist:['project'],skeba_clip_preview:[first]});
+assert.equal(added,1);
+assert.equal(previewNode.properties.skeba_playlist,'project');
+assert.ok(previewNode.skebaClipVideo.controls);
+assert.ok(previewNode.skebaClipVideo.src.includes('filename=clip+one.mp4'));
+assert.ok(previewNode.skebaClipVideo.src.startsWith('/prefix/view?'));
+previewNode.onExecuted({skeba_clip_preview:[{...first,filename:'second.mp4'}]});
+assert.equal(added,1);
+assert.ok(previewNode.skebaClipVideo.src.includes('second.mp4'));
+previewNode.onExecuted({skeba_playlist:['project']});
+assert.equal(previewNode.skebaClipVideo.style.display,'none');
+assert.equal(previewNode.skebaClipVideo.src,undefined);
+previewNode.onExecuted({skeba_clip_preview:[first]});
+assert.equal(previewNode.skebaClipVideo.style.display,'block');
+previewNode.onRemoved();
+assert.equal(previewNode.skebaClipVideo.src,undefined);
+console.log('Inline video preview: creation, replacement, disable, re-enable, cleanup passed');
