@@ -175,3 +175,31 @@ Timeline clips have an × button to remove that occurrence without deleting the 
 Use **New project** to create an empty project under `output/h3_projects`, then **Import videos…** to select one or more local videos. Videos are uploaded sequentially, converted to browser-compatible H.264 MP4 with stereo 48 kHz audio, and appended to the timeline. Silent sources receive a silent audio track. Imports retain the source frame rate as a constant frame rate for accurate editing; source files stay untouched. Imported clips have no prompt: select **Edit Clip** and enter one to redo, replace, or expand the footage. The registered two-pass redo workflow is still required for generation.
 
 **Pause** keeps the current playhead position; **Play** resumes it and continues through subsequent timeline clips. Click **+ Bridge** on a timeline clip to generate a new clip between it and the next clip. The editor selects both boundaries as references when available, defaults to five seconds and 22 context frames, and saves a standalone alternate. Review it and choose **Insert at saved position** to add it between those clips.
+
+### Register the main workflow for playlist edits
+
+`example/main_workflow.json` now contains **SKEBA Playlist Workflow — Register / Update**, connected to decoded video/audio before continuation trimming and to the upscale AV Connector bundle. Restart ComfyUI after updating, open this workflow, and click **Register / Update playlist workflow**. Select the saved template in Live Playlist. Save the ComfyUI workflow after registration to retain its template ID; later registrations update that same template.
+
+This node is not an execution output and does nothing during normal batch runs. Registration snapshots the shared model, LoRA, RefMod, sampling, reference, and upscale pipeline. Playlist requests substitute their prompt, seed, duration, and boundary references, exclude batch continuation/loop/cache-write dependencies and first/last-frame overrides, and save alternates through their own overlap finalizer. Settings are snapshots: re-register after changing the main graph. Existing dedicated redo templates remain supported, but a separate runner is no longer required.
+
+### Trim timeline occurrences
+
+Drag the left or right edge of a timeline clip to shorten its start or end; drag back outward to restore footage. Arrow keys on a focused edge adjust one source frame at a time. Trims retain at least one frame, save with the project, and support Undo/Redo. Project clips and source files stay full length, and repeated uses of the same clip can have independent trims.
+
+Playback and timeline duration use the retained range. Bridge references use the visible boundaries, and section-edit times are relative to the retained portion. Adopting a stitched alternate uses its full newly assembled range. Create Video respects the trim snapshot, including matching audio cuts; trimmed exports re-encode for accurate boundaries.
+
+Playlist boundary references use AV Connector **full_frame** resizing in both passes. This keeps the full picture when base and upscale dimensions have slightly different aspect ratios, avoiding cumulative center-crop zoom. It scales the full frame to the target, so substantially different aspect ratios can distort proportions; use matching scene proportions for bridges. Existing registered templates receive this setting when new jobs are prepared; re-registration is unnecessary. Other AV Connector workflows retain their existing center-crop default.
+
+### Playlist library controls
+
+Timeline cards use stable friendly names (Clip 1, Redo 1, Import 1) without renaming the files. **Info** opens the saved prompt and source filename; **Bridge →** is aligned bottom-right and inserts after that occurrence. The media library has Project clips, Edits, and Imports filters and independently collapsible groups. Library **Preview** opens a separate video dialog while retaining the timeline player position.
+
+In Edit Clip, **Remove workflow…** removes the selected registered snapshot from the global workflow selector after confirmation. It does not delete the original workflow JSON, clip files, or already-queued jobs. Register / Update in ComfyUI can recreate the registration later.
+
+### Insertion, trim preview, and edit history
+
+Select a timeline occurrence and use **+ Clip Left** or **+ Clip Right** beside Edit Clip to create standalone footage before or after it. Available neighboring references default on. The result appears in Project clips and is inserted only when adopted. These controls replace the per-card Bridge button.
+
+Dragging a trim edge shows the first or last retained source frame and its timestamp. The Edits library can be filtered by original clip, with stable labels such as **Clip 2 - Redo 1**, including further edits of that clip. Job durations display two decimals. **Rename** updates the project display name without moving its folder.
+
+The editor reuses the selected clip's recorded seed (including zero); Randomize remains available. Playlist generations already save their seed. Save Clip to File now accepts an optional seed input and also records a single unambiguous literal RandomNoise seed from the executed graph. Older clips without a recorded seed and imports receive a new seed when edited. Reusing a seed does not guarantee identical output when references, duration, prompt, or model settings change.

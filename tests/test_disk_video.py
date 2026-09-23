@@ -5,12 +5,14 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+import types
 import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent.parent))
-spec = importlib.util.spec_from_file_location("disk_video_test_module", ROOT / "disk_video.py")
+package=types.ModuleType("disk_test_package");package.__path__=[str(ROOT)];sys.modules[package.__name__]=package
+spec = importlib.util.spec_from_file_location("disk_test_package.disk_video", ROOT / "disk_video.py")
 disk = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(disk)
 

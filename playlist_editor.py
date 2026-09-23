@@ -11,6 +11,8 @@ import torch
 import folder_paths
 from comfy_api.latest import InputImpl, Types
 from comfy_extras.nodes_audio import load as load_audio
+from .playlist_registration import normalize_reference_fps
+from .playlist_timeline import clean_entry, frame_range
 from .playlist_sections import section_edit, context_window, adopt_timeline, assemble_section
 from .disk_video import (_MANIFEST_LOCK, playlist_manifest, playlist_media, write_project,
                          _write_clip, _clip_metadata)
@@ -26,6 +28,13 @@ def edit_timeline(token, payload):
         if payload.get("revision")!=doc["revision"]:
             raise RevisionConflict("Project changed. Refresh and retry your edit.")
         action=payload.get("action","set")
+        if action == "rename":
+            name=str(payload.get('name','')).strip()
+            if not name or len(name)>100:raise ValueError('Enter a project name between 1 and 100 characters.')
+            doc['name']=name
+            doc['revision']+=1
+            write_project(directory,doc)
+            return doc
         if action == "delete":
             clip_id = payload.get("clip_id")
             path = playlist_media(token, clip_id)
@@ -59,9 +68,11 @@ def edit_timeline(token, payload):
                 raise ValueError("Timeline contains an unknown clip.")
             if len({e["id"] for e in timeline})!=len(timeline):
                 raise ValueError("Timeline entry IDs must be unique.")
+            clips={c["clip_id"]:c for c in doc["clips"]}
+            timeline=[clean_entry(e,clips[e["clip_id"]]) for e in timeline]
             doc["undo"].append(copy.deepcopy(doc["timeline"]))
             doc["undo"]=doc["undo"][-100:];doc["redo"]=[]
-            doc["timeline"]=[{"id":e["id"],"clip_id":e["clip_id"]} for e in timeline]
+            doc["timeline"]=timeline
         doc["revision"]+=1;write_project(directory,doc)
         return doc
 
@@ -82,13 +93,19 @@ def read_template(identifier):
     return json.loads((template_root()/(identifier+".json")).read_text(encoding="utf-8"))
 
 
+def remove_template(identifier):
+    read_template(identifier)  # Validates the ID and existence before deletion.
+    (template_root()/(identifier+".json")).unlink()
+    return {"removed":identifier}
+
+
 def default_redo_crf(inputs):
     # Older frontend exports stored a blank quality widget as JSON null.
     if inputs.get("crf") is None:
         inputs["crf"] = 18
 
 
-def register_template(name,graph):
+def register_template(name,graph,identifier=None):
     if not isinstance(graph,dict) or not graph:
         raise ValueError("Export an executable ComfyUI workflow.")
     if any(not isinstance(n,dict) or not n.get("class_type") for n in graph.values()):
@@ -128,10 +145,14 @@ def register_template(name,graph):
     forbidden=("ForLoop", "SkebaSaveClipToFile", "MotionContext", "SkebaCompilePlaylist", "SkebaFinishPlaylist")
     if any(any(t in n.get("class_type","") for t in forbidden) for n in graph.values()):
         raise ValueError("Redo graph must be a single clip: remove loop, Motion Context, context saves and final assembly dependencies.")
-    identifier=uuid.uuid4().hex
+    if identifier is not None and not re.fullmatch(r"[a-f0-9]{32}", identifier):
+        raise ValueError("Invalid registered template ID.")
+    identifier=identifier or uuid.uuid4().hex
     data={"name":str(name).strip() or "H3 two-pass redo","graph":graph,"input":inputs[0],"output":outputs[0],"connectors":connectors}
     root=template_root();root.mkdir(parents=True,exist_ok=True)
-    (root/(identifier+".json")).write_text(json.dumps(data,indent=2),encoding="utf-8")
+    temporary=root/(identifier+"."+uuid.uuid4().hex+".tmp")
+    temporary.write_text(json.dumps(data,indent=2),encoding="utf-8")
+    temporary.replace(root/(identifier+".json"))
     return {"id":identifier,"name":data["name"]}
 
 
@@ -187,18 +208,20 @@ def prepare_redo(token,payload):
                 "audio":bool(choice.get("audio",True)) and has_audio,
                 "start_seconds":high-frames/24 if side == "previous" else low}
         default_duration = ((edit["end_frame"]-edit["start_frame"])/current["fps"]
-                            if edit and edit["mode"] == "replace" else 5 if edit else current["duration_seconds"])
+                            if edit and edit["mode"] == "replace" else 5 if edit else (frame_range(timeline[index],current)[1]-frame_range(timeline[index],current)[0])/current["fps"])
         visible,generation=timing(payload.get("duration",default_duration),
             spec["neighbors"].get("previous",{}).get("frames",0),spec["neighbors"].get("next",{}).get("frames",0))
         spec.update(visible_frames=visible,generation_length=generation,duration=visible/24)
         spec["prompt"]=re.sub(r"\[s\s*=\s*[\d.]+\]",f"[s={visible/24:g}]",prompt,flags=re.I)
         request_id=uuid.uuid4().hex;spec["request_id"]=request_id
         graph=copy.deepcopy(template["graph"])
+        normalize_reference_fps(graph)
         default_redo_crf(graph[template["output"]]["inputs"])
         graph[template["input"]]["inputs"]={"request":json.dumps(spec)}
         graph[template["output"]]["inputs"]["request"]=[template["input"],0]
         for key in template["connectors"]:
             inputs=graph[key]["inputs"];inputs["bypass"]=not bool(spec["neighbors"])
+            inputs["context_resize"]="full_frame"
             for side,prefix,slots in (("previous","start",(4,5)),("next","end",(6,7))):
                 selected=spec["neighbors"].get(side)
                 inputs.pop(prefix+"_frames",None);inputs.pop(prefix+"_audio",None)
@@ -318,7 +341,7 @@ class PlaylistRedoSave:
                                     "media_role":"generated_section", "parent_clip_id":spec["parent_clip_id"],
                                     "prompt":spec["prompt"], "redo":spec})
                 records.append({**_clip_metadata(output), "clip_id":output.stem,
-                    "media_role":"alternate", "parent_clip_id":spec["parent_clip_id"],
+                    "media_role":"new_clip" if spec.get("edit",{}).get("mode")=="insert_between" else "alternate", "seed":spec["seed"], "parent_clip_id":spec["parent_clip_id"],
                     "prompt":spec["prompt"], "redo":spec})
                 for record in records:
                     record["index"] = len(doc["clips"])+1

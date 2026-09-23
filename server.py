@@ -8,6 +8,7 @@ from .palette_sampling import sample_preview
 import io
 import uuid
 import tempfile
+from .playlist_registration import extract_renderer
 from .playlist_import import create_project, import_video
 from pathlib import Path
 
@@ -19,7 +20,7 @@ from comfy_extras.nodes_audio import load as load_audio_file
 from server import PromptServer
 from .disk_video import playlist_projects, playlist_manifest, playlist_media, playlist_final
 from .playlist_editor import (templates, register_template, edit_timeline, prepare_redo,
-                              update_job, reconcile_jobs, RevisionConflict)
+                              update_job, reconcile_jobs, RevisionConflict, remove_template)
 
 from .library import (
     audio_directory,
@@ -70,7 +71,7 @@ def register_routes():
     @routes.get("/api/h3-video-playlist/projects")
     async def video_playlist_projects(request):
         return web.json_response([
-            {"id": token, "name": Path(path).parent.name + " / " + Path(path).name}
+            {"id": token, "name": json.loads((Path(path)/"manifest.json").read_text(encoding="utf-8")).get("name") or Path(path).parent.name + " / " + Path(path).name}
             for token, path in reversed(list(playlist_projects().items()))
             if (Path(path) / "manifest.json").is_file()
         ], headers={"Cache-Control": "no-store"})
@@ -107,11 +108,21 @@ def register_routes():
     async def playlist_templates(request):
         return web.json_response(templates())
 
+    @routes.delete("/api/h3-video-playlist/templates/{identifier}")
+    async def playlist_remove_template(request):
+        try:
+            return web.json_response(remove_template(request.match_info["identifier"]))
+        except (ValueError, FileNotFoundError) as error:
+            return web.json_response({"error":str(error)}, status=400)
+
     @routes.post("/api/h3-video-playlist/templates")
     async def playlist_register_template(request):
         try:
             data = await request.json()
-            return web.json_response(register_template(data.get("name", ""), data.get("graph")))
+            graph=data.get("graph")
+            if data.get("registration_id") is not None:
+                graph=extract_renderer(graph, data["registration_id"])
+            return web.json_response(register_template(data.get("name", ""), graph, data.get("template_id")))
         except (ValueError, TypeError, KeyError) as error:
             return web.json_response({"error": str(error)}, status=400)
 
@@ -127,7 +138,7 @@ def register_routes():
                 result = await asyncio.to_thread(prepare_redo, token, payload)
             else:
                 result = update_job(token, payload["id"], payload)
-            return web.json_response({**result, "section_editing": True, "clip_deletion": True})
+            return web.json_response({**result, "section_editing": True, "clip_deletion": True, "timeline_trimming": True})
         except RevisionConflict as error:
             return web.json_response({"error": str(error)}, status=409)
         except (ValueError, TypeError, KeyError, FileNotFoundError) as error:
@@ -137,7 +148,7 @@ def register_routes():
     async def video_playlist_manifest(request):
         try:
             directory, manifest = reconcile_jobs(request.match_info["token"], PromptServer.instance.prompt_queue)
-            return web.json_response({**manifest, "directory": str(directory), "section_editing": True, "clip_deletion": True},
+            return web.json_response({**manifest, "directory": str(directory), "section_editing": True, "clip_deletion": True, "timeline_trimming": True},
                                      headers={"Cache-Control": "no-store"})
         except FileNotFoundError:
             raise web.HTTPNotFound()

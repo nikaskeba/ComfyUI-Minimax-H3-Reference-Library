@@ -91,6 +91,25 @@ class H3AVConnectorGuideTests(unittest.TestCase):
         ):
             return MODULE.SkebaMiniMaxH3AVConnectorGuideTest.execute(**kwargs)
 
+    def test_full_frame_resize_retains_edges_in_both_passes(self):
+        # Deliberately wider source: center crop loses the bright boundary stripes.
+        frames=torch.zeros(5,64,128,3)
+        frames[:,:,:16,0]=1;frames[:,:,-16:,1]=1
+        for preserve in (False,True):
+            vae=FakeVideoVAE()
+            MODULE.SkebaMiniMaxH3AVConnectorGuideTest.execute(
+                positive=conditioning(),latent=h3_latent(),vae=vae,
+                start_overlap="5",start_frames=frames,context_resize="full_frame",
+                preserve_upscaled_endpoints=preserve)
+            resized=vae.inputs[0]
+            self.assertGreater(float(resized[:,:,:5,0].mean()),.8)
+            self.assertGreater(float(resized[:,:,-5:,1].mean()),.8)
+        vae=FakeVideoVAE()
+        MODULE.SkebaMiniMaxH3AVConnectorGuideTest.execute(
+            positive=conditioning(),latent=h3_latent(),vae=vae,
+            start_overlap="5",start_frames=frames)
+        self.assertLess(float(vae.inputs[0][:,:,:5,0].mean()),.3)
+
     def test_bypass_does_not_request_lazy_inputs(self):
         positive = conditioning()
         latent = h3_latent()

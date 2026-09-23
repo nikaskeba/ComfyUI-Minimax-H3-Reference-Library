@@ -2,7 +2,7 @@
 name: skeba-minimax-prompts
 description: Write and revise MiniMax H3 video prompt sequences for SKEBA's deterministic H3 Tagged Reference Prompt compiler, using saved and temporary semantic references with explicit dialogue and clip continuity.
 metadata:
-  updated: 9/11/2026 5:30 PM
+  updated: 9/23/2026 5:30 PM
 ---
 
 # SKEBA MiniMax H3 prompt writing
@@ -173,9 +173,24 @@ Keep the opening wardrobe descriptions separate from dialogue shots. In each spe
 
 ### Shot timing and cuts
 
-Do not timestamp `[Shot 1]`; it begins at the start of the clip. Begin later shots with strictly increasing cut times inside the `[s=x]` duration:
+Do not timestamp `[Shot 1]`; it begins at the start of the clip.
+
+For a prompt beginning with `[new_location]`, Shot 1 establishes the new location and initial composition normally.
+
+For a prompt WITHOUT `[new_location]`, Shot 1 is also the continuation handoff shot. Its opening frames must acknowledge the preceding prompt's final visible composition because the workflow supplies the final 22 frames of that clip as context. Begin Shot 1 from the inherited visible subject, framing, pose, and camera state before transitioning to a different subject or composition.
+
+Do not treat 00:00 of a continuation as a fresh cut that has already occurred. If the desired opening composition differs from the inherited final shot, author the transition explicitly.
+
+If the next speaker differs from the character visible in the inherited frames, prefer:
+
+`[Shot 1] Live-action, cinematic, the inherited framing begins on only {Character_A}, preserving the preceding clip's final composition. The shot holds briefly without new dialogue.`
+
+`[Shot 2] At 00:01.000, camera cuts to only {Character_B} in the established location. The new framing settles before {Character_B} speaks.`
+
+Begin later shots with strictly increasing cut times inside the `[s=x]` duration:
 
 `[Shot 1] Live-action, cinematic, a medium-wide shot frames...`
+
 `[Shot 2] At 00:03.500, the camera cuts to...`
 
 Use timestamps to allow dialogue and actions to finish naturally before the next cut. Set the next shot from the current line's natural speaking length rather than evenly dividing the clip.
@@ -598,7 +613,54 @@ BAD, unless the movement has already been shown:
 Do not use "same position as before" as a substitute for concrete state. Each prompt compiles independently: restate actual positions, poses, props, and persistent changes. Glowing eyes, damage, or a removed jacket must already be present at 00:00.000 of the next clip unless explicitly reversed. Keep the wardrobe lock consistent with intentional changes.
 
 **SAME LOCATION + CONSECUTIVE PROMPTS = CONTINUOUS PHYSICAL BLOCKING**, unless the story explicitly establishes a time jump, discontinuous edit, or character movement. A time jump or discontinuous edit needs an explicit transition and compatible workflow handling; do not assume the inherited 22 frames disappear, and do not misuse [new_location] for an unchanged physical location.
+### HARD RULE — CONTINUATION HANDOFF SHOT
 
+When a prompt does NOT begin with `[new_location]`, assume its opening frames inherit the final 22-frame video context from the preceding prompt. The new prompt is still compiled independently, but its opening visual state is not independent.
+
+The inherited 22 frames are the literal starting image of the next generation. `[Shot 1]` must therefore begin from what is visibly present in the preceding prompt's FINAL shot before introducing a different character, framing, or action.
+
+Before writing a same-location continuation, inspect the preceding prompt's FINAL shot and identify:
+
+- the visible character or characters;
+- framing and camera angle;
+- visible character position and pose;
+- important visible props and environment;
+- whether the visible character has just spoken;
+- whether the camera is moving or holding stable.
+
+Then apply these rules:
+
+1. `[Shot 1]` must begin on the inherited visible subject and composition. Do not declare a different character as already being on screen at the start of the new generation.
+2. Preserve the inherited framing briefly enough to create a clear visual handoff before changing subjects when necessary.
+3. If the next story beat belongs to another character, explicitly transition from the inherited subject using `camera cuts to`, `camera pans to`, `camera trucks to`, or another visible camera transition.
+4. The new character may speak only AFTER that transition has established the new character's shot.
+5. Never assign dialogue to a newly introduced character while the inherited visual context still contains the preceding visible speaker. This can associate the new voice or dialogue with the inherited face.
+6. When speaker identity is important, prefer a short silent handoff:
+
+   inherited speaker/shot → explicit camera transition → new speaker established → new speaker dialogue.
+
+7. The handoff requirement applies to what is VISIBLE in the inherited final shot. The broader SAME-LOCATION SPATIAL CONTINUITY rule still preserves the established physical state of characters and objects outside that framing.
+8. `[new_location]` resets this inherited visual handoff requirement because the workflow is intentionally entering a different physical location.
+
+Example:
+
+Previous prompt ends:
+
+`[Shot 4] ... only {George Costanza_BC} ... {George Costanza_BC} says, <d>[English §George Costanza_BC§]Nah, I ain't Jewish, I just don't dig on swine, that's all.</d>`
+
+BAD continuation:
+
+`[Shot 1] only {Jerry Seinfeld_BC} is visible. {Jerry Seinfeld_BC} says, <d>[English §Jerry Seinfeld_BC§]Why not?</d>`
+
+The inherited frames still visibly contain George, so this creates a visual and speaker-identity conflict.
+
+GOOD continuation:
+
+`[Shot 1] Live-action, cinematic, the inherited close view begins on only {George Costanza_BC} seated inside {Monks_Coffee}, preserving his position and framing from the preceding clip. The shot holds briefly after his answer without new dialogue.`
+
+`[Shot 2] At 00:01.000, camera cuts cleanly to only {Jerry Seinfeld_BC} seated in his established position inside {Monks_Coffee}. The new framing settles on Jerry before he speaks. {Jerry Seinfeld_BC} says, <d>[English §Jerry Seinfeld_BC§]Why not?</d>`
+
+The 22-frame context is a VISUAL HANDOFF, not merely continuity guidance. The first authored shot must bridge from that inherited image into the new clip.
 ## Complete example: temporary resources only
 
 This example can compile without any saved library entries. It intentionally creates no physical media slots.
@@ -719,8 +781,11 @@ Before returning a prompt:
    - Every used character, location, and object must have its own subject_definitions entry.
 
    WARDROBE CONTINUITY:
-   - For every appearing character with a persistent story-specific outfit, repeat the exact complete established wardrobe description in the opening detailed_description before timeline. Reject shorthand such as "same outfit" or "still wearing the vest" as a substitute.
-   - Check garments, colors, footwear, accessories, and layering against the established outfit. Only an intentional story change permits a new description; carry it forward from that point.
+   - For every appearing character with a persistent story-specific outfit, repeat the exact complete established wardrobe description beside that character's entry in `subject_definitions`.
+   - Do not require the wardrobe to be duplicated in the opening `detailed_description`.
+   - Reject shorthand such as "same outfit," "still wearing the vest," or "previous wardrobe" as a substitute.
+   - Check garments, colors, footwear, accessories, and layering against the established outfit. Reuse the established wording verbatim unless an intentional story change occurs.
+   - If the outfit intentionally changes, establish the complete new wardrobe when the change occurs and carry that exact description forward in subsequent prompts.
 
    CLIP DURATION:
   - Use [s=x] for intentionally selected scene lengths. Shot 1 begins implicitly at the start of the clip without a timestamp; all later shot timestamps must fit within that duration.
@@ -737,7 +802,19 @@ Before returning a prompt:
    - Reject unexplained movement between furniture or room areas, standing/seated changes, and moved objects. A camera-angle change does not permit repositioning.
    - When movement is required, begin from the inherited position and show the movement before using the new position. Persistent changes such as glowing eyes must already be present at 00:00.000 unless explicitly reversed.
    - Preserve speaking-shot isolation: other characters' continuity belongs in the scene opening or separate silent shots, not inside another character's dialogue shot.
-
+   
+   CONTINUATION HANDOFF:
+   - For every prompt without `[new_location]`, compare `[Shot 1]` directly against the preceding prompt's FINAL shot.
+   - Identify the character(s) actually visible in that final shot, its framing, camera angle, visible pose/position, important props, and whether the camera is moving or holding.
+   - Treat that final composition as the literal starting image supplied to the new generation by the 22-frame continuation context.
+   - Verify that Shot 1 BEGINS from that inherited visible subject and composition before transitioning elsewhere.
+   - Reject a continuation that starts by declaring a different character already on screen while the inherited frames visibly contain the preceding character.
+   - If the next story beat or speaker differs from the inherited visible subject, require an explicit camera cut, pan, truck, or other visible transition before establishing the new subject.
+   - If the next speaker differs from the inherited visible speaker, require a silent visual handoff before the new dialogue: inherited subject → camera transition → new speaker established → dialogue.
+   - Never place the new speaker's dialogue into the inherited composition before that speaker has been visually established.
+   - Apply SPEAKING-SHOT CHARACTER ISOLATION after the handoff: once the new speaker's dialogue begins, that speaking shot may reference only that speaker as a character.
+   - Distinguish visible handoff continuity from broader spatial continuity: characters outside the inherited final framing retain their established physical positions even though Shot 1 should not mention them merely to preserve state.
+   
    DIALOGUE ROTATION:
    - For short clips with three or more referenced speakers, prefer one turn each in a forward sequence, with 2–3 speaking shots in roughly 15 seconds where the story permits.
    - Remove unnecessary return turns before tightening cut timing. Keep necessary exchanges and fixed dialogue, allow enough time for each complete line, and use separate silent shots for multi-character reactions.

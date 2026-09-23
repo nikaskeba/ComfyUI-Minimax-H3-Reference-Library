@@ -1,4 +1,5 @@
 from .refmod_preview import SkebaRefModPreview
+from .h3_audio_refine import SkebaH3AudioRefine
 from .refmod_studio import SkebaRefModStudio
 from .refmod_create import SkebaCreateH3RefMod
 from .refmod_apply import SkebaH3RefModApply
@@ -30,6 +31,7 @@ from .skeba_io_tags import SkebaBypass
 from .universal_bypass import SkebaUniversalBypass
 from .video_loop_node import CombineVideoClipsNode
 from .disk_video import SaveClipToFile, CompilePlaylist, FinishPlaylist
+from .playlist_registration import PlaylistWorkflow
 from .playlist_editor import PlaylistRedoInput, PlaylistRedoSave
 from .server import register_routes
 
@@ -37,6 +39,7 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaH3AudioRefine": SkebaH3AudioRefine,
     "SkebaRefModPreview": SkebaRefModPreview,
     "SkebaRefModStudio": SkebaRefModStudio,
     "SkebaCreateH3RefMod": SkebaCreateH3RefMod,
@@ -44,6 +47,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaSaveClipToFile": SaveClipToFile,
     "SkebaCompilePlaylist": CompilePlaylist,
     "SkebaFinishPlaylist": FinishPlaylist,
+    "SkebaPlaylistWorkflow": PlaylistWorkflow,
     "SkebaPlaylistRedoInput": PlaylistRedoInput,
     "SkebaPlaylistRedoSave": PlaylistRedoSave,
     "SkebaPaletteFramePreview": PaletteFramePreview,
@@ -73,6 +77,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaH3AudioRefine": "SKEBA H3 Audio Refine (Optional)",
     "SkebaRefModPreview": "SKEBA RefMod Frame / Audio Preview",
     "SkebaRefModStudio": "SKEBA RefMod Studio Create / Edit",
     "SkebaCreateH3RefMod": "SKEBA Create H3 RefMod",
@@ -80,6 +85,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaSaveClipToFile": "Skeba Save Clip to File",
     "SkebaCompilePlaylist": "Skeba Create Playlist Video",
     "SkebaFinishPlaylist": "Skeba Finish Live Playlist",
+    "SkebaPlaylistWorkflow": "SKEBA Playlist Workflow — Register / Update",
     "SkebaPlaylistRedoInput": "Skeba Playlist Redo Input",
     "SkebaPlaylistRedoSave": "Skeba Playlist Redo Save",
     "SkebaPaletteFramePreview": "Palette Frame Preview",

@@ -5,6 +5,7 @@ from fractions import Fraction
 
 import av
 import comfy.model_management
+from .playlist_timeline import frame_range
 from .disk_video import _ffmpeg, playlist_media
 
 
@@ -18,13 +19,14 @@ def section_edit(doc, index, payload):
     entry = doc['timeline'][index]
     source = next(c for c in doc['clips'] if c['clip_id'] == entry['clip_id'])
     fps = float(source['fps'])
-    count = int(source['frame_count'])
+    source_start, source_end = frame_range(entry, source)
+    count = source_end-source_start
     start = round(float(choice.get('start', 0)) * fps)
     end = round(float(choice.get('end', count / fps if mode == 'replace' else start/fps)) * fps) if mode != 'insert_between' else start
     if not 0 <= start <= end <= count or (mode == 'replace' and start == end):
         raise ValueError('Choose a nonempty replacement range or an insertion point inside the clip.')
-    result = {'mode':mode, 'source_entry':copy.deepcopy(entry), 'start_frame':start,
-              'end_frame':end, 'source_frames':count, 'fps':source.get('fps_fraction', str(fps)),
+    result = {'mode':mode, 'source_entry':copy.deepcopy(entry), 'start_frame':source_start+start,
+              'end_frame':source_start+end, 'source_frames':source_end, 'source_start':source_start, 'fps':source.get('fps_fraction', str(fps)),
               'width':source['width'], 'height':source['height']}
     if mode == 'insert_between':
         boundary = index + (0 if choice.get('side') == 'before' else 1)
@@ -40,19 +42,22 @@ def context_window(doc, index, side, edit):
     if edit and edit['mode'] == 'insert_between':
         entry = edit['boundary']['left' if side == 'previous' else 'right']
         clip = clips[entry['clip_id']] if entry else None
-        return (clip, 0, clip['duration_seconds']) if clip else None
+        return (clip, frame_range(entry,clip)[0]/clip['fps'], frame_range(entry,clip)[1]/clip['fps']) if clip else None
+    source_start, source_end = frame_range(timeline[index], current)
+    low, high = source_start/current['fps'], source_end/current['fps']
     if edit:
         fps = float(Fraction(edit['fps']))
         start, end = edit['start_frame']/fps, edit['end_frame']/fps
-        if side == 'previous' and start > 0:
-            return current, 0, start
-        if side == 'next' and end < current['duration_seconds'] - 1e-7:
-            return current, end, current['duration_seconds']
+        if side == 'previous' and start > low:
+            return current, low, start
+        if side == 'next' and end < high - 1e-7:
+            return current, end, high
     other = index + (-1 if side == 'previous' else 1)
     if not 0 <= other < len(timeline):
         return None
     clip = clips[timeline[other]['clip_id']]
-    return clip, 0, clip['duration_seconds']
+    start,end=frame_range(timeline[other],clip)
+    return clip,start/clip['fps'],end/clip['fps']
 
 
 def adopt_timeline(doc, clip_id):
@@ -76,7 +81,7 @@ def adopt_timeline(doc, clip_id):
         index = next((i for i,e in enumerate(timeline) if e == edit['source_entry']), None)
         if index is None:
             raise ValueError('The original timeline occurrence changed. Insert the alternate manually.')
-        timeline[index]['clip_id'] = clip_id
+        timeline[index] = {'id':timeline[index]['id'], 'clip_id':clip_id}
     return timeline
 
 
@@ -107,8 +112,8 @@ def assemble_section(spec, section_path, output, crf):
     generated_count = max(1, round(spec['duration'] * float(fps)))
     source = playlist_media(spec['project'], spec['parent_clip_id'])
     pieces = []
-    if edit['mode'] != 'insert_between' and edit['start_frame']:
-        pieces.append((source, 0, edit['start_frame'], False))
+    if edit['mode'] != 'insert_between' and edit['start_frame'] > edit.get('source_start',0):
+        pieces.append((source, edit.get('source_start',0), edit['start_frame'], False))
     pieces.append((section_path, 0, generated_count, True))
     if edit['mode'] != 'insert_between' and edit['end_frame'] < edit['source_frames']:
         pieces.append((source, edit['end_frame'], edit['source_frames'], False))

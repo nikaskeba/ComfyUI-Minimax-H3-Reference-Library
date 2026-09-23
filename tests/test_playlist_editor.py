@@ -74,6 +74,38 @@ class PlaylistEditorTests(unittest.TestCase):
             editor.edit_timeline(self.token,{'revision':-1,'action':'delete','clip_id':clip_id})
         self.assertTrue(disk.playlist_media(self.token,clip_id).exists())
 
+    def test_friendly_labels_stay_stable_after_deletion(self):
+        self.assertEqual([c['display_name'] for c in self.doc['clips']],['Clip 1','Clip 2','Clip 3'])
+        doc=editor.edit_timeline(self.token,{'revision':self.doc['revision'],'action':'delete','clip_id':self.doc['clips'][0]['clip_id']})
+        self.assertEqual([c['display_name'] for c in doc['clips']],['Clip 2','Clip 3'])
+        self.assertEqual(doc['clip_label_counts']['Clip'],3)
+
+    def test_remove_registered_workflow_keeps_clips(self):
+        editor.remove_template(self.template)
+        self.assertFalse((editor.template_root()/(self.template+'.json')).exists())
+        self.assertEqual(len(disk.playlist_manifest(self.token)[1]['clips']),3)
+        with self.assertRaises(ValueError):editor.remove_template('../outside')
+
+    def test_rename_keeps_directory_and_seed_is_saved(self):
+        result=editor.edit_timeline(self.token,{'revision':self.doc['revision'],'action':'rename','name':'New title'})
+        self.assertEqual(result['name'],'New title')
+        self.assertEqual(disk.playlist_manifest(self.token)[0],self.directory)
+        saved=disk.SaveClipToFile().save(video(),seed=0)
+        metadata=disk.playlist_manifest(saved['ui']['skeba_playlist'][0])[1]['clips'][0]
+        self.assertEqual(metadata['seed'],0)
+        inferred=disk.SaveClipToFile().save(video(),execution_prompt={'n':{'class_type':'RandomNoise','inputs':{'noise_seed':1234}}})
+        self.assertEqual(disk.playlist_manifest(inferred['ui']['skeba_playlist'][0])[1]['clips'][0]['seed'],1234)
+
+    def test_edit_names_and_new_insert_grouping(self):
+        doc={'clips':[{'clip_id':'a'}, {'clip_id':'r','parent_clip_id':'a','media_role':'alternate'},
+                      {'clip_id':'r2','parent_clip_id':'r','media_role':'alternate'},
+                      {'clip_id':'new','parent_clip_id':'a','media_role':'alternate','redo':{'edit':{'mode':'insert_between'}}}]}
+        disk.normalize_project(doc)
+        self.assertEqual(doc['clips'][1]['edit_display_name'],'Clip 1 - Redo 1')
+        self.assertEqual(doc['clips'][2]['edit_display_name'],'Clip 1 - Redo 2')
+        self.assertEqual(doc['clips'][3]['media_role'],'new_clip')
+        self.assertEqual(doc['clips'][3]['display_name'],'Clip 2')
+
     def test_crf_defaults_at_registration_and_queue_preparation(self):
         for value in (None, 0, 18, 27, 51):
             with self.subTest(value=value):
@@ -135,6 +167,7 @@ class PlaylistEditorTests(unittest.TestCase):
                 for key in ['2','3']:
                     inputs=result['graph'][key]['inputs']
                     self.assertEqual(inputs['bypass'],not bool(sides))
+                    self.assertEqual(inputs['context_resize'],'full_frame')
                     self.assertEqual('start_frames' in inputs,'previous' in sides)
                     self.assertEqual('end_frames' in inputs,'next' in sides)
                 self.assertTrue(result['graph']['3']['inputs']['preserve_upscaled_endpoints'])

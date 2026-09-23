@@ -41,3 +41,13 @@ for(const [data,expected] of [
 }
 assert.ok(alerts.every(message=>message.startsWith('Saved Test')));
 console.log('Redo CRF named persistence, legacy layouts, defaults and registration exports passed');
+
+app.graph={setDirtyCanvas(){}};
+node=new Node();node.id=930;node.comfyClass='SkebaPlaylistWorkflow';node.properties={};
+api.fetchApi=async(path,options)=>{submitted=JSON.parse(options.body);return {ok:true,json:async()=>({id:'a'.repeat(32),name:'Main'})};};
+await extension.nodeCreated(node);
+await node.widgets.find(w=>w.type==='button').callback();
+assert.equal(submitted.registration_id,'930');assert.equal(submitted.template_id,undefined);
+assert.equal(node.properties.skeba_playlist_template,'a'.repeat(32));
+await node.widgets.find(w=>w.type==='button').callback();assert.equal(submitted.template_id,'a'.repeat(32));
+console.log('Shared main workflow registration and stable template updates passed');

@@ -1,8 +1,8 @@
 {
   "id": "2de050e6-615c-41f7-9159-dd0ac65d878f",
   "revision": 0,
-  "last_node_id": 929,
-  "last_link_id": 1685,
+  "last_node_id": 930,
+  "last_link_id": 1688,
   "nodes": [
     {
       "id": 334,
@@ -4117,7 +4117,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            614
+            614,
+            1686
           ]
         }
       ],
@@ -9358,7 +9359,8 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            703
+            703,
+            1687
           ]
         }
       ],
@@ -11628,7 +11630,9 @@
         {
           "name": "connector_bundle",
           "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
-          "links": []
+          "links": [
+            1688
+          ]
         },
         {
           "name": "status",
@@ -14050,6 +14054,46 @@
           "outputs": []
         }
       }
+    },
+    {
+      "id": 930,
+      "type": "SkebaPlaylistWorkflow",
+      "pos": [
+        3500,
+        1300
+      ],
+      "size": [
+        350,
+        150
+      ],
+      "flags": {},
+      "order": 177,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 1686
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 1687
+        },
+        {
+          "name": "upscale_connector",
+          "type": "SKEBA_H3_AV_CONNECTOR_BUNDLE",
+          "link": 1688
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SkebaPlaylistWorkflow"
+      },
+      "widgets_values": [
+        18
+      ],
+      "title": "Playlist — Register / Update Main Workflow"
     }
   ],
   "links": [
@@ -15620,6 +15664,30 @@
       258,
       0,
       "STRING"
+    ],
+    [
+      1686,
+      298,
+      0,
+      930,
+      0,
+      "IMAGE"
+    ],
+    [
+      1687,
+      323,
+      0,
+      930,
+      1,
+      "AUDIO"
+    ],
+    [
+      1688,
+      705,
+      1,
+      930,
+      2,
+      "SKEBA_H3_AV_CONNECTOR_BUNDLE"
     ]
   ],
   "groups": [

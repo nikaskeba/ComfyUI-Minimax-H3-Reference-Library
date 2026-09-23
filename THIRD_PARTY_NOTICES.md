@@ -21,6 +21,12 @@ Changes made for this combined package:
 
 ## Previously MIT-Licensed Components
 
+`h3_audio_refine.py` adapts the sampler approach from
+https://github.com/Adudeguyman/ComfyUI-H3-AudioRefine,
+copyright (c) 2026 Adudeguyman, under the MIT license reproduced in
+`LICENSES/ComfyUI-H3-AudioRefine.txt`. The adaptation adds optional execution,
+boundary-mask preservation, and exact preservation of video/protected audio.
+
 The H3 reference-library and Skeba utility code that predated the GPLv3
 consolidation retains its original MIT notice in `LICENSES/MIT.txt`. The
 batching-node source retains its upstream MIT license in

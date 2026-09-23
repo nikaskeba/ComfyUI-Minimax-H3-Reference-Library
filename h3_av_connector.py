@@ -218,6 +218,11 @@ class SkebaMiniMaxH3AVConnectorGuideTest(io.ComfyNode):
                     "end_audio", display_name="Ending Video Audio",
                     optional=True, lazy=True,
                 ),
+                io.Combo.Input(
+                    "context_resize", options=["center_crop", "full_frame"],
+                    default="center_crop", optional=True,
+                    tooltip="Full frame keeps the entire boundary image when pass aspect ratios differ slightly. Center crop fills the target by removing edges.",
+                ),
             ],
             outputs=[
                 io.Conditioning.Output(display_name="positive"),
@@ -266,6 +271,7 @@ class SkebaMiniMaxH3AVConnectorGuideTest(io.ComfyNode):
         start_audio=None,
         end_frames=None,
         end_audio=None,
+        context_resize="center_crop",
     ):
         if bypass:
             if latent is None:
@@ -390,7 +396,10 @@ class SkebaMiniMaxH3AVConnectorGuideTest(io.ComfyNode):
                 if side == "start"
                 else source_frames[:count]
             )
-            resized = h3._resize(selected, width, height, "center")
+            if context_resize not in ("center_crop", "full_frame"):
+                raise ValueError("Unknown AV Connector context resize mode: " + str(context_resize))
+            resized = h3._resize(selected, width, height,
+                                 "disabled" if context_resize == "full_frame" else "center")
             video_latent = vae.encode(resized)
             encoded_span = sum(
                 FRAME_PER_TOKEN[index % 5]
@@ -477,7 +486,7 @@ class SkebaMiniMaxH3AVConnectorGuideTest(io.ComfyNode):
             }
             status.append(
                 f"{side}: {count} frames at {position}-{position + count - 1}; "
-                f"audio {audio_note}"
+                f"audio {audio_note}; {context_resize} {selected.shape[2]}x{selected.shape[1]} -> {width}x{height}"
             )
 
         keyframes.sort(key=lambda item: item["resolved_frame_index"])

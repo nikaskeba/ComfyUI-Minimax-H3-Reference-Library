@@ -17,6 +17,7 @@ import numpy as np
 import torch
 import torchaudio
 import folder_paths
+from .playlist_timeline import frame_range, render_timeline
 from comfy_api.latest import InputImpl
 
 
@@ -101,6 +102,32 @@ def _clip_metadata(path):
 _MANIFEST_LOCK = threading.RLock()
 
 def normalize_project(document):
+    counts=document.setdefault("clip_label_counts",{})
+    for clip in document.get("clips",[]):
+        if clip.get('redo',{}).get('edit',{}).get('mode')=='insert_between' and clip.get('media_role')!='generated_section':
+            clip['media_role']='new_clip'
+            if clip.get('display_name','').startswith('Redo '):clip.pop('display_name',None)
+        kind="Import" if clip.get("media_role")=="imported" else "Redo" if clip.get("parent_clip_id") and clip.get('media_role')!='new_clip' else "Clip"
+        if not clip.get("display_name"):
+            counts[kind]=counts.get(kind,0)+1
+            clip["display_name"]=f"{kind} {counts[kind]}"
+    known={c['clip_id']:c for c in document.get('clips',[])}
+    edit_counts=document.setdefault('edit_label_counts',{})
+    for clip in document.get('clips',[]):
+        if clip.get('redo',{}).get('edit',{}).get('mode')=='insert_between' and clip.get('media_role')!='generated_section':
+            clip['media_role']='new_clip'
+        if not clip.get('parent_clip_id') or clip.get('media_role')=='new_clip':
+            continue
+        if not clip.get('edit_display_name'):
+            root=known.get(clip['parent_clip_id']);seen={clip['clip_id']}
+            while root and root.get('parent_clip_id') and root.get('media_role')!='new_clip' and root['clip_id'] not in seen:
+                seen.add(root['clip_id']);parent=known.get(root['parent_clip_id'])
+                if not parent:break
+                root=parent
+            root_id=(root or {}).get('edit_root_id',(root or {}).get('clip_id',clip['parent_clip_id']))
+            root_name=(root or {}).get('edit_root_name',(root or {}).get('display_name','Clip'))
+            edit_counts[root_id]=edit_counts.get(root_id,0)+1
+            clip.update(edit_root_id=root_id,edit_root_name=root_name,edit_display_name=f"{root_name} - Redo {edit_counts[root_id]}")
     document.setdefault("timeline", [{"id":"original_"+c["clip_id"],"clip_id":c["clip_id"]}
                                       for c in document.get("clips",[]) if not c.get("parent_clip_id")])
     document.setdefault("revision",0)
@@ -113,6 +140,7 @@ def normalize_project(document):
 
 
 def write_project(directory,document):
+    normalize_project(document)
     temporary=directory / f".manifest_{uuid.uuid4().hex}.tmp"
     try:
         temporary.write_text(json.dumps(document,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -212,14 +240,15 @@ class SaveClipToFile:
                     "project_name": ("STRING", {"default": "", "tooltip": "Optional project subfolder. Each run creates a dated bundle containing its clips and final video."}),
                     "preview_clip": ("BOOLEAN", {"default": False, "tooltip": "Show each completed clip in the node. Creates a temporary MP4 preview with audio; the loop still uses the saved MP4."}),
                     "prompt": ("STRING", {"default": "", "multiline": True, "tooltip": "Optional prompt for this clip. Saved verbatim with its filename and measured duration in manifest.json. Can be connected to the current loop prompt."}),
-                }}
+                    "seed": ("INT", {"forceInput":True}),
+                }, "hidden":{"execution_prompt":"PROMPT"}}
 
     RETURN_TYPES = ("VIDEO",)
     RETURN_NAMES = ("video",)
     FUNCTION = "save"
     CATEGORY = "Skeba AI Nodes - Utilities"
 
-    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt=""):
+    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt="", seed=None, execution_prompt=None):
         clips = (accumulation or {}).get("accum", [])
         if clips and isinstance(clips[-1], DiskClip):
             directory = Path(clips[-1].get_stream_source()).parent
@@ -239,9 +268,13 @@ class SaveClipToFile:
         directory.mkdir(parents=True, exist_ok=True)
         path = directory / f"clip_{len(clips) + 1:05}_{uuid.uuid4().hex[:8]}.mp4"
         clip = _write_clip(video, path, crf=crf)
+        if seed is None and execution_prompt:
+            seeds={n.get('inputs',{}).get('noise_seed') for n in execution_prompt.values()
+                   if n.get('class_type')=='RandomNoise' and type(n.get('inputs',{}).get('noise_seed')) is int}
+            if len(seeds)==1:seed=seeds.pop()
         _update_manifest(directory, clip={
             **_clip_metadata(path), "clip_id": path.stem, "index": len(clips) + 1,
-            "prompt": prompt, "crf": crf,
+            "prompt": prompt, "crf": crf, "seed":seed,
             "previous_file": str(Path(clips[-1].get_stream_source()).resolve()) if clips and isinstance(clips[-1], DiskClip) else None,
         })
         ui = {"skeba_playlist": [register_playlist(directory)]}
@@ -346,10 +379,25 @@ class CompilePlaylist:
     def IS_CHANGED(cls,**kwargs): return float("nan")
     def compile(self,project,clip_ids):
         ids=json.loads(clip_ids)
-        if not isinstance(ids,list) or not ids or not all(isinstance(i,str) for i in ids):
+        if not isinstance(ids,list) or not ids or not all(isinstance(i,(str,dict)) for i in ids):
             raise ValueError("Choose completed clips to compile.")
-        clips=[DiskClip(str(playlist_media(project,i))) for i in ids]
-        result,count=combine_disk_clips(clips)
+        if any(isinstance(i,dict) for i in ids):
+            directory,doc=playlist_manifest(project)
+            known={c['clip_id']:c for c in doc['clips']}
+            entries=[{'clip_id':i} if isinstance(i,str) else i for i in ids]
+            pieces=[]
+            for entry in entries:
+                clip=known.get(entry.get('clip_id'))
+                if clip is None:raise ValueError('Unknown timeline clip.')
+                frame_range(entry,clip)
+                pieces.append((playlist_media(project,clip['clip_id']),clip,entry))
+            output=directory/('combined_'+uuid.uuid4().hex[:8]+'.mp4')
+            render_timeline(_ffmpeg(),pieces,output)
+            _update_manifest(directory,combined={**_clip_metadata(output),'timeline':entries})
+            result=DiskClip(str(output))
+        else:
+            clips=[DiskClip(str(playlist_media(project,i))) for i in ids]
+            result,count=combine_disk_clips(clips)
         filename=Path(result.get_stream_source()).name
         return {"ui":{"text":[filename]},"result":(filename,)}
 
