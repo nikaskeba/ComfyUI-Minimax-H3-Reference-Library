@@ -1,14 +1,18 @@
 # Tagged RefMods
 
-RefMods can now supply appearance and/or voice for existing saved entries and built-in characters. Tags stay `{Character}` and `§Character§`. Existing records continue to use their ordinary attachments until switched.
+RefMods have their own gallery. Selecting a RefMod also adds its direct appearance and voice tags to the shared **Reference creator** alongside standard references and built-in characters. **Copy guide** in Reference creator copies the combined selection. Selections persist when navigating between library pages and synchronize across open tabs; Clear selection in Reference creator clears all three sources. The RefMod page also provides a guide for just its selected RefMods.
 
 ## Library
 
-In **Edit reference**, beneath Tag, Reference type and Library category, switch between **Standard Reference** and **RefMod**. Both sets of attachments remain saved. Standard Reference uses ordinary media. The RefMod tab shows independent appearance and voice source selectors, allowing a RefMod appearance with an ordinary voice, or vice versa. Select an attachment and save the record. Returning to Standard Reference disables RefMod sourcing without deleting the selected files.
+Cards show a thumbnail, name and actions. Technical information (tokens, encoding mode, audio length and paired filenames) is collapsed under **Details**. **Select** toggles membership in the RefMod prompt guide, retained in this browser across reloads.
 
-Built-in characters have a **RefMods / sources** button. Both galleries have a RefMod attachment filter. The picker searches ComfyUI's registered `refmods` folders (including extra model paths) and `models/refmods`. It lists individual safetensors and members of bundles, with kind, token count and a sidecar image preview when available. A bundle's preview represents the bundle, not necessarily the chosen member. Missing or incompatible selected attachments fail clearly; the compiler never silently falls back to ordinary media.
+RefMod **Category** is descriptive: character, location, object, music or video. It does not change encoding or tag behavior. **Collection** is optional and shares the reference library's category/collection names. Built-in characters also have an optional collection field. A saved name becomes available across all three galleries; refresh an already-open gallery to update its choices.
 
-Appearance accepts image/video RefMods. Voice accepts audio RefMods. A character's visual presence alone does not select its voice. Use its matching voice tag for spoken dialogue.
+RefMod attachment controls have been removed from the standard and built-in character editors. New RefMod usage is through direct `_rm` tags in the separate gallery. Existing saved RefMod assignments remain supported for older workflows; this UI change does not delete attachments or files.
+
+**Export** saves a portable `.safetensors` file with all members and category/collection metadata. Paired appearance/audio files become a single bundle without re-encoding. Chrome's save picker lets you choose the destination; browsers without that API use their normal download flow. Exported files can be added elsewhere with **Import RefMods**. Existing source files remain unchanged.
+
+Appearance accepts image/video RefMods and voice accepts audio RefMods. Visual presence alone does not select voice; use the matching voice tag for dialogue. Discovery uses registered `refmods` folders, including extra model paths, and `models/refmods`.
 
 ## Wiring
 
@@ -45,31 +49,18 @@ Visual RefMods are decoded for Qwen text-encoder presentation, while their saved
 
 ## RefMod Studio: create, train, save and edit
 
-Open **RefMods** in the reference library, or `/h3-refmods`. Character editors now only select saved attachments; their Studio link opens creation separately.
+Open **RefMods** in the reference library, or `/h3-refmods`. Use **Import RefMods** to select existing `.safetensors` files, including standalone appearance/audio pairs and bundles. Include matching JSON metadata and thumbnails if they are separate files. Imports are validated and copied to a unique `imports/` folder in the registered RefMod directory; originals and existing library files are not overwritten.
 
-- Upload several images, videos and/or audio clips. Reorder or remove sources; trim video/audio with start/end seconds (end 0 uses the remainder).
-- Choose **Full reference encoding** or **Compressed reference + refinement**. Compressed mode pools the visual latent and optimizes that smaller latent against the full encode, using Fantastic's approach. It does not train a diffusion model or LoRA.
-- Set the visual short edge, compressed grid and refinement steps, video frame count, and new-audio duration. Video is sampled at 24 fps and trimmed to H3's valid frame grid. Multiple visual sources share the first source's aspect; full mode center-crops later sources to that canvas.
-- Select an H3 video VAE for visual uploads and an H3 audio VAE for audio uploads. Video soundtracks are not automatically used as voices; upload the desired audio track explicitly.
-- Click **Train / Encode & Save**. It queues a local ComfyUI job, and the page resumes watching that job after a reload.
+- Upload several images, videos and audio clips. Reorder or remove sources. Use **Edit sections** to view a video and select one or several ranges.
+- Stored content shows **Voice** first, followed by **Frames**. Remove or restore individual frames, remove all frames, or remove/restore the stored voice. Kept content precedes added sources. To replace appearance or voice, remove the old source first. Removing a bundle member that would renumber attached references requires **Save as a copy**, preserving existing character attachments.
+- **Max video length per section (seconds)** limits each newly added video section, converted at 24 FPS and fitted to H3's frame grid. **Max voice length (seconds)** caps the combined kept and added voice from its beginning. These controls do not stretch or pad short sources. Stored visual frames stay unchanged unless removed or explicitly recompressed.
+- Full reference mode is the default. Compressed mode pools the visual latent and optionally refines it; it does not train a model or LoRA.
+- Connect your workflow's video/audio VAEs to **SKEBA RefMod Studio Create / Edit**, then click its **Open RefMod Library** button. Encoding and preview jobs use those exact connected loader branches, including their settings. The workflow must remain open in the same browser while requesting a job. With multiple Studio nodes or ComfyUI tabs, opening from the intended node selects the correct connections. No separate browser VAE defaults are used.
+- Keeping, reordering and metadata-only edits need no VAE. A queued job includes only the necessary connected VAE dependencies and the Studio operation, not unrelated generation/output nodes.
+- **Cancel editing ×** clears the unsaved edit and returns to the library. It does not delete an asset. It is disabled while processing a job.
+- Updating a bundle retains its format. Appearance and voice are saved in one safetensors file. Adding a second channel to an existing standalone file requires a copy so existing attachments are not silently changed.
 
-Visual sources are stacked into one appearance RefMod. Audio clips are joined into one voice RefMod. A combined appearance/voice asset is one `.safetensors` bundle with independently selectable members. Files are saved under a registered `refmods` folder; metadata and settings are embedded in the safetensors header, with a visual preview alongside it. Original uploads remain under `ComfyUI/input/skeba_refmod_sources`.
-
-The RefMods tab shares the reference-library header. Thumbnail cards group bundle channels and matching `_visual`/`_audio` files, showing tokens, dimensions, duration and characteristics. Use folder filters, search and **Edit** to open an item. You can change its name/description, reorder or omit stored visual latent frames, append new visual sources, replace appearance, and keep/append/replace/remove audio. Existing frames are retained without decode/re-encode. New-source training settings do not retrain stored frames unless **Recompress / refine kept frames** is enabled. This refines against the stored latent; upload original sources for a fresh encode. Unedited bundle members are preserved.
-
-Use **Generate previews** with matching H3 VAEs to decode stored-frame thumbnails and playable audio. Checkboxes omit frames or voice; drag or use Up/Down to reorder frames. Editing paired standalone files now saves one combined bundle (for example `actor.safetensors`). Original paired files are preserved so existing attachments remain usable; select the new bundle members on characters before deleting the old pair. An existing destination is never silently overwritten.
-
-Editing updates the existing asset by default. Enable **Save as a copy** to create a separate `_edited.safetensors` file. Changes that would silently renumber existing attachments require saving a copy. Library cards include **Delete**, with confirmation listing the files. Deleting removes all members of selected files; source media and thumbnails remain. Existing character attachments must be reassigned if their file is deleted. Metadata/frame-only edits require no VAE. The original **SKEBA Create H3 RefMod** node remains available for existing workflows; the Studio uses **SKEBA RefMod Studio Create / Edit**.
-
-After saving, return to the character editor, click **Refresh attachments**, select the appearance and/or audio member, and save the character. Voice-isolation guarantees and continuation behavior are unchanged; assess reference quality through render tests.
-
-VAE dropdowns are saved as browser defaults and survive new-item creation and page reloads. They remain changeable. Gallery thumbnails prefer an exact sidecar (such as `celestial_visual.png`), then a shared pair image (`celestial.png` for `celestial_visual.safetensors` and `celestial_audio.safetensors`). PNG, JPG, JPEG and WebP are supported.
-
-For uploaded videos, **Edit sections** opens a large preview with a scrubber, frame stepping, start/end controls and section playback. Add, reorder or remove multiple sections from the same upload. Each section has its own drawn crop and mirror setting; Apply saves selections, Cancel discards changes. Sections encode separately in listed order, with the clip-frame setting applied to each. Crops use the mirrored picture coordinates when mirroring is enabled.
-
-New video uploads include voice by default. Use **Include Voice** on a video source to enable or disable encoding its soundtrack using the selected audio VAE. Audio uses each selected section’s start/end, joins in section order, and follows the new-voice duration cap. Existing voice can be replaced or appended using Voice edit. Previously saved visual-only latents cannot recover their soundtrack; add the original source again.
-
-New RefMods default to Full reference. New/copy filenames derive from the Name field (copies get `_copy`); editing keeps existing filenames and attachments stable. Processing shows a queued/running indicator and elapsed time; this is not a percentage estimate.
+Restart ComfyUI and refresh the browser after updating. Encoding/preview jobs appear in ComfyUI's queue; the page shows queued/running/completed status and recovers pending jobs after refresh.
 
 ## Direct RefMod tags
 

@@ -9,9 +9,11 @@
 #clips .trim-edge{position:absolute;top:0;bottom:0;width:9px;padding:0;background:#6ac8ef66;border:0;border-radius:0;cursor:ew-resize;touch-action:none;z-index:2}#clips .trim-start{left:0}#clips .trim-end{right:0}#clips .remove-clip{right:14px}
 #media{display:block}#media details{margin:10px 0;border:1px solid #354459;border-radius:7px;padding:10px}#media summary{cursor:pointer;font-weight:600}.media-items{display:flex;gap:10px;overflow-x:auto;padding:10px 0}.timeline-clip{display:flex;flex-direction:column}#clips .clip-actions{display:flex;align-items:center;justify-content:space-between;gap:4px;margin-top:auto;padding:6px 8px 0}#clips .clip-actions button{padding:4px;font-size:12px}#clips .bridge-clip{margin:0 0 0 auto}#asset-player{width:100%;max-height:70vh;background:#05080b}#info-prompt{max-height:65vh}
 #trim-preview{position:fixed;z-index:30;width:270px;padding:7px;background:#101b29;border:1px solid #70caff;border-radius:7px;pointer-events:none}#trim-player{width:100%;height:145px;object-fit:contain;background:#000}
+#project-dialog{width:min(850px,95vw)}.project-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #354459}.project-row>div{flex:1;min-width:0;overflow-wrap:anywhere}.project-row small{margin-top:5px}.project-row .project-delete{color:#ffb0a5}
 </style>
+<dialog id="project-dialog"><h2>Projects</h2><label>Search <input id="project-search" type="search" placeholder="Project name"></label><p class="muted">Newest updated first · Length follows the active timeline.</p><div id="project-list"></div><div class="controls"><button id="project-prev">← Previous</button><span id="project-page"></span><button id="project-next">Next →</button><button id="project-close">Close</button></div><p id="project-error" role="status"></p></dialog>
 <main>
-<header><h1>H3 Live Playlist</h1><span class="spacer"></span><label>Project <select id="projects"></select></label><button id="new-project">New project</button><button id="rename-project">Rename</button><button id="import-video" disabled>Import videos…</button><input id="import-files" type="file" accept="video/*,.mkv,.mov,.avi,.webm,.mp4" multiple hidden><button id="refresh">Refresh</button></header>
+<header><h1>H3 Live Playlist</h1><span class="spacer"></span><select id="projects" hidden aria-label="Project"></select><button id="choose-project">Choose project…</button><button id="new-project">New project</button><button id="rename-project">Rename</button><button id="import-video" disabled>Import videos…</button><input id="import-files" type="file" accept="video/*,.mkv,.mov,.avi,.webm,.mp4" multiple hidden><button id="refresh">Refresh</button></header>
 <div id="directory"></div><div id="import-status" role="status"></div><p id="status" role="status">Waiting for clips…</p>
 <video id="player" controls playsinline preload="metadata"></video>
 <div class="controls"><button id="sequence" disabled>Play</button><button id="stop">Pause</button><span id="clock">0.00 / 0.00s</span><span class="spacer"></span><button id="create" class="primary" disabled>Create Video</button><a id="final" hidden>Open final video</a></div><div id="compile-status" role="status"></div>
@@ -109,7 +111,33 @@ function render(){
  highlight();showClock();const latest=doc.combined_videos?.at(-1);if(!compiling){$('final').hidden=!latest;if(latest)$('final').href=endpoint(project+'/final/'+encodeURIComponent(latest.filename));}
 }
 $('zoom').oninput=()=>{if(doc)render();};
-async function refresh(){if(busy||trimDrag)return;busy=true;try{const list=await request('projects');if(!project&&list.length)project=list[0].id;$('projects').replaceChildren(...list.map(p=>{const o=element('option',p.name);o.value=p.id;return o}));$('projects').value=project;if(!project)return;const token=project,newDoc=await request(token);if(project!==token)return;doc=normalizeManifest(newDoc);$('directory').textContent=doc.directory||'';const next=JSON.stringify(doc);if(signature!==next){signature=next;render();}if(sequence&&waiting){const clips=active(),i=clips.findIndex(c=>c.entry_id===selected);if(i+1<clips.length)playEntry(clips[i+1].entry_id);}if(!waiting)$('status').textContent=!doc._editorReady?'Restart ComfyUI to enable the new editor. Existing clips can still be previewed and compiled.':`${doc.timeline.length} timeline clips · ${total().toFixed(2)} seconds · ${doc.clips.length} saved files. Changes save automatically.`;}catch(e){$('status').textContent=e.message}finally{busy=false}}
+let projectList=[],projectPage=0;
+function renderProjectChooser(){
+ const query=$('project-search').value.toLowerCase(),list=projectList.filter(p=>p.name.toLowerCase().includes(query)),pages=Math.max(1,Math.ceil(list.length/8));
+ projectPage=Math.min(projectPage,pages-1);$('project-page').textContent=`Page ${projectPage+1} of ${pages} · ${list.length} projects`;
+ $('project-prev').disabled=projectPage===0;$('project-next').disabled=projectPage+1>=pages;
+ $('project-list').replaceChildren(...list.slice(projectPage*8,projectPage*8+8).map(p=>{
+  const row=element('div',undefined,'project-row'),info=element('div');info.append(element('strong',p.name));
+  const seconds=Math.round(p.duration_seconds||0),duration=`${Math.floor(seconds/60)}:${String(seconds%60).padStart(2,'0')}`;
+  info.append(element('small',`${p.updated_at?new Date(p.updated_at*1000).toLocaleString():'Date unavailable'} · ${p.clip_count??0} saved clips · ${duration} timeline length`));
+  const open=element('button',p.id===project?'Open current':'Open');open.onclick=()=>{$('projects').value=p.id;$('projects').onchange();$('project-dialog').close();};
+  const remove=element('button','Delete','project-delete');remove.onclick=async()=>{
+   if(!confirm(`Delete project “${p.name}” and ALL files in its project folder, including clips and final videos? This cannot be undone. Imported originals outside the folder are kept.`))return;
+   remove.disabled=true;
+   try{
+    const response=await fetch(endpoint('projects/'+encodeURIComponent(p.id)),{method:'DELETE'}),data=await response.json();if(!response.ok)throw Error(data.error||'Could not delete project.');
+    if(project===p.id){stop();player.removeAttribute('src');player.load();project='';doc=null;selected=null;preview=null;signature='';$('redo-dialog').close();for(const id of ['clips','media','jobs','directory'])$(id).replaceChildren();for(const id of ['sequence','create','regenerate','clip-left','clip-right','undo','redo-edit','import-video','rename-project'])$(id).disabled=true;$('final').hidden=true;$('title').textContent='No clip selected';$('status').textContent='Choose or create a project.';const url=new URL(location.href);url.searchParams.delete('project');history.replaceState(null,'',url);}
+    $('project-error').textContent='';await refresh();
+   }catch(error){$('project-error').textContent=error.message;remove.disabled=false;}
+  };row.append(info,open,remove);return row;
+ }));
+ if(!list.length)$('project-list').textContent='No projects found.';
+}
+$('choose-project').onclick=async()=>{$('project-error').textContent='';$('project-dialog').showModal();await refresh();renderProjectChooser();};
+$('project-close').onclick=()=>$('project-dialog').close();
+$('project-search').oninput=()=>{projectPage=0;renderProjectChooser();};
+$('project-prev').onclick=()=>{projectPage--;renderProjectChooser();};$('project-next').onclick=()=>{projectPage++;renderProjectChooser();};
+async function refresh(){if(busy||trimDrag)return;busy=true;try{const list=await request('projects');projectList=list;renderProjectChooser();if(!project&&list.length)project=list[0].id;$('projects').replaceChildren(...list.map(p=>{const o=element('option',p.name);o.value=p.id;return o}));$('projects').value=project;$('choose-project').textContent=list.find(p=>p.id===project)?.name||'Choose project…';if(!project)return;const token=project,newDoc=await request(token);if(project!==token)return;doc=normalizeManifest(newDoc);$('rename-project').disabled=false;$('directory').textContent=doc.directory||'';const next=JSON.stringify(doc);if(signature!==next){signature=next;render();}if(sequence&&waiting){const clips=active(),i=clips.findIndex(c=>c.entry_id===selected);if(i+1<clips.length)playEntry(clips[i+1].entry_id);}if(!waiting)$('status').textContent=!doc._editorReady?'Restart ComfyUI to enable the new editor. Existing clips can still be previewed and compiled.':`${doc.timeline.length} timeline clips · ${total().toFixed(2)} seconds · ${doc.clips.length} saved files. Changes save automatically.`;}catch(e){$('status').textContent=e.message}finally{busy=false}}
 $('rename-project').onclick=async()=>{if(!project||!doc)return;const name=prompt('Project name:',doc.name||$('projects').selectedOptions[0]?.textContent||'');if(name===null)return;try{await request(project+'/timeline',{action:'rename',name,revision:doc.revision});signature='';await refresh();}catch(e){$('status').textContent=e.message}};
 $('new-project').onclick=async()=>{const name=prompt('Name for the new blank project:');if(name===null)return;try{const created=await request('projects',{name});stop();project=created.id;doc=null;selected=null;preview=null;signature='';player.removeAttribute('src');player.load();$('redo-dialog').close();const url=new URL(location.href);url.searchParams.set('project',project);history.replaceState(null,'',url);await refresh();}catch(e){$('status').textContent=e.message;}};
 $('import-video').onclick=()=>$('import-files').click();

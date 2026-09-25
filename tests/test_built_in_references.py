@@ -18,6 +18,18 @@ SPEC.loader.exec_module(MODULE)
 
 
 class BuiltInReferenceTests(unittest.TestCase):
+    def test_optional_collection_persists_without_changing_character(self):
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(MODULE,"_attachment_manifest_path",return_value=Path(directory)/"built-ins.json"):
+            record=MODULE.list_built_in_references()[0]
+            tag=MODULE.library_built_in_tag_value(record)
+            before=MODULE.library_built_in_records()[tag]
+            self.assertEqual(MODULE.set_built_in_collection(tag,"SciFi"),"scifi")
+            after=MODULE.library_built_in_records()[tag]
+            self.assertEqual(after["collection"],"scifi")
+            self.assertEqual(after["image_description"],before["image_description"])
+            self.assertEqual(MODULE.set_built_in_collection(tag,""),"")
+            with self.assertRaises(ValueError):MODULE.set_built_in_collection(tag,"bad/name")
+
     def test_catalog_parses_sections_and_multiple_clips(self):
         records = MODULE.list_built_in_references()
         by_name = {record["name"]: record for record in records}

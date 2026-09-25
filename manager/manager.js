@@ -1,5 +1,6 @@
-import {refmodFields} from "./refmod-picker.js";
-let refmodEditor = null;
+import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
+import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=2";
+let refmodSelectionRequest=0;
 const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
@@ -16,7 +17,7 @@ const mediaByReferenceType = {
     uncategorized: ["image", "audio", "video"],
 };
 const state = {
-    records: [], categories: [], drafts: [], selected: new Set(), builtInSelected: [],
+    records: [], categories: [], drafts: [], selected: new Set(JSON.parse(localStorage.getItem("skeba-reference-selection")||"[]")), builtInSelected: [], refmodSelected: [],
 };
 
 const elements = Object.fromEntries([
@@ -132,6 +133,7 @@ async function loadRecords() {
         renderCategoryChoices();
         renderRecords();
         renderSelectionGuide();
+        await loadRefmodSelection();
     } catch (error) {
         toast(error.message, true);
     }
@@ -813,16 +815,8 @@ function clearDrafts() {
 }
 
 async function openEditor(record = null) {
+    try { state.categories = (await request("/api/h3-references/collections")).collections; } catch (error) { toast(error.message, true); return; }
     elements["record-form"].reset();
-    refmodEditor = null;
-    document.getElementById("refmod-fields")?.remove();
-    document.getElementById("refmod-source-tabs")?.remove();
-    try {
-        refmodEditor = await refmodFields(record || {});
-        refmodEditor.element.id = "refmod-fields";
-        document.querySelector("#record-form .form-grid").before(refmodEditor.element);
-        refmodEditor.addTabs(document.querySelector("#record-form .form-grid"));
-    } catch (error) { toast(error.message, true); return; }
     setUploadError(elements["record-error"]);
     elements["record-id"].value = record?.id || "";
     elements["dialog-title"].textContent = record ? "Edit reference" : "Add reference";
@@ -890,14 +884,13 @@ async function saveRecord(event) {
     });
     const textOnlyVoice = selectedReferenceType === "character"
         && Boolean(elements["audio-description"].value.trim());
-    const refmodSettings = refmodEditor?.read() || {};
+    const refmodSettings = state.records.find(item => item.id === recordId) || {};
     if (!hasExistingOrNewMedia && !textOnlyVoice && !Object.values(refmodSettings).includes("refmod")) {
         return rejectRecord(
             `${referenceTypeLabel(selectedReferenceType)} needs allowed media or a voice description.`);
     }
     const data = new FormData();
     data.append("tag", tag);
-    data.append("refmod_settings", JSON.stringify(refmodEditor?.read() || {}));
     data.append("category", category);
     data.append("reference_type", selectedReferenceType);
     data.append("image_description", permitted.includes("image") ? elements["image-description"].value.trim() : "");
@@ -950,121 +943,16 @@ function toggleSelection(recordId) {
     } else {
         state.selected.add(recordId);
     }
+    localStorage.setItem("skeba-reference-selection",JSON.stringify([...state.selected]));
     renderRecords();
     renderSelectionGuide();
 }
 
-function selectedGroups() {
-    const groups = new Map();
-    const selectedRecords = [
-        ...state.records.filter((item) => state.selected.has(item.id)),
-        ...state.builtInSelected,
-    ];
-    for (const record of selectedRecords) {
-        const category = record.category || "other";
-        if (!groups.has(category)) groups.set(category, []);
-        groups.get(category).push(record);
-    }
-    return [...groups.entries()]
-        .sort(([left], [right]) => compareCategories(left, right))
-        .map(([category, records]) => [
-            category,
-            groupByReferenceType(records).map(([referenceType, typeRecords]) => [
-                referenceType,
-                typeRecords.sort((left, right) => left.tag.localeCompare(right.tag)),
-            ]),
-        ]);
+function selectedGuideRecords() {
+    return [...state.records.filter(item => state.selected.has(item.id)), ...state.builtInSelected, ...state.refmodSelected];
 }
-
-function renderSelectionGuide() {
-    const groups = selectedGroups();
-    const hasSelection = groups.length > 0;
-    elements["selection-empty"].hidden = hasSelection;
-    elements["selection-guide"].hidden = !hasSelection;
-    elements["clear-selection"].disabled = !hasSelection;
-    elements["copy-selection"].disabled = !hasSelection;
-    elements["selection-guide"].replaceChildren(...groups.map(([category, typeGroups]) => {
-        const group = document.createElement("div");
-        group.className = "selection-group";
-        const heading = document.createElement("h3");
-        heading.textContent = categoryHeading(category);
-        group.append(heading, ...typeGroups.map(([referenceType, records]) => {
-            const typeGroup = document.createElement("div");
-            typeGroup.className = "selection-type-group";
-            const typeHeading = document.createElement("h4");
-            typeHeading.textContent = referenceTypeHeading(referenceType);
-            typeGroup.append(typeHeading, ...records.map(selectionItem));
-            return typeGroup;
-        }));
-        return group;
-    }));
-}
-
-function selectionItem(record) {
-    const item = document.createElement("div");
-    item.className = "selection-item";
-    const tag = document.createElement("code");
-    tag.textContent = `{${record.tag}}`;
-    item.append(tag);
-    if (record.built_in) {
-        const voiceTag = document.createElement("code");
-        voiceTag.className = "voice-tag";
-        voiceTag.textContent = `Voice: \u00a7${record.tag}\u00a7`;
-        item.append(voiceTag);
-        item.append(descriptionLine("Portrayal", portrayalText(record)));
-        if (record.has_image) item.append(descriptionLine("Image", "Attached"));
-        return item;
-    }
-    if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) {
-        const voiceTag = document.createElement("code");
-        voiceTag.className = "voice-tag";
-        voiceTag.textContent = `Voice: §${record.tag}§`;
-        item.append(voiceTag);
-    }
-    if (record.image_description) item.append(descriptionLine("Image", record.image_description));
-    if (record.audio_description) item.append(descriptionLine("Voice", record.audio_description));
-    if (record.video_description) item.append(descriptionLine("Video", record.video_description));
-    if (!record.image_description && !record.audio_description && !record.video_description) item.append(descriptionLine("Description", "None"));
-    return item;
-}
-
-function descriptionLine(label, description) {
-    const line = document.createElement("div");
-    line.className = "selection-description";
-    line.textContent = `${label}: ${description}`;
-    return line;
-}
-
-function selectionGuideText() {
-    return selectedGroups().map(([category, typeGroups]) => {
-        const lines = [categoryHeading(category).toUpperCase()];
-        for (const [referenceType, records] of typeGroups) {
-            lines.push("", referenceTypeHeading(referenceType).toUpperCase());
-            for (const record of records) {
-                lines.push(`{${record.tag}}`);
-                if (record.built_in) {
-                    lines.push(`Voice tag: \u00a7${record.tag}\u00a7`);
-                    lines.push(`Portrayal: ${portrayalText(record)}`);
-                    if (record.has_image) lines.push("Image: Attached");
-                    lines.push("");
-                    continue;
-                }
-                if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
-                if (record.image_description) lines.push(`Image: ${record.image_description}`);
-                if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
-                if (record.video_description) lines.push(`Video: ${record.video_description}`);
-                if (!record.image_description && !record.audio_description && !record.video_description) lines.push("Description: None");
-                lines.push("");
-            }
-        }
-        return lines.join("\n").trimEnd();
-    }).join("\n\n");
-}
-
-function portrayalText(record) {
-    const playedBy = record.actor ? `Played by ${record.actor}` : "Actor not listed";
-    return record.franchise ? `${playedBy} | ${record.franchise}` : playedBy;
-}
+function renderSelectionGuide() { renderReferenceGuide(selectedGuideRecords(), elements); }
+function selectionGuideText() { return referenceGuideText(selectedGuideRecords()); }
 
 async function copySelectionGuide() {
     try {
@@ -1100,6 +988,10 @@ elements.refresh.addEventListener("click", loadRecords);
 elements["clear-selection"].addEventListener("click", () => {
     state.selected.clear();
     state.builtInSelected = [];
+    state.refmodSelected = [];
+    refmodSelectionRequest++;
+    localStorage.removeItem("skeba-refmod-selection");
+    localStorage.removeItem("skeba-reference-selection");
     window.dispatchEvent(new CustomEvent("skeba-clear-all-reference-selection"));
     renderRecords();
     renderSelectionGuide();
@@ -1110,7 +1002,7 @@ window.addEventListener("skeba-built-in-selection-change", (event) => {
         ...record,
         id: `built-in:${record.library_tag}`,
         tag: record.library_tag,
-        category: "built-in-characters",
+        category: record.collection || "built-in-characters",
         reference_type: "character",
         built_in: true,
     }));
@@ -1183,3 +1075,15 @@ for (const buttonElement of managerTabs) {
 loadRecords();
 
 if (location.hash === "#built-in-tab-panel") activateManagerTab("built-in-tab-panel");
+
+async function loadRefmodSelection(){
+ const version=++refmodSelectionRequest;
+ const keys=new Set(JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"));
+ if(!keys.size){state.refmodSelected=[];renderSelectionGuide();return;}
+ try{const rows=await request("/api/h3-refmods/records");if(version!==refmodSelectionRequest)return;state.refmodSelected=groupCatalog(rows).filter(group=>keys.has(group.key)).map(refmodGuideRecord);renderSelectionGuide();}catch(error){toast(error.message,true);}
+}
+window.addEventListener("storage",event=>{
+ if(event.key==="skeba-refmod-selection"||event.key===null)loadRefmodSelection();
+ if(event.key==="skeba-reference-selection"||event.key===null){state.selected=new Set(JSON.parse(localStorage.getItem("skeba-reference-selection")||"[]"));renderRecords();renderSelectionGuide();}
+});
+window.addEventListener("focus",loadRefmodSelection);

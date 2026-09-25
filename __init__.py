@@ -1,4 +1,5 @@
 from .refmod_preview import SkebaRefModPreview
+from .quick_launcher import SkebaQuickLauncher
 from .h3_audio_refine import SkebaH3AudioRefine
 from .refmod_studio import SkebaRefModStudio
 from .refmod_create import SkebaCreateH3RefMod
@@ -26,7 +27,7 @@ from .motion_context import (
     NODE_CLASS_MAPPINGS as MOTION_CONTEXT_NODE_CLASS_MAPPINGS,
     NODE_DISPLAY_NAME_MAPPINGS as MOTION_CONTEXT_NODE_DISPLAY_NAME_MAPPINGS,
 )
-from .prompt_loop_node import PromptFromListNode, PromptLoopNode
+from .prompt_loop_node import PromptFromListNode, PromptLoopNode, PromptListTextNode
 from .skeba_io_tags import SkebaBypass
 from .universal_bypass import SkebaUniversalBypass
 from .video_loop_node import CombineVideoClipsNode
@@ -39,6 +40,8 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaPromptListText": PromptListTextNode,
+    "SkebaQuickLauncher": SkebaQuickLauncher,
     "SkebaH3AudioRefine": SkebaH3AudioRefine,
     "SkebaRefModPreview": SkebaRefModPreview,
     "SkebaRefModStudio": SkebaRefModStudio,
@@ -77,6 +80,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaPromptListText": "SKEBA Prompt List Text",
+    "SkebaQuickLauncher": "SKEBA Quick Launcher",
     "SkebaH3AudioRefine": "SKEBA H3 Audio Refine (Optional)",
     "SkebaRefModPreview": "SKEBA RefMod Frame / Audio Preview",
     "SkebaRefModStudio": "SKEBA RefMod Studio Create / Edit",

@@ -288,6 +288,7 @@ def library_built_in_records():
             "id": f"built-in:{tag}",
             "tag": tag,
             "category": "built-in-characters",
+            "collection": manifest.get("collections", {}).get(tag, ""),
             "reference_type": "character",
             "image_description": (
                 f"{_description(record)}. Image context: {image_contexts[tag]}"
@@ -315,6 +316,18 @@ def set_built_in_refmods(tag, settings):
         manifest.setdefault("refmods", {})[tag] = settings
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
         _write_attachment_manifest(manifest)
+
+
+def set_built_in_collection(tag, collection):
+    collection = str(collection or "").strip().lower()
+    if collection and not re.fullmatch(r"[A-Za-z0-9_-]+", collection):
+        raise ValueError("Collection must contain only letters, numbers, '_' or '-'.")
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        manifest.setdefault("collections", {})[tag] = collection
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
+    return collection
 
 
 def resolve_built_in_prompt(prompt_template, records=None):

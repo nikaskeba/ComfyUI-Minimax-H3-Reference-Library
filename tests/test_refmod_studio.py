@@ -1,6 +1,9 @@
 import importlib
 import json
 import unittest
+import tempfile
+import shutil
+from pathlib import Path
 from unittest.mock import patch
 
 import torch
@@ -22,6 +25,24 @@ class StudioTests(unittest.TestCase):
     def run_studio(self,spec,looks=None,audio=None):
         with patch.object(studio,"roots",return_value=[self.root]), patch.object(studio,"_trimmed_source",side_effect=lambda item: ("audio",audio) if item["file"]=="voice" else ("image",looks)):
             return studio.SkebaRefModStudio().save(spec,vae=self.vae,audio_vae=self.audio_vae)
+
+    def test_workflow_node_without_save_job_is_idle(self):
+        with patch.object(studio, "output_path") as output, patch.object(studio, "save_members") as save:
+            for spec in ("{}", "", "  \n", " { } "):
+                with self.subTest(spec=spec):
+                    result = self.run_studio(spec)
+                    self.assertEqual(result["result"], ("",))
+            output.assert_not_called()
+            save.assert_not_called()
+
+    def test_incomplete_save_job_has_actionable_error(self):
+        for file in (None, "", " "):
+            with self.subTest(file=file), self.assertRaisesRegex(ValueError, "Choose an output file"):
+                self.run_studio(json.dumps({"file": file, "sources": []}))
+        with self.assertRaisesRegex(ValueError, "Choose an output file"):
+            self.run_studio('{"sources": []}')
+        with self.assertRaisesRegex(ValueError, "JSON object"):
+            self.run_studio("[]")
 
     def test_multisource_training_and_voice_single_safetensors(self):
         image=torch.rand(1,320,320,3);audio={"waveform":torch.rand(1,2,32000),"sample_rate":32000}
@@ -153,6 +174,63 @@ class StudioTests(unittest.TestCase):
             for name in ("../escape.safetensors","C:/escape.safetensors"):
                 with self.assertRaises(ValueError):studio.output_path(name)
             with self.assertRaises(ValueError):studio.source_path("../escape.png")
+
+    def test_import_bundle_and_paired_assets_without_overwriting(self):
+        self.asset("person_visual", "video")
+        self.asset("person_audio", "audio")
+        self.asset("bundle", "video", bundle=True)
+        with tempfile.TemporaryDirectory() as directory, patch.object(studio, "roots", return_value=[self.root]):
+            for name in ("person_visual", "person_audio", "bundle"):
+                shutil.copyfile(self.root / (name + ".safetensors"), Path(directory) / (name + ".safetensors"))
+            (Path(directory) / "person.png").write_bytes(b"thumbnail")
+            first = studio.import_refmods(directory)
+            second = studio.import_refmods(directory)
+            self.assertEqual(len(first), 3)
+            self.assertNotEqual(first, second)
+            self.assertTrue((self.root / first[0]).parent.joinpath("person.png").is_file())
+            for name in first:
+                self.assertEqual((self.root / name).read_bytes(), (self.root / Path(name).name).read_bytes())
+
+    def test_invalid_import_is_not_published(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(studio, "roots", return_value=[self.root]):
+            with self.assertRaises(ValueError):studio.import_refmods(directory)
+            (Path(directory) / "broken.safetensors").write_bytes(b"invalid")
+            with self.assertRaises(Exception):studio.import_refmods(directory)
+            self.assertFalse((self.root / "imports").exists())
+
+    def test_editor_voice_cap_includes_kept_voice(self):
+        selected=self.asset("voice", "audio", seconds=10)
+        result=self.run_studio(self.spec(existing=selected,limit_total_voice=True,audio_seconds=3,audio_action="append"))
+        _,_,mods=studio.members_from_file({"file":result["result"][0],"member":None})
+        self.assertEqual(mods[0].latent_t,120)
+        self.assertEqual(studio.members_from_file(selected)[2][0].latent_t,400)
+
+    def test_export_pair_as_portable_bundle_and_keep_sources(self):
+        visual=self.asset("export_visual", "video")
+        audio=self.asset("export_audio", "audio")
+        target=self.root / "export.safetensors"
+        studio.export_refmods([visual,audio],target)
+        _,meta,mods=studio.members_from_file({"file":target.name,"member":0})
+        self.assertEqual(meta["kind"],"bundle")
+        self.assertEqual([m.kind for m in mods],["video","audio"])
+        for source,mod in zip([visual,audio],mods):
+            self.assertTrue(torch.equal(studio.members_from_file(source)[2][0].latent,mod.latent))
+        # Re-exporting multiple selections from one bundle must not duplicate it.
+        studio.export_refmods([{"file":target.name,"member":0},{"file":target.name,"member":1}],self.root/"again.safetensors")
+        self.assertEqual(len(studio.members_from_file({"file":"again.safetensors","member":0})[2]),2)
+
+    def test_category_and_collection_are_descriptive_and_exported(self):
+        selected=self.asset("category_source","video")
+        result=self.run_studio(self.spec(existing=selected,reference_type="location",collection="SciFi"))
+        selection={"file":result["result"][0],"member":None}
+        _,meta,mods=studio.members_from_file(selection)
+        self.assertEqual(meta["skeba_studio"]["collection"],"scifi")
+        self.assertEqual(meta["skeba_studio"]["reference_type"],"location")
+        self.assertTrue(torch.equal(mods[0].latent,studio.members_from_file(selected)[2][0].latent))
+        studio.export_refmods([selection],self.root/"portable.safetensors")
+        _,portable,_=studio.members_from_file({"file":"portable.safetensors","member":None})
+        self.assertEqual(portable["skeba_studio"]["collection"],"scifi")
+        self.assertNotIn("existing",portable["skeba_studio"])
 
     def test_refinement_decreases_reconstruction_error(self):
         torch.manual_seed(3)

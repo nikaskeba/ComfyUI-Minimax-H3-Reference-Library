@@ -12,6 +12,41 @@ imports = importlib.import_module('playlist_test_package.playlist_import')
 class ImportTests(unittest.TestCase):
     setUp = base.PlaylistEditorTests.setUp
 
+    def test_project_summary_and_delete(self):
+        project = imports.create_project('Disposable')
+        directory, _ = base.disk.playlist_manifest(project['id'])
+        summaries = base.disk.project_summaries()
+        summary = next(item for item in summaries if item['id'] == project['id'])
+        self.assertEqual(summary['clip_count'], 0)
+        self.assertEqual(summary['duration_seconds'], 0)
+        self.assertGreater(summary['updated_at'], 0)
+        source = base.disk.playlist_media(self.token, self.doc['clips'][0]['clip_id'])
+        original = source.read_bytes()
+        imports.import_video(project['id'], source, 'original.mp4')
+        summary = next(item for item in base.disk.project_summaries() if item['id'] == project['id'])
+        self.assertEqual(summary['clip_count'], 1)
+        self.assertAlmostEqual(summary['duration_seconds'], 3)
+        base.disk.delete_project(project['id'])
+        self.assertFalse(directory.exists())
+        self.assertNotIn(project['id'], base.disk.playlist_projects())
+        self.assertEqual(source.read_bytes(), original)
+
+    def test_delete_rejects_active_jobs_and_unsafe_folder(self):
+        project = imports.create_project('Busy')
+        directory, doc = base.disk.playlist_manifest(project['id'])
+        doc['jobs'] = [{'state': 'queued'}]
+        base.disk.write_project(directory, doc)
+        with self.assertRaisesRegex(ValueError, 'generation jobs'):
+            base.disk.delete_project(project['id'])
+        self.assertTrue(directory.exists())
+        outside = Path(self.temp.name) / 'outside_project'
+        outside.mkdir()
+        base.disk.write_project(outside, {'clips': []})
+        token = base.disk.register_playlist(outside)
+        with self.assertRaisesRegex(ValueError, 'output directory'):
+            base.disk.delete_project(token)
+        self.assertTrue(outside.exists())
+
     def test_blank_project_import_and_undo(self):
         project = imports.create_project('Outside videos')
         directory, doc = base.disk.playlist_manifest(project['id'])

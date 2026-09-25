@@ -57,6 +57,48 @@ def playlist_manifest(token):
     return directory, normalize_project(json.loads((directory / "manifest.json").read_text(encoding="utf-8")))
 
 
+def project_summaries():
+    result = []
+    for token in playlist_projects():
+        try:
+            directory, doc = playlist_manifest(token)
+            clips = {clip['clip_id']: clip for clip in doc['clips']}
+            duration = 0
+            for entry in doc['timeline']:
+                clip = clips[entry['clip_id']]
+                start, end = frame_range(entry, clip)
+                duration += (end - start) / float(Fraction(clip['fps_fraction']))
+            result.append({'id': token, 'name': doc.get('name') or directory.parent.name + ' / ' + directory.name,
+                           'updated_at': (directory / 'manifest.json').stat().st_mtime,
+                           'clip_count': len(doc['clips']), 'timeline_count': len(doc['timeline']),
+                           'duration_seconds': duration})
+        except (OSError, ValueError, KeyError):
+            continue
+    return sorted(result, key=lambda item: item['updated_at'], reverse=True)
+
+
+def delete_project(token):
+    with _MANIFEST_LOCK:
+        directory, doc = playlist_manifest(token)
+        root = Path(folder_paths.get_output_directory()).resolve()
+        if directory == root or not directory.is_relative_to(root):
+            raise ValueError('Only project folders inside the ComfyUI output directory can be deleted here.')
+        projects = playlist_projects()
+        for other, location in projects.items():
+            if other != token and Path(location).resolve().is_relative_to(directory):
+                raise ValueError('This folder contains another registered project; delete it separately first.')
+        if any(job.get('state') in ('prepared', 'queued', 'running') for job in doc['jobs']):
+            raise ValueError('Wait for or cancel this project’s generation jobs before deleting it.')
+        # Validate the resolved registered project folder before recursive deletion.
+        shutil.rmtree(directory)
+        del projects[token]
+        path = Path(folder_paths.get_user_directory()) / 'h3_video_projects.json'
+        temporary = path.with_suffix('.tmp')
+        temporary.write_text(json.dumps(projects, ensure_ascii=False, indent=2), encoding='utf-8')
+        temporary.replace(path)
+        return {'deleted': token}
+
+
 def playlist_media(token, clip_id):
     directory, manifest = playlist_manifest(token)
     entry = next((entry for entry in manifest["clips"] if entry["clip_id"] == clip_id), None)

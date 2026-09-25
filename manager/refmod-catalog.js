@@ -29,3 +29,20 @@ export function groupCatalog(rows) {
         return {...group, name, folder, visual, audio, primary, paired: group.files.length > 1};
     });
 }
+
+export function refmodTag(group) {
+    let stem = group.paired ? group.key : group.files[0].replace(/\.safetensors$/i, "");
+    if (group.primary.member == null) stem = stem.replace(/_(visual|video|audio)$/i, "");
+    return stem + "_rm";
+}
+
+export function refmodGuideRecord(group) {
+    return {
+        id: "refmod:" + group.key, tag: refmodTag(group), is_refmod: true,
+        category: group.primary.collection || "refmods",
+        reference_type: group.primary.reference_type || "character",
+        has_visual: Boolean(group.visual), has_audio: Boolean(group.audio),
+        image_description: group.visual?.appearance || group.visual?.description || "",
+        audio_description: group.audio?.voice_description || group.audio?.description || "",
+    };
+}

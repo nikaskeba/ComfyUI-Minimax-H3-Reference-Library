@@ -187,6 +187,8 @@ def catalog():
             members = bundle_members(meta)
             entries = list(enumerate(members)) if meta.get("kind") == "bundle" else [(None, meta)]
             found[name] = [{"file": name, "member": member, "kind": row.get("kind"),
+                            "reference_type": meta.get("skeba_studio", {}).get("reference_type", "character"),
+                            "collection": meta.get("skeba_studio", {}).get("collection", ""),
                             "name": row.get("name", path.stem),
                             **{key: row.get(key) for key in ("mode", "latent_t", "latent_h", "latent_w", "description", "subject_name", "appearance", "voice_description")},
                             "token_count": 2 * int(row.get("latent_t", 1)) if row.get("kind") == "audio" else

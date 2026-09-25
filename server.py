@@ -1,8 +1,9 @@
-from .refmod_studio import source_root, source_path, SOURCE_EXTENSIONS
+from .refmod_studio import source_root, source_path, SOURCE_EXTENSIONS, import_refmods, export_refmods
 from .refmod_library import preview_path as refmod_preview_path, read_meta as read_refmod_meta
 import json
 from .refmod_library import delete_files as delete_refmod_files, catalog as refmod_catalog, resolve as resolve_refmod
-from .built_in_references import set_built_in_refmods
+from .built_in_references import set_built_in_refmods, set_built_in_collection
+from urllib.parse import quote
 import asyncio
 from .palette_sampling import sample_preview
 import io
@@ -14,11 +15,12 @@ from pathlib import Path
 
 import av
 from aiohttp import web
+from safetensors import SafetensorError
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 from comfy_extras.nodes_audio import load as load_audio_file
 from server import PromptServer
-from .disk_video import playlist_projects, playlist_manifest, playlist_media, playlist_final
+from .disk_video import playlist_projects, playlist_manifest, playlist_media, playlist_final, project_summaries, delete_project
 from .playlist_editor import (templates, register_template, edit_timeline, prepare_redo,
                               update_job, reconcile_jobs, RevisionConflict, remove_template)
 
@@ -70,11 +72,19 @@ def register_routes():
 
     @routes.get("/api/h3-video-playlist/projects")
     async def video_playlist_projects(request):
-        return web.json_response([
-            {"id": token, "name": json.loads((Path(path)/"manifest.json").read_text(encoding="utf-8")).get("name") or Path(path).parent.name + " / " + Path(path).name}
-            for token, path in reversed(list(playlist_projects().items()))
-            if (Path(path) / "manifest.json").is_file()
-        ], headers={"Cache-Control": "no-store"})
+        return web.json_response(project_summaries(), headers={"Cache-Control": "no-store"})
+
+    @routes.delete("/api/h3-video-playlist/projects/{token}")
+    async def playlist_delete_project(request):
+        try:
+            running, pending = PromptServer.instance.prompt_queue.get_current_queue()
+            if running or pending:
+                raise ValueError('Finish or clear the ComfyUI queue before deleting a project.')
+            token = request.match_info['token']
+            reconcile_jobs(token, PromptServer.instance.prompt_queue)
+            return web.json_response(delete_project(token))
+        except (ValueError, OSError) as error:
+            return web.json_response({'error': str(error)}, status=400)
 
     @routes.post("/api/h3-video-playlist/projects")
     async def playlist_create_project(request):
@@ -193,6 +203,28 @@ def register_routes():
         except (OSError, ValueError) as error:
             return web.json_response({"error": str(error)}, status=400)
 
+    @routes.get("/api/h3-refmods/export")
+    async def refmod_export(request):
+        with tempfile.TemporaryDirectory(prefix="skeba_refmod_export_") as temporary:
+            target = Path(temporary) / "reference.safetensors"
+            try:
+                selections = json.loads(request.query.get("selections", "[]"))
+                await asyncio.to_thread(export_refmods, selections, target)
+            except (OSError, ValueError, KeyError, SafetensorError) as error:
+                return web.json_response({"error": str(error)}, status=400)
+            filename = request.query.get("name", "reference").replace("/", "_").replace("\\", "_") + ".safetensors"
+            response = web.StreamResponse(headers={
+                "Content-Type": "application/octet-stream",
+                "Content-Disposition": "attachment; filename*=UTF-8''" + quote(filename, safe=""),
+                "Content-Length": str(target.stat().st_size),
+            })
+            await response.prepare(request)
+            with target.open("rb") as handle:
+                while chunk := await asyncio.to_thread(handle.read, 1024 * 1024):
+                    await response.write(chunk)
+            await response.write_eof()
+            return response
+
     @routes.get("/api/h3-refmods/detail")
     async def refmod_studio_detail(request):
         try:
@@ -201,6 +233,25 @@ def register_routes():
             meta, _ = read_refmod_meta(str(path.with_suffix("")))
             return web.json_response(meta)
         except (OSError, ValueError) as error:
+            return web.json_response({"error": str(error)}, status=400)
+
+    @routes.post("/api/h3-refmods/import")
+    async def refmod_import(request):
+        try:
+            with tempfile.TemporaryDirectory(prefix="skeba_refmod_import_") as temporary:
+                reader = await request.multipart()
+                async for part in reader:
+                    name = part.filename or ""
+                    if (not name or Path(name).name != name or any(c in name for c in '<>:"/\\|?*')
+                            or Path(name).suffix.lower() not in (".safetensors", ".json", ".png", ".jpg", ".jpeg", ".webp")):
+                        raise ValueError("Import RefMod safetensors with optional matching JSON and thumbnail files.")
+                    target = Path(temporary) / name
+                    with target.open("xb") as handle:
+                        while chunk := await part.read_chunk(1024 * 1024):
+                            handle.write(chunk)
+                files = await asyncio.to_thread(import_refmods, temporary)
+            return web.json_response({"files": files})
+        except (OSError, ValueError, RuntimeError, KeyError, SafetensorError) as error:
             return web.json_response({"error": str(error)}, status=400)
 
     @routes.post("/api/h3-refmods/sources")
@@ -271,21 +322,41 @@ def register_routes():
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "video-selector.js"}:
+        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "reference-guide.js", "video-selector.js"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 
     @routes.get("/h3-built-in-references/static/{filename}")
     async def built_in_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"built-ins.css", "built-ins.js"}:
+        if filename not in {"built-ins.css", "built-ins.js", "built-in-cards.css"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
+
+    def shared_collections():
+        names = {record.get("category", "") for record in list_records()}
+        names.update(record.get("collection", "") for record in library_built_in_records().values())
+        names.update(row.get("collection", "") for row in refmod_catalog())
+        return sorted(name for name in names if name)
+
+    @routes.get("/api/h3-references/collections")
+    async def get_collections(request):
+        return web.json_response({"collections": await asyncio.to_thread(shared_collections)})
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/collection")
+    async def update_built_in_collection(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            payload = await request.json()
+            value = set_built_in_collection(library_built_in_tag_value(record), payload.get("collection", ""))
+            return web.json_response({"collection": value})
+        except (KeyError, ValueError, OSError) as error:
+            return web.json_response({"error": str(error)}, status=400)
 
     @routes.get("/api/h3-references/records")
     async def get_records(request):
         records = sorted(list_records(), key=lambda record: record["tag"].lower())
-        categories = sorted({record.get("category") or "other" for record in records})
+        categories = await asyncio.to_thread(shared_collections)
         return web.json_response({
             "records": [_public_record(record) for record in records],
             "categories": categories,
@@ -305,7 +376,7 @@ def register_routes():
                 "records": [
                     {
                         **{key: value for key, value in record.items() if key != "clips"},
-                        **{key: attached_records[library_built_in_tag_value(record)].get(key) for key in ("appearance_source", "voice_source", "appearance_refmod", "voice_refmod")},
+                        "collection": attached_records[library_built_in_tag_value(record)].get("collection", ""),
                         "library_tag": library_built_in_tag_value(record),
                         "attachment_id": built_in_attachment_id(record),
                         "has_audio": bool(attached_records[library_built_in_tag_value(record)].get("audio_file")),

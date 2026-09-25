@@ -1,6 +1,6 @@
-import {editBuiltInRefmods} from "/h3-references/static/refmod-picker.js";
+let activePopout=null;
 const apiRoot = "/api/h3-built-in-references/records";
-const state = { records: [], selected: new Set() };
+const state = { records: [], selected: new Set(JSON.parse(localStorage.getItem("skeba-built-in-selection")||"[]")) };
 const libraryTagMode = document.body.dataset.builtInTagMode === "library";
 const elements = Object.fromEntries([
     "built-in-folder", "built-in-search", "built-in-count", "built-in-empty",
@@ -10,10 +10,10 @@ const elements = Object.fromEntries([
     "built-in-sort-field", "built-in-sort-direction", "toast",
 ].map((id) => [id, document.getElementById(id)]));
 
-const onlyRefmods = document.createElement("input"); onlyRefmods.type = "checkbox";
-const refmodFilter = document.createElement("label"); refmodFilter.textContent = "RefMod attachments "; refmodFilter.prepend(onlyRefmods);
-elements["built-in-folder"].parentElement.after(refmodFilter);
-onlyRefmods.addEventListener("change", renderRecords);
+const collectionOptions=document.createElement("datalist");collectionOptions.id="built-in-collections";document.body.append(collectionOptions);
+const collectionFilter=document.createElement("select");collectionFilter.setAttribute("aria-label","Collection");
+const collectionFilterLabel=document.createElement("label");collectionFilterLabel.textContent="Collection";collectionFilterLabel.append(collectionFilter);elements["built-in-folder"].parentElement.after(collectionFilterLabel);collectionFilter.onchange=renderRecords;
+async function loadCollections(){const data=await request("/api/h3-references/collections");const current=collectionFilter.value;collectionOptions.replaceChildren(...data.collections.map(name=>new Option(name,name)));collectionFilter.replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));collectionFilter.value=current;}
 
 async function request(url, options = {}) {
     const response = await fetch(url, options);
@@ -28,7 +28,9 @@ async function loadRecords() {
         if (!Array.isArray(payload.records)) {
             throw new Error("The built-in character catalog returned an invalid response.");
         }
+        activePopout?.close();
         state.records = payload.records;
+        await loadCollections();
         const tags = new Set(state.records.map((record) => record.tag));
         state.selected = new Set([...state.selected].filter((tag) => tags.has(tag)));
         renderFolderFilter();
@@ -68,7 +70,7 @@ function filteredRecords() {
     const query = elements["built-in-search"].value.trim().toLowerCase();
     const sortField = elements["built-in-sort-field"].value;
     const direction = elements["built-in-sort-direction"].value === "desc" ? -1 : 1;
-    return state.records.filter((record) => (!onlyRefmods.checked || record.appearance_refmod || record.voice_refmod) && (!folder || record.folder === folder)
+    return state.records.filter((record) => (!collectionFilter.value || record.collection === collectionFilter.value) && (!folder || record.folder === folder)
         && [record.name, record.actor, record.franchise, record.status, record.image_context]
             .some((value) => (value || "").toLowerCase().includes(query)))
         .sort((left, right) => direction * compareRecords(left, right, sortField));
@@ -82,6 +84,7 @@ function compareRecords(left, right, field) {
 }
 
 function renderRecords() {
+    elements["built-in-records"].querySelectorAll("audio").forEach(audio=>audio.pause());
     const records = filteredRecords();
     const groups = new Map();
     for (const record of records) {
@@ -111,87 +114,67 @@ function renderRecords() {
     renderSelectionState();
 }
 
+const icons = {
+ image:'<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/>',
+ voice:'<path d="M4 10v4m4-8v12m4-16v20m4-16v12m4-8v4"/>',
+ folder:'<path d="M3 20V5h6l2 3h10v12z"/>',
+ edit:'<path d="m15 4 5 5M4 20l5-1L21 7l-5-5L4 14z"/>',
+ copy:'<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/>',
+ more:'<circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/>',
+ close:'<path d="m6 6 12 12M6 18 18 6"/>',
+ play:'<path d="m7 4 14 8-14 8z"/>', pause:'<path d="M8 4v16M16 4v16"/>',
+};
+function icon(name){const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("aria-hidden","true");svg.innerHTML=icons[name];return svg;}
+function iconButton(name,label,action){const control=button("",action);control.className="builtin-icon-button";control.title=label;control.setAttribute("aria-label",label);control.append(icon(name));return control;}
+function popout(record,title){
+ activePopout?.close();
+ const dialog=document.createElement("dialog");dialog.className="builtin-popout";
+ const header=document.createElement("header"),heading=document.createElement("h2"),body=document.createElement("div");heading.id="builtin-popout-title";heading.textContent=`${record.name} · ${title}`;dialog.setAttribute("aria-labelledby",heading.id);
+ header.append(heading,iconButton("close","Close editor",()=>dialog.close()));dialog.append(header,body);document.body.append(dialog);
+ dialog.addEventListener("close",()=>{dialog.querySelectorAll("audio").forEach(audio=>audio.pause());dialog.remove();if(activePopout===dialog)activePopout=null;});
+ dialog.addEventListener("click",event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+ activePopout=dialog;dialog.showModal();return {dialog,body};
+}
+function editImage(record){
+ const {body}=popout(record,"Image reference");
+ if(record.image_url){const image=document.createElement("img");image.src=record.image_url;image.alt=`${record.name} reference`;body.append(image);}
+ body.append(button(record.has_image?"Replace image":"Add image",()=>chooseImage(record)));
+ if(record.has_image){
+  body.append(button("Remove image",()=>removeImage(record)));
+  const label=document.createElement("label"),input=document.createElement("textarea");label.textContent="Image context (visual reference only)";input.rows=4;input.value=record.image_context||"";input.placeholder="Describe which appearance details to use.";label.append(input);
+  const save=button("Save image context",()=>saveImageContext(record,input,save));save.disabled=true;input.oninput=()=>save.disabled=input.value.trim()===(record.image_context||"").trim();body.append(label,save);
+ }
+}
+function editVoice(record){
+ const {body}=popout(record,"Voice reference");
+ if(record.audio_url){const audio=document.createElement("audio");audio.controls=true;audio.preload="metadata";audio.src=record.audio_url;audio.setAttribute("aria-label",`${record.name} voice reference`);body.append(audio);}
+ body.append(button(record.has_audio?"Replace voice clip":"Add voice clip",()=>chooseAudio(record)));
+ if(record.has_audio)body.append(button("Remove voice clip",()=>removeAudio(record)));
+ const tag=document.createElement("code");tag.textContent=voiceTag(record);body.append(tag);
+}
+function editCollection(record){
+ const {dialog,body}=popout(record,"Collection");const label=document.createElement("label"),input=document.createElement("input");label.textContent="Collection (optional)";input.value=record.collection||"";input.setAttribute("list","built-in-collections");input.placeholder="Choose or enter a collection";label.append(input);
+ const save=button("Save collection",async()=>{save.disabled=true;try{const result=await request(`${apiRoot}/${record.attachment_id}/collection`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({collection:input.value})});record.collection=result.collection;await loadCollections();dialog.close();renderRecords();toast("Collection saved.");}catch(error){save.disabled=false;toast(error.message,true);}});body.append(label,save);input.focus();
+}
+function mediaColumn(kind,title){const column=document.createElement("div");column.className=`builtin-column builtin-${kind}`;const heading=document.createElement("div");heading.className="builtin-column-title";heading.append(icon(kind),document.createTextNode(title));column.append(heading);return column;}
 function recordRow(record) {
-    const row = document.createElement("article");
-    row.className = `built-in-row${state.selected.has(record.tag) ? " selected" : ""}`;
-    const checkLabel = document.createElement("label");
-    checkLabel.className = "built-in-check";
-    checkLabel.title = `Select ${record.name} played by ${record.actor}`;
-    const check = document.createElement("input");
-    check.type = "checkbox";
-    check.checked = state.selected.has(record.tag);
-    check.addEventListener("change", () => {
-        if (check.checked) state.selected.add(record.tag);
-        else state.selected.delete(record.tag);
-        row.classList.toggle("selected", check.checked);
-        renderSelectionState();
-    });
-    checkLabel.append(check);
-
-    const identity = document.createElement("div");
-    identity.className = "built-in-identity";
-    const name = document.createElement("strong");
-    name.textContent = record.name;
-    const tag = document.createElement("code");
-    tag.textContent = referenceTag(record);
-    const voice = document.createElement("code");
-    voice.className = "voice-tag";
-    voice.textContent = `Voice: ${voiceTag(record)}`;
-    identity.append(name, tag, voice);
-
-    const details = document.createElement("div");
-    details.className = "built-in-details";
-    details.textContent = portrayalText(record);
-    if (libraryTagMode && record.has_image) {
-        const contextEditor = document.createElement("label");
-        contextEditor.className = "built-in-image-context";
-        const contextTitle = document.createElement("span");
-        contextTitle.textContent = "Image context (visual reference only)";
-        const contextInput = document.createElement("textarea");
-        contextInput.rows = 2;
-        contextInput.value = record.image_context || "";
-        contextInput.placeholder = "Example: Use the face and hairstyle; ignore the plain white background.";
-        const saveContext = button("Save image context", () => saveImageContext(
-            record, contextInput, saveContext));
-        saveContext.disabled = true;
-        contextInput.addEventListener("input", () => {
-            saveContext.disabled = contextInput.value.trim() === (record.image_context || "").trim();
-        });
-        contextEditor.append(contextTitle, contextInput, saveContext);
-        details.append(contextEditor);
-    }
-
-    const actions = document.createElement("div");
-    actions.className = "built-in-meta";
-    if (libraryTagMode) {
-        const refmod = record.appearance_source === "refmod" ? record.appearance_refmod : null;
-        const imageURL = refmod ? `/api/h3-refmods/preview?file=${encodeURIComponent(refmod.file)}&member=${refmod.member ?? ""}` : record.image_url;
-        if (imageURL) {
-            const preview = document.createElement("img");
-            preview.className = "built-in-image-preview";
-            preview.src = imageURL;
-            preview.onerror = () => { preview.replaceWith(document.createTextNode("RefMod · no preview")); };
-            preview.alt = `${record.name} reference`;
-            actions.append(preview);
-        }
-        actions.append(button("RefMods / sources", () => editBuiltInRefmods(record, loadRecords).catch(error => toast(error.message, true))));
-        actions.append(button(record.has_image ? "Replace image" : "Add image", () => chooseImage(record)));
-        if (record.has_image) actions.append(button("Remove image", () => removeImage(record)));
-        if (record.audio_url) {
-            const preview = document.createElement("audio");
-            preview.controls = true;
-            preview.preload = "none";
-            preview.src = record.audio_url;
-            preview.setAttribute("aria-label", `${record.name} voice reference`);
-            actions.append(preview);
-        }
-        actions.append(button(record.has_audio ? "Replace voice clip" : "Add voice clip", () => chooseAudio(record)));
-        if (record.has_audio) actions.append(button("Remove voice clip", () => removeAudio(record)));
-
-    }
-    actions.append(button("Copy character + voice", () => copyCharacterGuide([record])));
-    row.append(checkLabel, identity, details, actions);
-    return row;
+ const row=document.createElement("article");row.className=`built-in-row builtin-compact${state.selected.has(record.tag)?" selected":""}`;
+ const checkLabel=document.createElement("label"),check=document.createElement("input");checkLabel.className="built-in-check";check.type="checkbox";check.checked=state.selected.has(record.tag);check.setAttribute("aria-label",`Select ${record.name}`);check.onchange=()=>{check.checked?state.selected.add(record.tag):state.selected.delete(record.tag);row.classList.toggle("selected",check.checked);renderSelectionState();};checkLabel.append(check);
+ const identity=document.createElement("div");identity.className="builtin-person";
+ const portrait=document.createElement(record.image_url?"img":"div");portrait.className="builtin-portrait";
+ if(record.image_url){portrait.src=record.image_url;portrait.alt="";portrait.loading="lazy";}else{portrait.textContent=record.name.split(/\s+/).slice(0,2).map(word=>word[0]).join("");portrait.setAttribute("aria-hidden","true");}
+ const info=document.createElement("div"),name=document.createElement("strong"),tag=document.createElement("code"),details=document.createElement("span");info.className="built-in-identity";name.textContent=record.name;tag.textContent=referenceTag(record);details.className="builtin-portrayal";details.textContent=[record.actor,record.franchise].filter(Boolean).join(" · ");info.append(name,tag,details);identity.append(portrait,info);
+ const image=mediaColumn("image","Image"),voice=mediaColumn("voice","Voice"),collection=mediaColumn("folder","Collection");
+ if(libraryTagMode){
+  const imageLine=document.createElement("div");imageLine.className="builtin-inline";const status=document.createElement("span");status.className=record.has_image?"builtin-attached":"builtin-empty";status.textContent=record.has_image?"✓ Attached":"No image";imageLine.append(status,iconButton("edit",`Edit image for ${record.name}`,()=>editImage(record)));image.append(imageLine);
+  const voiceLine=document.createElement("div");voiceLine.className="builtin-inline";
+  if(record.audio_url){const audio=document.createElement("audio");audio.src=record.audio_url;audio.preload="none";const play=iconButton("play",`Play voice for ${record.name}`,()=>{if(audio.paused){document.querySelectorAll('.builtin-compact audio').forEach(other=>{if(other!==audio)other.pause();});audio.play().catch(error=>toast(error.message,true));}else audio.pause();});const update=()=>{play.replaceChildren(icon(audio.paused?"play":"pause"));play.setAttribute("aria-label",`${audio.paused?"Play":"Pause"} voice for ${record.name}`);};audio.onplay=audio.onpause=audio.onended=update;voiceLine.append(play,audio);}
+  const voiceStatus=document.createElement("span");voiceStatus.textContent=record.has_audio?"Voice clip":"No clip";voiceStatus.className="builtin-empty";voiceLine.append(voiceStatus,iconButton("edit",`Edit voice for ${record.name}`,()=>{row.querySelectorAll("audio").forEach(audio=>audio.pause());editVoice(record);}));voice.append(voiceLine);
+ }else{image.append(document.createTextNode("Built-in likeness"));voice.append(document.createTextNode("Built-in voice"));}
+ const collectionButton=button(record.collection||"Add collection",()=>editCollection(record));collectionButton.className="builtin-collection-button";collectionButton.setAttribute("aria-label",`Edit collection for ${record.name}`);collection.append(collectionButton);
+ const actions=document.createElement("div");actions.className="builtin-row-actions";
+ actions.append(iconButton("copy",`Copy character and voice for ${record.name}`,()=>copyCharacterGuide([record])),iconButton("more",`More options for ${record.name}`,()=>{const {body}=popout(record,"Tags & details");const text=document.createElement("p");text.textContent=portrayalText(record);body.append(text,button("Copy character + voice",()=>copyCharacterGuide([record])));for(const [label,value] of [["Character",referenceTag(record)],["Voice",voiceTag(record)]]){const code=document.createElement("code");code.textContent=`${label}: ${value}`;body.append(code);}}));
+ row.append(checkLabel,identity,image,voice,collection,actions);return row;
 }
 
 function button(text, onClick) {
@@ -204,6 +187,7 @@ function button(text, onClick) {
 }
 
 function renderSelectionState() {
+    localStorage.setItem("skeba-built-in-selection",JSON.stringify([...state.selected]));
     const count = state.selected.size;
     if (libraryTagMode) {
         window.dispatchEvent(new CustomEvent("skeba-built-in-selection-change", {
@@ -331,6 +315,10 @@ function selectionItem(record) {
     const details = document.createElement("div");
     details.className = "selection-details";
     details.textContent = portrayalText(record);
+    const collectionLabel=document.createElement("label"),collection=document.createElement("input");
+    collectionLabel.textContent="Collection (optional)";collection.value=record.collection||"";collection.setAttribute("list","built-in-collections");collection.placeholder="Choose or enter a collection";
+    const saveCollection=button("Save collection",async()=>{try{const result=await request(`${apiRoot}/${record.attachment_id}/collection`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({collection:collection.value})});record.collection=result.collection;collection.value=result.collection;await loadCollections();renderSelectionState();toast("Collection saved.");}catch(error){toast(error.message,true);}});
+    collectionLabel.append(collection,saveCollection);details.append(collectionLabel);
     tags.append(character, voice);
     item.append(tags, details);
     return item;
@@ -379,3 +367,5 @@ if (libraryTagMode) {
 }
 
 loadRecords();
+
+window.addEventListener("storage",event=>{if(event.key!=="skeba-built-in-selection"&&event.key!==null)return;state.selected=new Set(JSON.parse(localStorage.getItem("skeba-built-in-selection")||"[]"));renderRecords();});

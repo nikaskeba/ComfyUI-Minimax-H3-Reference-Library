@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+const code=(await fs.readFile(new URL('../web/refmod_studio.js',import.meta.url),'utf8')).replace(/^import .*;$/gm,'').replace('export function','function');
+const modelGraph=new Function('app',code+';return modelGraph;')({registerExtension(){}});
+const graph={studio:{class_type:'SkebaRefModStudio',inputs:{vae:['getter',0],audio_vae:['audio',0]}},getter:{class_type:'Getter',inputs:{key:'VAE'}},setter:{class_type:'Setter',inputs:{key:'VAE',value:['video',0]}},video:{class_type:'VAELoader',inputs:{vae_name:'selected-video'}},audio:{class_type:'VAELoader',inputs:{vae_name:'selected-audio'}},save:{class_type:'SaveImage',inputs:{images:['unrelated',0]}}};
+const result=modelGraph(graph,'studio',['vae','audio_vae']);
+assert.deepEqual(result.inputs,{vae:['workflow_video',0],audio_vae:['workflow_audio',0]});
+assert.equal(Object.keys(result.prompt).length,2);
+assert.equal(result.prompt.workflow_video.inputs.vae_name,'selected-video');
+assert.equal(Object.keys(modelGraph(graph,'studio',['audio_vae']).prompt).length,1);
+assert.throws(()=>modelGraph({...graph,other:graph.studio},null,['vae']),/Open RefMod/);
+assert.throws(()=>modelGraph({...graph,studio:{...graph.studio,inputs:{}}},'studio',['vae']),/Connect video VAE/);
+assert.throws(()=>modelGraph({...graph,video:{class_type:'VAELoader',inputs:{bad:['video',0]}}},'studio',['vae']),/Cycle/);
+console.log('Workflow VAE extraction: connections, pruning, selection, missing inputs and cycles passed');

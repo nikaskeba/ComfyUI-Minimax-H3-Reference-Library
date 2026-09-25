@@ -1,6 +1,22 @@
 """Text batching nodes migrated from ComfyUI-batching-nodes-SKEBA."""
 
 
+class PromptListTextNode:
+    """Keep the original string intact; formatting is a frontend-only view."""
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"text": ("STRING", {"multiline": True, "default": ""})}}
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("text",)
+    FUNCTION = "output_text"
+    CATEGORY = "Skeba AI Nodes - Utilities"
+
+    def output_text(self, text):
+        return (text,)
+
+
 class PromptLoopNode:
     """Split text into prompts for ComfyUI list-based batch execution."""
 

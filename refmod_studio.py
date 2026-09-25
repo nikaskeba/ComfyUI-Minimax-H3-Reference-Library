@@ -51,11 +51,61 @@ def output_path(name):
     return target, relative.as_posix()
 
 
+def import_refmods(directory):
+    """Validate uploaded assets, then publish an isolated import folder."""
+    directory = Path(directory)
+    files = sorted(directory.glob("*.safetensors"))
+    if not files:
+        raise ValueError("Select at least one .safetensors RefMod; include its JSON metadata if stored separately.")
+    for path in files:
+        meta, _ = read_meta(str(path.with_suffix("")))
+        members = range(len(meta.get("members", []))) if meta.get("kind") == "bundle" else [None]
+        if meta.get("kind") == "bundle" and not meta.get("members"):
+            raise ValueError("Empty RefMod bundle: " + path.name)
+        for member in members:
+            H3RefMod.load(str(path.with_suffix("")), member=member)
+    root = roots()[0].resolve()
+    target = root / "imports" / uuid.uuid4().hex
+    target.parent.mkdir(parents=True, exist_ok=True)
+    staging = target.with_name("." + target.name)
+    if not staging.resolve().is_relative_to(root):
+        raise ValueError("Import staging folder must stay inside the RefMod root.")
+    try:
+        shutil.copytree(directory, staging)
+        os.replace(staging, target)
+    finally:
+        if staging.exists():
+            shutil.rmtree(staging)
+    return [(target / path.name).relative_to(root).as_posix() for path in files]
+
+
 def members_from_file(selection):
     path, _ = resolve(selection)
     meta, _ = read_meta(str(path.with_suffix("")))
     indices = range(len(meta["members"])) if meta.get("kind") == "bundle" else [None]
     return path, meta, [H3RefMod.load(str(path.with_suffix("")), member=i) for i in indices]
+
+
+def export_refmods(selections, target):
+    if not isinstance(selections, list) or not selections:
+        raise ValueError("Select a RefMod to export.")
+    mods = []; seen = set(); settings = {}
+    for selection in selections:
+        path, meta, members = members_from_file(selection)
+        if path in seen:
+            continue
+        seen.add(path)
+        if not settings:
+            settings = dict(meta.get("skeba_studio", {}))
+        mods.extend(members)
+        if meta.get("kind") == "bundle":
+            settings["preserve_bundle"] = True
+    # Export only portable descriptive settings, never local source paths.
+    settings = {key: value for key, value in settings.items() if key in (
+        "name", "subject_name", "description", "appearance", "voice_description",
+        "reference_type", "collection", "mode", "resolution", "grid", "steps",
+        "video_frames", "video_seconds", "audio_seconds", "preserve_bundle")}
+    save_members(Path(target), mods, settings)
 
 
 def mod_metadata(mod):
@@ -147,7 +197,22 @@ class SkebaRefModStudio:
     def IS_CHANGED(cls, **kwargs): return float("nan")
 
     def save(self, spec, vae=None, audio_vae=None):
-        settings = json.loads(spec)
+        settings = json.loads(spec) if spec.strip() else {}
+        if not isinstance(settings, dict):
+            raise ValueError("RefMod settings must be a JSON object.")
+        # The workflow node also supplies VAE connections to the library.
+        # Only library jobs with a populated spec should save a RefMod.
+        if not settings:
+            return {"ui": {"text": ["Ready — no RefMod save requested."]}, "result": ("",)}
+        if not isinstance(settings.get("file"), str) or not settings["file"].strip():
+            raise ValueError("Choose an output file in the RefMod library before saving.")
+        reference_type = settings.get("reference_type", "character")
+        if reference_type not in ("character", "location", "object", "music", "video"):
+            raise ValueError("Choose character, location, object, music or video.")
+        collection = str(settings.get("collection", "")).strip().lower()
+        if collection and not re.fullmatch(r"[A-Za-z0-9_-]+", collection):
+            raise ValueError("Collection must contain only letters, numbers, '_' or '-'.")
+        settings.update(reference_type=reference_type, collection=collection)
         mode = settings.get("mode", "training")
         if mode not in ("training", "encode"): raise ValueError("Unknown RefMod mode.")
         settings = {"resolution": 1024, "grid": 16, "video_frames": 22, "steps": 500, "audio_seconds": 30,
@@ -265,6 +330,12 @@ class SkebaRefModStudio:
             if settings.get("overwrite") and audio_i != len(mods)-1:
                 raise ValueError("Save a new file to remove this member without renumbering attached references.")
             mods.pop(audio_i)
+        if settings.get("limit_total_voice"):
+            # The simplified editor's cap covers kept and newly added voice together.
+            for mod in mods:
+                if mod.kind == "audio":
+                    mod.latent = mod.latent[..., :max(1, int(seconds * 40))].clone()
+                    mod.latent_t = mod.latent.shape[-1]
         if mods:
             mods[selected if selected is not None and selected < len(mods) else 0].name = name
         for mod in mods:
