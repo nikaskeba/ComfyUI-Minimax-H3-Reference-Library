@@ -17,6 +17,7 @@ import numpy as np
 import torch
 import torchaudio
 import folder_paths
+from .audio_seams import seam_samples, seam_gain
 from .playlist_timeline import frame_range, render_timeline
 from comfy_api.latest import InputImpl
 
@@ -283,6 +284,7 @@ class SaveClipToFile:
                     "preview_clip": ("BOOLEAN", {"default": False, "tooltip": "Show each completed clip in the node. Creates a temporary MP4 preview with audio; the loop still uses the saved MP4."}),
                     "prompt": ("STRING", {"default": "", "multiline": True, "tooltip": "Optional prompt for this clip. Saved verbatim with its filename and measured duration in manifest.json. Can be connected to the current loop prompt."}),
                     "seed": ("INT", {"forceInput":True}),
+                    "noise": ("NOISE", {"tooltip": "Connect the same RandomNoise output used by the sampler. Records its seed for playlist edits; overrides the numeric seed input."}),
                 }, "hidden":{"execution_prompt":"PROMPT"}}
 
     RETURN_TYPES = ("VIDEO",)
@@ -290,7 +292,16 @@ class SaveClipToFile:
     FUNCTION = "save"
     CATEGORY = "Skeba AI Nodes - Utilities"
 
-    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt="", seed=None, execution_prompt=None):
+    def save(self, video, crf=18, accumulation=None, output_folder="skeba_clips", project_name="", preview_clip=False, prompt="", seed=None, execution_prompt=None, noise=None):
+        # Older workflow widget arrays saved toggle values in these string slots.
+        if isinstance(output_folder, bool) or output_folder is None:
+            output_folder = "skeba_clips"
+        if isinstance(project_name, bool) or project_name is None:
+            project_name = ""
+        if noise is not None:
+            seed = getattr(noise, "seed", None)
+            if type(seed) is not int:
+                raise ValueError("Connect a RandomNoise output with a numeric seed to noise.")
         clips = (accumulation or {}).get("accum", [])
         if clips and isinstance(clips[-1], DiskClip):
             directory = Path(clips[-1].get_stream_source()).parent
@@ -334,13 +345,13 @@ class SaveClipToFile:
         }}
 
 
-def _join_audio(paths, destination):
+def _join_audio(paths, destination, audio_seam_ms=0):
     # Decode one audio frame at a time and discard AAC tail padding per clip.
     with wave.open(str(destination), "wb") as output:
         output.setnchannels(2)
         output.setsampwidth(2)
         output.setframerate(48000)
-        for path in paths:
+        for index, path in enumerate(paths):
             with av.open(str(path)) as container:
                 video = container.streams.video[0]
                 if video.duration is None:
@@ -351,18 +362,26 @@ def _join_audio(paths, destination):
                 else:
                     duration = float(video.duration * video.time_base)
                 remaining = round(duration * 48000)
+                total = remaining
+                fade = seam_samples(total, 48000, audio_seam_ms)
+                def write_samples(data, count):
+                    if fade and count:
+                        samples = np.frombuffer(data[:count * 4], dtype='<i2').reshape(count, 2)
+                        gain = seam_gain(total - remaining, count, total, fade, index > 0, index + 1 < len(paths))
+                        data = np.rint(samples * gain[:, None]).astype('<i2').tobytes()
+                    output.writeframesraw(data[:count * 4])
                 resampler = av.AudioResampler(format="s16", layout="stereo", rate=48000)
                 for frame in container.decode(audio=0):
                     for converted in resampler.resample(frame):
                         data = converted.to_ndarray().tobytes()
                         count = min(remaining, converted.samples)
-                        output.writeframesraw(data[:count * 4])
+                        write_samples(data, count)
                         remaining -= count
                     if remaining == 0:
                         break
                 for converted in resampler.resample(None):
                     count = min(remaining, converted.samples)
-                    output.writeframesraw(converted.to_ndarray().tobytes()[:count * 4])
+                    write_samples(converted.to_ndarray().tobytes(), count)
                     remaining -= count
                 while remaining:
                     count = min(remaining, 48000)
@@ -370,7 +389,7 @@ def _join_audio(paths, destination):
                     remaining -= count
 
 
-def combine_disk_clips(clips, starting_video=None, ending_video=None):
+def combine_disk_clips(clips, starting_video=None, ending_video=None, audio_seam_ms=0):
     paths = [Path(clip.get_stream_source()) for clip in clips]
     geometry = _geometry(paths[0])
     if any(_geometry(path) != geometry for path in paths[1:]):
@@ -388,7 +407,7 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None):
         manifest.write_text("".join("file '" + path.resolve().as_posix().replace("'", "'\\''") + "'\n"
                                     for path in paths), encoding="utf-8")
         audio = Path(temporary) / "joined.wav"
-        _join_audio(paths, audio)
+        _join_audio(paths, audio, audio_seam_ms)
         result = subprocess.run([_ffmpeg(), "-hide_banner", "-loglevel", "error", "-y",
                              "-f", "concat", "-safe", "0", "-i", str(manifest),
                              "-i", str(audio), "-map", "0:v:0", "-map", "1:a:0",
@@ -399,6 +418,7 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None):
         raise RuntimeError("Clip concatenation failed: " + result.stderr)
     _update_manifest(directory, combined={
         **_clip_metadata(output),
+        "audio_seam_ms": audio_seam_ms,
         "clips": [{**_clip_metadata(path),
                    "path": path.name if path.parent == directory else str(path.resolve()),
                    "role": "starting" if starting_video is not None and i == 0 else
@@ -411,14 +431,14 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None):
 class CompilePlaylist:
     @classmethod
     def INPUT_TYPES(cls):
-        return {"required":{"project":("STRING",),"clip_ids":("STRING",)}}
+        return {"required":{"project":("STRING",),"clip_ids":("STRING",)}, "optional":{"audio_seam_ms":("FLOAT", {"default":0.0,"min":0.0,"max":50.0,"step":1.0,"tooltip":"Short fade to/from zero at internal audio joins. Try 10 ms; 0 is off. Total duration is unchanged."})}}
     RETURN_TYPES=("STRING",)
     FUNCTION="compile"
     OUTPUT_NODE=True
     CATEGORY="Skeba AI Nodes - Utilities"
     @classmethod
     def IS_CHANGED(cls,**kwargs): return float("nan")
-    def compile(self,project,clip_ids):
+    def compile(self,project,clip_ids,audio_seam_ms=0):
         ids=json.loads(clip_ids)
         if not isinstance(ids,list) or not ids or not all(isinstance(i,(str,dict)) for i in ids):
             raise ValueError("Choose completed clips to compile.")
@@ -433,12 +453,12 @@ class CompilePlaylist:
                 frame_range(entry,clip)
                 pieces.append((playlist_media(project,clip['clip_id']),clip,entry))
             output=directory/('combined_'+uuid.uuid4().hex[:8]+'.mp4')
-            render_timeline(_ffmpeg(),pieces,output)
-            _update_manifest(directory,combined={**_clip_metadata(output),'timeline':entries})
+            render_timeline(_ffmpeg(),pieces,output,audio_seam_ms=audio_seam_ms)
+            _update_manifest(directory,combined={**_clip_metadata(output),'timeline':entries,'audio_seam_ms':audio_seam_ms})
             result=DiskClip(str(output))
         else:
             clips=[DiskClip(str(playlist_media(project,i))) for i in ids]
-            result,count=combine_disk_clips(clips)
+            result,count=combine_disk_clips(clips,audio_seam_ms=audio_seam_ms)
         filename=Path(result.get_stream_source()).name
         return {"ui":{"text":[filename]},"result":(filename,)}
 

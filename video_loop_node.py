@@ -5,6 +5,7 @@ import torchaudio
 
 from comfy_api.latest import InputImpl, Types
 from .disk_video import DiskClip, combine_disk_clips
+from .audio_seams import seam_samples, seam_gain
 
 
 class CombineVideoClipsNode:
@@ -15,6 +16,7 @@ class CombineVideoClipsNode:
                 "accumulation": ("ACCUMULATION", {"forceInput": True}),
             },
             "optional": {
+                "audio_seam_ms": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 50.0, "step": 1.0, "tooltip": "Export-only audio de-click fades. Try 10 ms; 0 disables. No change to video timing."}),
                 "starting_video": ("VIDEO", {"tooltip": "Video placed before the accumulated clips; resized to fit with black bars if needed."}),
                 "ending_video": ("VIDEO", {"tooltip": "Video placed after the accumulated clips; resized to fit with black bars if needed."}),
             },
@@ -25,10 +27,10 @@ class CombineVideoClipsNode:
     FUNCTION = "combine"
     CATEGORY = "Skeba AI Nodes - Utilities"
 
-    def combine(self, accumulation, starting_video=None, ending_video=None):
+    def combine(self, accumulation, starting_video=None, ending_video=None, audio_seam_ms=0):
         videos = list(accumulation.get("accum", []))
         if videos and all(isinstance(video, DiskClip) for video in videos):
-            return combine_disk_clips(videos, starting_video, ending_video)
+            return combine_disk_clips(videos, starting_video, ending_video, audio_seam_ms)
         target_index = int(starting_video is not None) if videos else 0
         if starting_video is not None:
             videos.insert(0, starting_video)
@@ -76,7 +78,7 @@ class CombineVideoClipsNode:
         images = torch.cat([clip.images for clip in components], dim=0)
         accumulated_components = components[target_index:target_index + len(accumulation.get("accum", []))]
         reference_audio = next((clip.audio for clip in accumulated_components if clip.audio is not None), None)
-        audio = self._combine_audio(components, frame_rate, reference_audio)
+        audio = self._combine_audio(components, frame_rate, reference_audio, audio_seam_ms)
         video = InputImpl.VideoFromComponents(
             Types.VideoComponents(images=images, audio=audio, frame_rate=frame_rate),
             bit_depth=bit_depth,
@@ -84,7 +86,7 @@ class CombineVideoClipsNode:
         return (video, len(videos))
 
     @staticmethod
-    def _combine_audio(components, frame_rate, reference_audio=None):
+    def _combine_audio(components, frame_rate, reference_audio=None, audio_seam_ms=0):
         if all(clip.audio is None for clip in components):
             return None
         if reference_audio is None:
@@ -112,6 +114,12 @@ class CombineVideoClipsNode:
                 waveform = torch.cat([waveform, padding], dim=-1)
             waveforms.append(waveform)
 
+        if audio_seam_ms:
+            for index, waveform in enumerate(waveforms):
+                count = waveform.shape[-1]
+                fade = seam_samples(count, sample_rate, audio_seam_ms)
+                gain = torch.as_tensor(seam_gain(0, count, count, fade, index > 0, index + 1 < len(waveforms)), device=waveform.device, dtype=waveform.dtype)
+                waveforms[index] = waveform * gain
         return {
             "waveform": torch.cat(waveforms, dim=-1),
             "sample_rate": sample_rate,

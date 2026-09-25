@@ -1,6 +1,7 @@
 """Nondestructive, frame-based timeline ranges."""
 import subprocess
 from fractions import Fraction
+from .audio_seams import seam_samples
 
 
 def frame_range(entry, clip):
@@ -18,7 +19,7 @@ def clean_entry(entry, clip):
     return result
 
 
-def render_timeline(ffmpeg, pieces, output):
+def render_timeline(ffmpeg, pieces, output, audio_seam_ms=0):
     first = pieces[0][1]
     fps = Fraction(first['fps_fraction'])
     width, height = first['width'], first['height']
@@ -36,9 +37,16 @@ def render_timeline(ffmpeg, pieces, output):
                        f'pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,'
                        f'tpad=stop_mode=clone:stop_duration=1,trim=end_frame={frames}[v{i}]')
         begin=round(start/source_fps*48000)
+        fade = seam_samples(samples, 48000, audio_seam_ms)
+        fades = ''
+        if fade:
+            if i > 0:
+                fades += f',afade=t=in:ss=0:ns={max(1, fade-1)}:curve=hsin'
+            if i + 1 < len(pieces):
+                fades += f',afade=t=out:ss={samples-fade}:ns={max(1, fade-1)}:curve=hsin'
         filters.append(f'[{i}:a]aresample=48000,aformat=channel_layouts=stereo,'
                        f'atrim=start_sample={begin}:end_sample={round(end/source_fps*48000)},'
-                       f'asetpts=PTS-STARTPTS,apad=whole_len={samples},atrim=end_sample={samples}[a{i}]')
+                       f'asetpts=PTS-STARTPTS,apad=whole_len={samples},atrim=end_sample={samples}{fades}[a{i}]')
     filters.append(''.join(f'[v{i}][a{i}]' for i in range(len(pieces)))+f'concat=n={len(pieces)}:v=1:a=1[v][a]')
     command += ['-filter_complex',';'.join(filters),'-map','[v]','-map','[a]',
                 '-r',str(fps),'-c:v','libx264','-crf','18','-pix_fmt','yuv420p',

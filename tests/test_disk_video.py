@@ -6,6 +6,8 @@ from pathlib import Path
 import sys
 import tempfile
 import types
+import wave
+import numpy as np
 import unittest
 from unittest.mock import patch
 
@@ -45,6 +47,51 @@ class DiskVideoTests(unittest.TestCase):
         self.addCleanup(self.user.cleanup)
         patcher=patch.object(disk.folder_paths,"get_user_directory",return_value=self.user.name)
         patcher.start();self.addCleanup(patcher.stop)
+
+    def test_export_seam_smoothing_preserves_length_and_sources(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
+            first = disk.SaveClipToFile().save(video())["result"][0]
+            second = disk.SaveClipToFile().save(video(), accumulation={'accum':[first]})["result"][0]
+            paths = [Path(c.get_stream_source()) for c in (first, second)]
+            originals = [p.read_bytes() for p in paths]
+            def joined(name, ms):
+                path = Path(directory) / name
+                disk._join_audio(paths, path, ms)
+                with wave.open(str(path), 'rb') as audio:
+                    return np.frombuffer(audio.readframes(audio.getnframes()), dtype='<i2').reshape(-1, 2)
+            plain, smooth = joined('plain.wav', 0), joined('smooth.wav', 10)
+            self.assertEqual(smooth.shape, (96000, 2))
+            self.assertTrue(np.array_equal(smooth[:47760], plain[:47760]))
+            self.assertTrue(np.array_equal(smooth[48240:], plain[48240:]))
+            self.assertTrue(np.all(smooth[47999:48001] == 0))
+            combined, _ = disk.combine_disk_clips([first, second], audio_seam_ms=10)
+            frames, seconds = inspect(combined.get_stream_source())
+            self.assertEqual(frames, 48)
+            self.assertLess(abs(seconds - 2), .025)
+            self.assertEqual([p.read_bytes() for p in paths], originals)
+            token = disk.register_playlist(paths[0].parent)
+            ids = [{'clip_id':p.stem, 'in_frame':2, 'out_frame':22} for p in paths]
+            name = disk.CompilePlaylist().compile(token, json.dumps(ids), audio_seam_ms=10)['result'][0]
+            frames, seconds = inspect(paths[0].parent / name)
+            self.assertEqual(frames, 40)
+            self.assertLess(abs(seconds - 40 / 24), .025)
+
+    def test_destination_and_random_noise_seed(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
+            saver = disk.SaveClipToFile()
+            first = saver.save(video(), output_folder="episodes", project_name="Test Show", noise=types.SimpleNamespace(seed=0), seed=123)
+            folder, manifest = disk.playlist_manifest(first['ui']['skeba_playlist'][0])
+            self.assertEqual(folder.parent, Path(directory) / 'episodes' / 'Test Show')
+            self.assertEqual(manifest['clips'][0]['seed'], 0)
+            second = saver.save(video(), accumulation={'accum': [first['result'][0]]}, output_folder='different', project_name='Other', noise=types.SimpleNamespace(seed=456))
+            self.assertEqual(second['ui']['skeba_playlist'], first['ui']['skeba_playlist'])
+            self.assertEqual(disk.playlist_manifest(first['ui']['skeba_playlist'][0])[1]['clips'][1]['seed'], 456)
+            legacy = saver.save(video(), output_folder=True, project_name=True, seed=12)
+            folder, manifest = disk.playlist_manifest(legacy['ui']['skeba_playlist'][0])
+            self.assertEqual(folder.parent, Path(directory) / 'skeba_clips')
+            self.assertEqual(manifest['clips'][0]['seed'], 12)
+            with self.assertRaisesRegex(ValueError, 'RandomNoise'):
+                saver.save(video(), noise=object())
 
     def test_live_playlist_registration_and_media_access(self):
         with tempfile.TemporaryDirectory() as directory, \

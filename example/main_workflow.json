@@ -2,7 +2,7 @@
   "id": "fff03f6a-d58c-423a-b740-aff8c24420cf",
   "revision": 0,
   "last_node_id": 952,
-  "last_link_id": 1723,
+  "last_link_id": 1724,
   "nodes": [
     {
       "id": 334,
@@ -2039,6 +2039,12 @@
           "inputs": [],
           "outputs": []
         }
+      },
+      "widgets_values": [
+        10.0
+      ],
+      "widgets_values_named": {
+        "audio_seam_ms": 10.0
       }
     },
     {
@@ -13107,6 +13113,12 @@
           "name": "processed_1",
           "type": "*",
           "link": null
+        },
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "shape": 7,
+          "link": 1724
         }
       ],
       "outputs": [
@@ -13148,20 +13160,24 @@
         "skeba_playlist": "d858fbb8e0db4fb5b232ed429b32f8ef",
         "skeba_clip_toggles": {
           "preview_clip": true
+        },
+        "skeba_clip_destination": {
+          "output_folder": "skeba_clips",
+          "project_name": ""
         }
       },
       "widgets_values": [
         18,
-        true,
-        true,
+        "skeba_clips",
+        "",
         true,
         "",
         null
       ],
       "widgets_values_named": {
         "crf": 18,
-        "output_folder": true,
-        "project_name": true,
+        "output_folder": "skeba_clips",
+        "project_name": "",
         "preview_clip": true,
         "prompt": "",
         "Open Live Playlist": null
@@ -14033,7 +14049,8 @@
           "name": "NOISE",
           "type": "NOISE",
           "links": [
-            1154
+            1154,
+            1724
           ]
         }
       ],
@@ -16571,6 +16588,14 @@
       775,
       0,
       "STRING"
+    ],
+    [
+      1724,
+      411,
+      0,
+      851,
+      6,
+      "NOISE"
     ]
   ],
   "groups": [

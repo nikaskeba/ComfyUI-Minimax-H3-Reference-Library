@@ -29,6 +29,9 @@ app.registerExtension({
             }
             data.properties ||= {};
             data.properties.skeba_clip_toggles = toggles;
+            data.properties.skeba_clip_destination = Object.fromEntries(
+                ["output_folder", "project_name"].map(name => [name, this.widgets?.find(w => w.name === name)?.value])
+                    .filter(([, value]) => typeof value === "string"));
             return result;
         };
         const configured = nodeType.prototype.onConfigure;
@@ -38,6 +41,13 @@ app.registerExtension({
             for (const name of ["preview_clip"]) {
                 const widget = this.widgets?.find(item => item.name === name);
                 if (widget && typeof toggles?.[name] === "boolean") widget.value = toggles[name];
+            }
+            for (const [name, fallback] of [["output_folder", "skeba_clips"], ["project_name", ""]]) {
+                const widget = this.widgets?.find(item => item.name === name);
+                if (!widget) continue;
+                const value = [data.properties?.skeba_clip_destination?.[name], data.widgets_values_named?.[name], widget.value]
+                    .find(value => typeof value === "string");
+                widget.value = value ?? fallback;
             }
             return result;
         };
