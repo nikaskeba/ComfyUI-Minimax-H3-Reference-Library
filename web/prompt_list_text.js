@@ -96,6 +96,14 @@ function visualEditor(root, widget, dirty) {
         overview.textContent = `Prompt ${selected + 1} of ${prompts.length} · References: ${prompt.references.join(" · ") || "None"}`;
     }
     function render() {
+        if (!(widget.value || "").trim()) {
+            timeline.replaceChildren(); overview.textContent = ""; fields.replaceChildren();
+            const empty = el("div", undefined, "skeba-prompt-empty");
+            const add = el("button", "Add first scene", "skeba-prompt-add"); add.type = "button";
+            add.onclick = () => action(() => { write(template); selected = 0; render(); view.scrollTop = 0; });
+            empty.append(el("p", "Start your prompt list with a new scene.", "skeba-prompt-muted"), add);
+            fields.append(empty); historyState(); return;
+        }
         updateTimeline(); fields.replaceChildren();
         const prompt = parsePromptList(widget.value || "")[selected];
         const save = () => replacePrompt(prompt.sections.map(s => s.heading + s.text).join(""));
@@ -173,6 +181,7 @@ app.registerExtension({
         .skeba-prompt-block[aria-pressed=true]{outline:2px solid #79cfff;outline-offset:-2px;background:#254b69}
         .skeba-prompt-block.scene-break{border-left:5px solid #efb964}
         .skeba-prompt-add{flex:none;background:#202f41;color:#b9e3ff;border:1px solid #506078;border-radius:6px;cursor:pointer}
+        .skeba-prompt-empty{text-align:center;padding:28px 12px}.skeba-prompt-empty button{padding:10px 18px}
         .skeba-prompt-settings,.skeba-dialogue-card{display:flex;flex-wrap:wrap;gap:10px;white-space:normal}
         .skeba-prompt-editor label{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
         .skeba-prompt-editor input{min-width:0;max-width:100%;background:#111923;color:#e5edf6;border:1px solid #506078;border-radius:4px;padding:7px}

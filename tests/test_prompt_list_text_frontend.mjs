@@ -120,6 +120,22 @@ try {
  assert.equal(await page.evaluate(()=>node.widgets[0].value),'timeline:\nBefore. After.');
  await page.evaluate(()=>{node.widgets[0].value='[s=15]\n\nsubject_definitions:\n{Jerry_BC}\ntimeline:\n[Shot 1] {Jerry_BC} waits. <d>[English §Jerry_BC§]Hi.</d>';node.onConfigure();document.querySelector('.skeba-prompt-view').scrollTop=0;});
  await page.screenshot({path:process.env.TEMP+'/skeba-prompt-inline-editor.png'});
+ for(const blank of ['', '  \r\n ']){
+  await page.evaluate(value=>{node.widgets[0].value=value;node.onConfigure();},blank);
+  assert.equal(await page.locator('.skeba-prompt-block').count(),0);
+  assert.equal(await page.getByRole('textbox',{name:'Timeline text',exact:true}).count(),0);
+  assert.equal(await page.evaluate(()=>node.widgets[0].value),blank);
+  await page.getByRole('button',{name:'Add first scene',exact:true}).click();
+  assert.equal(await page.locator('.skeba-prompt-block').count(),1);
+  assert.equal(await page.getByLabel('Length (seconds)').inputValue(),'15');
+  assert.equal(await page.getByRole('textbox',{name:'Timeline text',exact:true}).count(),1);
+  assert.equal((await page.evaluate(()=>node.widgets[0].value)).includes('|'),false);
+  await page.getByRole('button',{name:'Undo',exact:true}).click();
+  assert.equal(await page.evaluate(()=>node.widgets[0].value),blank);
+  await page.getByRole('button',{name:'Add first scene',exact:true}).waitFor();
+  await page.getByRole('button',{name:'Redo',exact:true}).click();
+  assert.equal(await page.locator('.skeba-prompt-block').count(),1);
+ }
  assert.deepEqual(errors,[]);
  console.log('Visual prompt timeline, editing, insertion, undo/redo, exact text and restoration passed');
 } finally {await browser.close();}
