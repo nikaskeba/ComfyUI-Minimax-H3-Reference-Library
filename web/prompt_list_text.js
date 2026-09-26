@@ -137,6 +137,15 @@ function visualEditor(root, widget, dirty) {
                 });
             } else {
                 richPromptField(panel, section.text, `${section.name} text`, value => {
+                    // Rich-text replacement can remove the newlines around a body.
+                    // Section separators belong to the structure, not editable prose.
+                    const newline = section.text.includes("\r\n") ? "\r\n" : "\n";
+                    if (!/^[ \t]*\r?\n/.test(value)) value = newline + value;
+                    if (index + 1 < prompt.sections.length) {
+                        const ending = value.match(/(?:\r?\n[ \t]*)+$/)?.[0] || "";
+                        const count = (ending.match(/\n/g) || []).length;
+                        value += newline.repeat(Math.max(0, 2 - count));
+                    }
                     section.text = value; save();
                 }, references, dialogueParts, action);
             }

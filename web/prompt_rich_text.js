@@ -27,7 +27,7 @@ export function richPromptField(parent, text, label, changed, references, dialog
     editor.contentEditable = "true";
     editor.setAttribute("role", "textbox"); editor.setAttribute("aria-multiline", "true"); editor.setAttribute("aria-label", label);
     const notice = element("p", "", "skeba-prompt-error"); notice.setAttribute("role", "status");
-    let range = null;
+    let range = null, savedText = text;
     function remember() {
         const selection = window.getSelection();
         if (selection.rangeCount && editor.contains(selection.anchorNode) && !selection.anchorNode.parentElement?.closest("[data-prompt-raw]")) range = selection.getRangeAt(0).cloneRange();
@@ -36,7 +36,8 @@ export function richPromptField(parent, text, label, changed, references, dialog
         const value = readText(editor);
         if (value.includes("|")) { notice.textContent = "Use + to insert a prompt, or edit separators in Raw text. Remove | to save this field."; return false; }
         notice.textContent = dialogueParts(value).some(p => !p.dialogue && /<\/?d>/.test(p.raw)) ? "Unrecognized dialogue markup is kept as text. You can edit it here." : "";
-        changed(value); return true;
+        if (value !== savedText) { changed(value); savedText = value; }
+        return true;
     }
     function insert(node) {
         editor.focus();

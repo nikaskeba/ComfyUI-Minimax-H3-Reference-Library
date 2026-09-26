@@ -136,6 +136,14 @@ try {
   await page.getByRole('button',{name:'Redo',exact:true}).click();
   assert.equal(await page.locator('.skeba-prompt-block').count(),1);
  }
+ await page.evaluate(()=>{node.widgets[0].value='[s=15]\n\nsubject_definitions:\n{Conan_BC}\n\ndetailed_description:\nA street.\n\ntimeline:\n[Shot 1] Waits.';node.onConfigure();});
+ await page.getByRole('textbox',{name:'subject_definitions: text',exact:true}).fill('{Conan_BC} wearing a clown costume.');
+ await page.getByRole('textbox',{name:'Description text',exact:true}).fill('Realistic render');
+ await page.getByRole('tab',{name:'Raw text'}).click();
+ const spaced=await page.getByRole('textbox',{name:'Prompt list separated by vertical bars'}).inputValue();
+ assert.match(spaced,/subject_definitions:\n\{Conan_BC\} wearing a clown costume\.\n\ndetailed_description:\nRealistic render\n\ntimeline:\n/);
+ await page.getByRole('tab',{name:'Formatted view'}).click();
+ assert.equal(await page.getByRole('textbox',{name:'Description text',exact:true}).count(),1);
  assert.deepEqual(errors,[]);
  console.log('Visual prompt timeline, editing, insertion, undo/redo, exact text and restoration passed');
 } finally {await browser.close();}
