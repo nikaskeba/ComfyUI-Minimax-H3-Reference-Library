@@ -1,3 +1,4 @@
+import {bindLibrarySearch} from "/h3-references/static/library-search.js?v=1";
 let activePopout=null;
 const apiRoot = "/api/h3-built-in-references/records";
 const state = { records: [], selected: new Set(JSON.parse(localStorage.getItem("skeba-built-in-selection")||"[]")) };
@@ -345,7 +346,7 @@ function toast(message, isError = false) {
     toastTimer = setTimeout(() => { elements.toast.className = ""; }, 3500);
 }
 
-elements["built-in-search"].addEventListener("input", renderRecords);
+bindLibrarySearch(elements["built-in-search"], renderRecords);
 elements["built-in-folder"].addEventListener("change", renderRecords);
 elements["built-in-sort-field"].addEventListener("change", renderRecords);
 elements["built-in-sort-direction"].addEventListener("change", renderRecords);

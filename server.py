@@ -21,6 +21,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 from comfy_extras.nodes_audio import load as load_audio_file
 from server import PromptServer
 from .disk_video import playlist_projects, playlist_manifest, playlist_media, playlist_final, project_summaries, delete_project
+from .playlist_batches import prepare_batch, start_batch, cancel_batch, reconcile_batches, retry_job
 from .playlist_editor import (templates, register_template, edit_timeline, prepare_redo,
                               update_job, reconcile_jobs, RevisionConflict, remove_template)
 
@@ -68,7 +69,7 @@ def register_routes():
 
     @routes.get("/h3-video-playlist")
     async def video_playlist_page(request):
-        return web.FileResponse(WEB_DIRECTORY_PATH / "playlist.html")
+        return web.FileResponse(WEB_DIRECTORY_PATH / "playlist.html", headers={"Cache-Control": "no-store, max-age=0"})
 
     @routes.get("/api/h3-video-playlist/projects")
     async def video_playlist_projects(request):
@@ -136,7 +137,7 @@ def register_routes():
         except (ValueError, TypeError, KeyError) as error:
             return web.json_response({"error": str(error)}, status=400)
 
-    @routes.post("/api/h3-video-playlist/{token}/{action:timeline|redo|job}")
+    @routes.post("/api/h3-video-playlist/{token}/{action:timeline|redo|job|batch|retry}")
     async def playlist_edit(request):
         try:
             payload = await request.json()
@@ -145,7 +146,22 @@ def register_routes():
             if action == "timeline":
                 result = edit_timeline(token, payload)
             elif action == "redo":
-                result = await asyncio.to_thread(prepare_redo, token, payload)
+                if '|' in payload.get('prompt',''):
+                    job = await asyncio.to_thread(prepare_batch, token, payload)
+                    result = await start_batch(PromptServer.instance, token, job['id'])
+                else:
+                    result = await asyncio.to_thread(prepare_redo, token, payload)
+            elif action == "retry":
+                result = retry_job(PromptServer.instance, token, payload['id'], payload.get('prompt'))
+                if result.get('managed'):
+                    result = await start_batch(PromptServer.instance, token, result['batch_id'])
+            elif action == "batch":
+                if payload.get('action') == 'cancel':
+                    result = cancel_batch(PromptServer.instance, token, payload['id'])
+                elif payload.get('action') == 'resume':
+                    result = await start_batch(PromptServer.instance, token, payload['id'], resume=True)
+                else:
+                    raise ValueError('Unknown batch action.')
             else:
                 result = update_job(token, payload["id"], payload)
             return web.json_response({**result, "section_editing": True, "clip_deletion": True, "timeline_trimming": True})
@@ -157,7 +173,7 @@ def register_routes():
     @routes.get("/api/h3-video-playlist/{token}")
     async def video_playlist_manifest(request):
         try:
-            directory, manifest = reconcile_jobs(request.match_info["token"], PromptServer.instance.prompt_queue)
+            directory, manifest = reconcile_batches(request.match_info["token"], PromptServer.instance)
             return web.json_response({**manifest, "directory": str(directory), "section_editing": True, "clip_deletion": True, "timeline_trimming": True},
                                      headers={"Cache-Control": "no-store"})
         except FileNotFoundError:
@@ -322,7 +338,7 @@ def register_routes():
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "reference-guide.js", "video-selector.js"}:
+        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "reference-guide.js", "library-search.js", "video-selector.js"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 

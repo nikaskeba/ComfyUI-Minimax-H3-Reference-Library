@@ -34,6 +34,27 @@ class TrimTests(unittest.TestCase):
         output=self.directory/result['result'][0]
         self.assertEqual(inspect(output)[0],72+36+72)
 
+    def test_mixed_resolution_and_fps_exports_normalize_without_changing_sources(self):
+        from test_disk_video import video
+        paths=[]
+        for clip,(fps,width,height) in zip(self.doc['clips'],[(30,64,48),(25,80,64),(24,48,80)]):
+            path=base.disk.playlist_media(self.token,clip['clip_id'])
+            base.disk._write_clip(video(frames=fps,width=width,height=height,fps=fps),path)
+            clip.update(base.disk._clip_metadata(path));paths.append(path)
+        base.disk.write_project(self.directory,self.doc)
+        hashes=[hashlib.sha256(path.read_bytes()).digest() for path in paths]
+        ids=[c['clip_id'] for c in self.doc['clips']]
+        for entries,frames in [(ids,72),(list(reversed(ids)),72),
+                               ([{'clip_id':ids[0],'in_frame':15,'out_frame':30},ids[1],ids[2]],60)]:
+            result=base.disk.CompilePlaylist().compile(self.token,json.dumps(entries),audio_seam_ms=10)
+            output=self.directory/result['result'][0]
+            metadata=base.disk._clip_metadata(output)
+            self.assertEqual((metadata['width'],metadata['height'],metadata['fps']),(80,64,24))
+            count,duration=inspect(output)
+            self.assertEqual(count,frames)
+            self.assertAlmostEqual(duration,frames/24,delta=.025)
+        self.assertEqual([hashlib.sha256(path.read_bytes()).digest() for path in paths],hashes)
+
     def test_bridges_and_sections_use_visible_boundaries(self):
         doc=self.trim()
         payload=self.payload(revision=doc['revision'],edit={'mode':'insert_between','side':'after','start':0,'end':0})

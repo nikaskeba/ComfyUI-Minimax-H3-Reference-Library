@@ -442,23 +442,24 @@ class CompilePlaylist:
         ids=json.loads(clip_ids)
         if not isinstance(ids,list) or not ids or not all(isinstance(i,(str,dict)) for i in ids):
             raise ValueError("Choose completed clips to compile.")
-        if any(isinstance(i,dict) for i in ids):
-            directory,doc=playlist_manifest(project)
-            known={c['clip_id']:c for c in doc['clips']}
-            entries=[{'clip_id':i} if isinstance(i,str) else i for i in ids]
-            pieces=[]
-            for entry in entries:
-                clip=known.get(entry.get('clip_id'))
-                if clip is None:raise ValueError('Unknown timeline clip.')
-                frame_range(entry,clip)
-                pieces.append((playlist_media(project,clip['clip_id']),clip,entry))
+        directory,doc=playlist_manifest(project)
+        known={c['clip_id']:c for c in doc['clips']}
+        entries=[{'clip_id':i} if isinstance(i,str) else i for i in ids]
+        pieces=[]
+        for entry in entries:
+            clip=known.get(entry.get('clip_id'))
+            if clip is None:raise ValueError('Unknown timeline clip.')
+            frame_range(entry,clip)
+            pieces.append((playlist_media(project,clip['clip_id']),clip,entry))
+        geometries={_geometry(path) for path,_,_ in pieces}
+        # Keep the lossless video-copy path for already compatible, untrimmed 24 FPS clips.
+        if all(isinstance(i,str) for i in ids) and len(geometries)==1 and next(iter(geometries))[2]==24:
+            result,count=combine_disk_clips([DiskClip(str(path)) for path,_,_ in pieces],audio_seam_ms=audio_seam_ms)
+        else:
             output=directory/('combined_'+uuid.uuid4().hex[:8]+'.mp4')
             render_timeline(_ffmpeg(),pieces,output,audio_seam_ms=audio_seam_ms)
             _update_manifest(directory,combined={**_clip_metadata(output),'timeline':entries,'audio_seam_ms':audio_seam_ms})
             result=DiskClip(str(output))
-        else:
-            clips=[DiskClip(str(playlist_media(project,i))) for i in ids]
-            result,count=combine_disk_clips(clips,audio_seam_ms=audio_seam_ms)
         filename=Path(result.get_stream_source()).name
         return {"ui":{"text":[filename]},"result":(filename,)}
 

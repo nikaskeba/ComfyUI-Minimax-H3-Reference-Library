@@ -428,6 +428,25 @@ class H3TaggedReferencePrompt:
                 mapping = compiled.mapping
             else:
                 mapping += "\nRefMods: " + message
+        if compiler_mode == "deterministic":
+            assignments = []
+            for speaker, resource_id in compiled.debug["speakers"].items():
+                resource = compiled.debug["resources"][resource_id]
+                tag = resource_id.removeprefix("saved:")
+                audio_index = next((i for i, entry in enumerate(reference_bundle["audios"], 1) if entry["tag"] == tag), None)
+                video_index = next((i for i, entry in enumerate(reference_bundle["videos"], 1) if entry["tag"] == tag), None)
+                source = (reference_bundle["audios"][audio_index-1] if audio_index else
+                          reference_bundle["videos"][video_index-1] if video_index and resource["audio_used"] else None)
+                assignments.append({
+                    "character": tag, "subject": f"<Subject {resource['subject']}>",
+                    "speaker": f"S{speaker}",
+                    "audio": f"<Audio {resource['audio']}>" if resource["audio_used"] and resource["audio"] else None,
+                    "bundle_entry": f"audios[{audio_index-1}]" if audio_index else f"videos[{video_index-1}] soundtrack" if source else None,
+                    "source": source,
+                })
+            compiled.debug["voice_assignments"] = assignments
+            compiled.debug["voice_assignment_note"] = "Compiler-selected sources, not a verification of the recording's speaker or the generated speech. Inspect prompt for dialogue bindings; connected encoder overrides and continuation audio must be checked separately."
+            mapping = compiled.mapping
         if defer_media_loading or mods:
             return (
                 prompt,

@@ -234,7 +234,7 @@ class PlaylistEditorTests(unittest.TestCase):
         with self.assertRaises(ValueError):editor.prepare_redo(self.token,self.payload(previous={'enabled':True,'frames':23}))
 
     def test_example_graph_edges_and_redo_paths(self):
-        graph=json.loads((ROOT/'example/Playlist_Redo.json').read_text(encoding='utf-8'));nodes={n['id']:n for n in graph['nodes']}
+        graph=json.loads((ROOT/'example/old/Playlist_Redo.json').read_text(encoding='utf-8'));nodes={n['id']:n for n in graph['nodes']}
         for link,origin,slot,target,input_slot,typ in graph['links']:
             self.assertIn(link,nodes[origin]['outputs'][slot]['links'])
             self.assertEqual(nodes[target]['inputs'][input_slot]['link'],link)

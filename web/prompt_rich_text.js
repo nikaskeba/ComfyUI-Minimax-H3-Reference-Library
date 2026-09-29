@@ -122,7 +122,7 @@ export function richPromptField(parent, text, label, changed, references, dialog
         // Reapply highlighting after plain-text edits, but never interrupt inline inputs.
         setTimeout(() => { if (editor.isConnected && !editor.contains(document.activeElement) && !parent.querySelector('.skeba-reference-picker') && commit()) { paint(readText(editor)); range = null; } }, 0);
     });
-    if (["Timeline text", "Description text"].includes(label)) {
+    if (["detailed_description: text"].includes(label)) {
     button("+ Shot", "Add shot", () => { insert(shot("[Shot 1]")); renumberShots(); commit(); });
     button("+ Dialogue", "Add dialogue", () => {
         const atom = dialogue({raw:"<d>[English]</d>", language:"English", speaker:"", words:""}); insert(atom); atom.querySelector('textarea').focus();

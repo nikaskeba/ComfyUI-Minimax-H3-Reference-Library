@@ -33,7 +33,7 @@ export function groupCatalog(rows) {
 export function refmodTag(group) {
     let stem = group.paired ? group.key : group.files[0].replace(/\.safetensors$/i, "");
     if (group.primary.member == null) stem = stem.replace(/_(visual|video|audio)$/i, "");
-    return stem + "_rm";
+    return stem.split(/[\\/]/).pop() + "_rm";
 }
 
 export function refmodGuideRecord(group) {

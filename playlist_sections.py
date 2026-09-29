@@ -117,6 +117,17 @@ def assemble_section(spec, section_path, output, crf):
     pieces.append((section_path, 0, generated_count, True))
     if edit['mode'] != 'insert_between' and edit['end_frame'] < edit['source_frames']:
         pieces.append((source, edit['end_frame'], edit['source_frames'], False))
+    return render_pieces(pieces, edit, output, crf)
+
+
+def assemble_generated(spec, paths, durations, output, crf):
+    geometry = {**spec['geometry'], 'fps':'24'}
+    pieces = [(path, 0, round(duration*24), True) for path,duration in zip(paths,durations)]
+    return render_pieces(pieces, geometry, output, crf)
+
+
+def render_pieces(pieces, edit, output, crf):
+    fps = Fraction(edit['fps'])
     command = [_ffmpeg(), '-hide_banner', '-loglevel', 'error', '-y']
     filters = []
     for i,(path,start,end,generated) in enumerate(pieces):

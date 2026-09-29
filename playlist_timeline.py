@@ -1,5 +1,6 @@
 """Nondestructive, frame-based timeline ranges."""
 import subprocess
+import av
 from fractions import Fraction
 from .audio_seams import seam_samples
 
@@ -20,9 +21,9 @@ def clean_entry(entry, clip):
 
 
 def render_timeline(ffmpeg, pieces, output, audio_seam_ms=0):
-    first = pieces[0][1]
-    fps = Fraction(first['fps_fraction'])
-    width, height = first['width'], first['height']
+    largest = max((clip for _,clip,_ in pieces), key=lambda clip:clip['width']*clip['height'])
+    fps = Fraction(24)
+    width, height = (largest[key]+largest[key]%2 for key in ('width','height'))
     command = [ffmpeg, '-hide_banner', '-loglevel', 'error', '-y']
     filters = []
     for i, (path, clip, entry) in enumerate(pieces):
@@ -33,7 +34,7 @@ def render_timeline(ffmpeg, pieces, output, audio_seam_ms=0):
         frames = max(1, round(duration*float(fps)))
         samples = round(frames/float(fps)*48000)
         filters.append(f'[{i}:v]trim=start_frame={start}:end_frame={end},setpts=PTS-STARTPTS,'
-                       f'fps={fps},scale={width}:{height}:force_original_aspect_ratio=decrease,'
+                       f'fps={fps},scale={width}:{height}:force_original_aspect_ratio=decrease:force_divisible_by=2,'
                        f'pad={width}:{height}:(ow-iw)/2:(oh-ih)/2,setsar=1,'
                        f'tpad=stop_mode=clone:stop_duration=1,trim=end_frame={frames}[v{i}]')
         begin=round(start/source_fps*48000)
@@ -44,9 +45,13 @@ def render_timeline(ffmpeg, pieces, output, audio_seam_ms=0):
                 fades += f',afade=t=in:ss=0:ns={max(1, fade-1)}:curve=hsin'
             if i + 1 < len(pieces):
                 fades += f',afade=t=out:ss={samples-fade}:ns={max(1, fade-1)}:curve=hsin'
-        filters.append(f'[{i}:a]aresample=48000,aformat=channel_layouts=stereo,'
-                       f'atrim=start_sample={begin}:end_sample={round(end/source_fps*48000)},'
-                       f'asetpts=PTS-STARTPTS,apad=whole_len={samples},atrim=end_sample={samples}{fades}[a{i}]')
+        with av.open(str(path)) as container:
+            has_audio = bool(container.streams.audio)
+        audio = (f'[{i}:a]aresample=48000,aformat=channel_layouts=stereo,'
+                 f'atrim=start_sample={begin}:end_sample={round(end/source_fps*48000)},'
+                 f'asetpts=PTS-STARTPTS,apad=whole_len={samples},atrim=end_sample={samples}'
+                 if has_audio else f'anullsrc=r=48000:cl=stereo,atrim=end_sample={samples}')
+        filters.append(audio+f'{fades}[a{i}]')
     filters.append(''.join(f'[v{i}][a{i}]' for i in range(len(pieces)))+f'concat=n={len(pieces)}:v=1:a=1[v][a]')
     command += ['-filter_complex',';'.join(filters),'-map','[v]','-map','[a]',
                 '-r',str(fps),'-c:v','libx264','-crf','18','-pix_fmt','yuv420p',

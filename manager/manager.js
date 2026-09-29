@@ -1,5 +1,6 @@
+import {bindLibrarySearch} from "/h3-references/static/library-search.js?v=1";
 import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
-import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=2";
+import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=3";
 let refmodSelectionRequest=0;
 const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
@@ -980,7 +981,7 @@ function toast(message, isError = false) {
     toastTimer = setTimeout(() => { elements.toast.className = ""; }, 3500);
 }
 
-elements.search.addEventListener("input", renderRecords);
+bindLibrarySearch(elements.search, renderRecords);
 elements["category-filter"].addEventListener("change", renderRecords);
 elements["type-filter"].addEventListener("change", renderRecords);
 elements["media-filter"].addEventListener("change", renderRecords);
@@ -1065,16 +1066,21 @@ function activateManagerTab(panelId) {
     for (const panel of managerPanels) panel.hidden = panel.id !== panelId;
     const libraryActive = panelId === "reference-library-tab";
     document.getElementById("library-toolbar").hidden = !libraryActive;
-    elements["built-in-top-search"].hidden = libraryActive;
+    elements["built-in-top-search"].hidden = panelId !== "built-in-tab-panel";
     elements["library-count"].hidden = !libraryActive;
 }
 for (const buttonElement of managerTabs) {
-    buttonElement.addEventListener("click", () => activateManagerTab(buttonElement.dataset.tab));
+    buttonElement.addEventListener("click", () => { activateManagerTab(buttonElement.dataset.tab); history.replaceState(null, "", "#" + buttonElement.dataset.tab); });
 }
 
 loadRecords();
 
-if (location.hash === "#built-in-tab-panel") activateManagerTab("built-in-tab-panel");
+function activateHashTab() {
+    const panelId = location.hash.slice(1);
+    activateManagerTab(managerPanels.some(panel => panel.id === panelId) ? panelId : "reference-library-tab");
+}
+window.addEventListener("hashchange", activateHashTab);
+activateHashTab();
 
 async function loadRefmodSelection(){
  const version=++refmodSelectionRequest;

@@ -7,7 +7,7 @@ H3 Reference Library replaces a large set of manually connected reference widget
 
 ## Features
 
-- Local manager at `/h3-references` with **Reference Library** and **Built In Characters** tabs, a toolbar launcher, and an **Open Reference Library** button on the node
+- Local manager at `/h3-references` with **Reference Library**, **Built In Characters**, **RefMods**, and **Reference Creator** tabs, a toolbar launcher, and an **Open Reference Library** button on the node
 - Legacy standalone known-character catalog retained at `/h3-built-in-references`
 - Image, audio, and video records; embedded video soundtracks are detected automatically
 - Drag-and-drop bulk import with automatic image/audio/video pairing by filename stem
@@ -404,9 +404,11 @@ a combined **Copy character + voice** action. Clip filenames remain in the
 Markdown source but are not displayed or returned by the character browser API.
 
 The main **H3 Reference Library** manager includes the same catalog in a
-separate **Built In Characters** tab. The shared **Reference creator** above
-the tabs combines selections from both the managed library and built-in catalog
-into one grouped guide. Tags copied from this merged view use the same
+separate **Built In Characters** tab. The dedicated **Reference Creator** tab
+combines selections from the managed library, built-in catalog, and RefMods
+into one grouped guide without taking space above the browsing lists. Search text
+is shared across the three library tabs and retained on reload, so switching tabs
+filters the same query by reference source. Tags copied from this merged view use the same
 delimiters as `H3 Tagged Reference Prompt` and add `_BC` to prevent a built-in
 character from colliding with a user-created record:
 
@@ -691,3 +693,57 @@ H3 Tagged Reference Prompt now offers `compiler_mode = deterministic` for six-se
 ## Tagged RefMods
 
 Appearance and voice RefMods, library creation, protected Apply controls and a two-pass example are documented in [Tagged RefMods](docs/refmods.md).
+
+### Playlist edit batches
+
+In **H3 Live Playlist > Edit Clip**, separate prompts with `|` to generate multiple
+clips in sequence. Each prompt uses its `[s=x]` duration, or **Default seconds per
+clip** (15 by default). The editor shows individual and total durations.
+
+The selected Before reference guides only the first clip, and After guides only
+the last. Separate batch continuation controls use 22 frames with audio by
+default; `[new_location]` resets internal continuation. A first-prompt scene
+marker does not disable an explicitly selected Before reference. All clips use
+the chosen seed, recorded with each result.
+
+Batches run on the server even if the playlist page closes. Completed clips stay
+in the media library, followed by one assembled alternate. Section edits retain
+the original prefix/suffix once around the complete batch. The active timeline
+stays unchanged until you use the alternate. Failed or interrupted batches offer
+**Resume from failed clip**, including after a ComfyUI restart. Cancel keeps
+completed clips. Changes to the saved timeline position require manual placement
+of the alternate. Workflow settings are captured at submission, so later template
+changes do not change a running/resumed batch.
+
+In deterministic compiler mode, a directly attributed dialogue turn such as
+`{Cosmo Kramer_BC} says, <d>[English]Oh, buddy!</d>` automatically selects that
+character's attached voice. The language header stays unchanged. Explicit voice
+tags still take precedence; silent characters do not contribute voice references.
+Use library character tags in source prompts; Subject/Speaker numbers are assigned
+by the compiler. The three-voice limit and shared cropping budget still apply.
+
+Prompt section names: use `summary:` for the scene setup and visual description,
+and `detailed_description:` for chronological shots and dialogue. New Prompt List
+Text scenes use these headings. Older `detailed_description:` + `timeline:` prompts
+are converted by the deterministic compiler; the formatted editor converts the
+selected prompt on edit, while viewing alone preserves the original raw text.
+
+For voice diagnostics, connect H3 Tagged Reference Prompt's existing `mapping`
+STRING output to Display Any. In deterministic mode, `voice_assignments` lists
+each speaker's character tag, Subject/Speaker/Audio IDs, bundle position, source
+file or RefMod attachment, and voice crop cap. Connect `prompt` to a second display
+to inspect the compiled dialogue. This reports compiler selection, not verification
+of the recording's identity, downstream socket overrides, or generated voices.
+
+Live Playlist Create Video exports at 24 FPS. Mixed clips use the selected source
+with the largest pixel area as the output resolution (ties use timeline order;
+odd dimensions round up to even). Smaller or differently shaped clips are scaled
+to fit with padding, without cropping or stretching. Timeline trims and audio seam
+settings still apply, and source files remain unchanged. Already matching,
+untrimmed 24 FPS clips retain the video-copy export path.
+
+Under Redo jobs, use **Edit prompt / Retry** on a failed or canceled job to correct
+its prompt and submit a new attempt with the saved seed, reference boundaries, and
+edit position. Completed jobs offer **Run again**. Batch retries lock and reuse
+completed prompts; edit the unfinished prompts without changing their count.
+Existing clips, the original job history, and the active timeline stay unchanged.

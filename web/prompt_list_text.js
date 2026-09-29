@@ -2,10 +2,10 @@ import { richPromptField } from "./prompt_rich_text.js";
 import { app } from "../../scripts/app.js";
 
 const sectionNames = {
-    subject_definitions: "subject_definitions:", summary: "Summary", retention_analysis: "Retention analysis",
-    detailed_description: "Description", timeline: "Timeline", overall_soundscape: "Soundscape", non_diegetic_music: "Music",
+    subject_definitions: "subject_definitions:", summary: "summary:", retention_analysis: "Retention analysis",
+    detailed_description: "detailed_description:", timeline: "detailed_description:", overall_soundscape: "Soundscape", non_diegetic_music: "Music",
 };
-const template = "[s=15]\n\nsubject_definitions:\n\ndetailed_description:\n\ntimeline:\n\noverall_soundscape:\n\nnon_diegetic_music:\n";
+const template = "[s=15]\n\nsubject_definitions:\n\nsummary:\n\ndetailed_description:\n\noverall_soundscape:\n\nnon_diegetic_music:\n";
 function el(tag, text, className) {
     const item = document.createElement(tag);
     if (text !== undefined) item.textContent = text;
@@ -23,6 +23,22 @@ export function parsePromptList(text) {
             end = match.index + match[0].length;
         }
         sections.at(-1).text = raw.slice(end);
+        if (sections.some(s => /^timeline\s*:/i.test(s.heading.trim()))) {
+            for (const section of sections) {
+                if (/^detailed_description\s*:/i.test(section.heading.trim())) {
+                    section.heading = section.heading.replace(/detailed_description/i, "summary");
+                    section.name = sectionNames.summary;
+                } else if (/^timeline\s*:/i.test(section.heading.trim())) {
+                    section.heading = section.heading.replace(/timeline/i, "detailed_description");
+                    section.name = sectionNames.detailed_description;
+                }
+            }
+            const summaries = sections.filter(s => /^summary\s*:/i.test(s.heading.trim()));
+            for (const extra of summaries.slice(1)) {
+                summaries[0].text = summaries[0].text.trimEnd() + "\n\n" + extra.text.trimStart();
+                sections.splice(sections.indexOf(extra), 1);
+            }
+        }
         const opening = sections[0].text;
         return {index, raw, sections, newLocation: /\[new_location\]/i.test(opening),
             seconds: opening.match(/\[s\s*=\s*([^\]\r\n]*)\]/i)?.[1],

@@ -14,7 +14,7 @@ try {
 
  page.on('pageerror',e=>errors.push(e.message));
 
- let submitted, redoPayload, legacy=false;
+ let retryPayload, submitted, redoPayload, legacy=false, missingGraph=false, queueFailure=false;
 
  const doc={section_editing:true,clip_deletion:true,timeline_trimming:true,revision:0,undo:[],redo:[],jobs:[],directory:'Test episode',timeline:[{id:'ta',clip_id:'a'},{id:'tb',clip_id:'b'}],clips:[
 
@@ -41,11 +41,12 @@ try {
 
   if(url.pathname.endsWith('/timeline')){const p=route.request().postDataJSON();assert.equal(p.revision,doc.revision);if(p.action==='undo'){doc.redo.push(doc.timeline);doc.timeline=doc.undo.pop();}else if(p.action==='redo'){doc.undo.push(doc.timeline);doc.timeline=doc.redo.pop();}else if(p.action==='rename'){doc.name=p.name;}else if(p.action==='delete'){doc.clips=doc.clips.filter(c=>c.clip_id!==p.clip_id);doc.timeline=doc.timeline.filter(e=>e.clip_id!==p.clip_id);}else{doc.undo.push(doc.timeline);doc.redo=[];doc.timeline=p.timeline;}doc.revision++;return json(doc);}
 
-  if(url.pathname.endsWith('/redo')){redoPayload=route.request().postDataJSON();return json({request_id:'redo1',prompt_id:'queue1',graph:{'test':{class_type:'SkebaPlaylistRedoSave',inputs:{}}}});}
+  if(url.pathname.endsWith('/redo')){redoPayload=route.request().postDataJSON();if(missingGraph)return json({request_id:'broken'});if(redoPayload.prompt.includes('|'))return json({managed:true,batch_id:'batch1'});return json({request_id:'redo1',prompt_id:'queue1',graph:{'test':{class_type:'SkebaPlaylistRedoSave',inputs:{}}}});}
 
+  if(url.pathname.endsWith('/retry')){retryPayload=route.request().postDataJSON();return json({managed:true,batch_id:'retry-batch'});}
   if(url.pathname.endsWith('/job'))return json({});
 
-  if(url.pathname==='/prompt'){submitted=route.request().postDataJSON();return json({prompt_id:'queue1'});}
+  if(url.pathname==='/prompt'){submitted=route.request().postDataJSON();if(queueFailure)return route.fulfill({status:400,contentType:'application/json',body:JSON.stringify({error:{message:'No prompt provided',details:'No prompt provided'}})});return json({prompt_id:'queue1'});}
 
   if(url.pathname==='/history/queue1')return json({queue1:{status:{status_str:'success'},outputs:{'1':{text:['combined_test.mp4']}}}});
 
@@ -151,6 +152,31 @@ try {
 
  await page.locator('#redo-dialog').waitFor({state:'hidden'});assert.equal(redoPayload.prompt,'Edited second prompt');assert.equal(redoPayload.duration,5);assert.deepEqual(redoPayload.previous,{enabled:true,frames:39,audio:false});assert.equal(redoPayload.next.enabled,false);assert.equal(submitted.prompt_id,'queue1');assert.equal(submitted.client_id,'comfy-test-client');
 
+ // Batch duration preview and server-owned submission must not enqueue from the browser.
+ await page.locator('#regenerate').click();await page.locator('#redo-prompt').fill('[s=5] Intro | Continued | [new_location] [s=2] Ending');
+ assert.equal(await page.locator('#batch-controls').isVisible(),true);
+ assert.equal(await page.locator('#duration').isDisabled(),true);
+ assert.match(await page.locator('#batch-summary').textContent(),/3 clips.*Total 22.00s/);
+ await page.locator('#batch-duration').fill('7');
+ assert.match(await page.locator('#batch-summary').textContent(),/Total 14.00s/);
+ await page.locator('#batch-frames').selectOption('39');await page.locator('#batch-audio').uncheck();
+ submitted=null;await page.locator('#submit-redo').click();await page.locator('#redo-dialog').waitFor({state:'hidden'});
+ assert.equal(submitted,null);assert.equal(redoPayload.batch_default_duration,7);
+ assert.deepEqual(redoPayload.continuation,{enabled:true,frames:39,audio:false});
+ await page.locator('#regenerate').click();await page.locator('#redo-prompt').fill('First || Last');
+ assert.match(await page.locator('#batch-summary').textContent(),/Prompt 2 is empty/);
+ await page.locator('#redo-prompt').fill('Single again');assert.equal(await page.locator('#duration').isDisabled(),false);
+ await page.locator('#close-redo').click();
+
+ // Invalid/stale preparation responses must never submit an undefined graph.
+ missingGraph=true;submitted=null;
+ await page.locator('#regenerate').click();await page.locator('#submit-redo').click();
+ await page.waitForFunction(()=>document.getElementById('redo-error').textContent.includes('no executable workflow'));
+ assert.equal(submitted,null);await page.locator('#close-redo').click();missingGraph=false;
+ queueFailure=true;await page.locator('#regenerate').click();await page.locator('#submit-redo').click();
+ await page.waitForFunction(()=>document.getElementById('redo-error').textContent==='No prompt provided');
+ await page.locator('#close-redo').click();queueFailure=false;
+
  // Both handles remain available in insertion mode, including a zero-width cut.
 
  await page.locator('#regenerate').click();await page.locator('#edit-mode').selectOption('insert');
@@ -227,6 +253,15 @@ try {
 
  page.once('dialog',d=>d.accept('Imported project'));await page.locator('#new-project').click();await page.waitForFunction(()=>document.querySelectorAll('#clips .timeline-clip').length===0);
  await page.locator('#import-files').setInputFiles({name:'outside.mp4',mimeType:'video/mp4',buffer:Buffer.from('mock video upload')});await page.locator('#clips .timeline-clip').waitFor();await page.locator('#clips .timeline-clip').click();await page.locator('#regenerate').click();assert.equal(await page.locator('#redo-prompt').inputValue(),'');page.once('dialog',d=>d.accept());await page.locator('#remove-template').click();await page.waitForFunction(()=>document.querySelector('#template').options.length===0);await page.locator('#close-redo').click();
+ doc.jobs=[{id:'done-child',state:'completed',clip_id:'imported',spec:{batch_id:'failed-batch',parent_clip_id:'imported',duration:1}},
+ {id:'failed-batch',kind:'batch',state:'failed',error:'Bad prompt',children:['done-child'],segments:[{prompt:'Completed first',duration:1},{prompt:'Broken second',duration:2}],spec:{parent_clip_id:'imported',duration:3,seed:123}}];
+ await page.locator('#refresh').click();await page.getByRole('button',{name:'Edit prompt / Retry…',exact:true}).click();
+ assert.equal(await page.getByLabel('Retry prompt 1').getAttribute('readonly'),'');
+ assert.equal(await page.getByLabel('Retry prompt 2').inputValue(),'Broken second');
+ await page.getByLabel('Retry prompt 2').fill('Corrected second');submitted=null;await page.locator('#retry-submit').click();
+ await page.locator('#retry-dialog').waitFor({state:'hidden'});
+ assert.deepEqual(retryPayload,{id:'failed-batch',prompt:'Completed first|Corrected second'});assert.equal(submitted,null);
+ doc.jobs=[];
  legacy=true;await page.reload();await page.locator('#clips .timeline-clip').first().waitFor();assert.equal(await page.locator('#regenerate').isDisabled(),true);assert.match(await page.locator('#status').textContent(),/Restart ComfyUI/);
 
  assert.deepEqual(errors,[]);console.log('Playlist timeline editing, alternate insertion, redo submission, persistence and compilation passed');

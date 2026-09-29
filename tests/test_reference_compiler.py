@@ -22,6 +22,68 @@ def character(image=None, audio=None, **values):
 
 
 class CompilerTests(unittest.TestCase):
+    def test_shared_wardrobe_references_stay_with_their_character(self):
+        records = {
+            "Prison_Uniform":dict(reference_type="object", name="Prison Uniform", image_file="uniform.png"),
+            "Newman":character("newman.png"),
+            "Cosmo Kramer_BC":character("kramer.png"),
+        }
+        definitions = ("{Cosmo Kramer_BC} Wardrobe: wearing {Prison_Uniform}, orange with a white undershirt.\n\n"
+                       "{Newman} Wardrobe: wearing {Prison_Uniform}, orange with white sneakers.\n\n"
+                       "{Prison_Uniform}")
+        result = compiler.compile_prompt(prompt(definitions),records)
+        self.assertEqual(result.images.count("Prison_Uniform"),1)
+        self.assertEqual(result.prompt.count("is Prison Uniform in <Picture 1>."),1)
+        self.assertIn("Wardrobe: wearing <Subject 1>, orange with a white undershirt.",result.prompt)
+        self.assertIn("Wardrobe: wearing <Subject 1>, orange with white sneakers.",result.prompt)
+        self.assertLess(result.prompt.index("white sneakers"),result.prompt.index("white undershirt"))
+        self.assertNotIn("{Prison_Uniform}",result.prompt)
+        with self.assertRaisesRegex(ValueError,"DUPLICATE_SUBJECT_DEFINITION"):
+            compiler.compile_prompt(prompt(definitions+"\n{Prison_Uniform}"),records)
+        with self.assertRaisesRegex(ValueError,"MISSING_SUBJECT_DEFINITION"):
+            compiler.compile_prompt(prompt(definitions.rsplit("\n\n",1)[0]),records)
+
+    def test_temporary_uniform_cross_reference_and_compact_definitions(self):
+        definitions=("<character:a = A man.> Wardrobe: wears <object:uniform>.\n"
+                     "<character:b = Another man.> Wardrobe: wears <object:uniform>.\n"
+                     "<object:uniform = Orange prison clothing.>")
+        result=compiler.compile_prompt(prompt(definitions),{})
+        self.assertEqual(result.prompt.count("is Orange prison clothing."),1)
+        self.assertEqual(result.prompt.count("Wardrobe: wears <Subject"),2)
+        result=compiler.compile_prompt(prompt("{a} {b}"),{"a":character(),"b":character()})
+        self.assertIn("<Subject 1> is",result.prompt)
+        self.assertIn("<Subject 2> is",result.prompt)
+
+    def test_dialogue_without_voice_tag_selects_only_its_speaker_audio(self):
+        records={"Jerry":character("jerry.png","jerry.wav"),
+                 "Kramer":character("kramer.png","kramer.wav"),
+                 "Elaine":character("elaine.png","elaine.wav")}
+        detail=('[Shot 1] {Kramer} says, <d>[English]Oh, buddy!</d>\n'
+                '[Shot 2] {Jerry} immediately replies, <d>[English]Hello, Kramer.</d>\n'
+                '[Shot 3] {Kramer} whispers, <d>[English]Quiet.</d>\n'
+                '[Shot 4] {Elaine} watches silently.')
+        result=compiler.compile_prompt(prompt('{Jerry}\n{Kramer}\n{Elaine}',detail),records)
+        self.assertEqual(result.audios,['Kramer','Jerry'])
+        self.assertEqual(result.debug['speakers'],{'1':'saved:Kramer','2':'saved:Jerry'})
+        self.assertIn('<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, says, <d>[English]Oh, buddy!</d>',result.prompt)
+        self.assertIn('<Audio 1> is the voice-timbre reference for <Subject 1> (S1)',result.prompt)
+        self.assertIn('<Audio 2> is the voice-timbre reference for <Subject 2> (S2)',result.prompt)
+        self.assertNotIn('<Audio 3>',result.prompt)
+
+    def test_implicit_voice_does_not_override_explicit_voice_or_guess_silent_actions(self):
+        records={'a':character(audio='a.wav'),'b':character(audio='b.wav')}
+        for detail in ('{a} says, <d>[English §b§]Hello.</d>',
+                       '{a} says §b§, <d>[English]Hello.</d>'):
+            self.assertEqual(compiler.compile_prompt(prompt('{a}\n{b}',detail),records).audios,['b'])
+        for detail in ('{a} listens silently. <d>[English]Hello.</d>',
+                       '{a} watches silently, <d>[English]Hello.</d>',
+                       '{a} waits. [Shot 2] <d>[English]Hello.</d>'):
+            self.assertEqual(compiler.compile_prompt(prompt('{a}\n{b}',detail),records).audios,[])
+        result=compiler.compile_prompt(prompt('<character:guest = A guest.>',
+                    '<character:guest> says, <d>[French]Bonjour.</d>'),{})
+        self.assertEqual(result.audios,[])
+        self.assertIn('<d>[French]Bonjour.</d>',result.prompt)
+
     def test_inline_definitions_and_duration_marker(self):
         defs = "<character:guest = A guest.>\n<voice:guest = A warm voice.>\n<object:coffee_cup = A white porcelain cup.>"
         detail = "<character:guest> holds <object:coffee_cup> and says, <d>[English <voice:guest>]Hello.</d>"
@@ -36,10 +98,24 @@ class CompilerTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "MISSING_TEMPORARY_DESCRIPTION"):
             compiler.compile_prompt(prompt("<object:cup = >"), {})
 
+    def test_summary_setup_and_detailed_shots_migrate_without_losing_existing_summary(self):
+        source=prompt("{hero}", "Visual setup.\n\ntimeline:\n[Shot 1] {hero} says, <d>[English]Hi.</d>", summary="Existing premise.")
+        result=compiler.compile_prompt(source,{"hero":character(audio="hero.wav")})
+        self.assertIn("summary:\n\nExisting premise. Visual setup.",result.prompt)
+        self.assertIn("detailed_description:\n\n",result.prompt)
+        self.assertNotIn("timeline:",result.prompt)
+        self.assertEqual(result.audios,["hero"])
+        canonical=prompt("{hero}","[Shot 1] {hero} says, <d>[English]Hi.</d>",summary="Visual setup.")
+        output=compiler.compile_prompt(canonical,{"hero":character(audio="hero.wav")}).prompt
+        self.assertIn("summary:\n\nVisual setup.",output)
+        self.assertNotIn("timeline:",output)
+
     def test_timeline_subheading_stays_inside_detail(self):
         source = prompt("{hero}", "Sitcom presentation.\n\ntimeline:\n\n[Shot 1] At 00:00.000, {hero} says, <d>[English \u00a7hero\u00a7]Hello.</d>")
         result = compiler.compile_prompt(source, {"hero":character(audio="hero.wav")})
-        self.assertIn("Sitcom presentation.\n\ntimeline:\n\n[Shot 1]", result.prompt)
+        self.assertIn("summary:\n\nSitcom presentation.", result.prompt)
+        self.assertIn("detailed_description:\n\n[Shot 1]", result.prompt)
+        self.assertNotIn("timeline:", result.prompt)
         self.assertIn("<d>[English <Audio 1>]Hello.</d>", result.prompt)
         self.assertEqual(result.audios, ["hero"])
         for invalid in (source.replace("timeline:", "timline:"), source.replace("subject_definitions:", "timeline:\nsubject_definitions:")):
@@ -67,17 +143,17 @@ class CompilerTests(unittest.TestCase):
                 if not keep_retention:
                     source = source.replace("retention_analysis:\nKeep color.\n\n", "")
                 result = compiler.compile_prompt(source, {"clip": dict(reference_type="video", video_file="clip.mp4")}, video_usage="editing")
-                self.assertEqual("summary:" in result.prompt, keep_summary)
-                self.assertEqual("retention_analysis:" in result.prompt, keep_retention)
+                self.assertIn("summary:", result.prompt)
+                self.assertIn("retention_analysis:", result.prompt)
                 self.assertIn("The target video is an edited version of <Video 1>.", result.prompt)
                 if not keep_summary:
-                    self.assertIn("detailed_description:\n\nThe target video", result.prompt)
+                    self.assertIn("summary:\n\nThe target video", result.prompt)
         for source in ("subject_definitions:\ndetailed_description:\nnon_diegetic_music:\nN/A",
                        "subject_definitions:\nsummary:\nsummary:\ndetailed_description:\noverall_soundscape:\nnon_diegetic_music:\nN/A"):
             with self.assertRaisesRegex(ValueError, "INVALID_SECTION"):
                 compiler.compile_prompt(source, {})
 
-    def test_five_sections_and_language_header_voice_preserve_entire_line(self):
+    def test_six_sections_and_language_header_voice_preserve_entire_line(self):
         records = {"Jerry Seinfeld_BC": character("jerry.png", "jerry.wav"),
                    "George Costanza_BC": character("george.png", "george.wav")}
         detail = ("[Shot 2] At 00:03.000, a medium shot shows only {George Costanza_BC} clutching his mysterious folder. "
@@ -86,13 +162,13 @@ class CompilerTests(unittest.TestCase):
                   "{George Costanza_BC} continues, <d>[English \u00a7George Costanza_BC\u00a7]Fine.</d>")
         source = prompt("{Jerry Seinfeld_BC}\n{George Costanza_BC}", detail).replace("retention_analysis:\n\n\n", "")
         result = compiler.compile_prompt(source, records)
-        self.assertNotIn("retention_analysis:", result.prompt)
+        self.assertIn("retention_analysis:", result.prompt)
         self.assertEqual(result.debug["warnings"], [])
-        self.assertEqual(result.debug["generated_voice_retention"], [])
+        self.assertEqual(len(result.debug["generated_voice_retention"]), 2)
         self.assertEqual(result.images, ["George Costanza_BC", "Jerry Seinfeld_BC"])
         self.assertEqual(result.audios, result.images)
-        self.assertIn("<Subject 1> (S1) says, <d>[English <Audio 1>]They did? Because I can be more intimidating.</d>", result.prompt)
-        self.assertIn("<Subject 2> (S2) reacts: <d>[English <Audio 2>]My refrigerator doesn't move. It barely refrigerates.</d>", result.prompt)
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, says, <d>[English <Audio 1>]They did? Because I can be more intimidating.</d>", result.prompt)
+        self.assertIn("<Subject 2> (S2), using the voice identity referenced exclusively from <Audio 2>, reacts: <d>[English <Audio 2>]My refrigerator doesn't move. It barely refrigerates.</d>", result.prompt)
         self.assertIn("<d>[English <Audio 1>]Fine.</d>", result.prompt)
 
     def test_temporary_and_standalone_header_voices_need_no_speech_verb(self):
@@ -143,7 +219,7 @@ class CompilerTests(unittest.TestCase):
                         f"<character:cashier> says <voice:cashier>, {dialogue}", declarations=declarations)
         result = compiler.compile_prompt(source, {"binary_thott": character("i.png", "a.wav")})
         self.assertEqual(result.prompt.count("<Subject 1> (S1) says in Young male voice, upbeat tone"), 2)
-        self.assertIn("<Subject 2> (S2) says using the recognizable voice timbre referenced from <Audio 1>", result.prompt)
+        self.assertIn("<Subject 2> (S2), using the voice identity referenced exclusively from <Audio 1>, says using the recognizable voice timbre referenced from <Audio 1>", result.prompt)
         self.assertIn("<Audio 1> is the voice-timbre reference for <Subject 2> (S2).", result.prompt)
         self.assertEqual(result.images, ["binary_thott"])
         self.assertEqual(result.audios, ["binary_thott"])
@@ -237,7 +313,7 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(compiler._sort_summary_entries("- <Subject 10>: waits.\n- <Subject 2>: sits.\n- <Subject 2>: smiles."),
                          "- <Subject 2>: sits.\n- <Subject 2>: smiles.\n- <Subject 10>: waits.")
 
-    def test_optional_retention_sorted_without_generated_entries(self):
+    def test_authored_retention_sorted_with_missing_entries_generated(self):
         records = {"george": character("george.png", "george.wav"),
                    "jerry": character("jerry.png", "jerry.wav"),
                    "apartment": dict(reference_type="location", image_file="room.png")}
@@ -256,7 +332,7 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(positions, sorted(positions))
         self.assertIn("keep Jerry.\nKeep his hairstyle, too.", section)
         self.assertIn("<Audio 1>: weak_reference - keep only the timbre.", section)
-        self.assertEqual(result.debug["generated_voice_retention"], [])
+        self.assertEqual(len(result.debug["generated_voice_retention"]), 1)
         self.assertEqual(result.debug["speakers"], {"1": "saved:jerry", "2": "saved:george"})
         self.assertEqual(result.images, ["jerry", "george", "apartment"])
         self.assertEqual(result.audios, ["jerry", "george"])
@@ -304,7 +380,7 @@ class CompilerTests(unittest.TestCase):
                    "score": dict(reference_type="music", audio_file="score.wav", audio_usage="reuse")}
         detail = "{hero} (off-screen) exclaims \u00a7hero\u00a7, <d>[French]Salut!</d>\n{hero} says \u00a7hero\u00a7, <d>[French]Au revoir!<cutoff></d>\nWhen {score} reaches <d>[English]Hello.</d>, the light changes."
         result = compiler.compile_prompt(prompt("{hero}", detail, music="Use {score}."), records)
-        self.assertIn("<Subject 1> (S1) (off-screen) exclaims", result.prompt)
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, (off-screen) exclaims", result.prompt)
         self.assertEqual(result.debug["speakers"], {"1": "saved:hero"})
         self.assertIn("When <Audio 2> reaches <d>[English]Hello.</d>", result.prompt)
         self.assertIn("<d>[French]Au revoir!<cutoff></d>", result.prompt)
@@ -318,7 +394,7 @@ class CompilerTests(unittest.TestCase):
         bad = compiler.compile_prompt(prompt("{hero}", detail, retention="{hero}: reference - identity."), records)
         self.assertEqual(bad.debug["warnings"], [])
         self.assertFalse(any("MISSING_RETENTION_ENTRY: <Audio 1>" in w for w in bad.debug["warnings"]))
-        self.assertEqual(bad.debug["generated_voice_retention"], [])
+        self.assertEqual(len(bad.debug["generated_voice_retention"]), 1)
         self.assertFalse(any("Picture" in w for w in bad.debug["warnings"]))
         self.assertNotIn("(S1)", result.prompt.split("retention_analysis:")[1].split("detailed_description:")[0])
 
@@ -368,15 +444,14 @@ class CompilerTests(unittest.TestCase):
         source = prompt("{jerry}\n{kramer}\n{randy}\n{cafe}", detail)
         result = compiler.compile_prompt(source, records)
         self.assertEqual(result.debug["speakers"], {"1":"saved:kramer", "2":"saved:randy", "3":"saved:jerry"})
-        self.assertIn("<Subject 2> (S2) is the only speaker using <Audio 1> as its voice-timbre reference.", result.prompt)
-        self.assertEqual(result.prompt.count("<Subject 2> (S2) is the only speaker"), 2)
+        self.assertIn("<Subject 2> (S2), using the voice identity referenced exclusively from <Audio 1>,", result.prompt)
+        self.assertEqual(result.prompt.count("<Subject 2> (S2), using the voice identity referenced exclusively"), 2)
         for subject, speaker in ((1,1),(3,3)):
-            self.assertIn(f"<Subject {subject}> (S{speaker}) uses its own assigned voice identity and must not use or imitate <Audio 1>.", result.prompt)
+            self.assertNotIn(f"<Subject {subject}> (S{speaker}), using", result.prompt)
         self.assertIn("<Subject 3> (S3) (off-screen) says in Jerry's distinctive voice", result.prompt)
         retention = result.prompt.split("retention_analysis:")[1].split("detailed_description:")[0]
-        self.assertEqual(retention.strip(), "")
-        self.assertNotIn("(S", retention)
-        self.assertEqual(retention.count("<Audio 1>:"), 0)
+        self.assertIn("guide only <Subject 2> (S2)", retention)
+        self.assertEqual(retention.count("<Audio 1>:"), 1)
         self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(source))
         disabled = compiler.compile_prompt(source, records, voice_isolation=False)
         self.assertNotIn("must not use or imitate", disabled.prompt)
@@ -393,11 +468,11 @@ class CompilerTests(unittest.TestCase):
                         sound="Reference \u00a7clip\u00a7.", music="Use {score}.")
         result = compiler.compile_prompt(source, records)
         detail = result.prompt.split("detailed_description:")[1].split("overall_soundscape:")[0]
-        self.assertIn("must not use or imitate <Audio 3>", detail)
-        self.assertIn("must not use or imitate <Audio 2>", detail)
+        self.assertIn("voice identity referenced exclusively from <Audio 3>", detail)
+        self.assertIn("voice identity referenced exclusively from <Audio 2>", detail)
         self.assertNotIn("<Audio 1>", detail)
         self.assertNotIn("<Audio 4>", detail)
-        self.assertEqual(result.debug["generated_voice_retention"], [])
+        self.assertEqual(len(result.debug["generated_voice_retention"]), 2)
 
     def test_voice_retention_preserves_authored_analysis_and_does_not_guess_reuse(self):
         records = {"hero": character(audio="voice.wav")}
@@ -409,7 +484,7 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(retention.count("<Audio 1>:"), 1)
         self.assertEqual(result.debug["generated_voice_retention"], [])
         reused = compiler.compile_prompt(prompt("{hero}", detail), records, audio_usage="reuse")
-        self.assertEqual(reused.debug["generated_voice_retention"], [])
+        self.assertIn(": reuse -", reused.debug["generated_voice_retention"][0])
         self.assertEqual(reused.debug["warnings"], [])
         silent = compiler.compile_prompt(prompt("{hero}"), records)
         self.assertNotIn("<Audio", silent.prompt)
@@ -447,8 +522,8 @@ class CompilerTests(unittest.TestCase):
         for name in ("a", "b", "c"):
             self.assertTrue(result.debug["resources"]["saved:"+name]["has_audio"])
             self.assertIsNone(result.debug["resources"]["saved:"+name]["audio"])
-        self.assertIn("<Subject 1> (S1) is the only speaker using <Audio 1>", result.prompt)
-        self.assertEqual(result.debug["generated_voice_retention"], [])
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>,", result.prompt)
+        self.assertEqual(len(result.debug["generated_voice_retention"]), 2)
         silent = compiler.compile_prompt(prompt(definitions), records)
         self.assertEqual(silent.audios, [])
         self.assertNotIn("<Audio", silent.prompt)
@@ -471,7 +546,7 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(result.debug["resources"]["saved:silent"]["subject"], 2)
         self.assertEqual(result.debug["resources"]["saved:speaker"]["subject"], 1)
         self.assertEqual(result.images, ["speaker", "silent"])
-        self.assertIn("<Subject 1> (S1) is the only speaker using <Audio 2>", result.prompt)
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 2>,", result.prompt)
 
     def test_south_park_reply_modifier_preserves_ownership_and_dialogue(self):
         names = ("Stan Marsh_BC", "Kyle Broflovski_BC", "Eric Cartman_BC")
@@ -481,7 +556,7 @@ class CompilerTests(unittest.TestCase):
         result = compiler.compile_prompt(prompt(definitions, detail), records)
         self.assertEqual(result.debug["speakers"], {"1":"saved:Stan Marsh_BC", "2":"saved:Kyle Broflovski_BC"})
         self.assertEqual(result.audios, list(names[:2]))
-        self.assertIn("<Subject 2> (S2) immediately replies using the recognizable voice timbre referenced from <Audio 2>", result.prompt)
+        self.assertIn("<Subject 2> (S2), using the voice identity referenced exclusively from <Audio 2>, immediately replies using the recognizable voice timbre referenced from <Audio 2>", result.prompt)
         self.assertIn("<Subject 1>, <Subject 2>, and <Subject 3> stare toward where Kenny landed.", result.prompt)
         self.assertEqual(compiler.DIALOGUE.findall(detail), compiler.DIALOGUE.findall(result.prompt))
 
@@ -524,17 +599,17 @@ class CompilerTests(unittest.TestCase):
         self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(source))
 
     def test_flexible_tagged_clause_and_inline_speech_share_speaker_order(self):
-        records = {"hero": character("hero.png", "hero.wav"), "inline": character("inline.png", "unused.wav")}
+        records = {"hero": character("hero.png", "hero.wav"), "inline": character("inline.png", "inline.wav")}
         detail = "{inline} turns toward the door and says in a warm voice, <d>[English]Welcome.</d>\n{hero}, using \u00a7hero\u00a7 with a startled delivery, <d>[English]Hello!</d>\n{inline} (off-screen) laughs softly and replies, <d>[English]Come in.</d>"
         source = prompt("{hero}\n{inline}", detail)
         result = compiler.compile_prompt(source, records)
         self.assertEqual(result.debug["speakers"], {"1":"saved:inline", "2":"saved:hero"})
-        self.assertEqual(result.audios, ["hero"])
-        self.assertIn("<Subject 1> (S1) turns toward the door and says in a warm voice", result.prompt)
-        self.assertIn("<Subject 1> (S1) (off-screen) laughs softly and replies", result.prompt)
-        self.assertIn("using the recognizable voice timbre referenced from <Audio 1> with a startled delivery", result.prompt)
+        self.assertEqual(result.audios, ["inline", "hero"])
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, turns toward the door and says in a warm voice", result.prompt)
+        self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, (off-screen) laughs softly and replies", result.prompt)
+        self.assertIn("using the recognizable voice timbre referenced from <Audio 2> with a startled delivery", result.prompt)
         self.assertNotIn("using using", result.prompt)
-        self.assertIn("must not use or imitate <Audio 1>", result.prompt)
+        self.assertIn("Voice-identity binding is strict and exclusive", result.prompt)
         self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(source))
         # An explicit reference event can also contain action/delivery wording.
         result = compiler.compile_prompt(prompt("{hero}", "{hero} turns around and says \u00a7hero\u00a7, <d>[English]Hi.</d>"), records)

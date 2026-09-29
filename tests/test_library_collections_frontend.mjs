@@ -12,17 +12,18 @@ try {
   const url=new URL(route.request().url());const json=value=>route.fulfill({contentType:'application/json',body:JSON.stringify(value)});
   if(url.pathname==='/api/h3-references/collections')return json({collections:['scifi','sitcom']});
   if(url.pathname==='/api/h3-references/records')return json({records:[{id:'normal',tag:'Narrator',category:'sitcom',reference_type:'character',audio_description:'A warm voice'}],categories:['scifi','sitcom']});
-  if(url.pathname==='/api/h3-refmods/records')return json([{file:'actor.safetensors',member:0,kind:'image',name:'Ref Actor',appearance:'Dark jacket',collection:'sitcom'},{file:'actor.safetensors',member:1,kind:'audio',name:'Ref Actor',voice_description:'Deep voice'}]);
+  if(url.pathname==='/api/h3-refmods/records')return json([{file:'library/actor.safetensors',member:0,kind:'image',name:'Ref Actor',appearance:'Dark jacket',collection:'sitcom'},{file:'library/actor.safetensors',member:1,kind:'audio',name:'Ref Actor',voice_description:'Deep voice'}]);
   if(url.pathname.endsWith('/image-context')){imageContext=route.request().postDataJSON().image_context;return json({image_context:imageContext});}
   if(url.pathname==='/voice.wav')return route.fulfill({status:204});
   if(url.pathname.endsWith('/collection')){collection=route.request().postDataJSON().collection;return json({collection});}
   if(url.pathname==='/api/h3-built-in-references/records')return json({records:[{tag:'Actor',library_tag:'Actor_BC',attachment_id:'actor',name:'Actor',actor:'Example',franchise:'Series',folder:'good',status:'good',collection,has_image:true,image_url:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="80"><rect width="70" height="80" fill="%23263830"/><text x="20" y="45" fill="white">A</text></svg>'),image_context:imageContext,has_audio:true,audio_url:'/voice.wav'}]});
   const name=url.pathname==='/h3-references'?'index.html':url.pathname==='/h3-refmods'?'refmods.html':url.pathname.split('/').pop();
-  if(!['index.html','manager.js','manager.css','built-ins.js','built-ins.css','built-in-cards.css','refmod-catalog.js','reference-guide.js','refmods.html','refmods.js','refmods.css','video-selector.js'].includes(name))return route.fulfill({status:404});
+  if(!['index.html','manager.js','manager.css','built-ins.js','built-ins.css','built-in-cards.css','refmod-catalog.js','reference-guide.js','library-search.js','refmods.html','refmods.js','refmods.css','video-selector.js'].includes(name))return route.fulfill({status:404});
   return route.fulfill({contentType:name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':'text/html',body:await fs.readFile(new URL('../manager/'+name,import.meta.url))});
  });
  await page.goto('http://library.test/h3-references');
  await page.locator('#records .select-reference').click();
+ assert.equal(await page.locator('#reference-creator-tab').isVisible(),false);
  await page.locator('#add-reference').click();
  assert.equal(await page.locator('#refmod-fields,#refmod-source-tabs').count(),0);
  await page.locator('#record-dialog').waitFor({state:'visible'});
@@ -67,35 +68,30 @@ try {
  await page.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{actor_rm}'));
  let guide=await page.locator('#selection-guide').textContent();
  for(const tag of ['{Narrator}','{Actor_BC}','{actor_rm}','§actor_rm§'])assert.ok(guide.includes(tag),tag);
- await mods.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{Actor_BC}'));
- assert.equal(await mods.locator('#selection-guide').textContent(),guide);
- await mods.reload();
- await mods.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{Actor_BC}'));
- assert.equal(await mods.locator('#selection-guide').textContent(),guide);
+ assert.equal(await mods.locator('#selection-guide').count(),0);
+ assert.equal(await page.locator('#reference-creator-tab').isVisible(),false);
+ await page.getByRole('tab',{name:'Reference Creator',exact:true}).click();
+ assert.equal(await page.locator('#selection-guide').isVisible(),true);
  await page.reload();
  await page.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{Actor_BC}')&&document.getElementById('selection-guide').textContent.includes('{actor_rm}'));
- assert.ok((await page.locator('#selection-guide').textContent()).includes('{Narrator}'));
+ assert.equal(await page.locator('#reference-creator-tab').isVisible(),true);
  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedGuide=text;}}}));
- await page.locator('#copy-selection').click();
- assert.match(await page.evaluate(()=>window.copiedGuide),/§actor_rm§/);
- await mods.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedGuide=text;}}}));
- await mods.locator('#copy-selection').click();
- assert.equal(await mods.evaluate(()=>window.copiedGuide),await page.evaluate(()=>window.copiedGuide));
- // Clearing from RefMods clears all three source types, including other open tabs.
- await mods.locator('#clear-selection').click();
- await page.locator('#selection-empty').waitFor({state:'visible'});
- assert.equal(await page.locator('.built-in-check input').isChecked(),false);
- assert.deepEqual(await mods.evaluate(()=>['skeba-reference-selection','skeba-built-in-selection','skeba-refmod-selection'].map(key=>JSON.parse(localStorage.getItem(key)||'[]'))),[[],[],[]]);
- await mods.locator('#assets').getByRole('button',{name:'Select',exact:true}).click();
- await page.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{actor_rm}'));
-
- await page.locator('#clear-selection').click();
+ await page.locator('#copy-selection').click();assert.match(await page.evaluate(()=>window.copiedGuide),/§actor_rm§/);
+ await page.locator('#clear-selection').click();await page.locator('#selection-empty').waitFor({state:'visible'});
  await mods.locator('#assets').getByRole('button',{name:'Select',exact:true}).waitFor();
- assert.equal(await mods.locator('#selection-empty').isVisible(),true);
- await mods.locator('#assets').getByRole('button',{name:'Select',exact:true}).click();
- await page.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{actor_rm}'));
- await mods.locator('#clear-selection').click();
- await page.locator('#selection-empty').waitFor({state:'visible'});
+ assert.deepEqual(await mods.evaluate(()=>['skeba-reference-selection','skeba-built-in-selection','skeba-refmod-selection'].map(key=>JSON.parse(localStorage.getItem(key)||'[]'))),[[],[],[]]);
+ // One query filters each library and follows navigation, reload and other windows.
+ await page.getByRole('tab',{name:'Reference Library',exact:true}).click();
+ await page.locator('#search').fill('Actor');assert.equal(await page.locator('#records .select-reference').count(),0);
+ await page.getByRole('tab',{name:'Built In Characters',exact:true}).click();
+ assert.equal(await page.locator('#built-in-search').inputValue(),'Actor');assert.equal(await page.locator('.built-in-row').count(),1);
+ await mods.waitForFunction(()=>document.getElementById('search').value==='Actor');assert.equal(await mods.locator('.asset').count(),1);
+ await page.locator('#built-in-search').fill('No matches');await mods.waitForFunction(()=>document.querySelectorAll('.asset').length===0);
+ await mods.reload();assert.equal(await mods.locator('#search').inputValue(),'No matches');
+ await mods.locator('#search').fill('');await page.waitForFunction(()=>document.getElementById('built-in-search').value==='');
+ await mods.getByRole('link',{name:'Reference Creator',exact:true}).click();
+ await mods.locator('#reference-creator-tab').waitFor({state:'visible'});
+ await mods.getByRole('tab',{name:'Reference Library',exact:true}).click();assert.equal(await mods.locator('#records .select-reference').count(),1);
  assert.deepEqual(errors,[]);
  console.log('Shared collections and separate library editors passed');
 } finally {await browser.close();}

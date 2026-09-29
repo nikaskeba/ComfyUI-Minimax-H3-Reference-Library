@@ -1,6 +1,6 @@
-import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
+import {bindLibrarySearch} from "./library-search.js?v=1";
 import {openVideoEditor} from "./video-selector.js?v=7";
-import {groupCatalog,refmodTag,refmodGuideRecord} from "./refmod-catalog.js?v=2";
+import {groupCatalog,refmodTag} from "./refmod-catalog.js?v=3";
 const $ = id => document.getElementById(id);
 const fields=["reference_type","collection","name","file","subject_name","appearance","voice_description","description","frames","mode","resolution","grid","steps","video_seconds","audio_seconds"];
 const selected=new Set(JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"));
@@ -58,7 +58,7 @@ function renderCatalog(){
  if(group.visual&&group.audio)badges.append(chip(group.paired?"paired files":"appearance + voice"));
  const summary=document.createElement("summary");summary.textContent="Details";details.append(summary);
  for(const [label,value] of [["Subject",group.primary.subject_name],["Appearance",group.visual?.appearance],["Voice",group.audio?.voice_description],["Notes",group.primary.description]])if(value){const p=document.createElement("p");p.textContent=`${label}: ${value}`;details.append(p);}
- details.append(badges,files);const detailButton=button(selected.has(group.key)?"Selected":"Select",()=>{selected.has(group.key)?selected.delete(group.key):selected.add(group.key);localStorage.setItem("skeba-refmod-selection",JSON.stringify([...selected]));renderCatalog();renderSelection();});detailButton.classList.toggle("selected",selected.has(group.key));const editButton=button("Edit",()=>edit(group).catch(error=>status(error.message,true)));editButton.setAttribute("aria-label",`Edit ${group.name}`);actions.append(detailButton,editButton,button("Export",()=>exportGroup(group)),button("Delete",()=>removeGroup(group).catch(error=>status(error.message,true))));body.append(name,actions,details);card.append(preview,body);$("assets").append(card);}
+ details.append(badges,files);const detailButton=button(selected.has(group.key)?"Selected":"Select",()=>{selected.has(group.key)?selected.delete(group.key):selected.add(group.key);localStorage.setItem("skeba-refmod-selection",JSON.stringify([...selected]));renderCatalog();});detailButton.classList.toggle("selected",selected.has(group.key));const editButton=button("Edit",()=>edit(group).catch(error=>status(error.message,true)));editButton.setAttribute("aria-label",`Edit ${group.name}`);actions.append(detailButton,editButton,button("Export",()=>exportGroup(group)),button("Delete",()=>removeGroup(group).catch(error=>status(error.message,true))));body.append(name,actions,details);card.append(preview,body);$("assets").append(card);}
  $("empty").hidden=shown.length>0;$("library-count").textContent=`${groups.length} RefMods · ${groups.filter(group=>group.visual&&group.audio).length} appearance + voice`;
 }
 async function removeGroup(group){
@@ -68,7 +68,7 @@ async function removeGroup(group){
  await request("/api/h3-refmods/records",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({selections})});
  if(existing&&group.files.includes(existing.file)){reset();showView(false);}await refresh();status(`Deleted ${group.name}.`);
 }
-async function refresh(){await loadCollections();catalog=await request("/api/h3-refmods/records");groups=groupCatalog(catalog);renderFolders();renderCatalog();await loadSharedSelection();renderSelection();}
+async function refresh(){await loadCollections();catalog=await request("/api/h3-refmods/records");groups=groupCatalog(catalog);renderFolders();renderCatalog();}
 async function edit(group){
  if(busy)return;if(group.primary.error)throw new Error(group.primary.error);const row=group.primary;
  const meta=await request(`/api/h3-refmods/detail?file=${encodeURIComponent(row.file)}&member=${row.member??""}`);const members=meta.kind==="bundle"?meta.members:[meta];const visual=members.find(m=>m.kind!=="audio");
@@ -97,7 +97,7 @@ async function queue(kind){if(busy||uploading)return;try{const data=spec();const
 
 $("editor").onsubmit=event=>{event.preventDefault();queue("save");};$("preview").onclick=()=>queue("preview");$("upload").onchange=()=>upload([...$("upload").files]);
 const zone=document.querySelector(".upload-zone");zone.ondragover=event=>event.preventDefault();zone.ondrop=event=>{event.preventDefault();upload([...event.dataTransfer.files]);};
-$("new").onclick=reset;$("refresh").onclick=()=>refresh().catch(error=>status(error.message,true));$("search").oninput=renderCatalog;$("kind-filter").onchange=renderCatalog;$("mode").onchange=modeChanged;
+$("new").onclick=reset;$("refresh").onclick=()=>refresh().catch(error=>status(error.message,true));bindLibrarySearch($("search"),renderCatalog);$("kind-filter").onchange=renderCatalog;$("mode").onchange=modeChanged;
 $("show-library").onclick=$("back").onclick=()=>showView(false);$("show-editor").onclick=()=>showView(true);$("editor").addEventListener("change",remember);
 async function init(){const draft=JSON.parse(localStorage.getItem("skeba-refmod-draft")||"null");
  if(draft){for(const id of fields)if(draft[id]!=null)$(id).value=draft[id];sources=draft.sources||[];existing=draft.existing||null;companion=draft.companion||null;frameRows=draft.frameRows||[];storedVoice=draft.storedVoice||null;keepVoice=draft.keep_voice??draft.audio_action!=="remove";if(draft.video_seconds==null&&draft.video_frames)$("video_seconds").value=draft.video_frames/24;previewData=draft.previewData||{frames:[],audio:null};$("overwrite").checked=Boolean(existing)&&!draft.overwrite;$("overwrite-row").hidden=!existing;$("retrain").checked=Boolean(draft.retrain);}
@@ -118,25 +118,6 @@ function workflowModels(fields){return new Promise((resolve,reject)=>{
 async function loadCollections(){const data=await request("/api/h3-references/collections");const current=$("collection-filter").value;$("collections").replaceChildren(...data.collections.map(name=>new Option(name,name)));$("collection-filter").replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));$("collection-filter").value=current;}
 $("type-filter").onchange=$("collection-filter").onchange=renderCatalog;
 
-let otherSelected=[],selectionRequest=0;
-const selectionKeys=["skeba-reference-selection","skeba-built-in-selection","skeba-refmod-selection"];
-function guideRecords(){return [...otherSelected,...groups.filter(group=>selected.has(group.key)).map(refmodGuideRecord)];}
-function guideText(){return referenceGuideText(guideRecords());}
-function renderSelection(){renderReferenceGuide(guideRecords(),Object.fromEntries(["selection-empty","selection-guide","clear-selection","copy-selection"].map(id=>[id,$(id)])));}
-async function loadSharedSelection(){
- const version=++selectionRequest;
- const standard=new Set(JSON.parse(localStorage.getItem(selectionKeys[0])||"[]"));
- const builtin=new Set(JSON.parse(localStorage.getItem(selectionKeys[1])||"[]"));
- const [references,characters]=await Promise.all([
-  standard.size?request("/api/h3-references/records"):Promise.resolve({records:[]}),
-  builtin.size?request("/api/h3-built-in-references/records"):Promise.resolve({records:[]})
- ]);
- if(version!==selectionRequest)return;
- otherSelected=[...references.records.filter(record=>standard.has(record.id)),...characters.records.filter(record=>builtin.has(record.tag)).map(record=>({...record,id:`built-in:${record.library_tag}`,tag:record.library_tag,category:record.collection||"built-in-characters",reference_type:"character",built_in:true}))];
- renderSelection();
-}
-$("clear-selection").onclick=()=>{selectionRequest++;otherSelected=[];selected.clear();selectionKeys.forEach(key=>localStorage.removeItem(key));renderCatalog();renderSelection();};
-$("copy-selection").onclick=async()=>{try{await navigator.clipboard.writeText(guideText());status("Reference guide copied.");}catch(error){status(error.message,true);}};
 async function exportGroup(group){
  const name=group.name.replace(/[<>:"/\\|?*\x00-\x1f]/g,"_")+".safetensors";
  const url="/api/h3-refmods/export?"+new URLSearchParams({name:group.name,selections:JSON.stringify(group.files.map(file=>selection(group.rows.find(row=>row.file===file))))});
@@ -145,5 +126,4 @@ async function exportGroup(group){
  catch(error){if(error.name!=="AbortError")status(error.message,true);}
 }
 
-window.addEventListener("storage",event=>{if(!selectionKeys.includes(event.key)&&event.key!==null)return;selected.clear();for(const key of JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"))selected.add(key);renderCatalog();loadSharedSelection().catch(error=>status(error.message,true));});
-window.addEventListener("focus",()=>loadSharedSelection().catch(error=>status(error.message,true)));
+window.addEventListener("storage",event=>{if(event.key!=="skeba-refmod-selection"&&event.key!==null)return;selected.clear();for(const key of JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"))selected.add(key);renderCatalog();});

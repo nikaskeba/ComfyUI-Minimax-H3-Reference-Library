@@ -38,6 +38,9 @@ button { cursor: pointer; }
 }
 .brand-block { flex: 0 0 235px; padding-top: 2px; }
 .floating-toolbar { display: grid; flex: 1 1 auto; gap: 10px; min-width: 0; }
+.library-topbar { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.library-topbar .brand-block { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.library-topbar > .patreon-link { justify-self: start; margin-top: 0; }
 h1, h2, p { margin: 0; }
 h1 { font-size: 22px; line-height: 1.2; }
 h2 { font-size: 16px; }

@@ -77,6 +77,13 @@ class RefModTests(unittest.TestCase):
         self.assertIn("_refmod_video",projected["celestial_rm"])
         self.assertNotIn("_refmod_audio",projected["celestial_rm"])
 
+    def test_short_and_folder_qualified_tags_resolve_same_file(self):
+        rows = [{"file": "library/Frank Costanza.safetensors", "member": 0, "kind": "image"}]
+        with patch.object(library, "catalog", return_value=rows):
+            for tag in ("Frank Costanza_rm", "library/Frank Costanza_rm"):
+                record = library.direct_refmod_records({}, "{" + tag + "}")[tag]
+                self.assertEqual(record["appearance_refmod"], {"file": rows[0]["file"], "member": 0})
+
     def test_delete_selected_files_preserves_thumbnail_and_checks_all_paths(self):
         visual=self.asset("delete_visual","video")
         audio=self.asset("delete_audio","audio",seconds=1)

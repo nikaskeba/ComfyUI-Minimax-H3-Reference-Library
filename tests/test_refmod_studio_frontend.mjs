@@ -31,7 +31,7 @@ try {
   if(url.pathname.startsWith("/history/"))return json({"test-job":{status:{status_str:"success"},outputs:{"3":{text:["library/new_reference.safetensors"]}}}});
   if(url.pathname.startsWith("/api/h3-refmods/sources/"))return route.fulfill({status:204});
   const file=url.pathname==="/h3-refmods"?"refmods.html":url.pathname.split("/").pop();
-  if(!["refmods.html","refmods.css","refmods.js","refmod-catalog.js", "reference-guide.js","video-selector.js","manager.css"].includes(file))return route.fulfill({status:404});
+  if(!["refmods.html","refmods.css","refmods.js","refmod-catalog.js", "reference-guide.js","library-search.js","video-selector.js","manager.css"].includes(file))return route.fulfill({status:404});
   const contentType=file.endsWith(".js")?"text/javascript":file.endsWith(".css")?"text/css":"text/html";
   return route.fulfill({contentType,body:await fs.readFile(new URL("../manager/"+file,import.meta.url))});
  });
@@ -39,9 +39,11 @@ try {
  await page.getByRole("button",{name:"Edit Actor appearance",exact:true}).waitFor();
  assert.equal(await page.locator(".asset").count(),1,"Bundle should have one card");
  await page.locator("#assets").getByRole("button",{name:"Select",exact:true}).click();
- assert.match(await page.locator("#selection-guide").textContent(),/\{library\/actor_rm\}/);
- assert.match(await page.locator("#selection-guide").textContent(),/§library\/actor_rm§/);
+ assert.equal(await page.locator("#selection-guide").count(),0);
+ assert.equal(await page.locator('.manager-tabs').getByRole('link',{name:'Reference Creator',exact:true}).count(),1);
+ assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('skeba-refmod-selection')).length),1);
  assert.equal(await page.locator(".asset .badges").isVisible(),false);
+ await page.mouse.move(0,0);
  assert.equal(await page.locator('.asset-actions button.selected').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(32, 133, 87)');
  await page.locator('.asset').evaluate(el=>el.style.width='210px');
  assert.equal(await page.locator('.asset-actions').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
@@ -52,7 +54,7 @@ try {
  await page.waitForFunction(()=>window.exported==="exported-reference");
  assert.equal(await page.evaluate(()=>window.exportName),"Actor appearance.safetensors");
  await page.screenshot({path:path.join(os.tmpdir(),"skeba-refmod-gallery.png"),fullPage:true});
- await page.locator("#clear-selection").click();
+ await page.locator("#assets").getByRole("button",{name:"Selected",exact:true}).click();
  await page.locator("#new").click();
  await page.locator("#upload").setInputFiles([{name:"one.png",mimeType:"image/png",buffer:Buffer.from("test")},{name:"two.png",mimeType:"image/png",buffer:Buffer.from("test")},{name:"voice.wav",mimeType:"audio/wav",buffer:Buffer.from("test")}]);
  await page.getByText("Sources ready.",{exact:true}).waitFor();

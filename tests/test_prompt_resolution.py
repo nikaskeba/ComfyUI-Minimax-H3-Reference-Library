@@ -568,8 +568,8 @@ class PromptResolutionTests(unittest.TestCase):
         for kind in ("images", "audios", "videos"):
             self.assertEqual(output[20][kind], deferred[20][kind])
         self.assertTrue(all(v is None for v in deferred[2:20]))
-        self.assertIn("is the only speaker using <Audio 2>", deferred[0])
-        self.assertNotIn("is the only speaker using", isolation_off[0])
+        self.assertIn("using the voice identity referenced exclusively from <Audio 2>", deferred[0])
+        self.assertNotIn("using the voice identity referenced exclusively", isolation_off[0])
         self.assertEqual(deferred[20], isolation_off[20])
         self.assertNotEqual(node.IS_CHANGED(source, compiler_voice_isolation=True),
                             node.IS_CHANGED(source, compiler_voice_isolation=False))
@@ -635,7 +635,7 @@ class PromptResolutionTests(unittest.TestCase):
                 self.assertEqual(mapping["resources"]["saved:silent"]["subject"], 3)
                 self.assertIsNone(mapping["resources"]["saved:silent"]["speaker"])
                 self.assertIsNone(mapping["resources"]["saved:silent"]["audio"])
-                self.assertIn("<Subject 1> (S1) says using the recognizable voice timbre referenced from <Audio 1>, <d>[English]Third.</d>", output[0])
+                self.assertIn("<Subject 1> (S1), using the voice identity referenced exclusively from <Audio 1>, says using the recognizable voice timbre referenced from <Audio 1>, <d>[English]Third.</d>", output[0])
 
     def test_unknown_voice_tag_is_clear(self):
         with self.assertRaisesRegex(ValueError, "§missing_voice§"):
@@ -643,6 +643,45 @@ class PromptResolutionTests(unittest.TestCase):
 
 
 class PromptListValidatorTests(unittest.TestCase):
+    def test_implicit_speaker_voice_reaches_bundle_and_crop_budget(self):
+        from unittest.mock import patch
+        records={name:dict(reference_type="character",name=name,audio_file=name+".wav") for name in ("Kramer","Jerry","Silent")}
+        source=("subject_definitions:\n{Kramer}\n{Jerry}\n{Silent}\ndetailed_description:\n"
+                "{Kramer} says, <d>[English]Oh, buddy!</d>\n"
+                "{Jerry} replies, <d>[English]Hello, Kramer.</d>\n"
+                "overall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A")
+        with patch.object(MODULE,"records_by_tag",return_value=records), patch.object(MODULE,"library_built_in_records",return_value={}), patch.object(MODULE,"media_path",side_effect=lambda record,kind:record[kind+"_file"]):
+            validation=MODULE.H3PromptListValidator().validate_list(source)
+            result=MODULE.H3TaggedReferencePrompt().build(source,compiler_mode=validation[1],defer_media_loading=True)
+        self.assertEqual([a['tag'] for a in result[20]['audios']],["Kramer","Jerry"])
+        self.assertEqual([a['max_duration_seconds'] for a in result[20]['audios']],[7.5,7.5])
+        self.assertIn('<d>[English]Oh, buddy!</d>',result[0])
+        import json
+        assignments=json.loads(result[1])['voice_assignments']
+        self.assertEqual([(a['character'],a['subject'],a['speaker'],a['audio']) for a in assignments],
+                         [('Kramer','<Subject 1>','S1','<Audio 1>'),('Jerry','<Subject 2>','S2','<Audio 2>')])
+        self.assertEqual(assignments[0]['source']['source_path'],'Kramer.wav')
+        self.assertEqual(assignments[1]['bundle_entry'],'audios[1]')
+        self.assertEqual(assignments[0]['source']['max_duration_seconds'],7.5)
+
+    def test_shared_wardrobe_reference_in_prompt_list(self):
+        from unittest.mock import patch
+        records = {"Cosmo Kramer_BC":dict(reference_type="character", name="Cosmo Kramer"),
+                   "Newman":dict(reference_type="character", name="Newman"),
+                   "Prison_Uniform":dict(reference_type="object", name="Prison Uniform")}
+        source = ("subject_definitions:\n"
+                  "{Cosmo Kramer_BC} Wardrobe: wearing {Prison_Uniform}, orange with white sneakers.\n\n"
+                  "{Newman} Wardrobe: wearing {Prison_Uniform}, orange with a white undershirt.\n\n"
+                  "{Prison_Uniform}\n\ndetailed_description:\nBoth men wait quietly.\n"
+                  "overall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A")
+        with patch.object(MODULE,"records_by_tag",return_value=records), patch.object(MODULE,"library_built_in_records",return_value={}):
+            result = MODULE.H3PromptListValidator().validate_list(source+"|"+source)
+            compiled = MODULE.H3TaggedReferencePrompt().build(source,compiler_mode=result[1],defer_media_loading=True)
+        self.assertEqual(result[0],source+"|"+source)
+        self.assertIn("Validated all 2 prompts",result[3])
+        self.assertEqual(compiled[0].count("Wardrobe: wearing <Subject"),2)
+        self.assertEqual(compiled[0].count("is Prison Uniform."),1)
+
     def test_inline_subject_and_duration_in_list(self):
         source = "[new_location] [s=15]\nsubject_definitions:\n<object:coffee_cup = A white porcelain cup.>\ndetailed_description:\ntimeline:\n[Shot 1] A view of <object:coffee_cup>.\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
         result = MODULE.H3PromptListValidator().validate_list(source + "|" + source.replace("[new_location] [s=15]", ""))
@@ -667,7 +706,7 @@ class PromptListValidatorTests(unittest.TestCase):
             validation = MODULE.H3PromptListValidator().validate_list("|".join([source]*8))
             output = MODULE.H3TaggedReferencePrompt().build(source,compiler_mode=validation[1],defer_media_loading=True)
         self.assertIn("Validated all 8 prompts",validation[3])
-        self.assertNotIn("retention_analysis:",output[0])
+        self.assertIn("retention_analysis:",output[0])
         self.assertIn("<d>[English <Audio 1>]They did? Because I can be more intimidating.</d>",output[0])
         self.assertEqual(output[20]["audios"][0]["tag"],"George Costanza_BC")
         self.assertEqual(output[20]["audios"][0]["max_duration_seconds"],15)

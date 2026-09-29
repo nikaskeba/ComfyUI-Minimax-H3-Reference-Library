@@ -4,26 +4,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>H3 Reference Library</title>
-    <link rel="stylesheet" href="/h3-references/static/manager.css?v=18">
+    <link rel="stylesheet" href="/h3-references/static/manager.css?v=19">
 <link rel="stylesheet" href="/h3-built-in-references/static/built-in-cards.css?v=1">
 </head>
 <body data-built-in-tag-mode="library">
-    <header class="topbar">
+    <header class="topbar library-topbar">
         <div class="brand-block">
             <h1>H3 Reference Library</h1>
             <p id="library-count">Loading references...</p>
-            <a class="patreon-link" href="https://www.patreon.com/skeba/" target="_blank" rel="noopener noreferrer">Built by Skeba AI - Follow Me for More</a>
         </div>
         <div class="floating-toolbar">
             <nav class="manager-tabs" aria-label="Reference library sections">
                 <button class="manager-tab active" type="button" role="tab" aria-selected="true" aria-controls="reference-library-tab" data-tab="reference-library-tab">Reference Library</button>
                 <button class="manager-tab" type="button" role="tab" aria-selected="false" aria-controls="built-in-tab-panel" data-tab="built-in-tab-panel">Built In Characters</button>
             <a class="manager-tab" href="/h3-refmods">RefMods</a>
+                <button class="manager-tab" type="button" role="tab" aria-selected="false" aria-controls="reference-creator-tab" data-tab="reference-creator-tab">Reference Creator</button>
             </nav>
             <div id="library-toolbar" class="topbar-actions">
                 <label class="search-field toolbar-search">
                     <span>Search references</span>
-                    <input id="search" type="search" placeholder="Tag or description">
+                    <input id="search" type="search" placeholder="Search all reference tabs">
                 </label>
                 <label class="category-filter compact-filter">
                     <span>Category</span>
@@ -51,19 +51,20 @@
             </div>
             <div id="built-in-top-search" class="topbar-actions built-in-top-search" hidden>
                 <label class="search-field toolbar-search">
-                    <span>Search built-in characters</span>
-                    <input id="built-in-search" type="search" placeholder="Character, actor, or franchise">
+                    <span>Search references</span>
+                    <input id="built-in-search" type="search" placeholder="Search all reference tabs">
                 </label>
             </div>
         </div>
+    <a class="patreon-link" href="https://www.patreon.com/skeba/" target="_blank" rel="noopener noreferrer">Built by Skeba AI - Follow Me for More</a>
     </header>
 
     <main>
-        <section class="creator-panel" aria-labelledby="creator-title">
+        <section id="reference-creator-tab" class="creator-panel manager-tab-panel" role="tabpanel" aria-labelledby="creator-title" hidden>
             <div class="section-heading">
                 <div>
                     <h2 id="creator-title">Reference creator</h2>
-                    <p>Select references from either tab to build one guide grouped by category, then reference type.</p>
+                    <p>Select references from any library tab to build one guide grouped by category, then reference type.</p>
                 </div>
                 <div class="creator-actions">
                     <button id="clear-selection" class="secondary" type="button" disabled>Clear selection</button>
@@ -199,7 +200,7 @@
     </dialog>
 
     <div id="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="/h3-references/static/manager.js?v=23"></script>
-    <script type="module" src="/h3-built-in-references/static/built-ins.js?v=23"></script>
+    <script type="module" src="/h3-references/static/manager.js?v=25"></script>
+    <script type="module" src="/h3-built-in-references/static/built-ins.js?v=24"></script>
 </body>
 </html>

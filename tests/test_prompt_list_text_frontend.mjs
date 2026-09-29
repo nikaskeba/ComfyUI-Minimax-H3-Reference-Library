@@ -39,7 +39,7 @@ try {
  assert.equal(await page.evaluate(()=>node.widgets[0].value),text);
  assert.match(await page.locator('[role=status]').first().textContent(),/positive duration/);
  await page.getByLabel('Length (seconds)').fill('7.5');await page.getByLabel('Length (seconds)').blur();
- assert.equal(await page.evaluate(()=>node.widgets[0].value),text.replace('[s=15]','[s=7.5]'));
+ assert.equal(await page.evaluate(()=>node.widgets[0].value),text.replace('[s=15]','[s=7.5]').replace('detailed_description:', 'summary:').replace('timeline:', 'detailed_description:'));
  await page.getByRole('button',{name:'Undo',exact:true}).click();assert.equal(await page.evaluate(()=>node.widgets[0].value),text);
  await page.getByRole('button',{name:'Redo',exact:true}).click();assert.match(await page.evaluate(()=>node.widgets[0].value),/s=7.5/);
  await page.getByLabel('Scene change').uncheck();assert.ok(!(await page.evaluate(()=>node.widgets[0].value)).includes('[new_location]'));
@@ -48,7 +48,7 @@ try {
  await page.getByLabel('Dialogue speaker',{exact:true}).fill('<voice:guest>');
  assert.match(await page.evaluate(()=>node.widgets[0].value),/<d>\[French <voice:guest>\]Bonjour!<\/d>/);
  assert.ok((await page.evaluate(()=>node.widgets[0].value)).endsWith(text.split('|').slice(1).join('|')));
- await page.getByRole('textbox',{name:'Description text',exact:true}).fill('New description <img src=x onerror=alert(1)>');
+ await page.getByRole('textbox',{name:'summary: text',exact:true}).fill('New description <img src=x onerror=alert(1)>');
  assert.equal(await page.locator('.skeba-prompt-view img').count(),0);
  await page.getByRole('button',{name:'Insert prompt at position 2',exact:true}).click();
  assert.equal(await page.locator('.skeba-prompt-block').count(),4);
@@ -85,7 +85,7 @@ try {
  assert.match(await page.locator('.skeba-prompt-muted').first().textContent(),/Prompt 80 of 80/);
  // One timeline textbox, inline shot/reference highlighting, and no empty opening editor.
  await page.evaluate(()=>{node.widgets[0].value='[s=15]\n\nsubject_definitions:\n{Jerry_BC}\ntimeline:\n[Shot 1] {Jerry_BC} waits. <d>[English §Jerry_BC§]Hi.</d>';node.onConfigure();});
- const timelineField=page.getByRole('textbox',{name:'Timeline text',exact:true});
+ const timelineField=page.getByRole('textbox',{name:'detailed_description: text',exact:true});
  assert.equal(await timelineField.count(),1);
  assert.equal(await page.getByRole('textbox',{name:'Opening / definitions text',exact:true}).count(),0);
  assert.equal(await timelineField.locator('.skeba-shot').count(),1);
@@ -111,11 +111,11 @@ try {
  await picker.getByRole('button',{name:'Insert {Apartment}',exact:true}).click();
  assert.match(await page.evaluate(()=>node.widgets[0].value),/\{Apartment\}/);
  // Insert at a saved caret in the middle, not at the start/end after the popup takes focus.
- await page.evaluate(()=>{node.widgets[0].value='timeline:\nBefore. After.';node.onConfigure();const ed=document.querySelector('[aria-label="Timeline text"]');ed.focus();const text=ed.firstChild;const r=document.createRange();r.setStart(text,9);r.collapse(true);getSelection().removeAllRanges();getSelection().addRange(r);ed.dispatchEvent(new MouseEvent('mouseup'));});
- const middlePanel=page.locator('.skeba-prompt-section').filter({has:page.getByRole('textbox',{name:'Timeline text',exact:true})});
+ await page.evaluate(()=>{node.widgets[0].value='timeline:\nBefore. After.';node.onConfigure();const ed=document.querySelector('[aria-label="detailed_description: text"]');ed.focus();const text=ed.firstChild;const r=document.createRange();r.setStart(text,9);r.collapse(true);getSelection().removeAllRanges();getSelection().addRange(r);ed.dispatchEvent(new MouseEvent('mouseup'));});
+ const middlePanel=page.locator('.skeba-prompt-section').filter({has:page.getByRole('textbox',{name:'detailed_description: text',exact:true})});
  await middlePanel.getByRole('button',{name:'Add reference',exact:true}).click();
  await page.getByRole('dialog',{name:'Insert reference'}).getByRole('button',{name:'Insert {Apartment}',exact:true}).click();
- assert.equal(await page.evaluate(()=>node.widgets[0].value),'timeline:\nBefore. {Apartment}After.');
+ assert.equal(await page.evaluate(()=>node.widgets[0].value),'detailed_description:\nBefore. {Apartment}After.');
  await page.getByRole('button',{name:'Undo',exact:true}).click();
  assert.equal(await page.evaluate(()=>node.widgets[0].value),'timeline:\nBefore. After.');
  await page.evaluate(()=>{node.widgets[0].value='[s=15]\n\nsubject_definitions:\n{Jerry_BC}\ntimeline:\n[Shot 1] {Jerry_BC} waits. <d>[English §Jerry_BC§]Hi.</d>';node.onConfigure();document.querySelector('.skeba-prompt-view').scrollTop=0;});
@@ -123,12 +123,12 @@ try {
  for(const blank of ['', '  \r\n ']){
   await page.evaluate(value=>{node.widgets[0].value=value;node.onConfigure();},blank);
   assert.equal(await page.locator('.skeba-prompt-block').count(),0);
-  assert.equal(await page.getByRole('textbox',{name:'Timeline text',exact:true}).count(),0);
+  assert.equal(await page.getByRole('textbox',{name:'detailed_description: text',exact:true}).count(),0);
   assert.equal(await page.evaluate(()=>node.widgets[0].value),blank);
   await page.getByRole('button',{name:'Add first scene',exact:true}).click();
   assert.equal(await page.locator('.skeba-prompt-block').count(),1);
   assert.equal(await page.getByLabel('Length (seconds)').inputValue(),'15');
-  assert.equal(await page.getByRole('textbox',{name:'Timeline text',exact:true}).count(),1);
+  assert.equal(await page.getByRole('textbox',{name:'detailed_description: text',exact:true}).count(),1);
   assert.equal((await page.evaluate(()=>node.widgets[0].value)).includes('|'),false);
   await page.getByRole('button',{name:'Undo',exact:true}).click();
   assert.equal(await page.evaluate(()=>node.widgets[0].value),blank);
@@ -138,12 +138,12 @@ try {
  }
  await page.evaluate(()=>{node.widgets[0].value='[s=15]\n\nsubject_definitions:\n{Conan_BC}\n\ndetailed_description:\nA street.\n\ntimeline:\n[Shot 1] Waits.';node.onConfigure();});
  await page.getByRole('textbox',{name:'subject_definitions: text',exact:true}).fill('{Conan_BC} wearing a clown costume.');
- await page.getByRole('textbox',{name:'Description text',exact:true}).fill('Realistic render');
+ await page.getByRole('textbox',{name:'summary: text',exact:true}).fill('Realistic render');
  await page.getByRole('tab',{name:'Raw text'}).click();
  const spaced=await page.getByRole('textbox',{name:'Prompt list separated by vertical bars'}).inputValue();
- assert.match(spaced,/subject_definitions:\n\{Conan_BC\} wearing a clown costume\.\n\ndetailed_description:\nRealistic render\n\ntimeline:\n/);
+ assert.match(spaced,/subject_definitions:\n\{Conan_BC\} wearing a clown costume\.\n\nsummary:\nRealistic render\n\ndetailed_description:\n/);
  await page.getByRole('tab',{name:'Formatted view'}).click();
- assert.equal(await page.getByRole('textbox',{name:'Description text',exact:true}).count(),1);
+ assert.equal(await page.getByRole('textbox',{name:'summary: text',exact:true}).count(),1);
  assert.deepEqual(errors,[]);
  console.log('Visual prompt timeline, editing, insertion, undo/redo, exact text and restoration passed');
 } finally {await browser.close();}

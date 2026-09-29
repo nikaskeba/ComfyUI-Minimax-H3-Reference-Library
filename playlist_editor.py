@@ -13,7 +13,7 @@ from comfy_api.latest import InputImpl, Types
 from comfy_extras.nodes_audio import load as load_audio
 from .playlist_registration import normalize_reference_fps
 from .playlist_timeline import clean_entry, frame_range
-from .playlist_sections import section_edit, context_window, adopt_timeline, assemble_section
+from .playlist_sections import section_edit, context_window, adopt_timeline, assemble_section, assemble_generated
 from .disk_video import (_MANIFEST_LOCK, playlist_manifest, playlist_media, write_project,
                          _write_clip, _clip_metadata)
 
@@ -41,6 +41,8 @@ def edit_timeline(token, payload):
             for job in doc["jobs"]:
                 spec = job["spec"]
                 used = {spec["parent_clip_id"]} | {n["clip_id"] for n in spec.get("neighbors", {}).values()}
+                if job.get("kind")=="batch":
+                    used.update(j.get("clip_id") for j in doc["jobs"] if j["id"] in job["children"])
                 if job["state"] in ("prepared", "queued", "running") and clip_id in used:
                     raise ValueError("This clip is used by an active generation. Wait for it to finish or cancel it first.")
             original = copy.deepcopy(doc)
@@ -165,8 +167,8 @@ def timing(duration,previous_frames=0,next_frames=0):
     return visible,generation
 
 
-def prepare_redo(token,payload):
-    template=read_template(payload.get("template"))
+def prepare_redo(token,payload, *, template=None, persist=True):
+    template=template or read_template(payload.get("template"))
     with _MANIFEST_LOCK:
         directory,doc=playlist_manifest(token)
         if payload.get("revision")!=doc["revision"]:raise RevisionConflict("Timeline changed. Reopen Redo to confirm its neighbors.")
@@ -214,26 +216,32 @@ def prepare_redo(token,payload):
         spec.update(visible_frames=visible,generation_length=generation,duration=visible/24)
         spec["prompt"]=re.sub(r"\[s\s*=\s*[\d.]+\]",f"[s={visible/24:g}]",prompt,flags=re.I)
         request_id=uuid.uuid4().hex;spec["request_id"]=request_id
-        graph=copy.deepcopy(template["graph"])
-        normalize_reference_fps(graph)
-        default_redo_crf(graph[template["output"]]["inputs"])
-        graph[template["input"]]["inputs"]={"request":json.dumps(spec)}
-        graph[template["output"]]["inputs"]["request"]=[template["input"],0]
-        for key in template["connectors"]:
-            inputs=graph[key]["inputs"];inputs["bypass"]=not bool(spec["neighbors"])
-            inputs["context_resize"]="full_frame"
-            for side,prefix,slots in (("previous","start",(4,5)),("next","end",(6,7))):
-                selected=spec["neighbors"].get(side)
-                inputs.pop(prefix+"_frames",None);inputs.pop(prefix+"_audio",None)
-                if selected:
-                    inputs[prefix+"_overlap"]=str(selected["frames"])
-                    inputs[prefix+"_frames"]=[template["input"],slots[0]]
-                    if selected["audio"]:inputs[prefix+"_audio"]=[template["input"],slots[1]]
-        doc["redo_template"]=payload["template"]
+        graph=redo_graph(template,spec)
         prompt_id=str(uuid.uuid4())
-        doc["jobs"].append({"id":request_id,"prompt_id":prompt_id,"state":"prepared","spec":spec,"output_node":template["output"]})
-        write_project(directory,doc)
-    return {"request_id":request_id,"prompt_id":prompt_id,"graph":graph,"duration":visible/24}
+        if persist:
+            doc["redo_template"]=payload["template"]
+            doc["jobs"].append({"id":request_id,"prompt_id":prompt_id,"state":"prepared","spec":spec,"output_node":template["output"],"template_snapshot":template})
+            write_project(directory,doc)
+    return {"request_id":request_id,"prompt_id":prompt_id,"graph":graph,"duration":visible/24,"spec":spec}
+
+
+def redo_graph(template,spec):
+    graph=copy.deepcopy(template["graph"])
+    normalize_reference_fps(graph)
+    default_redo_crf(graph[template["output"]]["inputs"])
+    graph[template["input"]]["inputs"]={"request":json.dumps(spec)}
+    graph[template["output"]]["inputs"]["request"]=[template["input"],0]
+    for key in template["connectors"]:
+        inputs=graph[key]["inputs"];inputs["bypass"]=not bool(spec["neighbors"])
+        inputs["context_resize"]="full_frame"
+        for side,prefix,slots in (("previous","start",(4,5)),("next","end",(6,7))):
+            selected=spec["neighbors"].get(side)
+            inputs.pop(prefix+"_frames",None);inputs.pop(prefix+"_audio",None)
+            if selected:
+                inputs[prefix+"_overlap"]=str(selected["frames"])
+                inputs[prefix+"_frames"]=[template["input"],slots[0]]
+                if selected["audio"]:inputs[prefix+"_audio"]=[template["input"],slots[1]]
+    return graph
 
 
 def update_job(token,identifier,changes):
@@ -327,7 +335,16 @@ class PlaylistRedoSave:
         output = path
         try:
             _write_clip(video,path,crf=crf)
-            if spec.get("edit"):
+            if spec.get("batch_id"):
+                metadata = _clip_metadata(path)
+                if any(metadata[key]!=spec["geometry"][key] for key in ("width","height")):
+                    normalized = directory/("normalized_"+spec["request_id"]+".mp4")
+                    try:
+                        assemble_generated(spec, [path], [spec["duration"]], normalized, crf)
+                        normalized.replace(path)
+                    finally:
+                        normalized.unlink(missing_ok=True)
+            if spec.get("edit") and not spec.get("batch_id"):
                 output = directory/("edited_"+spec["request_id"]+".mp4")
                 expected = assemble_section(spec, path, output, crf)
                 if _clip_metadata(output)["frame_count"] != expected:
@@ -336,12 +353,12 @@ class PlaylistRedoSave:
                 verify_request(spec)
                 directory,doc=playlist_manifest(token)
                 records = []
-                if spec.get("edit"):
+                if spec.get("edit") and not spec.get("batch_id"):
                     records.append({**_clip_metadata(path), "clip_id":path.stem,
                                     "media_role":"generated_section", "parent_clip_id":spec["parent_clip_id"],
                                     "prompt":spec["prompt"], "redo":spec})
                 records.append({**_clip_metadata(output), "clip_id":output.stem,
-                    "media_role":"new_clip" if spec.get("edit",{}).get("mode")=="insert_between" else "alternate", "seed":spec["seed"], "parent_clip_id":spec["parent_clip_id"],
+                    "media_role":"generated_section" if spec.get("batch_id") else "new_clip" if spec.get("edit",{}).get("mode")=="insert_between" else "alternate", "seed":spec["seed"], "parent_clip_id":spec["parent_clip_id"],
                     "prompt":spec["prompt"], "redo":spec})
                 for record in records:
                     record["index"] = len(doc["clips"])+1
@@ -365,7 +382,8 @@ def verify_request(spec):
     job = next((j for j in doc["jobs"] if j["id"] == spec["request_id"]), None)
     if job is None or job["spec"] != spec:
         raise ValueError("Redo request does not match its saved project job.")
-    if job["state"] == "canceled":
+    parent = next((j for j in doc["jobs"] if j["id"] == spec.get("batch_id")), None)
+    if job["state"] == "canceled" or (parent and parent["state"] == "canceled"):
         raise ValueError("This redo was canceled. Submit a new redo from the playlist.")
     return job
 
