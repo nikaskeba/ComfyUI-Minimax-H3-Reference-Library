@@ -747,3 +747,23 @@ its prompt and submit a new attempt with the saved seed, reference boundaries, a
 edit position. Completed jobs offer **Run again**. Batch retries lock and reuse
 completed prompts; edit the unfinished prompts without changing their count.
 Existing clips, the original job history, and the active timeline stay unchanged.
+
+
+## SKEBA Custom Choice
+
+Use **SKEBA Custom Choice** to expose a shared dropdown anywhere in a workflow. Click **Edit choices**, enter one value per line (or comma-separated), then **Apply choices**. The list and selected value are saved with the workflow.
+
+Connect `value -> Setter`, then matching Getters to the target nodes. Convert the target widget to an input when needed. Use **text** output for combo inputs, even for numeric-looking options such as `5`, `22`, `39`, `56`. Other targets can use integer, decimal, or boolean output; booleans use `true` and `false`.
+
+For Motion Context continuation mode, enter the exact values `standard`, `pre-cut reinforcement`, and `scene reference`. Choices are literal values, not display aliases. Rename the node title to identify each shared control.
+
+
+## Continuation from the last rendered clip
+
+**SKEBA H3 Last Rendered Context** reads the final clip in an incoming `ACCUMULATION` (or an explicitly connected `VIDEO`). It outputs tail frames, synchronized audio, a bypass flag, and the effective frame count. Choose 5/22/39/56 frames; audio is optional. Empty or shorter-than-five-frame input bypasses context. Other frame rates are sampled at H3's 24 fps without cropping the image. Only the last clip is decoded.
+
+Connect the loop-open accumulation from before the current clip is appended; connecting the current clip save back to its own generation would create a cycle. Use the bypass output for the first iteration, or drive the loader's bypass from your first-clip/new-scene control.
+
+For **SKEBA H3 Motion Context**, connect `context_frames` and `context_audio`, select `context_source = rendered frames/audio`, and supply the video/audio VAEs. This explicitly ignores `context_latent`; the required `latent` input remains the current generation's target latent. Auto retains the existing latent-first behavior.
+
+For **Base-Pass AV Connector**, connect the same outputs to Starting Video Frames (`start_frames`) and Starting Video Audio (`start_audio`), and connect the bypass output. Match the starting overlap length to the loader. The same media can feed an upscale connector with its own target latent/VAEs. Use the AV Connector's existing overlap-finalization path when it handles continuation; avoid also pinning/trimming the same overlap through Motion Context. This change does not automatically rewire saved workflows.

@@ -1,5 +1,7 @@
 from .refmod_preview import SkebaRefModPreview
 from .quick_launcher import SkebaQuickLauncher
+from .custom_choice import SkebaCustomChoice
+from .last_rendered_context import SkebaH3LastRenderedContext
 from .workflow_guide import SkebaWorkflowGuide
 from .h3_audio_refine import SkebaH3AudioRefine
 from .refmod_studio import SkebaRefModStudio
@@ -41,6 +43,8 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaH3LastRenderedContext": SkebaH3LastRenderedContext,
+    "SkebaCustomChoice": SkebaCustomChoice,
     "SkebaWorkflowGuide": SkebaWorkflowGuide,
     "SkebaPromptListText": PromptListTextNode,
     "SkebaQuickLauncher": SkebaQuickLauncher,
@@ -82,6 +86,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaH3LastRenderedContext": "SKEBA H3 Last Rendered Context",
+    "SkebaCustomChoice": "SKEBA Custom Choice",
     "SkebaWorkflowGuide": "SKEBA Workflow Guide (HTML)",
     "SkebaPromptListText": "SKEBA Prompt List Text",
     "SkebaQuickLauncher": "SKEBA Quick Launcher",

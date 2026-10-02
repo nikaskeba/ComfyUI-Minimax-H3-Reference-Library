@@ -76,7 +76,7 @@ function selectedGroups(selectedRecords) {
         ]);
 }
 
-export function renderReferenceGuide(records, elements) {
+export function renderReferenceGuide(records, elements, onRemove) {
     const groups = selectedGroups(records);
     const hasSelection = groups.length > 0;
     elements["selection-empty"].hidden = hasSelection;
@@ -93,16 +93,26 @@ export function renderReferenceGuide(records, elements) {
             typeGroup.className = "selection-type-group";
             const typeHeading = document.createElement("h4");
             typeHeading.textContent = referenceTypeHeading(referenceType);
-            typeGroup.append(typeHeading, ...records.map(selectionItem));
+            typeGroup.append(typeHeading, ...records.map(record => selectionItem(record, onRemove)));
             return typeGroup;
         }));
         return group;
     }));
 }
 
-function selectionItem(record) {
+function selectionItem(record, onRemove) {
     const item = document.createElement("div");
     item.className = "selection-item";
+    if (onRemove) {
+        const remove = document.createElement("button");
+        remove.type = "button";
+        remove.className = "secondary selection-remove";
+        remove.textContent = "×";
+        remove.title = `Unselect ${record.tag}`;
+        remove.setAttribute("aria-label", remove.title);
+        remove.addEventListener("click", () => onRemove(record));
+        item.append(remove);
+    }
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     if (!record.is_refmod || record.has_visual) item.append(tag);

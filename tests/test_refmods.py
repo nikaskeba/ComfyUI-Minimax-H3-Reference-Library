@@ -234,6 +234,63 @@ class RefModTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"changed order"):
             apply._apply_bound(changed,out[21],1,None,-1,0)
 
+    def test_implicit_voice_reaches_encoder_and_apply(self):
+        self.asset("speaker_visual", "image")
+        self.asset("speaker_audio", "audio", seconds=3)
+        self.asset("silent_visual", "image")
+        self.asset("silent_audio", "audio", seconds=3)
+        prompt = ("subject_definitions:\n{speaker_rm}\n{silent_rm}\n"
+                  "detailed_description:\n[Shot 1] {silent_rm} sits.\n"
+                  "[Shot 2] {speaker_rm} says, <d>[English]Hello.</d>\n"
+                  "overall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A")
+        with patch.object(builder, "records_by_tag", return_value={}), patch.object(builder, "library_built_in_records", return_value={}):
+            implicit = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic")
+            explicit = builder.H3TaggedReferencePrompt().build(prompt.replace("[English]", "[English §speaker_rm§]"), compiler_mode="deterministic")
+        self.assertEqual(implicit[20], explicit[20])
+        self.assertEqual([e["tag"] for e in implicit[20]["audios"]], ["speaker_rm"])
+        self.assertIn("<Audio 1>", implicit[0])
+        with patch.object(encoder.h3, "_empty_av_latent", return_value=({"samples": "empty"}, 5)):
+            encoded = encoder.SkebaCachedMiniMaxH3ReferenceToVideo.execute(
+                self.clip, self.vae, self.audio_vae, implicit[0], 64, 64, 5, reference_bundle=implicit[20])
+        applied = apply._apply_bound(encoded[0], implicit[21], 1, None, -1, 0)
+        audio = [r for r in applied[0][1]["minimax_refs"] if r["kind"] == "audio"]
+        self.assertEqual(len(audio), 1)
+        self.assertTrue(torch.equal(audio[0]["audio_latent"], implicit[21][-1][0].latent))
+        self.assertEqual(audio[0]["ref_audio_t"], 120)
+
+    def test_implicit_saved_voice_and_explicit_override(self):
+        records = {"speaker": self.record("speaker"), "silent": self.record("silent")}
+        records["speaker"].update(voice_source="refmod", voice_refmod=self.asset("voice", "audio", seconds=3))
+        records["silent"].update(voice_source="refmod", voice_refmod={"file": "missing.safetensors", "member": None})
+        prompt = ("subject_definitions:\n{speaker}\n{silent}\n"
+                  "detailed_description:\n{speaker} whispers, <d>[English]Hello.</d>\n"
+                  "overall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A")
+        projected = library.project_records(records, prompt)
+        self.assertIn("_refmod_audio", projected["speaker"])
+        self.assertNotIn("_refmod_audio", projected["silent"])
+        compiler = importlib.import_module(PACKAGE + ".reference_compiler")
+        self.assertEqual(compiler.inferred_saved_voice_tags(prompt), {"speaker"})
+        self.assertEqual(compiler.inferred_saved_voice_tags(prompt.replace("[English]", "[English §other§]")), set())
+
+    def test_subject_only_wording_preserves_media_and_voice_bindings(self):
+        for kind, marker in (("video", "<Video 1>"), ("image", "<Picture 1>")):
+            with self.subTest(kind=kind):
+                records = {"person": self.record("person", kind)}
+                records["person"].update(voice_source="refmod", voice_refmod=self.asset("voice", "audio", seconds=3))
+                prompt = ("subject_definitions:\n{person}\ndetailed_description:\n"
+                          "{person} says, <d>[English]Hello.</d>\n"
+                          "overall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A")
+                with patch.object(builder, "records_by_tag", return_value=records), patch.object(builder, "library_built_in_records", return_value={}):
+                    normal = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic")
+                    simple = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic", refmod_subject_only=True)
+                self.assertIn(" in " + marker, normal[0])
+                self.assertNotIn(" in " + marker, simple[0])
+                self.assertEqual(normal[20], simple[20])
+                self.assertEqual(normal[21].bindings, simple[21].bindings)
+                self.assertNotIn("<Audio 1>", simple[0])
+                self.assertIn("<Subject 1> (S1) says, <d>[English]Hello.</d>", simple[0])
+                self.assertNotIn("Voice-identity binding", simple[0])
+
     def test_creation_round_trip(self):
         record=dict(tag="person", image_file="image.png")
         with patch.object(create,"get_record",return_value=record), patch.object(create,"media_path",return_value="image.png"), patch.object(create,"load_image",return_value=torch.ones(1,64,64,3)), patch.object(create,"roots",return_value=[self.root]):

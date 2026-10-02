@@ -1,4 +1,5 @@
 """RefMod discovery and library source selection; does not load latent tensors."""
+from .reference_compiler import inferred_saved_voice_tags
 import hashlib
 import json
 import re
@@ -75,8 +76,9 @@ def selection_fields(values):
     return result
 
 
-def direct_refmod_records(records, prompt):
+def direct_refmod_records(records, prompt, voice_tags=None):
     """Resolve filename-based _rm tags without changing the saved library."""
+    voice_tags = voice_tags if voice_tags is not None else set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt)
     requested = {a or b for a,b in re.findall(r"\{([^{}]+_rm)\}|§([^§]+_rm)§", prompt)} - records.keys()
     if not requested:
         return records
@@ -100,7 +102,7 @@ def direct_refmod_records(records, prompt):
         record = {"id":"refmod:"+matches[0], "tag":tag, "reference_type":"character"}
         for channel,kinds in (("appearance",("image","video")),("voice",("audio",))):
             choices = [row for row in rows if row["kind"] in kinds]
-            if channel == "voice" and "§"+tag+"§" not in prompt:
+            if channel == "voice" and tag not in voice_tags:
                 continue
             if len(choices)>1:
                 raise ValueError(f"AMBIGUOUS_REFMOD: {tag} has multiple {channel} members; select one through a library entry.")
@@ -109,7 +111,7 @@ def direct_refmod_records(records, prompt):
                 record[channel+"_source"]="refmod"
                 record[channel+"_refmod"]={"file":row["file"],"member":row["member"]}
                 record["audio_description" if channel=="voice" else "image_description"]=row.get("voice_description" if channel=="voice" else "appearance") or row.get("description") or row.get("name") or name
-        if "§"+tag+"§" in prompt and "voice_refmod" not in record:
+        if tag in voice_tags and "voice_refmod" not in record:
             raise ValueError(f"REFMOD_VOICE_MISSING: {tag} has no audio member.")
         if not record.get("appearance_refmod") and not record.get("voice_refmod"):
             raise ValueError(f"REFMOD_INVALID: {tag} has no usable reference member.")
@@ -119,7 +121,8 @@ def direct_refmod_records(records, prompt):
 
 def project_records(records, prompt):
     """Expose selected RefMod modalities to the existing tag/ownership resolver."""
-    records = direct_refmod_records(records, prompt)
+    voice_tags = set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt)
+    records = direct_refmod_records(records, prompt, voice_tags)
     result = dict(records)
     for tag, original in records.items():
         if "{" + tag + "}" not in prompt and "§" + tag + "§" not in prompt:
@@ -129,7 +132,7 @@ def project_records(records, prompt):
             if record.get(channel + "_source", "media") != "refmod":
                 continue
             # Silent characters need no voice file access or validation.
-            if channel == "voice" and "§" + tag + "§" not in prompt:
+            if channel == "voice" and tag not in voice_tags:
                 record["audio_file"] = None
                 continue
             selection = record.get(channel + "_refmod")

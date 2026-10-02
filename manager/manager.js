@@ -952,7 +952,26 @@ function toggleSelection(recordId) {
 function selectedGuideRecords() {
     return [...state.records.filter(item => state.selected.has(item.id)), ...state.builtInSelected, ...state.refmodSelected];
 }
-function renderSelectionGuide() { renderReferenceGuide(selectedGuideRecords(), elements); }
+function renderSelectionGuide() { renderReferenceGuide(selectedGuideRecords(), elements, removeGuideReference); }
+function removeGuideReference(record) {
+    if (record.built_in) {
+        window.dispatchEvent(new CustomEvent("skeba-unselect-built-in", {detail: {tag: record.library_tag}}));
+    } else if (record.is_refmod) {
+        const key = record.id.slice("refmod:".length);
+        const selected = new Set(JSON.parse(localStorage.getItem("skeba-refmod-selection") || "[]"));
+        selected.delete(key);
+        localStorage.setItem("skeba-refmod-selection", JSON.stringify([...selected]));
+        refmodSelectionRequest++;
+        state.refmodSelected = state.refmodSelected.filter(item => item.id !== record.id);
+        renderSelectionGuide();
+    } else {
+        state.selected.delete(record.id);
+        localStorage.setItem("skeba-reference-selection", JSON.stringify([...state.selected]));
+        renderRecords();
+        renderSelectionGuide();
+    }
+}
+
 function selectionGuideText() { return referenceGuideText(selectedGuideRecords()); }
 
 async function copySelectionGuide() {

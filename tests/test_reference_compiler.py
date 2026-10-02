@@ -277,7 +277,7 @@ class CompilerTests(unittest.TestCase):
                             detail, summary="{jerry} watches {randy}.")
             result = compiler.compile_prompt(source, records)
             definitions = result.prompt.split("summary:")[0]
-            labels = ["<Subject 1> is", "<Subject 2> is", "<Subject 3> is", "<Audio 1> is", "<Subject 4> is"]
+            labels = ["<Subject 1> is", "<Subject 2> is", "<Subject 3> is", "<Subject 4> is", "<Audio 1> is"]
             positions = [definitions.index(label) for label in labels]
             self.assertEqual(positions, sorted(positions))
             self.assertIn("<Subject 3> (S3)", definitions)
@@ -450,7 +450,7 @@ class CompilerTests(unittest.TestCase):
             self.assertNotIn(f"<Subject {subject}> (S{speaker}), using", result.prompt)
         self.assertIn("<Subject 3> (S3) (off-screen) says in Jerry's distinctive voice", result.prompt)
         retention = result.prompt.split("retention_analysis:")[1].split("detailed_description:")[0]
-        self.assertIn("guide only <Subject 2> (S2)", retention)
+        self.assertIn("<Audio 1> applies exclusively to <Subject 2> (S2)", retention)
         self.assertEqual(retention.count("<Audio 1>:"), 1)
         self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(source))
         disabled = compiler.compile_prompt(source, records, voice_isolation=False)

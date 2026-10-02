@@ -276,6 +276,19 @@ def main():
 
     node = nodes.MiniMaxH3MotionContext()
 
+    _, rendered_trim = node.apply(
+        conditioning=[["c", {}]], vae=VAE(), latent=target,
+        context_length="22", context_frames=context,
+        context_latent={"skeba_h3_motion_context_bypassed": True},
+        context_source="rendered frames/audio", audio_context_enabled=False)
+    assert rendered_trim == 22
+    try:
+        node.apply(conditioning=[], vae=VAE(), latent=target,
+                   context_length="22", context_frames=context, context_source="latent")
+        raise AssertionError("Explicit latent source must require a latent")
+    except ValueError as error:
+        assert "connect context_latent" in str(error)
+
     # A location change can continue only the previous soundtrack. It creates
     # no visual keyframes, places timeline audio at the beginning, and asks
     # Trim to remove no picture or sound.

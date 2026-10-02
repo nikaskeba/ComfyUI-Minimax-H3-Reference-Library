@@ -2,7 +2,7 @@
 name: skeba-minimax-prompts
 description: Write and revise MiniMax H3 video prompt sequences for SKEBA's deterministic H3 Tagged Reference Prompt compiler, using saved and temporary semantic references with explicit dialogue and clip continuity.
 metadata:
-  updated: 9/28/2026
+  updated: 10/1/2026
 ---
 
 # SKEBA MiniMax H3 prompt writing
@@ -274,9 +274,31 @@ Keep the opening wardrobe descriptions separate from dialogue shots. In each spe
 
 ### Shot timing and cuts
 
+### HARD RULE — Shot 1 is scene setup only
+
+Reserve the opening `[Shot 1]` of every prompt for establishing the location, visual style, framing, lighting, character positions, wardrobe, props, and inherited continuation state. Characters may perform simple visible setup actions. Use ambience and nonverbal environmental sounds; keep character speech, dialogue blocks, narration, voiceover, and implied or off-screen speech out of this shot.
+
+Move any intended spoken words into `[Shot 2]` or a later shot, preserving their speaker and exact wording. Establish the speaking character before the line begins and give it enough time to finish naturally. Keep Shot 1 brief and purposeful rather than adding an arbitrary long pause.
+
+Shot 1 begins implicitly at the start of the clip and performs the setup or continuation-handoff duties below. This rule applies to both new locations and same-location continuations, even when the inherited character is also the next speaker. Dialogue starts only in Shot 2 or later.
+
+```text
+[Shot 1] Live-action sitcom style. A medium-wide view establishes {Living_Room}. {Al_Bundy} sits on the sofa holding a folded newspaper. Warm lamplight and quiet room tone establish the scene.
+
+[Shot 2] At 00:01.000, a medium shot frames only {Al_Bundy} seated on the sofa. {Al_Bundy} says, <d>[English]I'm home.</d>
+```
+
 Do not timestamp `[Shot 1]`; it begins at the start of the clip.
 
-For a prompt beginning with `[new_location]`, Shot 1 establishes the new location and initial composition normally.
+### HARD RULE — NEW-LOCATION SPEECH BUFFER
+
+Every prompt beginning with `[new_location]` must open with at least **1.0 second of completely silent visual establishment**. Shot 1 contains no dialogue and establishes the new location, initial composition, and visible speaker before speech begins. For this opening buffer, silence takes precedence over the general permission to use setup ambience.
+
+The first speaking shot must begin at **00:01.000 or later**, after the speaker is visibly established. Never begin dialogue at 00:00 on a new scene. Keep Shot 1 untimestamped; explicitly timestamp the first speaking shot to make the buffer clear.
+
+This buffer is particularly important when the first spoken words contain a proper name. Preserve the entire line, including the complete name, and let it begin only after the silent buffer. Allow enough natural speaking time after the buffer; do not compensate by rushing or clipping the line.
+
+### Same-location opening handoff
 
 For a prompt WITHOUT `[new_location]`, Shot 1 is also the continuation handoff shot. Its opening frames must acknowledge the preceding prompt's final visible composition because the workflow supplies the final 22 frames of that clip as context. Begin Shot 1 from the inherited visible subject, framing, pose, and camera state before transitioning to a different subject or composition.
 
@@ -308,7 +330,26 @@ Use shot timing and direct character attribution to establish dialogue handoffs.
 
 ### summary
 
-Required in every complete prompt. Write a concise scene-level paragraph establishing the overall presentation and visual style, physical location, the situation or story beat, and persistent lighting or environmental conditions. Use the same semantic reference tags as the rest of the prompt.
+Required in every complete authored prompt. Write one short, factual paragraph describing what the target video visibly shows: the location, concrete starting arrangement, main physical actions, and visible outcome. Prefer "The target video shows...". Use semantic reference tags. Keep style and environmental details brief; do not turn summary into a second shot script.
+
+### HARD RULE — SUMMARY IS AN OVERVIEW, NOT A SPEECH CUE
+
+All spoken content and instructions to speak belong exclusively in `detailed_description`, attached to the correct character's dialogue event. In summary:
+
+- Do not quote, paraphrase, or recap dialogue, including dialogue from the preceding clip.
+- Do not describe a character explaining, revealing, claiming, asking, replying, announcing, defending an argument, or preparing to speak. Replace those descriptions with visible actions or expressions.
+- Do not prescribe speaking order, first words, proper-name pronunciation, delivery, or when someone begins or finishes a line. Put those instructions beside the actual dialogue in the timed shot.
+- Do not include dialogue tags, speaker IDs, shot markers, or timestamps.
+- A reference-usage note may state that an available audio reference supplies a character's vocal timbre. This describes the reference's role, not an instruction for the character to speak. Do not invent attachments or add voice tags to summary merely to request audio; actual dialogue determines which voices are selected.
+- A brief sound-design outcome such as "ends with a canned audience laugh" is allowed when intended; place its actual timing in the shots/soundscape. Do not add laughter automatically.
+
+BAD: "George explains his good deeds. Newman reveals how George died. George clearly says Sidney Fields before defending himself."
+
+GOOD: "The target video shows {George Costanza_BC} standing among the clouds before {pearlygate}. {Newmen_rm} stands beside the gate in a white angel robe. George gestures outward, Newman holds a stern expression, and George lowers his head."
+
+Another authoring example: "The target video shows {cookie_eater} eating a cookie inside {living_room}. {visitor} enters with {dog}, which lunges toward the cookie. The clip ends with a canned audience laugh."
+
+Compiled examples may additionally describe resolved audio-reference usage, but do not manually copy `<Subject N>`, `<Audio N>`, `(Sx)`, or `[reference generation + audio reference]` into semantic authoring prompts. The compiler owns numbering; its current output omits task headers. Preserve the visual-overview structure of such examples without inventing runtime bindings.
 
 For same-location continuations, concretely restate the inherited starting positions, poses, important props, and persistent visual changes needed to connect to the preceding clip. Each prompt compiles independently: do not substitute "same as before" for the actual starting state. Keep complete wardrobe descriptions beside each character in subject_definitions; summary need not duplicate them.
 
@@ -502,9 +543,11 @@ Keep the maximum of two spoken sentences per shot and allow natural speaking tim
 
 GOOD:
 
-[Shot 1] a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+[Shot 1] A wide shot establishes {Jerry_Seinfeld_Apartment}. {George Costanza_BC} sits on the sofa and {Jerry Seinfeld_BC} stands near the kitchen counter. Quiet apartment room tone accompanies the opening.
 
-[Shot 2] At 00:03.000, a medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen counter inside {Jerry_Seinfeld_Apartment}. {Jerry Seinfeld_BC} says, <d>[English]You're going.</d>
+[Shot 2] At 00:01.000, a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+
+[Shot 3] At 00:04.000, a medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen counter inside {Jerry_Seinfeld_Apartment}. {Jerry Seinfeld_BC} says, <d>[English]You're going.</d>
 
 BAD:
 
@@ -914,12 +957,14 @@ MULTIPLE PROMPTS → ONE plain-text code block with each prompt separated by exa
 Never add prompt numbers, prompt titles, scene labels, clip labels, explanatory text, or Markdown headings inside the code block.
 ## Validate and deliver
 
+Verify every opening `[Shot 1]` contains scene setup only: no character speech, dialogue blocks, narration, voiceover, or implied/off-screen speech. Dialogue begins in Shot 2 or later, with timing that leaves room for the setup. For every `[new_location]` prompt, verify at least 1.0 second of complete opening silence, a visibly established speaker, and the first speaking shot timestamped 00:01.000 or later. Preserve the full first line, especially an opening proper name.
+
 Before delivery, check the Ref2VA contract above: independent identities and anchors, stable semantic voice ownership, factual six-section compiled output, owned reactions/props, coherent world geometry and eyelines, timed dialogue/reactions, and inherited state or an explicit location reset. Do not add runtime labels to authoring prompts during this review.
 
 Before returning a prompt:
 
 1. Confirm deterministic mode is the target. Preserve exact known saved tags, and declare all temporary references directly in subject_definitions, with no separate declaration prefix or duplicate bare temporary entry.
-2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 has no timestamp and establishes the overall style and initial composition. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
+2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Reject dialogue quotations, paraphrases, recaps, implied speaking, speaking-order instructions, and first-word/delivery cues; summary describes visible action and may describe reference roles without cueing speech. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 has no timestamp, establishes the overall style and initial composition, and contains no speech. Dialogue begins in Shot 2 or later. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
 3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and only the language inside dialogue brackets.
 4. Check the intended performer for each speaking turn and directly attribute the dialogue to its character tag. Use `<d>[English]...</d>` (or the spoken language) without a voice tag in the brackets. Preserve spoken words after the brackets. Keep events in playback order; normally let the compiler generate retention_analysis.
 5. Validate every prompt in isolation. For multi-prompt sequences, the ONLY valid sequence separator is a single `|` on its own line. Split at each `|` and pretend all earlier prompt declarations and definitions are unavailable. Never use labels such as `PROMPT 1`, `PROMPT 2`, `Scene 1`, or `Clip 1` as separators.

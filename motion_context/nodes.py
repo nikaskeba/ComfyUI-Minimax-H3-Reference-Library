@@ -475,6 +475,9 @@ class MiniMaxH3MotionContext:
                 "scene_reference": ("IMAGE", {
                     "tooltip": "Optional override for the automatically extracted scene image. "
                                "Only used in scene reference mode with video context enabled."}),
+                "context_source": (["auto", "rendered frames/audio", "latent"], {
+                    "default": "auto",
+                    "tooltip": "Auto preserves latent-first behavior. Rendered frames/audio ignores a connected context_latent and re-encodes context_frames/context_audio from the saved clip."}),
             },
         }
 
@@ -497,10 +500,18 @@ class MiniMaxH3MotionContext:
               video_context_enabled=True, audio_context_enabled=True,
               pre_cut_reinforcement=False, reencode_audio_context=False,
               pre_cut_reinforcement_copies=1, continuation_mode=None,
-              scene_reference=None, settling_frames=0):
+              scene_reference=None, settling_frames=0, context_source="auto"):
         if bypass:
             _LOG.info("h3_motion_context: Motion Context bypassed")
             return (conditioning, 0)
+
+        if context_source == "rendered frames/audio":
+            context_latent = None
+        elif context_source == "latent":
+            if context_latent is None:
+                raise ValueError("h3_motion_context: latent source selected; connect context_latent.")
+        elif context_source != "auto":
+            raise ValueError("h3_motion_context: invalid context_source")
 
         if continuation_mode is None:
             continuation_mode = "pre-cut reinforcement" if pre_cut_reinforcement else "standard"

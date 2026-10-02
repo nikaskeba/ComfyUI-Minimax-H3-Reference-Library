@@ -307,6 +307,10 @@ class H3TaggedReferencePrompt:
                     "default": True,
                     "tooltip": "Keep the first 15 / used voice count seconds of each character voice reference. Shorter clips stay unchanged. Music, reused audio, and video soundtracks are excluded from this budget.",
                 }),
+                "refmod_subject_only": ("BOOLEAN", {
+                    "default": False,
+                    "tooltip": "Omit RefMod visual-source labels and audio-slot instructions from compiled prose. Keeps Subject/Speaker IDs and RefMod latent injection. Deterministic mode only; ordinary reference bindings remain.",
+                }),
             },
         }
 
@@ -336,18 +340,18 @@ class H3TaggedReferencePrompt:
                    video_max_side=DEFAULT_VIDEO_MAX_SIDE,
                    defer_media_loading=False, compiler_mode="legacy",
                    compiler_video_usage="reference", compiler_audio_usage="reference",
-                   compiler_voice_isolation=True, auto_crop_voice_references=True):
+                   compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False):
         return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
                 f"{prompt_template}:{video_fps}:"
                 f"{video_max_side}:{defer_media_loading}:{compiler_mode}:{refmod_revision()}:"
                 f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}:"
-                f"{auto_crop_voice_references}")
+                f"{auto_crop_voice_references}:{refmod_subject_only}")
 
     def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
               video_max_side=DEFAULT_VIDEO_MAX_SIDE,
               defer_media_loading=False, compiler_mode="legacy",
               compiler_video_usage="reference", compiler_audio_usage="reference",
-              compiler_voice_isolation=True, auto_crop_voice_references=True):
+              compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False):
         records = records_by_tag()
         records.update(library_built_in_records())
         records = project_records(records, prompt_template or "")
@@ -356,7 +360,8 @@ class H3TaggedReferencePrompt:
                 prompt_template or "", records, video_usage=compiler_video_usage,
                 audio_usage=compiler_audio_usage, max_images=MAX_IMAGES,
                 max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS,
-                voice_isolation=compiler_voice_isolation)
+                voice_isolation=compiler_voice_isolation, refmod_subject_only=refmod_subject_only)
+            compiled.debug["refmod_subject_only"] = bool(refmod_subject_only)
             prompt, mapping = compiled.prompt, compiled.mapping
             image_tags, audio_tags, video_tags = compiled.images, compiled.audios, compiled.videos
         elif compiler_mode == "legacy":

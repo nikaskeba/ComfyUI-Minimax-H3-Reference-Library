@@ -12,7 +12,7 @@ RefMod attachment controls have been removed from the standard and built-in char
 
 **Export** saves a portable `.safetensors` file with all members and category/collection metadata. Paired appearance/audio files become a single bundle without re-encoding. Chrome's save picker lets you choose the destination; browsers without that API use their normal download flow. Exported files can be added elsewhere with **Import RefMods**. Existing source files remain unchanged.
 
-Appearance accepts image/video RefMods and voice accepts audio RefMods. Visual presence alone does not select voice; use the matching voice tag for dialogue. Discovery uses registered `refmods` folders, including extra model paths, and `models/refmods`.
+Appearance accepts image/video RefMods and voice accepts audio RefMods. Visual presence alone does not select voice. In deterministic mode, directly attributed dialogue such as `{Character_rm} says, <d>[English]Hello.</d>` selects that character's attached voice automatically. Explicit `§Character_rm§` tags remain supported and are required in legacy mode. Silent characters contribute no voice reference. Discovery uses registered `refmods` folders, including extra model paths, and `models/refmods`.
 
 ## Wiring
 
@@ -65,3 +65,7 @@ Restart ComfyUI and refresh the browser after updating. Encoding/preview jobs ap
 ## Direct RefMod tags
 
 Use `{celestial_rm}` for appearance and `§celestial_rm§` inside dialogue for voice, without creating a character entry. The name comes from `celestial.safetensors` or the paired `celestial_visual.safetensors` / `celestial_audio.safetensors`. Include `{celestial_rm}` in subject_definitions as usual. A silent appearance tag does not load its voice. Use `{folder/celestial_rm}` (and matching voice tag) when filenames repeat across folders. Existing saved tags take precedence. Bundles with multiple members for the same channel require an explicit library attachment.
+
+### Subject-only wording test
+
+In deterministic mode, enable `refmod_subject_only` on H3 Tagged Reference Prompt to omit `in <Video N>` / `in <Picture N>` from RefMod character definitions. It also omits RefMod audio definitions, per-dialogue audio-slot instructions, and generated audio retention/global bindings. Subject and speaker IDs remain stable; ordinary media retain their bindings. It defaults off. This changes compiled prose only: the cached encoder, internal numbered media, cropping, and Apply wiring remain unchanged. It does not switch to the external stack's unnumbered injection path. Compare with the same seed and settings.

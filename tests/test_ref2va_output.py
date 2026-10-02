@@ -18,6 +18,10 @@ class Ref2VAOutputTests(unittest.TestCase):
                 source = source.replace('summary:\n\n\n', '').replace('retention_analysis:\n\n\n', '')
                 result = compiler.compile_prompt(source, records)
                 self.check_sections(result)
+                definitions = result.prompt.split("subject_definitions:", 1)[1].split("summary:", 1)[0]
+                starts = re.findall(r"^<(Subject|Audio) (\d+)>", definitions, re.M)
+                self.assertEqual(starts, [("Subject", str(i+1)) for i in range(count)]
+                                 + [("Audio", str(i+1)) for i in range(count)])
                 self.assertEqual(result.images, list(records))
                 self.assertEqual(result.audios, list(records))
                 self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(source))
@@ -29,7 +33,12 @@ class Ref2VAOutputTests(unittest.TestCase):
                         self.assertIn(f'<Subject {n}> = S{n} = <Audio {n}>', result.prompt)
                     local = f'<Subject {n}> (S{n}), using the voice identity referenced exclusively from <Audio {n}>, says,'
                     self.assertEqual(result.prompt.count(local), 2 if i == 0 else 1)
-                    self.assertIn(f'<Audio {n}>: reference - its vocal timbre and delivery guide only <Subject {n}> (S{n})', result.prompt)
+                    self.assertIn(
+                        f"<Audio {n}>: reference - the dialogue of <Subject {n}> (S{n}) follows <Audio {n}>'s "
+                        "referenced vocal timbre, pitch characteristics, resonance, accent, cadence, articulation, "
+                        "pacing, and natural delivery without directly copying the source audio signal. "
+                        f"<Audio {n}> applies exclusively to <Subject {n}> (S{n}) and does not influence any other vocal source.",
+                        result.prompt)
                 self.assertIn(f'<Subject 1> (appears in [Shot 1], [Shot {count+1}])', result.prompt)
                 self.assertNotIn('must not use or imitate', result.prompt)
 
@@ -64,6 +73,9 @@ class Ref2VAOutputTests(unittest.TestCase):
         self.check_sections(result)
         self.assertIn('<Subject 1> = S1 = <Audio 2>; <Subject 2> = S2 = <Audio 3>.', result.prompt)
         self.assertNotIn('<Subject 1> = S1 = <Audio 1>', result.prompt)
+        definitions = result.prompt.split("subject_definitions:", 1)[1].split("summary:", 1)[0]
+        self.assertEqual(re.findall(r"^<Audio (\d+)>", definitions, re.M), ["1", "2", "3"])
+        self.assertLess(definitions.index("<Subject 2> is"), definitions.index("<Audio 1> is"))
         disabled = compiler.compile_prompt(source, records, voice_isolation=False)
         for key in ('resources', 'pictures', 'audio', 'video', 'speakers'):
             self.assertEqual(result.debug[key], disabled.debug[key])
@@ -76,10 +88,47 @@ class Ref2VAOutputTests(unittest.TestCase):
         self.check_sections(result)
         self.assertTrue(result.prompt.startswith('[new_location] [s=12]'))
         sections = re.split(r'^\w+:\s*$', result.prompt, flags=re.M)
-        self.assertIn('<Subject 1> wears rectangular eyeglasses.', sections[2])
-        self.assertIn('<Subject 2> wears no glasses.', sections[2])
+        self.assertIn('wears rectangular eyeglasses.', sections[1])
+        self.assertNotIn('eyeglasses', sections[2])
+        self.assertIn('wears no glasses.', sections[1])
+        self.assertNotIn('glasses', sections[2])
         self.assertIn('At 00:04.000', result.prompt)
         self.assertEqual(compiler.DIALOGUE.findall(result.prompt), compiler.DIALOGUE.findall(detail))
+
+    def test_summary_only_swaps_tags_without_appending_identity_or_wardrobe(self):
+        records = {"george": character("george.png", "george.wav"),
+                   "newman": character("newman.png", "newman.wav"),
+                   "gate": dict(reference_type="location", image_file="gate.png")}
+        definitions = ("{george} Image context: bald man, with glasses. "
+                       "Wardrobe: wearing a muted shirt and dark trousers. This exact wardrobe remains fixed.\n"
+                       "{newman} Wardrobe: wearing a white angel robe and feathered wings.\n{gate}")
+        summary = ("The target video shows live-action sitcom photography inside {gate}. "
+                   "{george} stands among luminous clouds. {newman} remains beside the gate. "
+                   "George gestures toward himself. Newman remains composed and stern.")
+        result = compiler.compile_prompt(prompt(definitions,
+            "{george} says, <d>[English]Hello.</d> {newman} says, <d>[English]Welcome.</d>",
+            summary=summary), records)
+        actual = result.prompt.split("summary:\n\n", 1)[1].split("\n\nretention_analysis:", 1)[0]
+        expected = summary.replace("{gate}", "<Subject 3>").replace("{george}", "<Subject 1>").replace("{newman}", "<Subject 2>")
+        self.assertEqual(actual, expected)
+        self.assertIn("Image context: bald man, with glasses.", result.prompt.split("summary:")[0])
+        self.assertIn("Wardrobe: wearing a white angel robe", result.prompt.split("summary:")[0])
+
+    def test_subject_only_refmod_audio_keeps_ordinary_voice_binding(self):
+        records = {"ordinary": character("face.png", "voice.wav"),
+                   "mod": {**character("mod.png", "mod.wav"), "_refmod_audio": {"member": 1}}}
+        for cue in ("[English]", "[English §mod§]"):
+            source = prompt("{ordinary}\n{mod}\n§mod§",
+                            "{ordinary} says, <d>[English]First.</d>\n"
+                            "{mod} says, <d>" + cue + "Second.</d>")
+            normal = compiler.compile_prompt(source, records)
+            simple = compiler.compile_prompt(source, records, refmod_subject_only=True)
+            self.assertIn("<Audio 1> is the voice-timbre reference", simple.prompt)
+            self.assertNotIn("<Audio 2>", simple.prompt)
+            self.assertIn("<Subject 2> (S2) says,", simple.prompt)
+            self.assertEqual(normal.audios, simple.audios)
+            for key in ("resources", "audio", "speakers"):
+                self.assertEqual(normal.debug[key], simple.debug[key])
 
     def test_temporary_speaker_has_no_fabricated_audio(self):
         source = prompt('<character:guest = An older clean-shaven guest.>\n<location:room = A quiet room.>',

@@ -361,6 +361,12 @@ if (elements["copy-built-in-selection"]) {
     elements["copy-built-in-selection"].addEventListener("click", copySelection);
 }
 if (libraryTagMode) {
+    window.addEventListener("skeba-unselect-built-in", event => {
+        const record = state.records.find(item => item.library_tag === event.detail?.tag);
+        if (!record) return;
+        state.selected.delete(record.tag);
+        renderRecords();
+    });
     window.addEventListener("skeba-clear-all-reference-selection", () => {
         state.selected.clear();
         renderRecords();

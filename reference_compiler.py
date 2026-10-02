@@ -183,8 +183,34 @@ def _parse(prompt):
     return prefix.strip(), sections, temporary, warnings
 
 
+def _implicitly_uses_voice(event):
+    clause = event["before"].strip()
+    return bool(re.search(
+        r"\b(?:says?|said|speaks?|asks?|replies|reply|responds?|exclaims?|whispers?|shouts?|yells?|murmurs?|mutters?|screams?|sings?)\b",
+        clause, re.I) or clause in (":", ",", ""))
+
+
+def inferred_saved_voice_tags(prompt):
+    """Discover implicit voice sources before RefMod assets are projected."""
+    try:
+        _, sections, _, _ = _parse(prompt)
+    except ValueError:
+        # Legacy/free-form prompts retain their explicit voice-tag behavior.
+        return set()
+    tags = set()
+    for event in EVENT.finditer(sections["detailed_description"]):
+        header = re.match(r"<d>\s*\[([^\]]*)\]", event["dialogue"])
+        if event["voice"] or (header and any(
+                t[0].startswith(("§", "<voice:")) for t in TOKEN.finditer(header[1]))):
+            continue
+        if event["entity"].startswith("{") and _implicitly_uses_voice(event):
+            tags.add(event["entity"][1:-1].strip())
+    return tags
+
+
 def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="reference",
-                   max_images=9, max_audio=3, max_videos=3, voice_isolation=True):
+                   max_images=9, max_audio=3, max_videos=3, voice_isolation=True,
+                   refmod_subject_only=False):
     if video_usage not in ("reference", "motion_reference", "continuation", "editing"):
         fail("INVALID_VIDEO_USAGE", video_usage)
     if audio_usage not in ("reference", "reuse"):
@@ -290,9 +316,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         # A directly attributed speaking turn can use its owner's attached voice
         # without putting an audio tag into the dialogue language header.
         if voice is None and event:
-            clause = event["before"].strip()
-            if (re.search(r"\b(?:says?|said|speaks?|asks?|replies|reply|responds?|exclaims?|whispers?|shouts?|yells?|murmurs?|mutters?|screams?|sings?)\b", clause, re.I)
-                    or clause in (":", ",", "")):
+            if _implicitly_uses_voice(event):
                 entity.audio_used = bool(entity.audio or entity.embedded_audio)
         if entity.speaker is None:
             speakers.append(entity)
@@ -343,7 +367,11 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     definitions = set()
     audio_definitions = set()
     media_definitions = set()
-    voice_owners = [r for r in speakers if r.audio_used and (r.audio_slot or r.embedded_slot)]
+    def unlabelled_refmod_voice(r):
+        return bool(refmod_subject_only and records.get(r.key, {}).get("_refmod_audio"))
+
+    voice_owners = [r for r in speakers if r.audio_used and (r.audio_slot or r.embedded_slot)
+                    and not unlabelled_refmod_voice(r)]
     def isolate_speaker(r):
         if not voice_isolation or r not in voice_owners:
             return ""
@@ -355,6 +383,10 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     def render(r, section, voice, position):
         audio_slot = r.embedded_slot if r.type == "video" else r.audio_slot or r.embedded_slot
         if voice:
+            if unlabelled_refmod_voice(r):
+                if section == "subject_definitions":
+                    audio_definitions.add(r.id)
+                return ""
             if (section, position) in inline_voice_positions:
                 return f"<Audio {audio_slot}>" if audio_slot and r.audio_used else (r.voice_description or r.description or r.name)
             if r.type == "video":
@@ -401,9 +433,12 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                     description = r.description
                 else:
                     description = r.name
-                    if r.picture:
+                    record = records.get(r.key, {})
+                    subject_only = refmod_subject_only and (
+                        record.get("_refmod_image") or record.get("_refmod_video"))
+                    if r.picture and not subject_only:
                         description += f" in <Picture {r.picture}>"
-                    elif r.video_slot:
+                    elif r.video_slot and not subject_only:
                         description += f" in <Video {r.video_slot}>"
                     if r.description:
                         description += ", " + r.description
@@ -480,10 +515,16 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         if r.type in ("video", "music", "voice") and r.id not in media_definitions and r.visual_used:
             line = render(r, "subject_definitions", False, 0)
             definition_blocks.append((float("inf"), 0, line))
-    # Sort complete definition blocks; attached authored text stays with its resource.
+    # Keep complete authored blocks together; list subjects before media/audio.
+    def definition_order(entry):
+        match = re.match(r"\s*<(Subject|Picture|Video|Audio) (\d+)>", entry[2])
+        if match:
+            return ({"Subject": 0, "Picture": 1, "Video": 1, "Audio": 2}[match[1]], int(match[2]))
+        return (3, entry[0])
+
     rendered["subject_definitions"] = "\n\n".join(
         block.strip() for block in [definition_prefix] + [
-            entry[2] for entry in sorted(definition_blocks, key=lambda entry: entry[:2])
+            entry[2] for entry in sorted(definition_blocks, key=definition_order)
         ] if block.strip())
     task_list = [task for task in TASKS if task in task_types]
     summary = rendered.get("summary", "")
@@ -499,23 +540,6 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         opening = f"The target video is an edited version of {sources}."
         if not summary.startswith(opening):
             summary = opening + (" " + summary if summary else "")
-    # Repeat only explicit, owner-specific identity discriminators supplied in definitions.
-    traits = re.compile(r"\b(?:glasses|eyeglasses|spectacles|beard|bearded|clean[- ]shaven|hair|bald|wardrobe|wears|wearing)\b", re.I)
-    for r in subjects:
-        if r.type != "character":
-            continue
-        subject = f"<Subject {r.subject}>"
-        for number, voice, block in definition_blocks:
-            if number != r.subject or voice:
-                continue
-            for sentence in re.split(r"(?<=[.!?])\s+", block.strip()):
-                if traits.search(sentence) and not re.search(r"<Audio ", sentence):
-                    mentioned = set(re.findall(r"<Subject \d+>", sentence))
-                    if mentioned - {subject}:
-                        continue
-                    reminder = sentence if subject in mentioned else subject + " " + sentence
-                    if reminder not in summary:
-                        summary = (summary + " " + reminder).strip()
     rendered["summary"] = summary
     if voice_isolation and len(voice_owners) >= 2:
         bindings = "; ".join(f"<Subject {r.subject}> = S{r.speaker} = <Audio {r.audio_slot or r.embedded_slot}>" for r in voice_owners)
@@ -554,7 +578,10 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         if r.audio_usage == "reuse":
             line = f"<Audio {slot}>: reuse - the supplied vocal signal is reused only for {identity}."
         else:
-            line = f"<Audio {slot}>: reference - its vocal timbre and delivery guide only {identity} without copying the original signal or influencing any other speaker."
+            line = (f"<Audio {slot}>: reference - the dialogue of {identity} follows <Audio {slot}>'s "
+                    "referenced vocal timbre, pitch characteristics, resonance, accent, cadence, articulation, "
+                    "pacing, and natural delivery without directly copying the source audio signal. "
+                    f"<Audio {slot}> applies exclusively to {identity} and does not influence any other vocal source.")
         generated_voice_retention.append(line)
         retention += "\n\n" + line
     rendered["retention_analysis"] = _sort_retention_entries(retention.strip())
