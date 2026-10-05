@@ -1,4 +1,5 @@
 from .refmod_preview import SkebaRefModPreview
+from .reference_audio_preview import SkebaH3ReferenceAudioPreview
 from .quick_launcher import SkebaQuickLauncher
 from .custom_choice import SkebaCustomChoice
 from .last_rendered_context import SkebaH3LastRenderedContext
@@ -43,6 +44,7 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaH3ReferenceAudioPreview": SkebaH3ReferenceAudioPreview,
     "SkebaH3LastRenderedContext": SkebaH3LastRenderedContext,
     "SkebaCustomChoice": SkebaCustomChoice,
     "SkebaWorkflowGuide": SkebaWorkflowGuide,
@@ -86,6 +88,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaH3ReferenceAudioPreview": "SKEBA H3 Reference Audio Preview",
     "SkebaH3LastRenderedContext": "SKEBA H3 Last Rendered Context",
     "SkebaCustomChoice": "SKEBA Custom Choice",
     "SkebaWorkflowGuide": "SKEBA Workflow Guide (HTML)",

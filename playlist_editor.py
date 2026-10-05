@@ -430,4 +430,6 @@ def generation_prompt(spec):
             seconds = int(match[2]) * 60 + float(match[3]) + head
             return f"{match[1]}{int(seconds // 60):02}:{seconds % 60:06.3f}"
         prompt = re.sub(r"(\[Shot[^\]]*\]\s*At\s+)(\d+):(\d+(?:\.\d+)?)", shift, prompt, flags=re.I)
+        prompt = re.sub(r"(\[Shot\s+\d+\s*:\s*)(\d+(?:\.\d+)?)(s\])",
+                        lambda match: f"{match[1]}{float(match[2]) + head:.3f}{match[3]}", prompt, flags=re.I)
     return re.sub(r"\[s\s*=\s*[\d.]+\]", f"[s={spec['generation_length']/24:g}]", prompt, flags=re.I)

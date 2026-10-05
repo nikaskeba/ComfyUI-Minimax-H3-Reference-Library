@@ -8,6 +8,7 @@ class BoundRefMods(list):
     def __init__(self):
         super().__init__()
         self.bindings = []
+        self.diagnostics = {}
 
 
 def source_identity(path):
@@ -31,5 +32,10 @@ def build_mods(bundle):
                                     "cap": entry.get("max_duration_seconds")})
             entry["binding_id"] = identity
             mods.bindings.append(identity)
+            mods.diagnostics[identity] = {
+                "tag": entry["tag"], "source_file": path,
+                "member": selected["member"], "channel": selected["channel"],
+                "voice_cap_seconds": entry.get("max_duration_seconds"),
+            }
             mods.append((load_cached(path[:-len(".safetensors")], selected["member"]), 1.0))
     return mods

@@ -12,6 +12,37 @@ from .refmod_library import roots
 from .refmod_support import BoundRefMods
 
 RETENTION = {"fully_preserved": 1.0, "partially_preserved": 0.7, "attribute_transfer": 0.4, "weak_reference": 0.15}
+
+
+def reference_diagnostic(conditioning, mods):
+    """Report actual block order without reading or copying tensor contents."""
+    groups = [entry[1].get("minimax_refs", []) for entry in conditioning] if isinstance(conditioning, list) else [conditioning.refs]
+    owners = getattr(mods, "diagnostics", {})
+    result = []
+    for group_index, refs in enumerate(groups):
+        rows, audio_number = [], 0
+        for index, block in enumerate(refs):
+            binding = block.get("skeba_refmod_binding")
+            owner = owners.get(binding, {})
+            audio = block.get("audio_latent")
+            has_audio = audio is not None and int(block.get("ref_audio_t", 0)) > 0
+            if has_audio:
+                audio_number += 1
+            row = {"block_index": index, "kind": block.get("kind"),
+                   "ownership": "bound RefMod" if binding else "unbound / native; owner unavailable",
+                   **owner, "binding_id": binding,
+                   "audio_ordinal": audio_number if has_audio else None,
+                   "audio_shape": list(audio.shape) if audio is not None else None,
+                   "audio_seconds_approx": round(audio.shape[-1] / 40.0, 3) if has_audio else None}
+            expected = owner.get("expected_audio")
+            if has_audio and expected is not None:
+                row["audio_order_matches_compiler"] = expected == audio_number
+            rows.append(row)
+        result.append({"conditioning_entry": group_index, "blocks": rows})
+    return json.dumps({"note": "Actual reference block order at Apply output. Audio ordinals are counted from latent blocks, not proof of text-label binding or rendered voice identity. Unbound/native ownership is not inferred. Audio duration assumes H3's 40 latent steps/second. Later nodes may change conditioning.",
+                       "conditioning": result}, indent=2, ensure_ascii=False)
+
+
 def refmods_dir():
     return str(roots()[0])
 
@@ -352,6 +383,8 @@ class SkebaH3RefModApply(io.ComfyNode):
                     tooltip="Optional 1024x1024 curve graph: the strength envelope "
                             "(direction/shape/value) with the concept zone shaded. Leave "
                             "unconnected to skip the preview."),
+                io.String.Output("reference_diagnostic", display_name="reference diagnostic",
+                    tooltip="Connect to Display Any to inspect final block order, RefMod ownership, compiler audio assignments and latent lengths."),
             ],
         )
 
@@ -417,8 +450,8 @@ class SkebaH3RefModApply(io.ComfyNode):
                 print(f"[MiniMaxH3RefModApply] graph preset saved: {saved}.png "
                       f"({curve[0]} + {curve[1]} @ {float(curve[2]):.2f})")
         if isinstance(mods, BoundRefMods) and mods:
-            return io.NodeOutput(_apply_bound(conditioning, mods, retention, curve,
-                                             scramble_seed, max_total_tokens), pil_to_tensor(img))
+            out = _apply_bound(conditioning, mods, retention, curve, scramble_seed, max_total_tokens)
+            return io.NodeOutput(out, pil_to_tensor(img), reference_diagnostic(out, mods))
         blocks = _ref_blocks(mods, retention, curve, seed=scramble_seed,
                              scramble_mode=scramble_mode, scramble_keep=scramble_keep, max_total_tokens=max_total_tokens)
         if isinstance(conditioning, list):
@@ -435,5 +468,5 @@ class SkebaH3RefModApply(io.ComfyNode):
             out = replace(conditioning, refs=list(conditioning.refs) + blocks)
             print(f"[MiniMaxH3RefModApply] retention={retention} "
                   f"({len(blocks)} ref block(s) injected, {len(out.refs)} total)")
-        return io.NodeOutput(out, pil_to_tensor(img))
+        return io.NodeOutput(out, pil_to_tensor(img), reference_diagnostic(out, mods))
 

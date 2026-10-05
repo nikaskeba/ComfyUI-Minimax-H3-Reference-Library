@@ -1,3 +1,4 @@
+from .reference_images import reference_images
 from .refmod_studio import source_root, source_path, SOURCE_EXTENSIONS, import_refmods, export_refmods
 from .refmod_library import preview_path as refmod_preview_path, read_meta as read_refmod_meta
 import json
@@ -512,6 +513,7 @@ def register_routes():
     @routes.post("/api/h3-references/records")
     async def add_record(request):
         image_filename = audio_filename = video_filename = None
+        new_images = []
         try:
             fields, files = await _read_multipart(request)
             if "image" in files:
@@ -521,7 +523,9 @@ def register_routes():
             video_has_audio = False
             if "video" in files:
                 video_filename, video_has_audio = _save_video(*files["video"])
+            extras = _read_additional_images(fields, files, {}, new_images)
             record = create_record(
+                additional_images=extras, notes=fields.get("notes", ""),
                 refmod_settings=json.loads(fields.get("refmod_settings", "{}")),
                 tag=fields.get("tag"),
                 category=fields.get("category", "other"),
@@ -536,6 +540,8 @@ def register_routes():
             )
             return web.json_response({"record": _public_record(record)}, status=201)
         except Exception as error:
+            for filename in new_images:
+                remove_media(filename, "image")
             remove_media(image_filename, "image")
             remove_media(audio_filename, "audio")
             remove_media(video_filename, "video")
@@ -545,6 +551,7 @@ def register_routes():
     async def edit_record(request):
         record_id = request.match_info["record_id"]
         image_filename = audio_filename = video_filename = None
+        new_images = []
         try:
             fields, files = await _read_multipart(request)
             current = get_record(record_id)
@@ -555,7 +562,9 @@ def register_routes():
             video_has_audio = None
             if "video" in files:
                 video_filename, video_has_audio = _save_video(*files["video"])
+            extras = _read_additional_images(fields, files, current, new_images)
             record, old_image, old_audio, old_video = update_record(
+                additional_images=extras, notes=fields.get("notes"),
                 refmod_settings=json.loads(fields["refmod_settings"]) if "refmod_settings" in fields else None,
                 record_id=record_id,
                 tag=fields.get("tag", current["tag"]),
@@ -573,11 +582,17 @@ def register_routes():
                 video_has_audio=video_has_audio,
                 remove_video=fields.get("remove_video") == "true",
             )
+            kept = {item["image_file"] for item in reference_images(record)}
+            for item in current.get("additional_images", []):
+                if item["image_file"] not in kept:
+                    remove_media(item["image_file"], "image")
             remove_media(old_image, "image")
             remove_media(old_audio, "audio")
             remove_media(old_video, "video")
             return web.json_response({"record": _public_record(record)})
         except Exception as error:
+            for filename in new_images:
+                remove_media(filename, "image")
             remove_media(image_filename, "image")
             remove_media(audio_filename, "audio")
             remove_media(video_filename, "video")
@@ -587,20 +602,61 @@ def register_routes():
     async def remove_record(request):
         try:
             record = delete_record(request.match_info["record_id"])
-            remove_media(record.get("image_file"), "image")
+            for item in reference_images(record):
+                remove_media(item["image_file"], "image")
             remove_media(record.get("audio_file"), "audio")
             remove_media(record.get("video_file"), "video")
             return web.json_response({"deleted": record["id"]})
         except Exception as error:
             return _error_response(error)
 
+    @routes.get("/api/h3-references/records/{record_id}/images/{index}")
+    async def get_record_image(request):
+        try:
+            record = get_record(request.match_info["record_id"])
+            index = int(request.match_info["index"])
+            if index < 0:
+                raise ValueError("Invalid image index")
+            attachment = reference_images(record)[index]
+            return web.FileResponse(media_path(attachment, "image"))
+        except (KeyError, IndexError, FileNotFoundError, ValueError):
+            raise web.HTTPNotFound()
+
     @routes.get("/api/h3-references/records/{record_id}/media/{kind}")
     async def get_media(request):
         try:
             record = get_record(request.match_info["record_id"])
-            return web.FileResponse(media_path(record, request.match_info["kind"]))
+            kind = request.match_info["kind"]
+            if kind == "image" and not record.get("image_file") and reference_images(record):
+                record = reference_images(record)[0]
+            return web.FileResponse(media_path(record, kind))
         except (KeyError, FileNotFoundError, ValueError):
             raise web.HTTPNotFound()
+
+
+def _read_additional_images(fields, files, current, new_images):
+    if "additional_images" not in fields:
+        return None
+    specs = json.loads(fields["additional_images"])
+    if not isinstance(specs, list):
+        raise ValueError("Additional images must be a list.")
+    existing = {item["image_file"] for item in current.get("additional_images", [])}
+    result = []
+    for spec in specs:
+        if not isinstance(spec, dict):
+            raise ValueError("Invalid image attachment.")
+        if "upload" in spec:
+            key = spec["upload"]
+            if not isinstance(key, str) or not key.startswith("extra_image_") or key not in files:
+                raise ValueError("Missing additional image upload.")
+            filename = _save_image(*files[key])
+            new_images.append(filename)
+        else:
+            filename = spec.get("image_file")
+            if not isinstance(filename, str) or filename not in existing:
+                raise ValueError("Image does not belong to this reference.")
+        result.append({"image_file": filename, "description": spec.get("description", "")})
+    return result
 
 
 async def _read_multipart(request):
@@ -714,11 +770,15 @@ def _public_record(record):
         "image_description": record.get("image_description", ""),
         "audio_description": record.get("audio_description", ""),
         "video_description": record.get("video_description", ""),
-        "has_image": bool(record.get("image_file")),
+        "has_image": bool(reference_images(record)),
+        "has_primary_image": bool(record.get("image_file")),
+        "notes": record.get("notes", ""),
+        "additional_images": [{**item, "url": f"/api/h3-references/records/{record_id}/images/{i + int(bool(record.get('image_file')))}"} for i, item in enumerate(record.get("additional_images", []))],
+        "image_count": len(reference_images(record)),
         "has_audio": bool(record.get("audio_file")),
         "has_video": bool(record.get("video_file")),
         "has_video_audio": bool(record.get("video_file") and record.get("video_has_audio")),
-        "image_url": f"/api/h3-references/records/{record_id}/media/image" if record.get("image_file") else None,
+        "image_url": f"/api/h3-references/records/{record_id}/media/image" if reference_images(record) else None,
         "audio_url": f"/api/h3-references/records/{record_id}/media/audio" if record.get("audio_file") else None,
         "video_url": f"/api/h3-references/records/{record_id}/media/video" if record.get("video_file") else None,
         "created_at": record.get("created_at"),

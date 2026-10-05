@@ -9,10 +9,10 @@ try {
  await page.route("http://prompt.test/", route=>route.fulfill({contentType:"text/html",body:"<html></html>"}));
  await page.goto("http://prompt.test/");
  await page.setContent('<main style="height:600px;width:620px"></main>');
- const source=(await fs.readFile(new URL('../web/prompt_rich_text.js',import.meta.url),'utf8'))+'\n'+await fs.readFile(new URL('../web/prompt_list_text.js',import.meta.url),'utf8');
+ const source=(await fs.readFile(new URL('../manager/refmod-catalog.js',import.meta.url),'utf8'))+'\n'+(await fs.readFile(new URL('../web/prompt_rich_text.js',import.meta.url),'utf8'))+'\n'+await fs.readFile(new URL('../web/prompt_list_text.js',import.meta.url),'utf8');
  await page.evaluate(source=>{
   const app={registerExtension(ext){window.extension=ext;}};
-  const api={fetchApi:async path=>({ok:true,json:async()=>({records:path.includes('built-in')?[{tag:'Elaine',library_tag:'Elaine_BC'}]:[{id:'room',tag:'Apartment',reference_type:'location'},{id:'george',tag:'George',reference_type:'character'}]})})};
+  const api={fetchApi:async path=>({ok:true,json:async()=>path.includes('h3-refmods')?[{file:'library/Newman.safetensors',member:0,kind:'video',subject_name:'Newman',reference_type:'character'},{file:'library/Newman.safetensors',member:1,kind:'audio',subject_name:'Newman'}]:({records:path.includes('built-in')?[{tag:'Elaine',library_tag:'Elaine_BC'}]:[{id:'room',tag:'Apartment',reference_type:'location'},{id:'george',tag:'George',reference_type:'character'}]})})};
   new Function('app','api',source.replace(/^import .*;\r?\n/gm,'').replace(/export function/g,'function'))(app,api);
   extension.setup();
   class Node {
@@ -92,7 +92,9 @@ try {
  assert.equal(await timelineField.locator('.skeba-reference-token').count(),1);
  const timelinePanel=page.locator('.skeba-prompt-section').filter({has:timelineField});
  await timelinePanel.getByRole('button',{name:'Add shot',exact:true}).click();
- assert.match(await page.evaluate(()=>node.widgets[0].value),/\[Shot 2\]/);
+ assert.match(await page.evaluate(()=>node.widgets[0].value),/\[Shot 2: 1s\]/);
+ await timelineField.getByLabel('Shot start seconds').last().fill('4.5');
+ assert.match(await page.evaluate(()=>node.widgets[0].value),/\[Shot 2: 4.5s\]/);
  await timelinePanel.getByRole('button',{name:'Add dialogue',exact:true}).click();
  assert.equal(await timelineField.locator('.skeba-inline-dialogue').count(),2);
  await timelineField.getByLabel('Dialogue speech').last().fill('New speech.');
@@ -100,7 +102,7 @@ try {
  await timelineField.getByRole('button',{name:'Remove dialogue',exact:true}).last().click();
  assert.ok(!(await page.evaluate(()=>node.widgets[0].value)).includes('New speech.'));
  await timelineField.getByRole('button',{name:'Remove shot marker',exact:true}).last().click();
- assert.ok(!(await page.evaluate(()=>node.widgets[0].value)).includes('[Shot 2]'));
+ assert.ok(!(await page.evaluate(()=>node.widgets[0].value)).includes('[Shot 2:'));
  await timelinePanel.getByRole('button',{name:'Add reference',exact:true}).click();
  const picker=page.getByRole('dialog',{name:'Insert reference'});
  await picker.getByRole('textbox',{name:'Search references'}).fill('Elaine');
@@ -110,6 +112,13 @@ try {
  await picker.getByRole('combobox',{name:'Reference type'}).selectOption('location');
  await picker.getByRole('button',{name:'Insert {Apartment}',exact:true}).click();
  assert.match(await page.evaluate(()=>node.widgets[0].value),/\{Apartment\}/);
+ await timelinePanel.getByRole('button',{name:'Add reference',exact:true}).click();
+ await picker.getByRole('textbox',{name:'Search references'}).fill('Newman');
+ await picker.getByRole('combobox',{name:'Reference type'}).selectOption('character');
+ await picker.getByRole('button',{name:'Insert {Newman_rm}',exact:true}).waitFor();
+ assert.equal(await picker.getByRole('button',{name:'Insert {Newman_rm}',exact:true}).count(),1);
+ await picker.getByRole('button',{name:'Insert {Newman_rm}',exact:true}).click();
+ assert.match(await page.evaluate(()=>node.widgets[0].value),/\{Newman_rm\}/);
  // Insert at a saved caret in the middle, not at the start/end after the popup takes focus.
  await page.evaluate(()=>{node.widgets[0].value='timeline:\nBefore. After.';node.onConfigure();const ed=document.querySelector('[aria-label="detailed_description: text"]');ed.focus();const text=ed.firstChild;const r=document.createRange();r.setStart(text,9);r.collapse(true);getSelection().removeAllRanges();getSelection().addRange(r);ed.dispatchEvent(new MouseEvent('mouseup'));});
  const middlePanel=page.locator('.skeba-prompt-section').filter({has:page.getByRole('textbox',{name:'detailed_description: text',exact:true})});
@@ -144,6 +153,14 @@ try {
  assert.match(spaced,/subject_definitions:\n\{Conan_BC\} wearing a clown costume\.\n\nsummary:\nRealistic render\n\ndetailed_description:\n/);
  await page.getByRole('tab',{name:'Formatted view'}).click();
  assert.equal(await page.getByRole('textbox',{name:'summary: text',exact:true}).count(),1);
+ const timed='[s=10]\n\nsubject_definitions:\n{Jerry_BC}\n\ndetailed_description:\n[Shot 1: 0s] Wait.\n[Shot 2: 1.0s] Speak.\n[Shot 3: 4.5s] React.';
+ await page.evaluate(value=>{node.widgets[0].value=value;node.onConfigure();},timed);
+ assert.equal(await timelineField.locator('.skeba-shot').count(),3);
+ assert.equal(await page.evaluate(()=>node.widgets[0].value),timed);
+ await timelineField.getByLabel('Shot start seconds').nth(1).fill('2.3');
+ assert.match(await page.evaluate(()=>node.widgets[0].value),/\[Shot 2: 2.3s\]/);
+ await timelineField.getByRole('button',{name:'Remove shot marker',exact:true}).nth(1).click();
+ assert.match(await page.evaluate(()=>node.widgets[0].value),/\[Shot 2: 4.5s\]/);
  assert.deepEqual(errors,[]);
  console.log('Visual prompt timeline, editing, insertion, undo/redo, exact text and restoration passed');
 } finally {await browser.close();}

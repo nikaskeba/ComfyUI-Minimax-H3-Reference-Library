@@ -1,4 +1,5 @@
 import { api } from "../../scripts/api.js";
+import { groupCatalog, refmodTag } from "../../h3-references/static/refmod-catalog.js";
 
 function element(tag, text, cls) {
     const node = document.createElement(tag);
@@ -43,6 +44,9 @@ export function richPromptField(parent, text, label, changed, references, dialog
         editor.focus();
         const target = range && editor.contains(range.commonAncestorContainer) ? range : document.createRange();
         if (target !== range) { target.selectNodeContents(editor); target.collapse(false); }
+        const startElement = target.startContainer.nodeType === Node.ELEMENT_NODE ? target.startContainer : target.startContainer.parentElement;
+        const atom = startElement?.closest('[data-prompt-raw]');
+        if (atom && editor.contains(atom)) { target.setStartAfter(atom); target.collapse(true); }
         target.deleteContents(); target.insertNode(node); target.setStartAfter(node); target.collapse(true);
         const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(target); range = target.cloneRange();
         commit();
@@ -55,12 +59,29 @@ export function richPromptField(parent, text, label, changed, references, dialog
     }
     function renumberShots() {
         editor.querySelectorAll('.skeba-shot').forEach((shot, index) => {
-            shot.dataset.promptRaw = `[Shot ${index + 1}]`; shot.querySelector('strong').textContent = `Shot ${index + 1}`;
+            shot.dataset.promptRaw = shot.dataset.promptRaw.replace(/^(\[Shot\s+)\d+/i, `$1${index + 1}`);
+            shot.querySelector('strong').textContent = `Shot ${index + 1}`;
         });
     }
     function shot(raw) {
         const atom = element("span", undefined, "skeba-shot"); atom.contentEditable = "false"; atom.dataset.promptRaw = raw;
-        atom.append(element("strong", raw.slice(1, -1)));
+        const parsed = raw.match(/^\[Shot\s+(\d+)(?:\s*:\s*(\d+(?:\.\d+)?)s)?\]$/i);
+        atom.append(element("strong", `Shot ${parsed[1]}`));
+        const time = element("input"); time.type = "number"; time.min = "0"; time.step = "any";
+        time.value = parsed[2] ?? ""; time.placeholder = "Start";
+        time.setAttribute("aria-label", "Shot start seconds"); time.title = "Shot start time in seconds, not duration";
+        time.style.width = "72px";
+        time.oninput = event => {
+            event.stopPropagation();
+            if (!time.value.trim() || !Number.isFinite(Number(time.value)) || Number(time.value) < 0) {
+                notice.textContent = "Enter a non-negative shot start time in seconds. Last valid marker is retained."; return;
+            }
+            const number = atom.dataset.promptRaw.match(/\d+/)[0];
+            atom.dataset.promptRaw = `[Shot ${number}: ${Number(time.value) === 0 ? '0' : time.value}s]`;
+            commit();
+        };
+        time.onkeydown = event => { if (!(event.ctrlKey || event.metaKey)) event.stopPropagation(); };
+        atom.append(time, document.createTextNode("s"));
         button("×", "Remove shot marker", () => { atom.remove(); renumberShots(); commit(); }, atom);
         return atom;
     }
@@ -94,7 +115,7 @@ export function richPromptField(parent, text, label, changed, references, dialog
         return atom;
     }
     function highlight(value) {
-        const pattern = /\[Shot\s+\d+\]|\{[^{}\r\n]+\}|§[^§\r\n]+§|<(?:character|location|object|voice|style):[^>\r\n]+>/gi;
+        const pattern = /\[Shot\s+\d+(?:\s*:\s*\d+(?:\.\d+)?s)?\]|\{[^{}\r\n]+\}|§[^§\r\n]+§|<(?:character|location|object|voice|style):[^>\r\n]+>/gi;
         let start = 0;
         for (const match of value.matchAll(pattern)) {
             editor.append(document.createTextNode(value.slice(start, match.index)));
@@ -123,7 +144,16 @@ export function richPromptField(parent, text, label, changed, references, dialog
         setTimeout(() => { if (editor.isConnected && !editor.contains(document.activeElement) && !parent.querySelector('.skeba-reference-picker') && commit()) { paint(readText(editor)); range = null; } }, 0);
     });
     if (["detailed_description: text"].includes(label)) {
-    button("+ Shot", "Add shot", () => { insert(shot("[Shot 1]")); renumberShots(); commit(); });
+    button("+ Shot", "Add shot", () => {
+        const atom = shot("[Shot 1: 0s]"); insert(atom); renumberShots();
+        const shots = [...editor.querySelectorAll('.skeba-shot')], index = shots.indexOf(atom);
+        const previous = index > 0 ? Number(shots[index - 1].querySelector('input').value) : 0;
+        const next = shots[index + 1]?.querySelector('input').value;
+        const start = index === 0 ? 0 : next && Number(next) > previous ? (previous + Number(next)) / 2 : previous + 1;
+        atom.querySelector('input').value = start === 0 ? '0' : String(Number(start.toFixed(3)));
+        atom.querySelector('input').dispatchEvent(new Event('input', {bubbles:true}));
+        atom.querySelector('input').focus();
+    });
     button("+ Dialogue", "Add dialogue", () => {
         const atom = dialogue({raw:"<d>[English]</d>", language:"English", speaker:"", words:""}); insert(atom); atom.querySelector('textarea').focus();
     });
@@ -133,7 +163,7 @@ export function richPromptField(parent, text, label, changed, references, dialog
         if (parent.querySelector('.skeba-reference-picker')) return;
         const popup = element("div", undefined, "skeba-reference-picker"); popup.contentEditable = "false"; popup.setAttribute("role", "dialog"); popup.setAttribute("aria-label", "Insert reference");
         const search = element("input"), filter = element("select"), results = element("div", undefined, "skeba-reference-results"), status = element("p");
-        search.placeholder = "Search characters, locations, objects…"; search.setAttribute("aria-label", "Search references"); filter.setAttribute("aria-label", "Reference type");
+        search.placeholder = "Search characters, locations, objects, RefMods…"; search.setAttribute("aria-label", "Search references"); filter.setAttribute("aria-label", "Reference type");
         for (const type of ["all", "character", "location", "object", "music", "video", "voice"]) { const option = element("option", type === "all" ? "All types" : type); option.value = type; filter.append(option); }
         popup.append(element("strong", "Insert reference"), search, filter);
         button("Close", "Close reference picker", () => { popup.remove(); editor.focus(); }, popup);
@@ -160,11 +190,21 @@ export function richPromptField(parent, text, label, changed, references, dialog
             if (!results.childNodes.length) results.textContent = loaded ? "No matching references." : "Loading library…";
         }
         search.oninput = draw; filter.onchange = draw; popup.onkeydown = event => { event.stopPropagation(); if (event.key === "Escape") popup.remove(); }; draw(); search.focus();
-        const endpoints = ['/api/h3-references/records','/api/h3-built-in-references/records'];
+        const endpoints = ['/api/h3-references/records','/api/h3-built-in-references/records','/api/h3-refmods/records'];
         const replies = await Promise.allSettled(endpoints.map(async path => { const response = await api.fetchApi(path); if (!response.ok) throw Error('Library could not be loaded'); return response.json(); }));
         const saved = new Set(JSON.parse(localStorage.getItem('skeba-reference-selection') || '[]')), builtins = new Set(JSON.parse(localStorage.getItem('skeba-built-in-selection') || '[]'));
         replies.forEach((reply,index) => {
             if (reply.status !== 'fulfilled') return;
+            if (index === 2) {
+                const selected = new Set(JSON.parse(localStorage.getItem('skeba-refmod-selection') || '[]'));
+                for (const group of groupCatalog(reply.value)) {
+                    const name = refmodTag(group);
+                    catalog.push({tag: group.visual ? `{${name}}` : `§${name}§`,
+                        name: `${group.name} (RefMod)`, type: group.primary.reference_type || (group.visual ? 'character' : 'voice'),
+                        linked: selected.has(group.key)});
+                }
+                return;
+            }
             for (const record of reply.value.records || []) {
                 const name = index ? record.library_tag || `${record.tag}_BC` : record.tag;
                 const voiceOnly = !index && record.reference_type === 'voice';

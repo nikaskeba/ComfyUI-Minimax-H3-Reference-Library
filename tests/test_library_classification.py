@@ -33,6 +33,22 @@ class LibraryClassificationTests(unittest.TestCase):
         MODULE.library_root = self.original_library_root
         self.temporary.cleanup()
 
+    def test_multiple_images_and_notes_persist_without_breaking_old_updates(self):
+        extras = [{"image_file":"side.png", "description":"Side view"}]
+        record = MODULE.create_record("multi", image_file="front.png", reference_type="character",
+                                      additional_images=extras, notes="Private background")
+        stored = MODULE.get_record(record["id"])
+        self.assertEqual(stored["additional_images"], extras)
+        self.assertEqual(stored["notes"], "Private background")
+        updated, *_ = MODULE.update_record(record["id"], "multi", reference_type="character")
+        self.assertEqual(updated["additional_images"], extras)
+        self.assertEqual(updated["notes"], "Private background")
+        updated, *_ = MODULE.update_record(record["id"], "multi", reference_type="character", additional_images=[], notes="")
+        self.assertEqual(updated["additional_images"], [])
+        self.assertEqual(updated["notes"], "")
+        with self.assertRaises(ValueError):
+            MODULE.update_record(record["id"], "multi", additional_images=[{"image_file":"../outside.png"}])
+
     def test_missing_classification_defaults_to_uncategorized(self):
         MODULE.ensure_library()
         manifest = {

@@ -1,3 +1,4 @@
+from .reference_images import reference_images
 from .refmod_library import project_records, revision as refmod_revision
 from .refmod_support import build_mods
 from .reference_compiler import compile_prompt
@@ -119,15 +120,15 @@ def resolve_prompt(prompt_template, records):
 
     image_reference_tags = [
         tag for tag in reference_tags
-        if records[tag].get("image_file") and not records[tag].get("video_file")
+        if reference_images(records[tag]) and not records[tag].get("video_file")
     ]
     paired_tags = [
         tag for tag in image_reference_tags
-        if records[tag].get("image_file") and records[tag].get("audio_file")
+        if reference_images(records[tag]) and records[tag].get("audio_file")
     ]
     image_tags = paired_tags + [
         tag for tag in image_reference_tags
-        if records[tag].get("image_file") and not records[tag].get("audio_file")
+        if reference_images(records[tag]) and not records[tag].get("audio_file")
     ]
     voice_tags = [tag for kind, tag in references if kind == "voice"]
     voice_audio_tags = [
@@ -137,7 +138,7 @@ def resolve_prompt(prompt_template, records):
     ]
     paired_audio_tags = [
         tag for tag in image_reference_tags
-        if records[tag].get("image_file") and records[tag].get("audio_file")
+        if reference_images(records[tag]) and records[tag].get("audio_file")
         and tag not in voice_audio_tags
     ]
     standalone_audio_tags = [
@@ -149,7 +150,10 @@ def resolve_prompt(prompt_template, records):
     ]
     audio_candidates = voice_audio_tags + paired_audio_tags + standalone_audio_tags
     audio_tags = audio_candidates[:MAX_AUDIO]
-    image_indexes = {tag: index for index, tag in enumerate(image_tags)}
+    image_tags = [tag for tag in image_tags for _ in reference_images(records[tag])]
+    image_indexes = {}
+    for index, tag in enumerate(image_tags):
+        image_indexes.setdefault(tag, index)
     audio_indexes = {
         tag: len(video_audio_tags) + index
         for index, tag in enumerate(audio_tags)
@@ -163,6 +167,11 @@ def resolve_prompt(prompt_template, records):
             return _voice_replacement(records[tag], tag, audio_index)
         if tag in video_indexes:
             return _video_replacement(records[tag], tag, video_indexes[tag])
+        attachments = reference_images(records[tag])
+        if tag in image_indexes and (len(attachments) > 1 or not records[tag].get("image_file")):
+            return ", ".join(f"<Picture {image_indexes[tag] + i + 1}>" +
+                             (f" ({image['description']})" if image.get("description") else "")
+                             for i, image in enumerate(attachments))
         return _picture_replacement(
             records[tag], tag, image_indexes.get(tag), audio_indexes.get(tag))
 
@@ -309,7 +318,7 @@ class H3TaggedReferencePrompt:
                 }),
                 "refmod_subject_only": ("BOOLEAN", {
                     "default": False,
-                    "tooltip": "Omit RefMod visual-source labels and audio-slot instructions from compiled prose. Keeps Subject/Speaker IDs and RefMod latent injection. Deterministic mode only; ordinary reference bindings remain.",
+                    "tooltip": "Also omit RefMod audio-slot instructions from compiled prose. Leave off for explicit voice binding. RefMod visual-source labels are already omitted. Keeps Subject/Speaker IDs and latent injection; ordinary reference bindings remain.",
                 }),
             },
         }
@@ -391,6 +400,9 @@ class H3TaggedReferencePrompt:
             mapping += "\n" + "\n".join(
                 f"Voice crop: {tag} - first up to {seconds:g}s" for tag, seconds in voice_caps.items())
 
+        image_offsets = {}
+        image_sources = []
+
         def bundle_entry(tag, kind):
             record = records[tag]
             source_kind = kind
@@ -399,6 +411,12 @@ class H3TaggedReferencePrompt:
             if record.get("_refmod_" + kind):
                 return {"record_id": record.get("id") or tag, "tag": tag, "refmod": record["_refmod_" + kind],
                         "max_duration_seconds": voice_caps.get(tag) if kind == "audio" else None}
+            if kind == "image":
+                offset = image_offsets.get(tag, 0)
+                image_offsets[tag] = offset + 1
+                attachment = reference_images(record)[offset]
+                record = {**record, "image_file": attachment["image_file"]}
+                image_sources.append(record)
             entry = {
                 "record_id": record.get("id") or tag,
                 "tag": tag,
@@ -425,6 +443,11 @@ class H3TaggedReferencePrompt:
         }
 
         mods = build_mods(reference_bundle)
+        if mods and compiler_mode == "deterministic":
+            for info in mods.diagnostics.values():
+                resource = compiled.debug["resources"].get("saved:" + info["tag"], {})
+                info.update(subject=resource.get("subject"), speaker=resource.get("speaker"),
+                            expected_audio=resource.get("audio") if resource.get("audio_used") else None)
         if mods:
             reference_bundle["media_deferred"] = True
             message = "Connect reference_bundle to the SKEBA cached encoder and mods to SKEBA Apply H3 RefMod."
@@ -463,7 +486,7 @@ class H3TaggedReferencePrompt:
                 reference_bundle, mods,
             )
 
-        images = [load_image(media_path(records[tag], "image")) for tag in image_tags]
+        images = [load_image(media_path(record, "image")) for record in image_sources]
         video_media = {}
 
         def video_for(tag):

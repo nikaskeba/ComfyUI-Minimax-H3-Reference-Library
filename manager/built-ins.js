@@ -1,4 +1,4 @@
-import {bindLibrarySearch} from "/h3-references/static/library-search.js?v=1";
+import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "/h3-references/static/library-search.js?v=2";
 let activePopout=null;
 const apiRoot = "/api/h3-built-in-references/records";
 const state = { records: [], selected: new Set(JSON.parse(localStorage.getItem("skeba-built-in-selection")||"[]")) };
@@ -13,8 +13,8 @@ const elements = Object.fromEntries([
 
 const collectionOptions=document.createElement("datalist");collectionOptions.id="built-in-collections";document.body.append(collectionOptions);
 const collectionFilter=document.createElement("select");collectionFilter.setAttribute("aria-label","Collection");
-const collectionFilterLabel=document.createElement("label");collectionFilterLabel.textContent="Collection";collectionFilterLabel.append(collectionFilter);elements["built-in-folder"].parentElement.after(collectionFilterLabel);collectionFilter.onchange=renderRecords;
-async function loadCollections(){const data=await request("/api/h3-references/collections");const current=collectionFilter.value;collectionOptions.replaceChildren(...data.collections.map(name=>new Option(name,name)));collectionFilter.replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));collectionFilter.value=current;}
+const collectionFilterLabel=document.createElement("label");collectionFilterLabel.textContent="Collection";collectionFilterLabel.append(collectionFilter);elements["built-in-folder"].parentElement.after(collectionFilterLabel);bindLibraryCollection(collectionFilter,renderRecords);
+async function loadCollections(){const data=await request("/api/h3-references/collections");collectionOptions.replaceChildren(...data.collections.map(name=>new Option(name,name)));collectionFilter.replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));restoreLibraryCollection(collectionFilter);}
 
 async function request(url, options = {}) {
     const response = await fetch(url, options);

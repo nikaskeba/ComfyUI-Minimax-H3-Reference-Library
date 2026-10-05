@@ -116,6 +116,10 @@ function selectionItem(record, onRemove) {
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     if (!record.is_refmod || record.has_visual) item.append(tag);
+    for (const [index, image] of (record.additional_images || []).entries()) {
+        if (image.description) item.append(descriptionLine(`Additional image ${index + 1}`, image.description));
+    }
+    if (record.notes) item.append(descriptionLine("Notes (not sent to generation)", record.notes));
     if (record.built_in) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
@@ -161,6 +165,9 @@ export function referenceGuideText(records) {
                 }
                 if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
                 if (record.image_description) lines.push(`Image: ${record.image_description}`);
+                for (const [index, image] of (record.additional_images || []).entries()) {
+                    if (image.description) lines.push(`Additional image ${index + 1}: ${image.description}`);
+                }
                 if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
                 if (record.video_description) lines.push(`Video: ${record.video_description}`);
                 if (!record.image_description && !record.audio_description && !record.video_description) lines.push("Description: None");

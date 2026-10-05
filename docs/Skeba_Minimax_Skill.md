@@ -274,27 +274,37 @@ Keep the opening wardrobe descriptions separate from dialogue shots. In each spe
 
 ### Shot timing and cuts
 
+### Canonical shot markers: start time in seconds
+
+Every newly authored shot uses `[Shot N: Xs]`, for example `[Shot 1: 0s]`, `[Shot 2: 1.0s]`, `[Shot 3: 4.5s]`, and `[Shot 4: 8.2s]`. The value is the shot's **start time relative to the current clip**, not its duration. Reset to 0s for each prompt. Prefer one decimal place for later times when practical.
+
+Start times must be strictly increasing and less than the `[s=x]` clip duration (or the configured clip duration if the marker is absent). The next marker determines the current shot's available duration; the clip end bounds the last shot. Calculate these windows with DIALOGUE TIMING BY WORD COUNT before writing the markers.
+
+Use decimal seconds, not clock notation. Do not normally write time ranges inside markers, and do not repeat the start time in prose such as “At 4.5 seconds.” Important later events within a shot may have their own timing when synchronization genuinely matters. Keep Shot 1 silent, retain speaker isolation and wardrobe/spatial continuity, and honor the new-location buffer and continuation handoff below.
+
+The parser and visual editor also accept legacy untimed markers and legacy prose timestamps. Preserve old prompts when simply viewing them; use the new timed markers for newly authored or deliberately reformatted prompts. Do not automatically retime existing dialogue during notation conversion.
+
 ### HARD RULE — Shot 1 is scene setup only
 
-Reserve the opening `[Shot 1]` of every prompt for establishing the location, visual style, framing, lighting, character positions, wardrobe, props, and inherited continuation state. Characters may perform simple visible setup actions. Use ambience and nonverbal environmental sounds; keep character speech, dialogue blocks, narration, voiceover, and implied or off-screen speech out of this shot.
+Reserve the opening `[Shot 1: 0s]` of every prompt for establishing the location, visual style, framing, lighting, character positions, wardrobe, props, and inherited continuation state. Characters may perform simple visible setup actions. Use ambience and nonverbal environmental sounds; keep character speech, dialogue blocks, narration, voiceover, and implied or off-screen speech out of this shot.
 
-Move any intended spoken words into `[Shot 2]` or a later shot, preserving their speaker and exact wording. Establish the speaking character before the line begins and give it enough time to finish naturally. Keep Shot 1 brief and purposeful rather than adding an arbitrary long pause.
+Move any intended spoken words into `[Shot 2: 1.0s]` or a later shot, preserving their speaker and exact wording. Establish the speaking character before the line begins and give it enough time to finish naturally. Keep Shot 1 brief and purposeful rather than adding an arbitrary long pause.
 
-Shot 1 begins implicitly at the start of the clip and performs the setup or continuation-handoff duties below. This rule applies to both new locations and same-location continuations, even when the inherited character is also the next speaker. Dialogue starts only in Shot 2 or later.
+Shot 1 is explicitly marked `[Shot 1: 0s]` at the start of the clip and performs the setup or continuation-handoff duties below. This rule applies to both new locations and same-location continuations, even when the inherited character is also the next speaker. Dialogue starts only in Shot 2 or later.
 
 ```text
-[Shot 1] Live-action sitcom style. A medium-wide view establishes {Living_Room}. {Al_Bundy} sits on the sofa holding a folded newspaper. Warm lamplight and quiet room tone establish the scene.
+[Shot 1: 0s] Live-action sitcom style. A medium-wide view establishes {Living_Room}. {Al_Bundy} sits on the sofa holding a folded newspaper. Warm lamplight and quiet room tone establish the scene.
 
-[Shot 2] At 00:01.000, a medium shot frames only {Al_Bundy} seated on the sofa. {Al_Bundy} says, <d>[English]I'm home.</d>
+[Shot 2: 1.0s] a medium shot frames only {Al_Bundy} seated on the sofa. {Al_Bundy} says, <d>[English]I'm home.</d>
 ```
 
-Do not timestamp `[Shot 1]`; it begins at the start of the clip.
+Always write `[Shot 1: 0s]`; every later shot also includes its start time inside the marker.
 
 ### HARD RULE — NEW-LOCATION SPEECH BUFFER
 
 Every prompt beginning with `[new_location]` must open with at least **1.0 second of completely silent visual establishment**. Shot 1 contains no dialogue and establishes the new location, initial composition, and visible speaker before speech begins. For this opening buffer, silence takes precedence over the general permission to use setup ambience.
 
-The first speaking shot must begin at **00:01.000 or later**, after the speaker is visibly established. Never begin dialogue at 00:00 on a new scene. Keep Shot 1 untimestamped; explicitly timestamp the first speaking shot to make the buffer clear.
+The first speaking shot must begin at **1.0s or later**, after the speaker is visibly established. Never begin dialogue at 0.0s on a new scene. Use `[Shot 1: 0s]` and explicitly time the first speaking shot inside its marker to make the buffer clear.
 
 This buffer is particularly important when the first spoken words contain a proper name. Preserve the entire line, including the complete name, and let it begin only after the silent buffer. Allow enough natural speaking time after the buffer; do not compensate by rushing or clipping the line.
 
@@ -302,19 +312,19 @@ This buffer is particularly important when the first spoken words contain a prop
 
 For a prompt WITHOUT `[new_location]`, Shot 1 is also the continuation handoff shot. Its opening frames must acknowledge the preceding prompt's final visible composition because the workflow supplies the final 22 frames of that clip as context. Begin Shot 1 from the inherited visible subject, framing, pose, and camera state before transitioning to a different subject or composition.
 
-Do not treat 00:00 of a continuation as a fresh cut that has already occurred. If the desired opening composition differs from the inherited final shot, author the transition explicitly.
+Do not treat 0.0s of a continuation as a fresh cut that has already occurred. If the desired opening composition differs from the inherited final shot, author the transition explicitly.
 
 If the next speaker differs from the character visible in the inherited frames, prefer:
 
-`[Shot 1] Live-action, cinematic, the inherited framing begins on only {Character_A}, preserving the preceding clip's final composition. The shot holds briefly without new dialogue.`
+`[Shot 1: 0s] Live-action, cinematic, the inherited framing begins on only {Character_A}, preserving the preceding clip's final composition. The shot holds briefly without new dialogue.`
 
-`[Shot 2] At 00:01.000, camera cuts to only {Character_B} in the established location. The new framing settles before {Character_B} speaks.`
+`[Shot 2: 1.0s] camera cuts to only {Character_B} in the established location. The new framing settles before {Character_B} speaks.`
 
 Begin later shots with strictly increasing cut times inside the `[s=x]` duration:
 
-`[Shot 1] Live-action, cinematic, a medium-wide shot frames...`
+`[Shot 1: 0s] Live-action, cinematic, a medium-wide shot frames...`
 
-`[Shot 2] At 00:03.500, the camera cuts to...`
+`[Shot 2: 3.5s] the camera cuts to...`
 
 Use timestamps to allow dialogue and actions to finish naturally before the next cut. Set the next shot from the current line's natural speaking length rather than evenly dividing the clip.
 
@@ -322,11 +332,54 @@ Use `camera cuts to`, `shot cuts to`, `shot transitions to`, `shot changes to`, 
 
 A cut should introduce meaningful new information about subject, space, state, viewpoint, or time. If only framing distance or a slight angle changes, prefer camera movement instead of a cut.
 
-Set the next shot's start from the current line's natural speaking length, not from evenly divided shot intervals. Read the line at its intended delivery pace and allow for punctuation, pauses, emphasis, and any action before speech starts. Allow a natural pause before the cut through the shot timing; do not narrate the completion of speech or mouth closure. Slow, emotional, or hesitant delivery needs more time; do not force fast delivery just to meet a timestamp.
+Calculate dialogue windows using DIALOGUE TIMING BY WORD COUNT below, including punctuation, delivery, and any action before speech starts. Allow the handoff margin through shot timing; do not narrate the completion of speech or mouth closure.
 
-For example, a silent arrival at 00:00.000 followed by a speaker at 00:01.500 and the next speaker at 00:05.000 gives the first speaking shot 3.5 seconds. That spacing worked in the user's test; it is not a fixed allowance for every line. Longer dialogue needs a later cut. Give the final speaker enough time before the clip ends as well.
+For example, a silent arrival at 0.0s followed by a speaker at 1.5s and the next speaker at 5.0s gives the first speaking shot 3.5 seconds. That spacing worked in the user's test; it is not a fixed allowance for every line. Longer dialogue needs a later cut. Give the final speaker enough time before the clip ends as well.
 
-Use shot timing and direct character attribution to establish dialogue handoffs. Do not append formulaic speech-completion or mouth-closure instructions after dialogue. Keep shots and speaking turns in playback order. Respect the requested overall clip length; if the dialogue cannot fit naturally, use fewer turns or split across clips when permitted, rather than crowding the timestamps or silently changing the spoken words. Untimed shots remain acceptable when precise timing adds no value or the user requests natural untimed pacing.
+Use shot timing and direct character attribution to establish dialogue handoffs. Do not append formulaic speech-completion or mouth-closure instructions after dialogue. Keep shots and speaking turns in playback order. Respect the requested overall clip length; if the dialogue cannot fit naturally, use fewer turns or split across clips when permitted, rather than crowding the timestamps or silently changing the spoken words. Every newly authored shot includes its start time inside its marker, including silent shots. Older untimed markers remain readable for backward compatibility.
+
+### HARD RULE — DIALOGUE TIMING BY WORD COUNT
+
+Calculate dialogue timing before assigning shot timestamps. Do not estimate speaking windows by evenly dividing the clip. These are conservative authoring estimates, not measured speech durations or a guarantee of generated timing; no compiler timing validation is implied.
+
+For ordinary conversational English, budget **0.40 seconds per spoken word** (approximately 150 words per minute). Count only spoken words inside the dialogue block, excluding language headers, character/voice tags, and staging. Count contractions as one word; count numbers and abbreviations according to their intended spoken form.
+
+```text
+estimated_speech_duration = (word_count × seconds_per_word) + punctuation_pauses
+earliest_next_shot = dialogue_start + max(1.25, estimated_speech_duration) + 0.35
+next_shot_start = ceil(earliest_next_shot × 10) / 10
+```
+
+Add these approximate pauses:
+
+- Comma: **+0.15 seconds**.
+- Sentence-ending period: **+0.25 seconds**.
+- Question mark or exclamation mark: **+0.25 seconds**.
+- Ellipsis or deliberate hesitation: **+0.40 seconds**.
+- Explicit comedic/reaction beat: **+0.50–1.00 seconds**, when required.
+
+Treat an ellipsis as one pause, not three periods. Treat combined terminal punctuation such as `?!` as one ending pause. Do not count the same explicitly described hesitation or reaction twice.
+
+Reserve at least **1.25 seconds** for very short dialogue, then **0.35 seconds** before the next speaker's shot begins. Round the resulting next-shot timestamp **upward to the nearest 0.1 second**, never downward. Apply the speech window and closing margin before the clip ends for its final line too. If a shot contains multiple dialogue events, budget each event sequentially, including intervening actions; the maximum two spoken sentences per shot still applies.
+
+`dialogue_start` is when speech actually begins, not necessarily the cut time. Add time for required walking, gestures, visual establishment, or other actions before speech. Preserve the silent opening Shot 1 and the new-location speech buffer; those are additional to the spoken line's budget.
+
+Choose delivery rates deliberately:
+
+| Delivery | Seconds per spoken word |
+|---|---:|
+| Rapid argument / excited speech | 0.30–0.35 |
+| Normal sitcom conversation / unspecified delivery | 0.40 |
+| Deliberate or emphatic speech | 0.45–0.50 |
+| Hesitant or emotional speech | 0.50–0.60 |
+
+Adjust the rate for unusually fast, slow, emotional, hesitant, shouted, or deliberately comedic delivery. Do not assume shouting means fast speech. For other languages, use an appropriate natural speaking estimate rather than blindly applying English word counts. Never choose a faster rate merely to force the exchange into the available duration.
+
+Example: “Does this look clean to you?” contains six words. At 0.40 seconds per word plus a 0.25-second question pause, speech needs approximately **2.65 seconds**. If dialogue starts at **1.0s**, the next shot may begin no earlier than **4.0s**, including the 0.35-second handoff. Any action before the line moves that cut later.
+
+Calculate the required clip duration from its dialogue, opening setup, actions, and handoffs. When duration is flexible, select `[s=x]` to accommodate that total. If the timeline exceeds the user's desired maximum or the workflow's supported clip length, split the exchange into another independently defined prompt instead of accelerating speech unnaturally. Preserve fixed dialogue and speaker ownership; if splitting is explicitly prohibited, flag the conflict instead of silently shortening or rushing the lines.
+
+These calculations are minimum allocations, not requirements for audible silence. Natural gestures, expressions, reactions, and room sound may occupy unused time and the handoff margin, subject to the separate completely silent new-location opening rule. Keep calculations in planning; output the resulting timestamps without automatically adding speech-completion, mouth-closure, or laughter prose.
 
 ### summary
 
@@ -371,21 +424,21 @@ Example of a self-contained summary:
 
 Use those positions only if they match the preceding clip's ending. If its final image is a close-up of the seated Jerry, begin detailed_description with that seated close-up; do not suddenly open on a standing Jerry or a new wide composition.
 
-Keep summary at the scene level. Do not put `[Shot N]` markers, timestamps, `<d>...</d>` dialogue, or voice tags here. Do not list or repeat the individual dialogue turns. Those belong only in detailed_description. A short scene still needs a brief meaningful summary.
+Keep summary at the scene level. Do not put `[Shot N: Xs]` markers, timestamps, `<d>...</d>` dialogue, or voice tags here. Do not list or repeat the individual dialogue turns. Those belong only in detailed_description. A short scene still needs a brief meaningful summary.
 
 ### detailed_description
 
-Use `detailed_description:` on its own line after summary (with a blank line on each side), followed by `[Shot 1]` and the chronological shots, timed actions, camera changes, and dialogue. This is a separate top-level section, not a heading nested inside another detailed_description. Do not add a `timeline:` heading.
+Use `detailed_description:` on its own line after summary (with a blank line on each side), followed by `[Shot 1: 0s]` and the chronological shots, timed actions, camera changes, and dialogue. This is a separate top-level section, not a heading nested inside another detailed_description. Do not add a `timeline:` heading.
 
 The division is: summary describes the scene's setup and overall situation; detailed_description describes what happens on screen in playback order. Do not leave the setup as unlabeled prose between subject_definitions and detailed_description.
 
 ### Visual style, camera, and movement
 
-At the beginning of `[Shot 1]`, state the overall visual style and initial composition. Use concrete style language such as `Live-action, cinematic`, `2D animation`, `3D CG`, `claymation`, `watercolor`, or `vintage film`.
+At the beginning of `[Shot 1: 0s]`, state the overall visual style and initial composition. Use concrete style language such as `Live-action, cinematic`, `2D animation`, `3D CG`, `claymation`, `watercolor`, or `vintage film`.
 
 When useful, specify the camera system, lens, support, lighting, and palette:
 
-`[Shot 1] Live-action, cinematic, shot on an ARRI Alexa with a Cooke S4 75mm prime, a medium-wide composition under cold blue-green arctic lighting with a slightly desaturated palette.`
+`[Shot 1: 0s] Live-action, cinematic, shot on an ARRI Alexa with a Cooke S4 75mm prime, a medium-wide composition under cold blue-green arctic lighting with a slightly desaturated palette.`
 
 Use precise camera terminology:
 
@@ -405,7 +458,7 @@ Use precise camera terminology:
 Qualify movement when useful with `small/large amplitude` and `slow/fast speed`, e.g. `a slow push in with small amplitude`.
 
 Do not add technical camera specifications merely to make a prompt sound cinematic. Use them when they provide meaningful visual direction and keep them consistent across shots unless a change is intentional.
-Begin with one or two English sentences establishing presentation/style before `[Shot 1]`. Use sequential `[Shot N]` labels and encourage timestamps, especially for dialogue; follow the natural speaking-length guidance above before placing each cut. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
+Begin with one or two English sentences establishing presentation/style before `[Shot 1: 0s]`. Use sequential `[Shot N: Xs]` markers with explicit start times for every shot; follow the natural speaking-length guidance above before placing each cut. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
 
 For generation prompts, normally aim for 350-500 English words here. Dialogue-heavy scenes prioritize a feasible complete spoken timeline over reaching that range. Editing detail scales with the changes. One shot alone is not a reason to omit necessary detail; do not invent additional action to pad a word count. Write events in playback order, because the compiler assigns speakers in source order rather than sorting timestamps.
 
@@ -518,7 +571,7 @@ Maintain natural dialogue timing, direct character attribution, and speaking-sho
 
 ### Maximum two dialogue sentences per shot
 
-Keep intelligible dialogue to a maximum of TWO sentences per `[Shot N]`, counted across all dialogue blocks in that shot. The user has observed audio drift with longer turns. This limit applies to spoken dialogue, not scene descriptions or action sentences.
+Keep intelligible dialogue to a maximum of TWO sentences per `[Shot N: Xs]`, counted across all dialogue blocks in that shot. The user has observed audio drift with longer turns. This limit applies to spoken dialogue, not scene descriptions or action sentences.
 
 Split longer turns at sentence boundaries into additional sequential shots, even when the same character continues speaking. Preserve the spoken words and repeat the correct character attribution in each shot. Allow natural speaking time, pauses, and a brief closing beat before each cut. Two long sentences may still need separate shots; the sentence limit does not replace the timing check. Do not merge sentences or change punctuation just to evade the limit.
 
@@ -528,7 +581,7 @@ For reliable voice binding, default to visually and semantically isolating the s
 
 For each default solo dialogue shot:
 
-1. The speaking character must be the ONLY character referenced anywhere inside that `[Shot N]`.
+1. The speaking character must be the ONLY character referenced anywhere inside that `[Shot N: Xs]`.
 2. Do not show, name, describe, or reference any other character in that shot.
 3. Do not mention another character as off-camera, unseen, silent, listening, reacting, nearby, or outside the frame.
 4. Bind the dialogue directly to the visible character using the matching character tag and a language-only header: `{Character} says, <d>[English]Dialogue.</d>`. Attribute temporary characters directly and place any temporary voice reference before the dialogue; retain inline voice descriptions for characters without a voice reference rather than inventing an audio attachment.
@@ -543,19 +596,19 @@ Keep the maximum of two spoken sentences per shot and allow natural speaking tim
 
 GOOD:
 
-[Shot 1] A wide shot establishes {Jerry_Seinfeld_Apartment}. {George Costanza_BC} sits on the sofa and {Jerry Seinfeld_BC} stands near the kitchen counter. Quiet apartment room tone accompanies the opening.
+[Shot 1: 0s] A wide shot establishes {Jerry_Seinfeld_Apartment}. {George Costanza_BC} sits on the sofa and {Jerry Seinfeld_BC} stands near the kitchen counter. Quiet apartment room tone accompanies the opening.
 
-[Shot 2] At 00:01.000, a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+[Shot 2: 1.0s] a medium shot shows only {George Costanza_BC} seated on the sofa inside {Jerry_Seinfeld_Apartment}. {George Costanza_BC} says, <d>[English]I'm not going!</d>
 
-[Shot 3] At 00:04.000, a medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen counter inside {Jerry_Seinfeld_Apartment}. {Jerry Seinfeld_BC} says, <d>[English]You're going.</d>
-
-BAD:
-
-[Shot 1] George sits on the sofa while Jerry watches from the kitchen. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+[Shot 3: 4.0s] a medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen counter inside {Jerry_Seinfeld_Apartment}. {Jerry Seinfeld_BC} says, <d>[English]You're going.</d>
 
 BAD:
 
-[Shot 1] A medium shot shows only {George Costanza_BC}. Jerry is off-camera listening. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+[Shot 1: 0s] George sits on the sofa while Jerry watches from the kitchen. {George Costanza_BC} says, <d>[English]I'm not going!</d>
+
+BAD:
+
+[Shot 1: 0s] A medium shot shows only {George Costanza_BC}. Jerry is off-camera listening. {George Costanza_BC} says, <d>[English]I'm not going!</d>
 
 The same omission rule applies to silent shots explicitly framed around only one character. Other characters may still be defined in subject_definitions and appear in other shots.
 
@@ -597,7 +650,7 @@ CHARACTER + PLACEMENT IN CURRENT LOCATION + CAMERA FRAMING
 
 Example:
 
-[Shot 3] An abrupt amateurish cut shows {Mr_Roarke} in the room in a crooked medium close-up.
+[Shot 3: 4.5s] An abrupt amateurish cut shows {Mr_Roarke} in the room in a crooked medium close-up.
 
 This keeps the shot restricted to {Mr_Roarke} without encouraging the generator to reproduce the isolated composition or plain background of the character reference image.
 
@@ -642,7 +695,7 @@ Use `[s=x]` before `subject_definitions` to request the current clip's duration 
 
 Choose duration per story beat instead of assuming every prompt is 15 seconds. A 5-second silent intro can be followed by 15-second dialogue clips. Repeat the chosen duration in each prompt; a previous `[s=5]` must not be treated as a persistent setting for later prompts. A duration change alone does not require `[new_location]`.
 
-Keep timestamps local to each clip, starting at 00:00.000, and fit every action and complete spoken line within its duration. Use fewer shots and less description for a short intro; do not compress a 15-second dialogue exchange into five seconds. Continue to repeat complete temporary definitions and any locked wardrobe in every applicable prompt.
+Keep timestamps local to each clip, starting at 0.0s, and fit every action and complete spoken line within its duration. Calculate dialogue capacity using DIALOGUE TIMING BY WORD COUNT, including the opening setup and final handoff margin, before choosing `[s=x]`. Split exchanges that exceed the permitted duration. Use fewer shots and less description for a short intro; do not compress a 15-second dialogue exchange into five seconds. Continue to repeat complete temporary definitions and any locked wardrobe in every applicable prompt.
 
 Example of a 5-second intro followed by a 15-second scene in the same location:
 
@@ -658,7 +711,7 @@ Warm natural light and a quiet observational style inside <location:coffee_shop>
 
 detailed_description:
 
-[Shot 1]  a slow push toward <object:coffee_cup> on a wooden table inside <location:coffee_shop> establishes the setting through the end of the five-second clip.
+[Shot 1: 0s]  a slow push toward <object:coffee_cup> on a wooden table inside <location:coffee_shop> establishes the setting through the end of the five-second clip.
 
 overall_soundscape:
 Quiet room tone and faint crockery sounds.
@@ -679,9 +732,9 @@ Warm natural light and a quiet observational style continue inside <location:cof
 
 detailed_description:
 
-[Shot 1] a close view of <object:coffee_cup> on the wooden table continues the established scene.
-[Shot 2] At 00:03.000, a medium shot shows only <character:cashier> behind the counter inside <location:coffee_shop>. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d>
-[Shot 3] At 00:08.000, the camera returns to <object:coffee_cup>, with the sunlit wooden table filling the background through the end of the clip.
+[Shot 1: 0s] a close view of <object:coffee_cup> on the wooden table continues the established scene.
+[Shot 2: 3.0s] a medium shot shows only <character:cashier> behind the counter inside <location:coffee_shop>. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d>
+[Shot 3: 8.0s] the camera returns to <object:coffee_cup>, with the sunlit wooden table filling the background through the end of the clip.
 
 overall_soundscape:
 Quiet room tone and faint crockery sounds.
@@ -794,20 +847,20 @@ For dialogue shots, preserve the inherited position while following SPEAKING-SHO
 
 GOOD, when Jerry was last seated on the sofa:
 
-"[Shot 2] A medium shot shows only {Jerry Seinfeld_BC} seated forward on the sofa inside {Jerry_Seinfeld_Apartment}."
+"[Shot 2: 1.0s] A medium shot shows only {Jerry Seinfeld_BC} seated forward on the sofa inside {Jerry_Seinfeld_Apartment}."
 
 BAD, unless the movement has already been shown:
 
-"[Shot 2] A medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen inside {Jerry_Seinfeld_Apartment}."
+"[Shot 2: 1.0s] A medium shot shows only {Jerry Seinfeld_BC} standing near the kitchen inside {Jerry_Seinfeld_Apartment}."
 
-Do not use "same position as before" as a substitute for concrete state. Each prompt compiles independently: restate actual positions, poses, props, and persistent changes. Glowing eyes, damage, or a removed jacket must already be present at 00:00.000 of the next clip unless explicitly reversed. Keep the wardrobe lock consistent with intentional changes.
+Do not use "same position as before" as a substitute for concrete state. Each prompt compiles independently: restate actual positions, poses, props, and persistent changes. Glowing eyes, damage, or a removed jacket must already be present at 0.0s of the next clip unless explicitly reversed. Keep the wardrobe lock consistent with intentional changes.
 
 **SAME LOCATION + CONSECUTIVE PROMPTS = CONTINUOUS PHYSICAL BLOCKING**, unless the story explicitly establishes a time jump, discontinuous edit, or character movement. A time jump or discontinuous edit needs an explicit transition and compatible workflow handling; do not assume the inherited 22 frames disappear, and do not misuse [new_location] for an unchanged physical location.
 ### HARD RULE — CONTINUATION HANDOFF SHOT
 
 When a prompt does NOT begin with `[new_location]`, assume its opening frames inherit the final 22-frame video context from the preceding prompt. The new prompt is still compiled independently, but its opening visual state is not independent.
 
-The inherited 22 frames are the literal starting image of the next generation. `[Shot 1]` must therefore begin from what is visibly present in the preceding prompt's FINAL shot before introducing a different character, framing, or action.
+The inherited 22 frames are the literal starting image of the next generation. `[Shot 1: 0s]` must therefore begin from what is visibly present in the preceding prompt's FINAL shot before introducing a different character, framing, or action.
 
 Before writing a same-location continuation, inspect the preceding prompt's FINAL shot and identify:
 
@@ -820,7 +873,7 @@ Before writing a same-location continuation, inspect the preceding prompt's FINA
 
 Then apply these rules:
 
-1. `[Shot 1]` must begin on the inherited visible subject and composition. Do not declare a different character as already being on screen at the start of the new generation.
+1. `[Shot 1: 0s]` must begin on the inherited visible subject and composition. Do not declare a different character as already being on screen at the start of the new generation.
 2. Preserve the inherited framing briefly enough to create a clear visual handoff before changing subjects when necessary.
 3. If the next story beat belongs to another character, explicitly transition from the inherited subject using `camera cuts to`, `camera pans to`, `camera trucks to`, or another visible camera transition.
 4. The new character may speak only AFTER that transition has established the new character's shot.
@@ -836,19 +889,19 @@ Example:
 
 Previous prompt ends:
 
-`[Shot 4] ... only {George Costanza_BC} ... {George Costanza_BC} says, <d>[English]Nah, I ain't Jewish, I just don't dig on swine, that's all.</d>`
+`[Shot 4: 8.2s] ... only {George Costanza_BC} ... {George Costanza_BC} says, <d>[English]Nah, I ain't Jewish, I just don't dig on swine, that's all.</d>`
 
 BAD continuation:
 
-`[Shot 1] only {Jerry Seinfeld_BC} is visible. {Jerry Seinfeld_BC} says, <d>[English]Why not?</d>`
+`[Shot 1: 0s] only {Jerry Seinfeld_BC} is visible. {Jerry Seinfeld_BC} says, <d>[English]Why not?</d>`
 
 The inherited frames still visibly contain George, so this creates a visual and speaker-identity conflict.
 
 GOOD continuation:
 
-`[Shot 1] Live-action, cinematic, the inherited close view begins on only {George Costanza_BC} seated inside {Monks_Coffee}, preserving his position and framing from the preceding clip. The shot holds briefly after his answer without new dialogue.`
+`[Shot 1: 0s] Live-action, cinematic, the inherited close view begins on only {George Costanza_BC} seated inside {Monks_Coffee}, preserving his position and framing from the preceding clip. The shot holds briefly after his answer without new dialogue.`
 
-`[Shot 2] At 00:01.000, camera cuts cleanly to only {Jerry Seinfeld_BC} seated in his established position inside {Monks_Coffee}. The new framing settles on Jerry before he speaks. {Jerry Seinfeld_BC} says, <d>[English]Why not?</d>`
+`[Shot 2: 1.0s] camera cuts cleanly to only {Jerry Seinfeld_BC} seated in his established position inside {Monks_Coffee}. The new framing settles on Jerry before he speaks. {Jerry Seinfeld_BC} says, <d>[English]Why not?</d>`
 
 The 22-frame context is a VISUAL HANDOFF, not merely continuity guidance. The first authored shot must bridge from that inherited image into the new clip.
 ## Complete example: temporary resources only
@@ -869,9 +922,9 @@ The target video uses a realistic, quietly observed cafe style with warm indoor 
 
 detailed_description:
 
-[Shot 1]  a medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
-[Shot 2] At 00:03.000, a closer view retains the counter in the background. <character:cashier> looks toward the waiting area. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the empty waiting area while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
-[Shot 3] At 00:07.000, return to the medium shot. <character:cashier> waits with relaxed hands and a closed mouth. The camera returns to the established counter-height viewpoint without changing which side of the counter he occupies. His shoulders settle after the announcement, and his gaze remains on the waiting area. The room's low ambience continues without added dialogue or music. Keep the visible table edges, empty space on the left, and light on the uniform consistent with the opening. At the end of the clip he stays still, with no fresh gesture, mouth movement, or camera drift. Hold this same position through the end of the clip so the following clip can inherit a clear, settled state.
+[Shot 1: 0s]  a medium shot inside <location:coffee_shop> shows <character:cashier> standing behind the counter under soft indoor light. Only the cashier is visible. The camera is at counter height, with the cashier just RIGHT of center and the empty waiting area on the LEFT. The red uniform is clearly visible from the chest upward; the cashier keeps his shoulders relaxed and both hands resting on the countertop. Wooden tables remain recognizable behind him, with clear gaps between their edges. Warm ceiling light illuminates his face evenly without altering the room's established colors. A low room tone and a faint off-screen clink of crockery accompany the still composition. No other intelligible voices occur.
+[Shot 2: 3.0s] a closer view retains the counter in the background. <character:cashier> looks toward the waiting area. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and avoiding a cut to the empty waiting area while he speaks. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
+[Shot 3: 7.0s] return to the medium shot. <character:cashier> waits with relaxed hands and a closed mouth. The camera returns to the established counter-height viewpoint without changing which side of the counter he occupies. His shoulders settle after the announcement, and his gaze remains on the waiting area. The room's low ambience continues without added dialogue or music. Keep the visible table edges, empty space on the left, and light on the uniform consistent with the opening. At the end of the clip he stays still, with no fresh gesture, mouth movement, or camera drift. Hold this same position through the end of the clip so the following clip can inherit a clear, settled state.
 
 overall_soundscape:
 Low room tone and faint cups touching saucers. Only the cashier produces intelligible speech during the explicit line.
@@ -899,10 +952,10 @@ The target video uses a realistic, quietly observed cafe style with warm indoor 
 
 detailed_description:
 
-[Shot 1] a medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
-[Shot 2] At 00:03.000, frame only <character:cashier> with the counter visible. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and holding the same face through the whole line. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
-[Shot 3] At 00:07.000, frame only {hero}, retaining the wooden tables in the background. {hero} says, <d>[English]Thank you.</d> Keep the hero on the same side of the counter as before, with the angle clearly motivated by the established geography. The camera remains stationary during the whole line; hold this face through the whole line. The hero's expression softens briefly in thanks, with a small change in gaze toward the edge of the frame. Neither the supplied wardrobe nor the visible table layout changes. The underlying room tone remains consistent across the cut.
-[Shot 4] At 00:10.000, return to the medium shot. {hero} remains LEFT of the counter and <character:cashier> remains on the RIGHT, both silent with closed mouths through the end of the clip. Restore the original counter-height framing and spacing. Their hands and shoulders settle without a new exchange or object transfer. Keep the warm light and visible table edges stable; hold this final composition with only quiet room tone, providing a clear state for a same-location continuation.
+[Shot 1: 0s] a medium shot in <location:coffee_shop> shows {hero} standing LEFT of the counter and <character:cashier> behind it on the RIGHT. Both have closed mouths. The camera holds at chest height, showing their established spacing across the counter and enough of the wooden tables to make the location recognizable. The hero's supplied appearance and wardrobe remain unchanged; describe only the features visible from this angle. The cashier's red uniform stays unobstructed above the counter. Warm ceiling light falls evenly across the two positions, with no change of daylight direction between cuts. A faint cup clink and low room tone establish the space without adding intelligible background dialogue.
+[Shot 2: 3.0s] frame only <character:cashier> with the counter visible. <character:cashier> says using <voice:cashier>, <d>[English]Your order is ready.</d> The camera remains steady for the complete line, keeping his face unobstructed and holding the same face through the whole line. His expression is friendly but restrained, and his gaze stays directed just left of the lens toward the edge of frame. The counter edge remains horizontal across the bottom of the frame. His hands stay on the countertop rather than introducing a new gesture that could obscure his face. The background stays softly visible, preserving the same warm light and table arrangement.
+[Shot 3: 7.0s] frame only {hero}, retaining the wooden tables in the background. {hero} says, <d>[English]Thank you.</d> Keep the hero on the same side of the counter as before, with the angle clearly motivated by the established geography. The camera remains stationary during the whole line; hold this face through the whole line. The hero's expression softens briefly in thanks, with a small change in gaze toward the edge of the frame. Neither the supplied wardrobe nor the visible table layout changes. The underlying room tone remains consistent across the cut.
+[Shot 4: 10.0s] return to the medium shot. {hero} remains LEFT of the counter and <character:cashier> remains on the RIGHT, both silent with closed mouths through the end of the clip. Restore the original counter-height framing and spacing. Their hands and shoulders settle without a new exchange or object transfer. Keep the warm light and visible table edges stable; hold this final composition with only quiet room tone, providing a clear state for a same-location continuation.
 
 overall_soundscape:
 Quiet room tone and faint cups touching saucers. One active speaking voice at a time, with no additional intelligible background speech.
@@ -957,14 +1010,14 @@ MULTIPLE PROMPTS → ONE plain-text code block with each prompt separated by exa
 Never add prompt numbers, prompt titles, scene labels, clip labels, explanatory text, or Markdown headings inside the code block.
 ## Validate and deliver
 
-Verify every opening `[Shot 1]` contains scene setup only: no character speech, dialogue blocks, narration, voiceover, or implied/off-screen speech. Dialogue begins in Shot 2 or later, with timing that leaves room for the setup. For every `[new_location]` prompt, verify at least 1.0 second of complete opening silence, a visibly established speaker, and the first speaking shot timestamped 00:01.000 or later. Preserve the full first line, especially an opening proper name.
+Verify every opening `[Shot 1: 0s]` contains scene setup only: no character speech, dialogue blocks, narration, voiceover, or implied/off-screen speech. Dialogue begins in Shot 2 or later, with timing that leaves room for the setup. For every `[new_location]` prompt, verify at least 1.0 second of complete opening silence, a visibly established speaker, and the first speaking shot timestamped 1.0s or later. Preserve the full first line, especially an opening proper name.
 
 Before delivery, check the Ref2VA contract above: independent identities and anchors, stable semantic voice ownership, factual six-section compiled output, owned reactions/props, coherent world geometry and eyelines, timed dialogue/reactions, and inherited state or an explicit location reset. Do not add runtime labels to authoring prompts during this review.
 
 Before returning a prompt:
 
 1. Confirm deterministic mode is the target. Preserve exact known saved tags, and declare all temporary references directly in subject_definitions, with no separate declaration prefix or duplicate bare temporary entry.
-2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Reject dialogue quotations, paraphrases, recaps, implied speaking, speaking-order instructions, and first-word/delivery cues; summary describes visible action and may describe reference roles without cueing speech. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 has no timestamp, establishes the overall style and initial composition, and contains no speech. Dialogue begins in Shot 2 or later. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
+2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Reject dialogue quotations, paraphrases, recaps, implied speaking, speaking-order instructions, and first-word/delivery cues; summary describes visible action and may describe reference roles without cueing speech. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 uses `[Shot 1: 0s]`, establishes the overall style and initial composition, and contains no speech. Dialogue begins in Shot 2 or later. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
 3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and only the language inside dialogue brackets.
 4. Check the intended performer for each speaking turn and directly attribute the dialogue to its character tag. Use `<d>[English]...</d>` (or the spoken language) without a voice tag in the brackets. Preserve spoken words after the brackets. Keep events in playback order; normally let the compiler generate retention_analysis.
 5. Validate every prompt in isolation. For multi-prompt sequences, the ONLY valid sequence separator is a single `|` on its own line. Split at each `|` and pretend all earlier prompt declarations and definitions are unavailable. Never use labels such as `PROMPT 1`, `PROMPT 2`, `Scene 1`, or `Clip 1` as separators.
@@ -982,7 +1035,7 @@ Before returning a prompt:
    - If the outfit intentionally changes, establish the complete new wardrobe when the change occurs and carry that exact description forward in subsequent prompts.
 
    CLIP DURATION:
-  - Use [s=x] for intentionally selected scene lengths. Shot 1 begins implicitly at the start of the clip without a timestamp; all later shot timestamps must fit within that duration.
+  - Use [s=x] for intentionally selected scene lengths. Shot 1 uses `[Shot 1: 0s]`; every later marker has a strictly increasing start time inside that duration.
 
    LOCATION CONTINUITY:
    - Evaluate `[new_location]` from physical story geography, independently from declaration scope.
@@ -999,11 +1052,11 @@ Before returning a prompt:
    - Compare Prompt N's final shot with Prompt N+1's opening shot when the physical location is unchanged. Internally list each active character's and important object's final established state.
    - Verify the next prompt starts with those concrete positions, poses, facing directions, prop placements, door states, and persistent visual changes. Use supplied handoff frames to check actual visible state when available.
    - Reject unexplained movement between furniture or room areas, standing/seated changes, and moved objects. A camera-angle change does not permit repositioning.
-   - When movement is required, begin from the inherited position and show the movement before using the new position. Persistent changes such as glowing eyes must already be present at 00:00.000 unless explicitly reversed.
+   - When movement is required, begin from the inherited position and show the movement before using the new position. Persistent changes such as glowing eyes must already be present at 0.0s unless explicitly reversed.
    - For default solo dialogue coverage, keep other characters' continuity in the scene opening or separate silent shots. For intentional multi-character coverage, state active-speaker ownership and keep non-speakers silent.
    
    CONTINUATION HANDOFF:
-   - For every prompt without `[new_location]`, compare `[Shot 1]` directly against the preceding prompt's FINAL shot.
+   - For every prompt without `[new_location]`, compare `[Shot 1: 0s]` directly against the preceding prompt's FINAL shot.
    - Identify the character(s) actually visible in that final shot, its framing, camera angle, visible pose/position, important props, and whether the camera is moving or holding.
    - Treat that final composition as the literal starting image supplied to the new generation by the 22-frame continuation context.
    - Verify that Shot 1 BEGINS from that inherited visible subject and composition before transitioning elsewhere.
@@ -1024,10 +1077,10 @@ Before returning a prompt:
    - Silent beats must remain silent; do not include cues for muttering, speech-like mouth movements, or unspecified words. Check the final shot especially for implied extra dialogue.
 
    SHOT/SPEAKER ISOLATION:
-   - Scan each `[Shot N]` independently.
+   - Scan each `[Shot N: Xs]` independently.
    - Count the distinct characters with explicit dialogue events inside that shot.
    - The allowed count is 0 or 1.
-   - If two or more different characters speak inside one shot, split their turns into separate sequential shots while preserving the original dialogue and staging. Set timestamps far enough apart for each complete line at a natural speaking pace, including pauses and a brief handoff beat; let each speaker finish before the next turn.
+   - If two or more different characters speak inside one shot, split their turns into separate sequential shots while preserving the original dialogue and staging. Calculate each line using DIALOGUE TIMING BY WORD COUNT: default 0.40 seconds per spoken English word plus punctuation pauses, minimum 1.25-second speaking window, then 0.35-second handoff; round next-shot starts upward to 0.1 seconds. Include pre-speech actions and reserve the final line's margin before clip end. Split across prompts when the total exceeds the permitted clip duration.
    - Count spoken sentences across all dialogue blocks in the shot: the maximum is two. Split longer turns into additional shots at sentence boundaries, preserving the dialogue, speaker attribution, and natural timing. Multiple clauses from the same character may remain only within this limit.
    - In every speaking shot, count all characters shown, named, described, or referenced in staging prose, not just speakers: only the speaking character is allowed in default solo coverage. For an intentional exception, explicitly identify the active speaker and keep non-speakers silent. Remove unnecessary off-camera/listener mentions, repeat the matching character attribution for every dialogue event, and omit automatic speech-completion, mouth-closure, or laughter endings. Put multi-character reactions in separate silent shots.
 

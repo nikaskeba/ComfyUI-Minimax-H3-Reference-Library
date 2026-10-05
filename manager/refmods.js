@@ -1,4 +1,4 @@
-import {bindLibrarySearch} from "./library-search.js?v=1";
+import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "./library-search.js?v=2";
 import {openVideoEditor} from "./video-selector.js?v=7";
 import {groupCatalog,refmodTag} from "./refmod-catalog.js?v=3";
 const $ = id => document.getElementById(id);
@@ -115,8 +115,9 @@ function workflowModels(fields){return new Promise((resolve,reject)=>{
  channel.postMessage({type:"request-models",id,fields,client:params.get("client"),node:params.get("node")});
 });}
 
-async function loadCollections(){const data=await request("/api/h3-references/collections");const current=$("collection-filter").value;$("collections").replaceChildren(...data.collections.map(name=>new Option(name,name)));$("collection-filter").replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));$("collection-filter").value=current;}
-$("type-filter").onchange=$("collection-filter").onchange=renderCatalog;
+async function loadCollections(){const data=await request("/api/h3-references/collections");$("collections").replaceChildren(...data.collections.map(name=>new Option(name,name)));$("collection-filter").replaceChildren(new Option("All collections",""),...data.collections.map(name=>new Option(name,name)));restoreLibraryCollection($("collection-filter"));}
+$("type-filter").onchange=renderCatalog;
+bindLibraryCollection($("collection-filter"),renderCatalog);
 
 async function exportGroup(group){
  const name=group.name.replace(/[<>:"/\\|?*\x00-\x1f]/g,"_")+".safetensors";

@@ -26,6 +26,44 @@ create = importlib.import_module(PACKAGE + ".refmod_create")
 
 
 class RefModTests(unittest.TestCase):
+    def test_diagnostic_reports_native_audio_offsets_and_mismatches(self):
+        mods = support.BoundRefMods()
+        mods.diagnostics = {
+            "a": {"tag": "Kramer_rm", "subject": 2, "speaker": 1, "expected_audio": 2,
+                  "source_file": "kramer.safetensors", "member": 1, "channel": "voice"},
+            "b": {"tag": "Newman_rm", "subject": 5, "speaker": 2, "expected_audio": 3},
+        }
+        native = {"kind": "audio", "ref_audio_t": 120, "audio_latent": torch.zeros(1, 32, 2, 120)}
+        first = {**native, "skeba_refmod_binding": "a"}
+        second = {**native, "skeba_refmod_binding": "b"}
+        cond = [[torch.zeros(1), {"minimax_refs": [native, first, second]}]]
+        rows = json.loads(apply.reference_diagnostic(cond, mods))["conditioning"][0]["blocks"]
+        self.assertEqual([r["audio_ordinal"] for r in rows], [1, 2, 3])
+        self.assertTrue(rows[1]["audio_order_matches_compiler"])
+        self.assertTrue(rows[2]["audio_order_matches_compiler"])
+        self.assertEqual(rows[1]["member"], 1)
+        self.assertEqual(rows[1]["subject"], 2)
+        self.assertEqual(rows[1]["audio_seconds_approx"], 3)
+        self.assertNotIn("tag", rows[0])
+        changed = [[cond[0][0], {"minimax_refs": [native, second, first]}]]
+        changed_rows = json.loads(apply.reference_diagnostic(changed, mods))["conditioning"][0]["blocks"]
+        self.assertFalse(changed_rows[1]["audio_order_matches_compiler"])
+        self.assertFalse(changed_rows[2]["audio_order_matches_compiler"])
+        self.assertEqual(first["audio_latent"].shape[-1], 120)
+
+    def test_compiler_diagnostic_ownership_survives_apply(self):
+        records = {name: self.record(name, "audio", 3) for name in ("Kramer", "Newman")}
+        output = self.build(records, voices=list(records))
+        blocks = [encoder._prepare_refmod(entry, self.clip, self.vae, self.audio_vae, "auto", 24)[1]
+                  for entry in output[20]["audios"]]
+        cond = [[torch.zeros(1), {"minimax_refs": blocks}]]
+        applied = apply._apply_bound(cond, output[21], 1, None, -1, 0)
+        rows = json.loads(apply.reference_diagnostic(applied, output[21]))["conditioning"][0]["blocks"]
+        self.assertEqual({row["tag"] for row in rows}, set(records))
+        self.assertTrue(all(row["audio_order_matches_compiler"] for row in rows))
+        self.assertTrue(all(row["source_file"].endswith('.safetensors') for row in rows))
+        self.assertEqual(len(apply.SkebaH3RefModApply.define_schema().outputs), 3)
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
@@ -119,7 +157,11 @@ class RefModTests(unittest.TestCase):
             records = {str(i): self.record(str(i), "video") for i in range(4)}
             output = self.build(records, mode)
             self.assertEqual(len(output[20]["videos"]), 4)
-            self.assertIn("<Video 4>", output[0])
+            if mode == "deterministic":
+                self.assertNotIn(" in <Video 4>", output[0])
+                self.assertEqual(json.loads(output[1])["video"]["4"], "saved:3")
+            else:
+                self.assertIn("<Video 4>", output[0])
             records = {str(i): dict(reference_type="character", video_file="x.mp4") for i in range(4)}
             with self.assertRaisesRegex(ValueError, "3"):
                 self.build(records, mode)
@@ -189,7 +231,7 @@ class RefModTests(unittest.TestCase):
         debug=json.loads(result[1].split("\nRefMods require")[0])
         self.assertEqual([a["tag"] for a in result[20]["audios"]],["mod","ordinary"])
         self.assertEqual([a["max_duration_seconds"] for a in result[20]["audios"]],[7.5,7.5])
-        self.assertIn("<Video 1>",result[0]); self.assertIn("<Picture 1>",result[0])
+        self.assertNotIn(" in <Video 1>",result[0]); self.assertIn("<Picture 1>",result[0])
         projected=library.project_records(records,"{mod} §mod§")
         self.assertTrue(projected["mod"]["_refmod_audio"])
         records["mod"].update(appearance_source="media",voice_source="media",image_file="normal.png",audio_file="normal.wav")
@@ -283,7 +325,7 @@ class RefModTests(unittest.TestCase):
                 with patch.object(builder, "records_by_tag", return_value=records), patch.object(builder, "library_built_in_records", return_value={}):
                     normal = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic")
                     simple = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic", refmod_subject_only=True)
-                self.assertIn(" in " + marker, normal[0])
+                self.assertNotIn(" in " + marker, normal[0])
                 self.assertNotIn(" in " + marker, simple[0])
                 self.assertEqual(normal[20], simple[20])
                 self.assertEqual(normal[21].bindings, simple[21].bindings)

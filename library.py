@@ -115,15 +115,32 @@ def get_record(record_id):
     raise KeyError(record_id)
 
 
+def _clean_additional_images(images):
+    if not isinstance(images, list):
+        raise ValueError("Additional images must be a list.")
+    result = []
+    seen = set()
+    for image in images:
+        filename = image.get("image_file") if isinstance(image, dict) else None
+        if not isinstance(filename, str) or not filename or Path(filename).name != filename:
+            raise ValueError("Invalid additional image file.")
+        if filename in seen:
+            raise ValueError("Duplicate additional image.")
+        seen.add(filename)
+        result.append({"image_file": filename, "description": str(image.get("description") or "").strip()})
+    return result
+
+
 def create_record(tag, category="other", image_description="", audio_description="",
                   image_file=None, audio_file=None, reference_type="uncategorized",
-                  video_description="", video_file=None, video_has_audio=False, refmod_settings=None):
+                  video_description="", video_file=None, video_has_audio=False, refmod_settings=None, additional_images=None, notes=""):
+    additional_images = _clean_additional_images(additional_images or [])
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
     text_voice = reference_type == "character" and bool((audio_description or "").strip())
     refmods = selection_fields(refmod_settings or {})
-    if image_file is None and audio_file is None and video_file is None and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"]):
+    if image_file is None and not additional_images and audio_file is None and video_file is None and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"]):
         raise ValueError(
             "A reference record needs media, or a Character needs a voice description.")
 
@@ -141,6 +158,8 @@ def create_record(tag, category="other", image_description="", audio_description
             "audio_description": (audio_description or "").strip(),
             "video_description": (video_description or "").strip(),
             "image_file": image_file,
+            "additional_images": additional_images,
+            "notes": str(notes or "").strip(),
             "audio_file": audio_file,
             "video_file": video_file,
             "video_has_audio": bool(video_file and video_has_audio),
@@ -155,7 +174,7 @@ def create_record(tag, category="other", image_description="", audio_description
 def update_record(record_id, tag, category="other", image_description="", audio_description="",
                   image_file=None, audio_file=None, remove_image=False, remove_audio=False,
                   reference_type="uncategorized", video_description="", video_file=None,
-                  video_has_audio=None, remove_video=False, refmod_settings=None):
+                  video_has_audio=None, remove_video=False, refmod_settings=None, additional_images=None, notes=None):
     tag = clean_tag(tag)
     category = clean_category(category)
     reference_type = clean_reference_type(reference_type)
@@ -169,6 +188,7 @@ def update_record(record_id, tag, category="other", image_description="", audio_
             for key in ("appearance_source", "voice_source", "appearance_refmod", "voice_refmod")}
         _require_unique_tag(manifest["records"], tag, record_id)
 
+        next_images = _clean_additional_images(additional_images) if additional_images is not None else record.get("additional_images", [])
         old_image = record.get("image_file")
         old_audio = record.get("audio_file")
         old_video = record.get("video_file")
@@ -176,7 +196,7 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         next_audio = audio_file if audio_file is not None else (None if remove_audio else old_audio)
         next_video = video_file if video_file is not None else (None if remove_video else old_video)
         text_voice = reference_type == "character" and bool((audio_description or "").strip())
-        if (next_image is None and next_audio is None and next_video is None
+        if (next_image is None and not next_images and next_audio is None and next_video is None
                 and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"])):
             raise ValueError(
                 "A reference record needs media, or a Character needs a voice description.")
@@ -196,6 +216,8 @@ def update_record(record_id, tag, category="other", image_description="", audio_
             "audio_description": (audio_description or "").strip(),
             "video_description": (video_description or "").strip(),
             "image_file": next_image,
+            "additional_images": next_images,
+            "notes": record.get("notes", "") if notes is None else str(notes).strip(),
             "audio_file": next_audio,
             "video_file": next_video,
             "video_has_audio": next_video_has_audio,

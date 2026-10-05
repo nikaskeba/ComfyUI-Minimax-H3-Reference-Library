@@ -574,6 +574,24 @@ class PromptResolutionTests(unittest.TestCase):
         self.assertNotEqual(node.IS_CHANGED(source, compiler_voice_isolation=True),
                             node.IS_CHANGED(source, compiler_voice_isolation=False))
 
+    def test_multiple_images_normal_and_deferred_paths(self):
+        from unittest.mock import patch
+        records = {"person": dict(reference_type="character", image_file="front.png", image_description="Front",
+                                  additional_images=[{"image_file":"side.png", "description":"Side"}], notes="PRIVATE")}
+        source = "subject_definitions:\n{person}\ndetailed_description:\n[Shot 1] {person} sits.\noverall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A"
+        with patch.object(MODULE, "records_by_tag", side_effect=lambda:dict(records)), \
+             patch.object(MODULE, "library_built_in_records", return_value={}), \
+             patch.object(MODULE, "media_path", side_effect=lambda r,k:r[k+"_file"]), \
+             patch.object(MODULE, "load_image", side_effect=lambda p:p):
+            for mode in ("legacy", "deterministic"):
+                normal = MODULE.H3TaggedReferencePrompt().build(source, compiler_mode=mode)
+                deferred = MODULE.H3TaggedReferencePrompt().build(source, compiler_mode=mode, defer_media_loading=True)
+                self.assertEqual(normal[2:4], ("front.png", "side.png"))
+                self.assertEqual([e["source_path"] for e in normal[20]["images"]], ["front.png", "side.png"])
+                self.assertEqual(normal[20]["images"], deferred[20]["images"])
+                self.assertIn("<Picture 2>", normal[0])
+                self.assertNotIn("PRIVATE", normal[0] + normal[1])
+
     def test_large_cast_loads_only_requested_voice_in_outputs_and_bundle(self):
         from unittest.mock import patch
         import json

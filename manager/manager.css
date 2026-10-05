@@ -295,3 +295,8 @@ a.manager-tab { display: inline-flex; align-items: center; justify-content: cent
 
 .selection-item { position: relative; padding-right: 38px; }
 .selection-remove { position: absolute; top: 0; right: 0; width: 28px; height: 28px; padding: 0; font-size: 20px; line-height: 1; }
+
+.additional-image-row { display: flex; gap: 12px; align-items: start; padding: 12px 0; border-bottom: 1px solid var(--border, #425158); }
+.additional-image-row img { width: 80px; height: 80px; object-fit: contain; }
+.additional-image-row label { flex: 1; min-width: 0; }
+.additional-image-row textarea { width: 100%; box-sizing: border-box; }

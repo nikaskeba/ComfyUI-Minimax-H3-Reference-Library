@@ -1,4 +1,4 @@
-import {bindLibrarySearch} from "/h3-references/static/library-search.js?v=1";
+import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "/h3-references/static/library-search.js?v=2";
 import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
 import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=3";
 let refmodSelectionRequest=0;
@@ -27,6 +27,7 @@ const elements = Object.fromEntries([
     "records", "record-dialog", "record-form", "dialog-title", "close-dialog", "cancel-dialog",
     "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
+    "reference-notes", "additional-images-panel", "additional-images-count", "additional-images-list", "additional-images-files",
     "image-fields", "audio-fields", "video-fields", "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
     "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "record-error", "save-record", "toast",
     "open-bulk-import", "bulk-import-dialog", "close-bulk-import", "import-progress", "import-progress-text", "built-in-top-search",
@@ -224,12 +225,11 @@ function groupByReferenceType(records) {
 }
 
 function renderCategoryFilter() {
-    const current = elements["category-filter"].value;
-    const categories = [...new Set(state.records.map((record) => record.category || "other"))]
+    const categories = [...new Set([...state.categories, ...state.records.map((record) => record.category || "other")])]
         .sort(compareCategories);
     const all = document.createElement("option");
     all.value = "";
-    all.textContent = "All categories";
+    all.textContent = "All collections";
     const options = categories.map((category) => {
         const option = document.createElement("option");
         option.value = category;
@@ -237,7 +237,7 @@ function renderCategoryFilter() {
         return option;
     });
     elements["category-filter"].replaceChildren(all, ...options);
-    elements["category-filter"].value = categories.includes(current) ? current : "";
+    restoreLibraryCollection(elements["category-filter"]);
 }
 
 function libraryCategories(extra = "") {
@@ -363,6 +363,7 @@ function recordCard(record) {
     const select = button(selected ? "Selected" : "Select", `select-reference${selected ? " selected" : ""}`, () => toggleSelection(record.id));
     const copyVoice = button("Copy voice", "secondary", () => copyVoiceTag(record));
     const edit = button("Edit", "secondary", () => openEditor(record));
+    if ((record.image_count || 0) > 1) actions.append(button(`${record.image_count} images`, "secondary", async () => { await openEditor(record); elements["additional-images-panel"].open = true; }));
     const remove = button("Delete", "danger", () => removeRecord(record));
     actions.append(select);
     if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) actions.append(copyVoice);
@@ -815,9 +816,40 @@ function clearDrafts() {
     renderDrafts();
 }
 
+let additionalImages = [];
+let imagePreviewURLs = [];
+function renderAdditionalImages() {
+    elements["additional-images-count"].textContent = `(${additionalImages.length})`;
+    elements["additional-images-list"].replaceChildren(...additionalImages.map((image, index) => {
+        const row = document.createElement("div"); row.className = "additional-image-row";
+        const preview = document.createElement("img"); preview.src = image.url; preview.alt = `Additional image ${index + 1}`;
+        const label = document.createElement("label"); label.textContent = `Additional image ${index + 1} description`;
+        const description = document.createElement("textarea"); description.rows = 3; description.value = image.description || "";
+        description.addEventListener("input", () => { image.description = description.value; });
+        label.append(description);
+        row.append(preview, label, button("Remove", "secondary", () => { additionalImages.splice(index, 1); renderAdditionalImages(); }));
+        return row;
+    }));
+}
+elements["additional-images-files"].addEventListener("change", event => {
+    for (const file of event.target.files) {
+        const url = URL.createObjectURL(file); imagePreviewURLs.push(url);
+        additionalImages.push({file, url, description: ""});
+    }
+    event.target.value = "";
+    elements["additional-images-panel"].open = true;
+    renderAdditionalImages();
+});
+
 async function openEditor(record = null) {
     try { state.categories = (await request("/api/h3-references/collections")).collections; } catch (error) { toast(error.message, true); return; }
     elements["record-form"].reset();
+    for (const url of imagePreviewURLs) URL.revokeObjectURL(url);
+    imagePreviewURLs = [];
+    additionalImages = (record?.additional_images || []).map(image => ({...image, url: `${image.url}?v=${encodeURIComponent(record.updated_at || "")}`}));
+    elements["additional-images-panel"].open = false;
+    elements["reference-notes"].value = record?.notes || "";
+    renderAdditionalImages();
     setUploadError(elements["record-error"]);
     elements["record-id"].value = record?.id || "";
     elements["dialog-title"].textContent = record ? "Edit reference" : "Add reference";
@@ -828,7 +860,7 @@ async function openEditor(record = null) {
     elements["image-description"].value = record?.image_description || "";
     elements["audio-description"].value = record?.audio_description || "";
     elements["video-description"].value = record?.video_description || "";
-    elements["remove-image-row"].hidden = !record?.has_image;
+    elements["remove-image-row"].hidden = !(record?.has_primary_image ?? record?.has_image);
     elements["remove-audio-row"].hidden = !record?.has_audio;
     elements["remove-video-row"].hidden = !record?.has_video;
     elements["record-dialog"].showModal();
@@ -881,7 +913,7 @@ async function saveRecord(event) {
         const existing = recordId
             && !elements[`remove-${kind}-row`].hidden
             && !elements[`remove-${kind}`].checked;
-        return Boolean(file || existing);
+        return Boolean(file || existing || (kind === "image" && additionalImages.length));
     });
     const textOnlyVoice = selectedReferenceType === "character"
         && Boolean(elements["audio-description"].value.trim());
@@ -891,6 +923,14 @@ async function saveRecord(event) {
             `${referenceTypeLabel(selectedReferenceType)} needs allowed media or a voice description.`);
     }
     const data = new FormData();
+    data.append("notes", elements["reference-notes"].value);
+    data.append("additional_images", JSON.stringify(permitted.includes("image") ? additionalImages.map((image, index) => {
+        if (image.file) {
+            const upload = `extra_image_${index}`; data.append(upload, image.file);
+            return {upload, description: image.description};
+        }
+        return {image_file: image.image_file, description: image.description};
+    }) : []));
     data.append("tag", tag);
     data.append("category", category);
     data.append("reference_type", selectedReferenceType);
@@ -1001,7 +1041,7 @@ function toast(message, isError = false) {
 }
 
 bindLibrarySearch(elements.search, renderRecords);
-elements["category-filter"].addEventListener("change", renderRecords);
+bindLibraryCollection(elements["category-filter"], renderRecords);
 elements["type-filter"].addEventListener("change", renderRecords);
 elements["media-filter"].addEventListener("change", renderRecords);
 elements.refresh.addEventListener("click", loadRecords);

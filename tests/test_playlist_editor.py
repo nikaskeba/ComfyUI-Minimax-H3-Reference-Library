@@ -225,6 +225,16 @@ class PlaylistEditorTests(unittest.TestCase):
         self.assertIn('[Shot 2] At 00:02.917',generated)
         self.assertEqual(spec['prompt'],prompt)
 
+    def test_timed_markers_include_hidden_head_without_changing_saved_prompt(self):
+        prompt='[s=3] detailed_description: [Shot 1: 0s] Enter. [Shot 2: 1.0s] Speak.'
+        spec={'prompt':prompt,'neighbors':{'previous':{'frames':22}},'generation_length':100}
+        generated=editor.generation_prompt(spec)
+        self.assertIn('[Shot 1: 0.917s]',generated)
+        self.assertIn('[Shot 2: 1.917s]',generated)
+        self.assertEqual(spec['prompt'],prompt)
+        spec['neighbors']={}
+        self.assertIn('[Shot 1: 0s]',editor.generation_prompt(spec))
+
     def test_template_rejects_loop_and_stale_revision(self):
         graph=template_graph();graph['5']={'class_type':'ForLoopOpen','inputs':{}};graph['2']['inputs']['loop']=['5',0]
         with self.assertRaises(ValueError):editor.register_template('Bad',graph)

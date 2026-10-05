@@ -1,0 +1,43 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {createRequire} from 'node:module';
+const {chromium}=createRequire(import.meta.url)('playwright');
+const browser=await chromium.launch({headless:true,channel:'chrome'});
+try {
+ const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const preview='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="blue"/></svg>');
+ let submitted='';
+ const record={id:'actor',tag:'Actor',category:'other',reference_type:'character',has_image:true,image_url:preview,image_count:2,image_description:'Front view',notes:'Private reminder',additional_images:[{image_file:'side.png',description:'Side view',url:preview}]};
+ await page.route('http://library.test/**',async route=>{
+  const url=new URL(route.request().url());const json=value=>route.fulfill({contentType:'application/json',body:JSON.stringify(value)});
+  if(url.pathname==='/api/h3-references/collections')return json({collections:['other']});
+  if(url.pathname==='/api/h3-references/records/actor'&&route.request().method()==='PUT'){submitted=route.request().postDataBuffer().toString();return json({record});}
+  if(url.pathname==='/api/h3-references/records')return json({records:[record],categories:['other']});
+  if(url.pathname==='/api/h3-built-in-references/records')return json({records:[]});
+  if(url.pathname==='/api/h3-refmods/records')return json([]);
+  const name=url.pathname==='/h3-references'?'index.html':url.pathname.split('/').pop();
+  try{return route.fulfill({contentType:name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':'text/html',body:await fs.readFile(new URL('../manager/'+name,import.meta.url))});}catch{return route.fulfill({status:404});}
+ });
+ await page.goto('http://library.test/h3-references');
+ await page.getByRole('button',{name:'2 images',exact:true}).click();
+ assert.equal(await page.locator('#additional-images-panel').evaluate(el=>el.open),true);
+ assert.equal(await page.locator('#reference-notes').inputValue(),'Private reminder');
+ await page.locator('#additional-images-list textarea').fill('Profile view with glasses');
+ await page.locator('#reference-notes').fill('Updated private reminder');
+ await page.locator('#additional-images-files').setInputFiles({name:'new.png',mimeType:'image/png',buffer:Buffer.from('fixture')});
+ assert.equal(await page.locator('.additional-image-row').count(),2);
+ await page.locator('.additional-image-row').last().getByRole('button',{name:'Remove'}).click();
+ assert.equal(await page.locator('.additional-image-row').count(),1);
+ await page.locator('#save-record').click();
+ await page.locator('#record-dialog').waitFor({state:'hidden'});
+ assert.match(submitted,/Profile view with glasses/);assert.match(submitted,/Updated private reminder/);assert.match(submitted,/side.png/);
+ await page.locator('#records .select-reference').click();
+ await page.getByRole('tab',{name:'Reference Creator',exact:true}).click();
+ assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
+ await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedGuide=text;}}}));
+ await page.locator('#copy-selection').click();assert.doesNotMatch(await page.evaluate(()=>window.copiedGuide),/Private reminder/);
+ await page.reload();
+ assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
+ assert.deepEqual(errors,[]);
+ console.log('Multiple image editor, descriptions, removal, save payload and private notes passed');
+}finally{await browser.close();}

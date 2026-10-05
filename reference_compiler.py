@@ -1,4 +1,5 @@
 """Deterministic, section-aware H3 reference compilation. No media loading."""
+from .reference_images import reference_images
 import json
 import re
 from dataclasses import dataclass, field
@@ -84,6 +85,7 @@ class Resource:
     owner: str | None = None
     subject: int | None = None
     picture: int | None = None
+    pictures: list = field(default_factory=list)
     audio_slot: int | None = None
     embedded_slot: int | None = None
     video_slot: int | None = None
@@ -253,7 +255,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         r = Resource(f"saved:{key}", key, "saved", kind,
             description=(record.get("image_description") or record.get("video_description") or record.get("description") or "").strip(),
             voice_description=(record.get("audio_description") or "").strip(),
-            name=(record.get("name") or key).strip(), image=bool(record.get("image_file")),
+            name=(record.get("name") or key).strip(), image=bool(reference_images(record)),
             audio=bool(record.get("audio_file")), video=bool(record.get("video_file")),
             embedded_audio=bool(record.get("video_file") and record.get("video_has_audio")),
             video_usage=record.get("video_usage", video_usage), audio_usage=record.get("audio_usage", audio_usage))
@@ -330,12 +332,13 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         r = resources[rid]
         if section != "subject_definitions" and (voice or r.type in ("music", "voice")):
             r.audio_used = bool(r.audio or r.embedded_audio)
-    # Allocate every stream after identifying speakers. Spoken subjects share their
-    # Speaker ID; their real images and audio follow the same first-speech order.
+    # Speaker IDs above come only from first dialogue occurrence, not asset slots.
+    # Allocate subjects/media afterward in first-speech order; missing voices and
+    # video soundtracks mean Audio N need not equal Subject N or SN.
     # Silent resources retain media priority and library/declaration tie-breakers.
     ordered = sorted(resources.values(), key=lambda r: (
         resources.get(r.owner, r).speaker or float("inf"), r.priority()))
-    images = [r for r in ordered if r.image]
+    images = [r for r in ordered if r.image for _ in reference_images(records.get(r.key, {}))]
     videos = [r for r in ordered if r.video]
     embedded = [r for r in videos if r.embedded_audio]
     subjects = [r for r in ordered if r.type in ENTITY_TYPES]
@@ -344,7 +347,10 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         if len(raw_values) > limit:
             fail("REFERENCE_LIMIT", f"{len(values)} {label}; supported maximum is {limit}.")
     for i, r in enumerate(subjects, 1): r.subject = i
-    for i, r in enumerate(images, 1): r.picture = i
+    for i, r in enumerate(images, 1):
+        r.pictures.append(i)
+        if r.picture is None:
+            r.picture = i
     for i, r in enumerate(videos, 1): r.video_slot = i
     # H3 emits enabled video soundtrack labels before standalone audio labels.
     for i, r in enumerate(embedded, 1): r.embedded_slot = i
@@ -403,9 +409,11 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                     return ""
                 audio_definitions.add(r.id)
                 speaker = f" (S{owner.speaker})" if owner.speaker else ""
-                isolation = (f" This vocal reference applies only to <Subject {owner.subject}>{speaker} and must not influence any other speaker's timbre, accent, cadence, pitch, or delivery."
-                             if voice_isolation else "")
+                voice_name = owner.name or owner.key
+                voice_name = re.sub(r"_(?:rm|BC)$", "", voice_name, flags=re.I).rsplit("/", 1)[-1].replace("_", " ")
+                isolation = f" <Audio {audio_slot}> applies exclusively to <Subject {owner.subject}>{speaker} and provides {voice_name}’s vocal timbre and delivery."
                 if r.audio_usage == "reuse":
+                    isolation = f" <Audio {audio_slot}> applies exclusively to <Subject {owner.subject}>{speaker}." if voice_isolation else ""
                     return f"<Audio {audio_slot}> is the source of the vocal audio reused for <Subject {owner.subject}>{speaker}." + isolation
                 return f"<Audio {audio_slot}> is the voice-timbre reference for <Subject {owner.subject}>{speaker}." + isolation
             if section == "summary":
@@ -434,13 +442,17 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                 else:
                     description = r.name
                     record = records.get(r.key, {})
-                    subject_only = refmod_subject_only and (
+                    subject_only = (
                         record.get("_refmod_image") or record.get("_refmod_video"))
                     if r.picture and not subject_only:
-                        description += f" in <Picture {r.picture}>"
+                        description += " in " + ", ".join(f"<Picture {number}>" for number in r.pictures)
                     elif r.video_slot and not subject_only:
                         description += f" in <Video {r.video_slot}>"
-                    if r.description:
+                    if len(r.pictures) > 1 or (r.picture and not record.get("image_file")):
+                        for number, attachment in zip(r.pictures, reference_images(record)):
+                            if attachment.get("description"):
+                                description += f". <Picture {number}>: {attachment['description'].rstrip('.')}"
+                    elif r.description:
                         description += ", " + r.description
                 return f"{subject} is {description.rstrip('.')}."
             if section == "detailed_description" and position in speaker_events:
@@ -515,12 +527,14 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         if r.type in ("video", "music", "voice") and r.id not in media_definitions and r.visual_used:
             line = render(r, "subject_definitions", False, 0)
             definition_blocks.append((float("inf"), 0, line))
-    # Keep complete authored blocks together; list subjects before media/audio.
+    # Keep each subject's complete authored block beside its voice definition.
     def definition_order(entry):
+        if entry[0] != float("inf"):
+            return (0, entry[0], entry[1])
         match = re.match(r"\s*<(Subject|Picture|Video|Audio) (\d+)>", entry[2])
         if match:
-            return ({"Subject": 0, "Picture": 1, "Video": 1, "Audio": 2}[match[1]], int(match[2]))
-        return (3, entry[0])
+            return (1, {"Subject": 0, "Picture": 1, "Video": 1, "Audio": 2}[match[1]], int(match[2]))
+        return (2, entry[0], 0)
 
     rendered["subject_definitions"] = "\n\n".join(
         block.strip() for block in [definition_prefix] + [
@@ -540,7 +554,16 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         opening = f"The target video is an edited version of {sources}."
         if not summary.startswith(opening):
             summary = opening + (" " + summary if summary else "")
-    rendered["summary"] = summary
+    if voice_isolation:
+        for r in voice_owners:
+            slot = r.audio_slot or r.embedded_slot
+            identity = f"<Subject {r.subject}> (S{r.speaker})"
+            binding = (f"<Audio {slot}> supplies vocal audio reused exclusively for {identity}."
+                       if r.audio_usage == "reuse" else
+                       f"<Audio {slot}> exclusively provides the voice-timbre reference for {identity}.")
+            if binding not in summary:
+                summary = (summary + " " + binding).strip()
+    rendered["summary"] = ("[" + " + ".join(task_list) + "] " + summary).strip() if task_list else summary
     if voice_isolation and len(voice_owners) >= 2:
         bindings = "; ".join(f"<Subject {r.subject}> = S{r.speaker} = <Audio {r.audio_slot or r.embedded_slot}>" for r in voice_owners)
         rendered["subject_definitions"] += ("\n\nVoice-identity binding is strict and exclusive throughout the target video: "
@@ -550,7 +573,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         retention = ""
     generated_voice_retention = []
     shot_detail = DIALOGUE.sub(lambda match: " " * len(match[0]), detail)
-    shot_spans = list(re.finditer(r"\[Shot\s+(\d+)\]", shot_detail))
+    shot_spans = list(re.finditer(r"\[Shot\s+(\d+)(?:\s*:\s*\d+(?:\.\d+)?s)?\]", shot_detail, re.I))
     for r in subjects:
         if not r.visual_used or re.search(rf"<Subject {r.subject}>(?:[^\n]*?):", retention):
             continue
@@ -578,10 +601,8 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         if r.audio_usage == "reuse":
             line = f"<Audio {slot}>: reuse - the supplied vocal signal is reused only for {identity}."
         else:
-            line = (f"<Audio {slot}>: reference - the dialogue of {identity} follows <Audio {slot}>'s "
-                    "referenced vocal timbre, pitch characteristics, resonance, accent, cadence, articulation, "
-                    "pacing, and natural delivery without directly copying the source audio signal. "
-                    f"<Audio {slot}> applies exclusively to {identity} and does not influence any other vocal source.")
+            line = (f"<Audio {slot}>: reference - its vocal timbre and delivery guide only the dialogue "
+                    f"produced by {identity}, without copying the original audio signal.")
         generated_voice_retention.append(line)
         retention += "\n\n" + line
     rendered["retention_analysis"] = _sort_retention_entries(retention.strip())
@@ -603,7 +624,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         "has_video": r.video, "has_visual_description": bool(r.description),
         "has_voice_description": bool(r.voice_description),
     } for r in ordered},
-        "pictures": {str(r.picture): r.id for r in images},
+        "pictures": {str(i): r.id for i, r in enumerate(images, 1)},
         "audio": {**{str(r.embedded_slot): r.id for r in embedded}, **{str(r.audio_slot): r.id for r in audios}},
         "video": {str(r.video_slot): r.id for r in videos},
         "speakers": {str(r.speaker): r.id for r in speakers}, "task_types": task_list, "warnings": warnings,

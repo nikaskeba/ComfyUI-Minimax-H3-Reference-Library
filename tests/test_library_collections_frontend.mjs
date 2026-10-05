@@ -10,8 +10,8 @@ try {
  let collection='',imageContext='Use the face and hairstyle.';
  await context.route('http://library.test/**',async route=>{
   const url=new URL(route.request().url());const json=value=>route.fulfill({contentType:'application/json',body:JSON.stringify(value)});
-  if(url.pathname==='/api/h3-references/collections')return json({collections:['scifi','sitcom']});
-  if(url.pathname==='/api/h3-references/records')return json({records:[{id:'normal',tag:'Narrator',category:'sitcom',reference_type:'character',audio_description:'A warm voice'}],categories:['scifi','sitcom']});
+  if(url.pathname==='/api/h3-references/collections')return json({collections:['scifi','sitcom','refmods_only']});
+  if(url.pathname==='/api/h3-references/records')return json({records:[{id:'normal',tag:'Narrator',category:'sitcom',reference_type:'character',audio_description:'A warm voice'}],categories:['scifi','sitcom','refmods_only']});
   if(url.pathname==='/api/h3-refmods/records')return json([{file:'library/actor.safetensors',member:0,kind:'image',name:'Ref Actor',appearance:'Dark jacket',collection:'sitcom'},{file:'library/actor.safetensors',member:1,kind:'audio',name:'Ref Actor',voice_description:'Deep voice'}]);
   if(url.pathname.endsWith('/image-context')){imageContext=route.request().postDataJSON().image_context;return json({image_context:imageContext});}
   if(url.pathname==='/voice.wav')return route.fulfill({status:204});
@@ -80,6 +80,25 @@ try {
  await page.locator('#clear-selection').click();await page.locator('#selection-empty').waitFor({state:'visible'});
  await mods.locator('#assets').getByRole('button',{name:'Select',exact:true}).waitFor();
  assert.deepEqual(await mods.evaluate(()=>['skeba-reference-selection','skeba-built-in-selection','skeba-refmod-selection'].map(key=>JSON.parse(localStorage.getItem(key)||'[]'))),[[],[],[]]);
+ // Collection selection follows tabs/windows and survives reload, even when a tab has no members.
+ await page.getByRole('tab',{name:'Reference Library',exact:true}).click();
+ assert.equal(await page.locator('#category-filter').inputValue(),'sitcom');
+ assert.equal(await mods.locator('#collection-filter').inputValue(),'sitcom');
+ assert.equal(await page.locator('#category-filter option[value="refmods_only"]').count(),1);
+ await mods.locator('#collection-filter').selectOption('scifi');
+ await page.waitForFunction(()=>document.getElementById('category-filter').value==='scifi');
+ assert.equal(await page.locator('#records .select-reference').count(),0);
+ await page.getByRole('tab',{name:'Built In Characters',exact:true}).click();
+ assert.equal(await page.getByRole('combobox',{name:'Collection',exact:true}).inputValue(),'scifi');
+ assert.equal(await page.locator('.built-in-row').count(),0);
+ await page.getByRole('combobox',{name:'Collection',exact:true}).selectOption('sitcom');
+ await mods.waitForFunction(()=>document.getElementById('collection-filter').value==='sitcom');
+ assert.equal(await mods.locator('.asset').count(),1);
+ await mods.reload();
+ await mods.locator('.asset').waitFor();
+ assert.equal(await mods.locator('#collection-filter').inputValue(),'sitcom');
+ await mods.locator('#collection-filter').selectOption('');
+ await page.waitForFunction(()=>document.getElementById('category-filter').value==='');
  // One query filters each library and follows navigation, reload and other windows.
  await page.getByRole('tab',{name:'Reference Library',exact:true}).click();
  await page.locator('#search').fill('Actor');assert.equal(await page.locator('#records .select-reference').count(),0);

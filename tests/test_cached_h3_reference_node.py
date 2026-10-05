@@ -119,6 +119,24 @@ class CachedNodeTests(unittest.TestCase):
         NODE_MODULE.h3._empty_av_latent = self.original_empty
         self.temporary.cleanup()
 
+    def test_same_record_multiple_images_use_distinct_cache_entries(self):
+        other = self.root / "side.png"; other.write_bytes(b"side image")
+        clip, vae = _Clip(self.qwen_model), _VAE(self.video_model)
+        entries = [{"record_id":"person", "tag":"person", "source_path":str(path)} for path in (self.image_source, other)]
+        args = dict(clip=clip, vae=vae, audio_vae=_VAE(self.audio_model, audio=True),
+                    prompt="<Subject 1> in <Picture 1>, <Picture 2>", width=32, height=32, length=5,
+                    reference_bundle={"images":entries})
+        with patch.object(NODE_MODULE, "_load_image_source", side_effect=lambda path:torch.full((1,32,32,3), 0.2 if path==str(self.image_source) else 0.8)) as loader:
+            first = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+            self.assertEqual(loader.call_count, 2)
+            self.assertEqual(vae.calls, 2)
+            self.assertEqual(len(first[0][0][1]["minimax_refs"]), 2)
+            second = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**args)
+            self.assertEqual(loader.call_count, 2)
+            self.assertEqual(vae.calls, 2)
+            self.assertEqual(len(clip.items), 2)
+            self.assertIn("HIT (lazy bundle)", second[2])
+
     def test_voice_crop_invalidates_both_audio_caches_and_restores_full_audio(self):
         audio_vae = _VAE(self.audio_model, audio=True)
         source = {"waveform": torch.arange(20*32000, dtype=torch.float32).repeat(1,2,1), "sample_rate": 32000}
