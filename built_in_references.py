@@ -42,6 +42,8 @@ def _read_attachment_manifest():
             raise RuntimeError("Built-in image-context manifest is invalid.")
         if not isinstance(manifest.get("audio", {}), dict):
             raise RuntimeError("Built-in audio manifest is invalid.")
+        if not isinstance(manifest.get("voice_descriptions", {}), dict):
+            raise RuntimeError("Built-in voice-description manifest is invalid.")
         manifest["version"] = 2
         manifest.setdefault("revision", 0)
         manifest.setdefault("image_contexts", {})
@@ -93,6 +95,17 @@ def set_built_in_audio(record, filename):
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
         _write_attachment_manifest(manifest)
         return previous
+
+
+def set_built_in_voice_description(record, description):
+    if not isinstance(description, str):
+        raise ValueError("Voice description must be text.")
+    with ATTACHMENT_LOCK:
+        manifest = _read_attachment_manifest()
+        manifest.setdefault("voice_descriptions", {})[library_built_in_tag_value(record)] = description.strip()
+        manifest["revision"] = int(manifest.get("revision", 0)) + 1
+        _write_attachment_manifest(manifest)
+    return description.strip()
 
 
 def remove_built_in_audio(record):
@@ -296,7 +309,7 @@ def library_built_in_records():
                 else _description(record)
             ),
             "image_context": image_contexts.get(tag, "") if attachments.get(tag) else "",
-            "audio_description": _voice_description(record),
+            "audio_description": manifest.get("voice_descriptions", {}).get(tag, _voice_description(record)),
             "image_file": attachments.get(tag),
             "audio_file": manifest.get("audio", {}).get(tag),
             "video_file": None,

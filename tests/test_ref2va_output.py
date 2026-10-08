@@ -5,6 +5,30 @@ from test_reference_compiler import compiler, character, prompt
 
 
 class Ref2VAOutputTests(unittest.TestCase):
+    def test_voice_characteristics_stay_with_the_assigned_audio_definition(self):
+        description = "distinctively raspy, gravelly, and nasal tone with a casual, deadpan edge"
+        records = {
+            "alf": dict(reference_type="character", name="ALF", image_file="alf.png", audio_file="alf.wav", audio_description=description),
+            "willy": dict(reference_type="character", name="Willy", image_file="willy.png", audio_file="willy.wav", audio_description=""),
+            "silent": dict(reference_type="character", image_file="silent.png", audio_file="silent.wav", audio_description="Silent character description"),
+        }
+        source = prompt("{alf} {willy} {silent}", "[Shot 1: 1s] {willy} says, <d>[English]Hello.</d> [Shot 2: 3s] {alf} says, <d>[English]Hi.</d>")
+        for order, number in [("first_speech", 2), ("library_order", 1)]:
+            for usage in ("reference", "reuse"):
+                for isolation in (True, False):
+                    result = compiler.compile_prompt(source, records, reference_order=order, audio_usage=usage, voice_isolation=isolation)
+                    definitions = result.prompt.split("summary:")[0]
+                    line = next(line for line in definitions.splitlines() if line.startswith(f"<Audio {number}> is"))
+                    self.assertIn(f"Voice characteristics: {description}.", line)
+                    self.assertEqual(result.prompt.count(description), 1)
+                    self.assertNotIn("Silent character description", result.prompt)
+                    self.assertEqual(result.debug["resources"]["saved:alf"]["speaker"], 2)
+        records["alf"]["audio_description"] = "Raspy delivery."
+        result = compiler.compile_prompt(source, records)
+        self.assertIn("Voice characteristics: Raspy delivery.", result.prompt)
+        self.assertNotIn("delivery..", result.prompt)
+
+
     def test_timed_shot_markers_preserve_speakers_and_retention(self):
         records = {"a": character("a.png", "a.wav"), "b": character("b.png", "b.wav")}
         detail = ("[Shot 1: 0s] {a} waits.\n[Shot 2: 1.0s] {b} says, <d>[English]Hello.</d>\n"

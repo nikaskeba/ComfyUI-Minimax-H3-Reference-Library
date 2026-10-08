@@ -9,7 +9,7 @@ app.registerExtension({
     name: "Skeba.CustomChoice",
     async beforeRegisterNodeDef(nodeType, nodeData) {
         if (nodeData.name !== "SkebaCustomChoice") return;
-        // UI-only combo; Python keeps STRING so choices remain per-instance.
+        // Also supports servers still advertising the older STRING definition.
         nodeData.input.required.selected = [parseChoices(nodeData.input.required.choices[1].default), {default: "22"}];
         const created = nodeType.prototype.onNodeCreated;
         nodeType.prototype.onNodeCreated = function (...args) {
@@ -20,12 +20,14 @@ app.registerExtension({
             choices.computeSize = () => [0, -4];
             if (choices.inputEl) choices.inputEl.hidden = true;
             const root = document.createElement("div");
-            root.style.cssText = "padding:8px;box-sizing:border-box;display:grid;gap:8px;color:var(--input-text,#eee);font:13px system-ui;background:var(--comfy-menu-bg,#222);height:100%;overflow:auto";
+            root.style.cssText = "padding:4px 8px;box-sizing:border-box;display:grid;align-content:start;gap:4px;color:var(--input-text,#eee);font:13px system-ui;background:var(--comfy-menu-bg,#222);height:100%;overflow:auto";
             selected.type = "combo";
             const edit = document.createElement("button"); edit.textContent = "Edit choices";
+            edit.style.cssText = "justify-self:start;padding:3px 8px";
             const panel = document.createElement("div"); panel.hidden = true;
             const hint = document.createElement("p"); hint.textContent = "One choice per line (or comma-separated). Values must match the target node exactly. Expose selected as a subgraph input to show these choices on the outer node.";
-            const input = document.createElement("textarea"); input.rows = 5; input.setAttribute("aria-label", "Custom choices");
+            hint.style.margin = "4px 0";
+            const input = document.createElement("textarea"); input.rows = 3; input.setAttribute("aria-label", "Custom choices");
             input.style.cssText = "width:100%;box-sizing:border-box;resize:vertical";
             const error = document.createElement("div"); error.setAttribute("role", "alert"); error.style.color = "#ff9292";
             const apply = document.createElement("button"); apply.textContent = "Apply choices";
@@ -62,9 +64,9 @@ app.registerExtension({
             cancel.onclick = close;
             for (const event of ["pointerdown", "keydown", "wheel"]) root.addEventListener(event, e => e.stopPropagation());
             panel.append(hint, input, error, apply, cancel); root.append(edit, panel);
-            this.addDOMWidget("choice_editor", "custom", root, {serialize: false, getMinHeight: () => 70});
+            this.addDOMWidget("choice_editor", "custom", root, {serialize: false, getMinHeight: () => 36});
             this.skebaChoiceRefresh = () => { close(); refresh(); };
-            this.setSize([330, 190]); this.resizable = true;
+            this.setSize([290, 150]); this.resizable = true;
             refresh();
             return result;
         };

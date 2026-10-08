@@ -26,12 +26,13 @@ try {
    uploads++;return json({file:uploads===3?"voice.wav":`photo${uploads}.png`,name:uploads===3?"voice.wav":`photo${uploads}.png`,kind:uploads===3?"audio":"image"});
   }
   if(url.pathname==="/prompt"){queued=route.request().postDataJSON();return json({prompt_id:"test-job"});}
+  if(url.pathname.startsWith("/history/") && queued.prompt["3"].class_type==="SkebaRefModVoiceDescription")return json({"test-job":{status:{status_str:"success"},outputs:{"3":{voice_description:[{description:"A textured voice.",seconds:10}]}}}});
   if(url.pathname.startsWith("/history/") && queued.prompt["3"].class_type==="SkebaRefModPreview")return json({"test-job":{status:{status_str:"success"},outputs:{"3":{refmod_preview:[{frames:[{filename:"one.png",type:"temp"},{filename:"two.png",type:"temp"}],audio:{filename:"voice.wav",type:"temp"}}]}}}});
   if(url.pathname==="/view")return route.fulfill({status:204});
   if(url.pathname.startsWith("/history/"))return json({"test-job":{status:{status_str:"success"},outputs:{"3":{text:["library/new_reference.safetensors"]}}}});
   if(url.pathname.startsWith("/api/h3-refmods/sources/"))return route.fulfill({status:204});
   const file=url.pathname==="/h3-refmods"?"refmods.html":url.pathname.split("/").pop();
-  if(!["refmods.html","refmods.css","refmods.js","refmod-catalog.js", "reference-guide.js","library-search.js","video-selector.js","manager.css"].includes(file))return route.fulfill({status:404});
+  if(!["voice-description.js","refmods.html","refmods.css","refmods.js","refmod-catalog.js", "reference-guide.js","library-search.js","video-selector.js","manager.css"].includes(file))return route.fulfill({status:404});
   const contentType=file.endsWith(".js")?"text/javascript":file.endsWith(".css")?"text/css":"text/html";
   return route.fulfill({contentType,body:await fs.readFile(new URL("../manager/"+file,import.meta.url))});
  });
@@ -71,6 +72,12 @@ try {
  assert.deepEqual(queued.prompt["3"].inputs.audio_vae,["2",0]);
  await page.locator("#show-library").click();
  await page.getByRole("button",{name:"Edit Actor appearance",exact:true}).click();
+ await page.getByRole("button",{name:"Generate voice description",exact:true}).click();
+ await page.waitForFunction(()=>document.getElementById('voice_description').value==='A textured voice.');
+ assert.equal(queued.prompt['3'].class_type,'SkebaRefModVoiceDescription');
+ assert.deepEqual(Object.keys(queued.prompt['3'].inputs).sort(),['audio_vae','spec']);
+ await page.getByRole("button",{name:"Undo",exact:true}).click();
+
  assert.equal(await page.evaluate(()=>Boolean(document.getElementById('stored-audio').compareDocumentPosition(document.getElementById('stored-frames'))&Node.DOCUMENT_POSITION_FOLLOWING)),true);
  await page.locator("#preview").click();
  await page.getByRole("status").filter({hasText:"previews are ready"}).waitFor();

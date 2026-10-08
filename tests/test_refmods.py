@@ -283,7 +283,7 @@ class RefModTests(unittest.TestCase):
         self.asset("silent_audio", "audio", seconds=3)
         prompt = ("subject_definitions:\n{speaker_rm}\n{silent_rm}\n"
                   "detailed_description:\n[Shot 1] {silent_rm} sits.\n"
-                  "[Shot 2] {speaker_rm} says, <d>[English]Hello.</d>\n"
+                  "[Shot 2: 1.0s] Only {speaker_rm}. He raises a hand and says, <d>[English]Hello.</d>\n"
                   "overall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A")
         with patch.object(builder, "records_by_tag", return_value={}), patch.object(builder, "library_built_in_records", return_value={}):
             implicit = builder.H3TaggedReferencePrompt().build(prompt, compiler_mode="deterministic")
@@ -313,6 +313,11 @@ class RefModTests(unittest.TestCase):
         compiler = importlib.import_module(PACKAGE + ".reference_compiler")
         self.assertEqual(compiler.inferred_saved_voice_tags(prompt), {"speaker"})
         self.assertEqual(compiler.inferred_saved_voice_tags(prompt.replace("[English]", "[English §other§]")), set())
+        separated = prompt.replace("{speaker} whispers,", "[Shot 1: 1.0s] Only {speaker}. He quietly whispers,")
+        projected = library.project_records(records, separated)
+        self.assertIn("_refmod_audio", projected["speaker"])
+        self.assertNotIn("_refmod_audio", projected["silent"])
+        self.assertEqual(compiler.compile_prompt(separated, projected).audios, ["speaker"])
 
     def test_subject_only_wording_preserves_media_and_voice_bindings(self):
         for kind, marker in (("video", "<Video 1>"), ("image", "<Picture 1>")):

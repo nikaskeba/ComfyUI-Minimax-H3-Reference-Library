@@ -1,3 +1,8 @@
+from .voice_description import describe_file
+from .voice_description_refmod import describe_refmod
+from .built_in_references import set_built_in_voice_description
+from .compiler_template_preview import preview_reference
+from .refmod_library import project_records
 from .reference_images import reference_images
 from .refmod_studio import source_root, source_path, SOURCE_EXTENSIONS, import_refmods, export_refmods
 from .refmod_library import preview_path as refmod_preview_path, read_meta as read_refmod_meta
@@ -33,6 +38,7 @@ from .library import (
     get_record,
     image_directory,
     list_records,
+    records_by_tag,
     media_path,
     remove_media,
     update_record,
@@ -339,14 +345,14 @@ def register_routes():
     @routes.get("/h3-references/static/{filename}")
     async def manager_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "reference-guide.js", "library-search.js", "video-selector.js"}:
+        if filename not in {"voice-description.js", "manager.css", "manager.js", "refmod-picker.js", "refmods.js", "refmods.css", "refmod-catalog.js", "reference-guide.js", "library-search.js", "video-selector.js"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 
     @routes.get("/h3-built-in-references/static/{filename}")
     async def built_in_asset(request):
         filename = request.match_info["filename"]
-        if filename not in {"built-ins.css", "built-ins.js", "built-in-cards.css"}:
+        if filename not in {"voice-description.js", "built-ins.css", "built-ins.js", "built-in-cards.css"}:
             raise web.HTTPNotFound()
         return web.FileResponse(WEB_DIRECTORY_PATH / filename)
 
@@ -355,6 +361,53 @@ def register_routes():
         names.update(record.get("collection", "") for record in library_built_in_records().values())
         names.update(row.get("collection", "") for row in refmod_catalog())
         return sorted(name for name in names if name)
+
+    @routes.post("/api/h3-references/voice-description")
+    async def voice_description(request):
+        try:
+            fields, files = await _read_multipart(request)
+            if "audio" in files:
+                result = await asyncio.to_thread(describe_file, files["audio"][1])
+            elif fields.get("kind") == "refmod":
+                result = await asyncio.to_thread(describe_refmod, json.loads(fields["spec"]))
+            else:
+                if fields.get("kind") == "builtin":
+                    record = _built_in_by_attachment_id(fields["id"])
+                    record = {"audio_file": built_in_audio_filename(record)}
+                elif fields.get("kind") == "library":
+                    record = get_record(fields["id"])
+                else:
+                    raise ValueError("Choose uploaded or saved voice audio.")
+                result = await asyncio.to_thread(describe_file, media_path(record, "audio"))
+            return web.json_response(result)
+        except (ValueError, KeyError, OSError, RuntimeError) as error:
+            return _error_response(error)
+
+    @routes.put("/api/h3-built-in-references/records/{attachment_id}/voice-description")
+    async def update_built_in_voice_description(request):
+        try:
+            record = _built_in_by_attachment_id(request.match_info["attachment_id"])
+            payload = await request.json()
+            description = set_built_in_voice_description(record, payload["description"])
+            return web.json_response({"audio_description": description})
+        except (ValueError, KeyError, OSError, RuntimeError) as error:
+            return _error_response(error)
+
+    @routes.post("/api/h3-references/compiler-template-preview")
+    async def compiler_template_preview(request):
+        try:
+            payload = await request.json()
+            if not isinstance(payload, dict) or not isinstance(payload.get("tag"), str) or not isinstance(payload.get("compiler_templates", ""), str):
+                raise ValueError("Provide a reference tag and template JSON string.")
+            def build():
+                records = records_by_tag()
+                records.update(library_built_in_records())
+                records = project_records(records, "{" + payload["tag"] + "}" + (" §" + payload["tag"] + "§" if payload.get("preview_voice") else ""))
+                return preview_reference(payload["tag"], records, payload.get("compiler_templates", ""),
+                                         payload.get("audio_usage", "reference"), payload.get("video_usage", "reference"))
+            return web.json_response(await asyncio.to_thread(build))
+        except (ValueError, KeyError, OSError) as error:
+            return web.json_response({"error": str(error)}, status=400)
 
     @routes.get("/api/h3-references/collections")
     async def get_collections(request):
@@ -397,6 +450,7 @@ def register_routes():
                         "library_tag": library_built_in_tag_value(record),
                         "attachment_id": built_in_attachment_id(record),
                         "has_audio": bool(attached_records[library_built_in_tag_value(record)].get("audio_file")),
+                        "audio_description": attached_records[library_built_in_tag_value(record)]["audio_description"],
                         "audio_url": (
                             f"/api/h3-built-in-references/records/{built_in_attachment_id(record)}/audio?v={image_revision}"
                             if attached_records[library_built_in_tag_value(record)].get("audio_file") else None

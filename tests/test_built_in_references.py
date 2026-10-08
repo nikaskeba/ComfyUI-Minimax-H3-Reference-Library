@@ -18,6 +18,17 @@ SPEC.loader.exec_module(MODULE)
 
 
 class BuiltInReferenceTests(unittest.TestCase):
+    def test_voice_description_override_persists(self):
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(MODULE, "_attachment_manifest_path", return_value=Path(directory)/"built-ins.json"):
+            record = MODULE.list_built_in_references()[0]
+            tag = MODULE.library_built_in_tag_value(record)
+            before = MODULE.library_built_in_records()[tag]
+            MODULE.set_built_in_voice_description(record, "A warm, textured voice.")
+            after = MODULE.library_built_in_records()[tag]
+            self.assertEqual(after["audio_description"], "A warm, textured voice.")
+            self.assertEqual(before["image_description"], after["image_description"])
+            self.assertEqual(before["audio_file"], after["audio_file"])
+
     def test_optional_collection_persists_without_changing_character(self):
         with tempfile.TemporaryDirectory() as directory, mock.patch.object(MODULE,"_attachment_manifest_path",return_value=Path(directory)/"built-ins.json"):
             record=MODULE.list_built_in_references()[0]

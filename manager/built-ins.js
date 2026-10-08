@@ -1,3 +1,4 @@
+import {voiceDescriptionControl, requestVoiceDescription} from "./voice-description.js";
 import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "/h3-references/static/library-search.js?v=2";
 let activePopout=null;
 const apiRoot = "/api/h3-built-in-references/records";
@@ -149,8 +150,15 @@ function editImage(record){
 function editVoice(record){
  const {body}=popout(record,"Voice reference");
  if(record.audio_url){const audio=document.createElement("audio");audio.controls=true;audio.preload="metadata";audio.src=record.audio_url;audio.setAttribute("aria-label",`${record.name} voice reference`);body.append(audio);}
- body.append(button(record.has_audio?"Replace voice clip":"Add voice clip",()=>chooseAudio(record)));
- if(record.has_audio)body.append(button("Remove voice clip",()=>removeAudio(record)));
+ body.append(button(record.has_audio?"Replace voice clip":"Add voice clip",()=>chooseAudio(record,()=>editVoice({...record,audio_description:input.value}))));
+ if(record.has_audio)body.append(button("Remove voice clip",()=>removeAudio(record,()=>editVoice({...record,audio_description:input.value}))));
+ const label=document.createElement("label"),input=document.createElement("textarea");label.textContent="Voice description";input.rows=3;input.value=record.audio_description||"";label.append(input);body.append(label);
+ const control=voiceDescriptionControl(input,()=>{
+  if(!record.has_audio)return null;
+  const form=new FormData();form.append("kind","builtin");form.append("id",record.attachment_id);
+  return {key:record.attachment_id+record.audio_url,run:()=>requestVoiceDescription(form)};
+ });body.append(control.element);
+ const save=button("Save voice description",async()=>{save.disabled=true;try{const result=await request(`${apiRoot}/${record.attachment_id}/voice-description`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({description:input.value})});record.audio_description=result.audio_description;await loadRecords();toast("Voice description saved.");}catch(error){toast(error.message,true);}finally{save.disabled=false;}});body.append(save);
  const tag=document.createElement("code");tag.textContent=voiceTag(record);body.append(tag);
 }
 function editCollection(record){
@@ -239,7 +247,7 @@ async function removeImage(record) {
     }
 }
 
-function chooseAudio(record) {
+function chooseAudio(record, onUpdated) {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "audio/*";
@@ -251,6 +259,8 @@ function chooseAudio(record) {
         try {
             await request(`${apiRoot}/${record.attachment_id}/audio`, { method: "PUT", body: form });
             await loadRecords();
+            Object.assign(record,state.records.find(row=>row.attachment_id===record.attachment_id));
+            onUpdated?.();
             toast(`Voice clip attached to ${record.name}.`);
         } catch (error) {
             toast(error.message, true);
@@ -259,11 +269,13 @@ function chooseAudio(record) {
     input.click();
 }
 
-async function removeAudio(record) {
+async function removeAudio(record, onUpdated) {
     if (!window.confirm(`Remove the optional reference audio for ${record.name}?`)) return;
     try {
         await request(`${apiRoot}/${record.attachment_id}/audio`, { method: "DELETE" });
         await loadRecords();
+        Object.assign(record,state.records.find(row=>row.attachment_id===record.attachment_id));
+        onUpdated?.();
         toast(`Voice clip removed from ${record.name}.`);
     } catch (error) {
         toast(error.message, true);

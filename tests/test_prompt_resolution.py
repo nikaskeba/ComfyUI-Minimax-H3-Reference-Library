@@ -661,6 +661,24 @@ class PromptResolutionTests(unittest.TestCase):
 
 
 class PromptListValidatorTests(unittest.TestCase):
+    def test_compiler_templates_connection_and_validation(self):
+        import json
+        from unittest.mock import patch
+        source = ("subject_definitions:\n{a}\ndetailed_description:\n"
+                  "{a} says, <d>[English]Hello.</d>\noverall_soundscape:\nQuiet.\nnon_diegetic_music:\nN/A")
+        settings = json.dumps({"version": 1, "templates": {"voice_reference": "[[audio]] belongs to [[subject]][[speaker]]."}})
+        records = {"a": dict(reference_type="character", name="A", audio_file="a.wav")}
+        with patch.object(MODULE, "records_by_tag", return_value=records), patch.object(MODULE, "library_built_in_records", return_value={}), patch.object(MODULE, "media_path", return_value="a.wav"):
+            validated = MODULE.H3PromptListValidator().validate_list(source, compiler_templates=settings)
+            output = MODULE.H3TaggedReferencePrompt().build(source, compiler_mode=validated[1], compiler_templates=settings, defer_media_loading=True)
+            self.assertIn("<Audio 1> belongs to <Subject 1> (S1).", output[0])
+            self.assertEqual(output[20]["audios"][0]["tag"], "a")
+            with self.assertRaisesRegex(ValueError, "COMPILER_TEMPLATE"):
+                MODULE.H3PromptListValidator().validate_list(source, compiler_templates="not JSON")
+            MODULE.H3TaggedReferencePrompt().build("Plain prompt", compiler_mode="legacy", compiler_templates="ignored", defer_media_loading=True)
+        self.assertNotEqual(MODULE.H3TaggedReferencePrompt.IS_CHANGED(source), MODULE.H3TaggedReferencePrompt.IS_CHANGED(source, compiler_templates=settings))
+
+
     def test_implicit_speaker_voice_reaches_bundle_and_crop_budget(self):
         from unittest.mock import patch
         records={name:dict(reference_type="character",name=name,audio_file=name+".wav") for name in ("Kramer","Jerry","Silent")}

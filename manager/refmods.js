@@ -1,3 +1,4 @@
+import {voiceDescriptionControl, requestVoiceDescription} from "./voice-description.js";
 import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "./library-search.js?v=2";
 import {openVideoEditor} from "./video-selector.js?v=7";
 import {groupCatalog,refmodTag} from "./refmod-catalog.js?v=3";
@@ -5,6 +6,7 @@ const $ = id => document.getElementById(id);
 const fields=["reference_type","collection","name","file","subject_name","appearance","voice_description","description","frames","mode","resolution","grid","steps","video_seconds","audio_seconds"];
 const selected=new Set(JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"));
 const numeric=new Set(["resolution","grid","steps","video_seconds","audio_seconds"]);
+let voiceControl;
 let sources=[],existing=null,companion=null,catalog=[],groups=[],folder="",uploading=0,busy=false,frameRows=[],storedVoice=null,keepVoice=true,previewData={frames:[],audio:null},baseline="";
 const status=(message,error=false)=>{$("status").textContent=message;$("status").className=error?"error":"";};
 async function request(url,options={}){const response=await fetch(url,options),text=await response.text();let result;try{result=JSON.parse(text);}catch{throw new Error(`${url} returned ${response.status} with a non-JSON response. Restart ComfyUI after updating the nodes, then refresh this page.`);}if(!response.ok)throw new Error(typeof result.error==="string"?result.error:JSON.stringify(result));return result;}
@@ -15,7 +17,7 @@ function button(label,action){const el=document.createElement("button");el.type=
 function values(){return Object.fromEntries(fields.map(id=>[id,numeric.has(id)?Number($(id).value):$(id).value]));}
 function spec(){const data=values();const stem=data.name.trim().replace(/[<>:"/\\|?*\x00-\x1f]/g,"_").replace(/[. ]+$/g,"")||"reference";const folder=existing?.file.includes("/")?existing.file.slice(0,existing.file.lastIndexOf("/")+1):"library/";data.file=existing&&!$("overwrite").checked?existing.file:folder+stem+($("overwrite").checked?"_copy":"")+".safetensors";return {...data,video_frames:Math.max(1,Math.floor(data.video_seconds*24)),appearance_action:"append",audio_action:storedVoice&&keepVoice?"append":sources.some(s=>s.kind==="audio"||(s.kind==="video"&&s.include_audio))?"replace":"remove",keep_voice:keepVoice,limit_total_voice:true,sources,existing,companion,overwrite:Boolean(existing)&&!$("overwrite").checked,retrain:$("retrain").checked,frame_order:existing?frameRows.filter(row=>row.keep).map(row=>row.index):null};}
 function snapshot(){return JSON.stringify(spec());}
-function remember(){localStorage.setItem("skeba-refmod-draft",JSON.stringify({...spec(),frameRows,storedVoice,previewData}));summary();}
+function remember(){voiceControl?.refresh();localStorage.setItem("skeba-refmod-draft",JSON.stringify({...spec(),frameRows,storedVoice,previewData}));summary();}
 function summary(){const kept=frameRows.filter(row=>row.keep).length;$("edit-summary").textContent=`${kept} kept frames · ${sources.length} new sources${storedVoice&&keepVoice?" · stored voice":""}`;const unchanged=existing&&baseline===snapshot();$("save").disabled=busy||uploading>0||Boolean(unchanged);$("save").textContent=unchanged?"No changes":existing&&!sources.length&&!$("retrain").checked?"Save changes":"Train / Encode & Save";}
 function showView(editor){$("cancel-edit").hidden=!existing;$("library-view").hidden=editor;$("edit-view").hidden=!editor;$("show-library").classList.toggle("active",!editor);$("show-editor").classList.toggle("active",editor);}
 function modeChanged(){document.querySelectorAll(".compressed").forEach(el=>el.hidden=$("mode").value!=="training");$("retrain-row").hidden=!existing||!frameRows.length||$("mode").value!=="training";if($("retrain-row").hidden)$("retrain").checked=false;}
@@ -128,3 +130,31 @@ async function exportGroup(group){
 }
 
 window.addEventListener("storage",event=>{if(event.key!=="skeba-refmod-selection"&&event.key!==null)return;selected.clear();for(const key of JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"))selected.add(key);renderCatalog();});
+
+voiceControl=voiceDescriptionControl($("voice_description"),()=>{
+ if(busy||uploading||$("edit-view").hidden)return null;
+ const data=spec();const stored=Boolean(storedVoice&&keepVoice);
+ if(!stored&&!sources.some(source=>source.kind==="audio"||(source.kind==="video"&&source.include_audio)))return null;
+ const key=JSON.stringify({existing,companion,keepVoice,sources,seconds:data.audio_seconds});
+ return {key,run:async report=>{
+  if(!stored){const form=new FormData();form.append("kind","refmod");form.append("spec",JSON.stringify(data));return requestVoiceDescription(form);}
+  const graph=await workflowModels(["audio_vae"]);
+  const prompt={...graph.prompt,"3":{class_type:"SkebaRefModVoiceDescription",inputs:{spec:JSON.stringify(data),...graph.inputs}}};
+  const queued=await request("/prompt",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+  report("Queued voice decoding and analysis…");
+  while(true){
+   await new Promise(resolve=>setTimeout(resolve,1500));
+   const history=await request(`/history/${queued.prompt_id}`),run=history[queued.prompt_id];
+   if(run){
+    if(run.status?.status_str!=="success")throw Error(run.status?.messages?.find(([type])=>type==="execution_error")?.[1]?.exception_message||"Voice analysis was interrupted or failed.");
+    const result=run.outputs?.["3"]?.voice_description?.[0];if(!result)throw Error("Voice analysis returned no description.");return result;
+   }
+   const queue=await request("/queue");
+   if(![...(queue.queue_running||[]),...(queue.queue_pending||[])].some(row=>row[1]===queued.prompt_id))throw Error("Voice analysis was canceled or the server restarted. Try again.");
+   report((queue.queue_running||[]).some(row=>row[1]===queued.prompt_id)?"Decoding and analyzing stored voice…":"Waiting in ComfyUI queue…");
+  }
+ }};
+});
+$("voice_description").parentElement.append(voiceControl.element);
+$("editor").addEventListener("change",()=>voiceControl.refresh());
+new MutationObserver(()=>voiceControl.invalidate()).observe($("edit-view"),{attributes:true,attributeFilter:["hidden"]});

@@ -1,0 +1,4323 @@
+{
+  "id": "ab1302a5-c572-4697-8c3e-ab25beb6339e",
+  "revision": 0,
+  "last_node_id": 185,
+  "last_link_id": 422,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadVideo",
+      "pos": [
+        -2687.9467576685993,
+        -74.63335377287174
+      ],
+      "size": [
+        300,
+        242.75
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            390
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "LoadVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4",
+        "image"
+      ],
+      "widgets_values_named": {
+        "file": "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4",
+        "upload": "image"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "GetVideoComponents",
+      "pos": [
+        -2140,
+        -40
+      ],
+      "size": [
+        290,
+        110
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 391
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            2
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            3
+          ]
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": [
+            384
+          ]
+        },
+        {
+          "name": "bit_depth",
+          "type": "COMBO",
+          "links": null
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "GetVideoComponents",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "MiniMaxH3TrimSourceAV",
+      "pos": [
+        -1790,
+        -40
+      ],
+      "size": [
+        360,
+        150
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "frames",
+          "type": "IMAGE",
+          "link": 2
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "trimmed_frames",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        },
+        {
+          "name": "trimmed_audio",
+          "type": "AUDIO",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "h3_length",
+          "type": "INT",
+          "links": [
+            406
+          ]
+        },
+        {
+          "name": "trim_info",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "MiniMaxH3TrimSourceAV",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "ImageScale",
+      "pos": [
+        -1270.4798444394157,
+        -380.06987510787366
+      ],
+      "size": [
+        310,
+        150
+      ],
+      "flags": {},
+      "order": 20,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 387
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 388
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8,
+            9,
+            385
+          ]
+        }
+      ],
+      "title": "Resize/crop exact H3 canvas",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "ImageScale",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "lanczos",
+        1344,
+        768,
+        "center"
+      ],
+      "widgets_values_named": {
+        "upscale_method": "lanczos",
+        "width": 1344,
+        "height": 768,
+        "crop": "center"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "MiniMaxH3MaskGridPreview",
+      "pos": [
+        -980,
+        140
+      ],
+      "size": [
+        370,
+        300
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 9
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 393
+        }
+      ],
+      "outputs": [
+        {
+          "name": "snapped_mask",
+          "type": "MASK",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "grid_preview",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "grid_info",
+          "type": "STRING",
+          "links": [
+            38
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "MiniMaxH3MaskGridPreview",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "runtime exact (latent max)",
+        1,
+        1,
+        true,
+        true
+      ],
+      "widgets_values_named": {
+        "cell_selection": "runtime exact (latent max)",
+        "cell_adjust": 1,
+        "overlay_opacity": 1,
+        "show_grid": true,
+        "show_source_outline": true
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [
+        -426.03602905949333,
+        128.61309984233407
+      ],
+      "size": [
+        380,
+        330
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Verify generated 32×32 cells",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "PreviewImage",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "VAELoader",
+      "pos": [
+        -2500,
+        830
+      ],
+      "size": [
+        590,
+        70
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            13,
+            33,
+            382,
+            408
+          ]
+        }
+      ],
+      "title": "MiniMax H3 video VAE",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_video_vae_fp16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors",
+            "directory": "vae"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "minimax_h3_video_vae_int8_convrot.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "VAELoader",
+      "pos": [
+        -2500,
+        950
+      ],
+      "size": [
+        590,
+        70
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            14,
+            34,
+            383,
+            410
+          ]
+        }
+      ],
+      "title": "MiniMax H3 audio VAE",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "minimax_h3_audio_vae_fp32.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors",
+            "directory": "vae"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "minimax_h3_audio_vae_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "minimax_h3_audio_vae_fp32.safetensors"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "VAEEncode",
+      "pos": [
+        -980,
+        -120
+      ],
+      "size": [
+        250,
+        70
+      ],
+      "flags": {},
+      "order": 23,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pixels",
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 13
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "title": "Encode source video",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAEEncode",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": "VAEEncodeAudio",
+      "pos": [
+        -980,
+        -20
+      ],
+      "size": [
+        250,
+        70
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 5
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 14
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "title": "Encode source audio",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAEEncodeAudio",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "LTXVConcatAVLatent",
+      "pos": [
+        -650,
+        -80
+      ],
+      "size": [
+        290,
+        90
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "link": 15
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            17
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "LTXVConcatAVLatent",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "MiniMaxH3SetGenerationMask",
+      "pos": [
+        -300,
+        -80
+      ],
+      "size": [
+        340,
+        180
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 17
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "masked_av_latent",
+          "type": "LATENT",
+          "links": [
+            420
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "MiniMaxH3SetGenerationMask",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "white = generate",
+        "generate audio"
+      ],
+      "widgets_values_named": {
+        "mask_meaning": "white = generate",
+        "audio_mode": "generate audio"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": "UNETLoader",
+      "pos": [
+        -2547.2815371926868,
+        1162.9564476706425
+      ],
+      "size": [
+        590,
+        90
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "title": "MiniMax H3 model",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+            "directory": "diffusion_models"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+        "weight_dtype": "default"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": "MiniMaxH3SigmaShift",
+      "pos": [
+        -1791.714487725372,
+        1097.5834766417997
+      ],
+      "size": [
+        300,
+        120
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            380
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "MiniMaxH3SigmaShift",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        12,
+        3
+      ],
+      "widgets_values_named": {
+        "shift_video": 12,
+        "shift_audio": 3
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "MiniMaxH3PerRowMaskPatch",
+      "pos": [
+        -1262.9700330777227,
+        1395.4470940611275
+      ],
+      "size": [
+        360.5806640625,
+        90
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 381
+        }
+      ],
+      "outputs": [
+        {
+          "name": "patched_model",
+          "type": "MODEL",
+          "links": [
+            21,
+            22
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "MiniMaxH3PerRowMaskPatch",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": "CLIPLoader",
+      "pos": [
+        -2500,
+        1390
+      ],
+      "size": [
+        590,
+        120
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            407
+          ]
+        }
+      ],
+      "title": "MiniMax H3 text encoder",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "directory": "text_encoders"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "minimax",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+        "type": "minimax",
+        "device": "default"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": "BasicGuider",
+      "pos": [
+        -466.02221714234537,
+        1075.8835677768268
+      ],
+      "size": [
+        300,
+        80
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 22
+        },
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 409
+        }
+      ],
+      "outputs": [
+        {
+          "name": "GUIDER",
+          "type": "GUIDER",
+          "links": [
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "BasicGuider",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "BasicScheduler",
+      "pos": [
+        -500,
+        1240
+      ],
+      "size": [
+        300,
+        140
+      ],
+      "flags": {},
+      "order": 22,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 21
+        }
+      ],
+      "outputs": [
+        {
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            27
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "BasicScheduler",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "simple",
+        8,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 8,
+        "denoise": 1
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 22,
+      "type": "KSamplerSelect",
+      "pos": [
+        -500,
+        1420
+      ],
+      "size": [
+        300,
+        80
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "KSamplerSelect",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "res_multistep"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "res_multistep"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": "RandomNoise",
+      "pos": [
+        -500,
+        1540
+      ],
+      "size": [
+        300,
+        90
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "NOISE",
+          "type": "NOISE",
+          "links": [
+            29
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "RandomNoise",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        468472389579870,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "noise_seed": 468472389579870,
+        "control_after_generate": "randomize"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 24,
+      "type": "SamplerCustomAdvanced",
+      "pos": [
+        -100,
+        1190
+      ],
+      "size": [
+        330,
+        326
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "noise",
+          "type": "NOISE",
+          "link": 29
+        },
+        {
+          "name": "guider",
+          "type": "GUIDER",
+          "link": 26
+        },
+        {
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 28
+        },
+        {
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 27
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 421
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            30
+          ]
+        },
+        {
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "SamplerCustomAdvanced",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 25,
+      "type": "LTXVSeparateAVLatent",
+      "pos": [
+        300,
+        1190
+      ],
+      "size": [
+        300,
+        90
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "av_latent",
+          "type": "LATENT",
+          "link": 30
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_latent",
+          "type": "LATENT",
+          "links": [
+            31
+          ]
+        },
+        {
+          "name": "audio_latent",
+          "type": "LATENT",
+          "links": [
+            32
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "LTXVSeparateAVLatent",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 26,
+      "type": "VAEDecode",
+      "pos": [
+        670,
+        1110
+      ],
+      "size": [
+        250,
+        70
+      ],
+      "flags": {},
+      "order": 39,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 31
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 33
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            35
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAEDecode",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 27,
+      "type": "VAEDecodeAudio",
+      "pos": [
+        670,
+        1240
+      ],
+      "size": [
+        250,
+        70
+      ],
+      "flags": {},
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 32
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 34
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            36
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "VAEDecodeAudio",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 28,
+      "type": "CreateVideo",
+      "pos": [
+        990,
+        1140
+      ],
+      "size": [
+        280,
+        150
+      ],
+      "flags": {},
+      "order": 41,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 35
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 36
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": 384
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            37
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "CreateVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        24,
+        8,
+        "sRGB",
+        "none"
+      ],
+      "widgets_values_named": {
+        "fps": 24,
+        "bit_depth": 8,
+        "color_space": "sRGB",
+        "codec": "none"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 29,
+      "type": "SaveVideo",
+      "pos": [
+        1340,
+        1120
+      ],
+      "size": [
+        520,
+        395.14285714285717
+      ],
+      "flags": {},
+      "order": 42,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 37
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "SaveVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "video/MiniMax_H3_Inpaint",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/MiniMax_H3_Inpaint",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 30,
+      "type": "MarkdownNote",
+      "pos": [
+        -2500,
+        -650
+      ],
+      "size": [
+        900,
+        500
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "How to use this workflow",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "## MiniMax H3 per-row video inpainting\n\n1. Upload a **24 fps** source video containing an audio track.\n2. Upload or paint a mask image. **White regenerates; black preserves.** One mask image is broadcast across the full video.\n3. Edit the H3 prompt to describe the intended replacement inside the mask.\n4. Queue the workflow.\n\nThe **Trim Source AV** node drops trailing frames to the largest valid `17k+5` length and trims audio to the same 24 fps duration. Its `h3_length` output controls H3 conditioning.\n\nThe resized source frames feed all three spatial branches: video VAE encoding, the 32×32 grid preview, and any optional tracking. Replace the static Load Image mask connection with **SAM3 Track to Mask** for a moving temporal mask.\n\nThe source video is the main latent and must not also be connected as an H3 reference video. Use the MiniMax H3 video VAE for frames and the MiniMax H3 audio VAE for audio."
+      ],
+      "widgets_values_named": {
+        "text": "## MiniMax H3 per-row video inpainting\n\n1. Upload a **24 fps** source video containing an audio track.\n2. Upload or paint a mask image. **White regenerates; black preserves.** One mask image is broadcast across the full video.\n3. Edit the H3 prompt to describe the intended replacement inside the mask.\n4. Queue the workflow.\n\nThe **Trim Source AV** node drops trailing frames to the largest valid `17k+5` length and trims audio to the same 24 fps duration. Its `h3_length` output controls H3 conditioning.\n\nThe resized source frames feed all three spatial branches: video VAE encoding, the 32×32 grid preview, and any optional tracking. Replace the static Load Image mask connection with **SAM3 Track to Mask** for a moving temporal mask.\n\nThe source video is the main latent and must not also be connected as an H3 reference video. Use the MiniMax H3 video VAE for frames and the MiniMax H3 audio VAE for audio."
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 31,
+      "type": "PreviewAny",
+      "pos": [
+        -540,
+        500
+      ],
+      "size": [
+        380,
+        122
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 38
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "H3 grid report",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "PreviewAny",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [],
+      "widgets_values_named": {},
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 164,
+      "type": "CheckpointLoaderSimple",
+      "pos": [
+        -2587.8754113513723,
+        249.51200556387263
+      ],
+      "size": [
+        330,
+        160
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            370
+          ]
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            360
+          ]
+        },
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.19.3",
+        "Node name for S&R": "CheckpointLoaderSimple",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "models": [
+          {
+            "name": "sam3.1_multiplex_fp16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/sam3.1/resolve/main/checkpoints/sam3.1_multiplex_fp16.safetensors",
+            "directory": "checkpoints"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "sam3.1_multiplex_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "ckpt_name": "sam3.1_multiplex_fp16.safetensors"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 165,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -2223.037351562059,
+        360.90511852888244
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 360
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            371
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.19.3",
+        "Node name for S&R": "CLIPTextEncode",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "the face of the man in the suit. the hair of the man in the suit."
+      ],
+      "widgets_values_named": {
+        "text": "the face of the man in the suit. the hair of the man in the suit."
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 167,
+      "type": "SAM3_Detect",
+      "pos": [
+        -1791.5328482017046,
+        352.6560448052813
+      ],
+      "size": [
+        270,
+        290
+      ],
+      "flags": {},
+      "order": 24,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 370
+        },
+        {
+          "label": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 385
+        },
+        {
+          "label": "conditioning",
+          "name": "conditioning",
+          "shape": 7,
+          "type": "CONDITIONING",
+          "link": 371
+        },
+        {
+          "label": "bboxes",
+          "name": "bboxes",
+          "shape": 7,
+          "type": "BOUNDING_BOX",
+          "link": null
+        },
+        {
+          "label": "positive_coords",
+          "name": "positive_coords",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "label": "negative_coords",
+          "name": "negative_coords",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "masks",
+          "type": "MASK",
+          "links": [
+            399
+          ]
+        },
+        {
+          "name": "bboxes",
+          "type": "BOUNDING_BOX",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.19.3",
+        "Node name for S&R": "SAM3_Detect",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        0.51,
+        1,
+        false
+      ],
+      "widgets_values_named": {
+        "threshold": 0.51,
+        "refine_iterations": 1,
+        "individual_masks": false
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 173,
+      "type": "ResolutionSelector",
+      "pos": [
+        -1872.5677403774173,
+        -369.75259547353636
+      ],
+      "size": [
+        446.02369704963166,
+        189.61657632454353
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            387,
+            404
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            388,
+            405
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.30.2",
+        "Node name for S&R": "ResolutionSelector",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#346434",
+        "__skeba_bgcolor_base": "rgba(24,24,27,.9)"
+      },
+      "widgets_values": [
+        "16:9 (Widescreen)",
+        0.3,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "16:9 (Widescreen)",
+        "megapixels": 0.3,
+        "multiple": 32
+      },
+      "color": "#346434",
+      "bgcolor": "rgba(24,24,27,.9)",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 174,
+      "type": "ModelPreviewOverrideKJ",
+      "pos": [
+        -2217.0276156782247,
+        1626.871452007192
+      ],
+      "size": [
+        885.1204056493307,
+        720.0290784013564
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 380
+        },
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 382
+        },
+        {
+          "name": "audio_vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 383
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            381
+          ]
+        }
+      ],
+      "title": "Generation Progress Preview For Current Scene",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui-kjnodes",
+        "ver": "d40331fc90608257bce1af743263bb74b14c1dce",
+        "Node name for S&R": "ModelPreviewOverrideKJ",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#322",
+        "__skeba_bgcolor_base": "#533",
+        "kjPovPanelH": 140
+      },
+      "widgets_values": [
+        2600,
+        80,
+        true,
+        10,
+        1,
+        "taeh3.safetensors",
+        ""
+      ],
+      "widgets_values_named": {
+        "max_resolution": 2600,
+        "jpeg_quality": 80,
+        "suppress_default_preview": true,
+        "preview_frames": 10,
+        "preview_fps": 1,
+        "tiny_vae": "taeh3.safetensors",
+        "preview": ""
+      },
+      "color": "#322",
+      "bgcolor": "#533",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 176,
+      "type": "Video Slice",
+      "pos": [
+        -2377.7024263745107,
+        -21.67039760892865
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 390
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            391
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "Video Slice",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        0,
+        10,
+        false
+      ],
+      "widgets_values_named": {
+        "start_time": 0,
+        "duration": 10,
+        "strict_duration": false
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 177,
+      "type": "InvertMask",
+      "pos": [
+        -1223.6715827534165,
+        413.5201745906354
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 4,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 398
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            393
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "InvertMask",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 178,
+      "type": "Mask To Image (mtb)",
+      "pos": [
+        -1209.6848873455428,
+        289.6456419347062
+      ],
+      "size": [
+        210,
+        106
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 27,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 397
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            395
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "Mask To Image (mtb)",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "#ffffff",
+        "#000000",
+        false
+      ],
+      "widgets_values_named": {
+        "color": "#ffffff",
+        "background": "#000000",
+        "invert": false
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 179,
+      "type": "FirstFrameSelector",
+      "pos": [
+        -1062.1946087711194,
+        519.99300203518
+      ],
+      "size": [
+        172.886328125,
+        26
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 395
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            396
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "FirstFrameSelector",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 180,
+      "type": "PreviewImage",
+      "pos": [
+        -836.3625840272164,
+        505.80303466699183
+      ],
+      "size": [
+        140,
+        246.00000000000006
+      ],
+      "flags": {},
+      "order": 31,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 396
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "PreviewImage",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 181,
+      "type": "GrowMaskWithBlur",
+      "pos": [
+        -1490.4571844754366,
+        522.2291700968847
+      ],
+      "size": [
+        299.84375,
+        246
+      ],
+      "flags": {},
+      "order": 26,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "link": 399
+        }
+      ],
+      "outputs": [
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            397,
+            398
+          ]
+        },
+        {
+          "name": "mask_inverted",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "GrowMaskWithBlur",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        3,
+        0,
+        true,
+        false,
+        2,
+        1,
+        1,
+        true
+      ],
+      "widgets_values_named": {
+        "expand": 3,
+        "incremental_expandrate": 0,
+        "tapered_corners": true,
+        "flip_input": false,
+        "blur_radius": 2,
+        "lerp_alpha": 1,
+        "decay_factor": 1,
+        "fill_holes": true
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 182,
+      "type": "H3TaggedReferencePrompt",
+      "pos": [
+        -1688.1018476658473,
+        942.4564124617492
+      ],
+      "size": [
+        400,
+        826
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "compiler_templates",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "compiler_templates"
+          },
+          "link": 419
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            411,
+            418
+          ]
+        },
+        {
+          "name": "mapping",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "image_1",
+          "type": "IMAGE",
+          "links": [
+            400
+          ]
+        },
+        {
+          "name": "image_2",
+          "type": "IMAGE",
+          "links": [
+            412
+          ]
+        },
+        {
+          "name": "image_3",
+          "type": "IMAGE",
+          "links": [
+            413
+          ]
+        },
+        {
+          "name": "image_4",
+          "type": "IMAGE",
+          "links": [
+            414
+          ]
+        },
+        {
+          "name": "image_5",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_6",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_7",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_8",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_9",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "audio_1",
+          "type": "AUDIO",
+          "links": [
+            415
+          ]
+        },
+        {
+          "name": "audio_2",
+          "type": "AUDIO",
+          "links": [
+            416
+          ]
+        },
+        {
+          "name": "audio_3",
+          "type": "AUDIO",
+          "links": [
+            417
+          ]
+        },
+        {
+          "name": "video_1",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "video_2",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "video_3",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "video_audio_1",
+          "type": "AUDIO",
+          "links": []
+        },
+        {
+          "name": "video_audio_2",
+          "type": "AUDIO",
+          "links": []
+        },
+        {
+          "name": "video_audio_3",
+          "type": "AUDIO",
+          "links": []
+        },
+        {
+          "name": "reference_bundle",
+          "type": "SKEBA_H3_REFERENCE_BUNDLE",
+          "links": [
+            422
+          ]
+        },
+        {
+          "name": "mods",
+          "type": "H3_REF_MODS",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "befd4adce7fceca39770a5f68b4168b2b2469858",
+        "Node name for S&R": "H3TaggedReferencePrompt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "[s=10]\n\nsubject_definitions:\n\n{doc_brown} Wardrobe: his established referenced outfit and appearance.\n\nsummary:\n\n[reference generation] The target video shows {doc_brown} urgently reacting to his situation. {doc_brown} delivers a single line before continuing his frantic physical reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Medium shot of only {doc_brown}. He looks around urgently, visibly alarmed and trying to determine what to do next. No dialogue.\n\n[Shot 2: 1.5s] The camera makes a quick subtle push toward {doc_brown}. His eyes widen as he suddenly throws his hands outward and says with frantic urgency, <d>[English]I need to get back to 1985!</d>\n\n[Shot 3: 4.5s] {doc_brown} completely finishes speaking. He hurriedly turns, looks around for a way out, and begins moving with frantic determination. The camera loosely tracks his movement.\n\n[Shot 4: 7.2s] {doc_brown} abruptly stops and looks off-camera as though he has spotted what he needs. He points toward it, then quickly rushes out of frame.\n\n[Shot 5: 9.2s] The camera holds briefly on the now-empty space where {doc_brown} had been standing. No dialogue.\n\n{doc_brown} is the only speaking character. His dialogue is spoken in the established voice of §doc_brown§. No other voices or dialogue are audible.\n\noverall_soundscape:\n\nNatural environmental ambience underneath {doc_brown}'s voice, with subtle movement and clothing sounds as he turns and rushes away.\n\nnon_diegetic_music:\n\nA brief tense, energetic cinematic orchestral underscore builds beneath the scene and rises slightly as {doc_brown} rushes out of frame.",
+        24,
+        1536,
+        true,
+        "legacy",
+        "continuation",
+        "reference",
+        false,
+        true,
+        false,
+        "first_speech",
+        "",
+        null
+      ],
+      "widgets_values_named": {
+        "prompt_template": "[s=10]\n\nsubject_definitions:\n\n{doc_brown} Wardrobe: his established referenced outfit and appearance.\n\nsummary:\n\n[reference generation] The target video shows {doc_brown} urgently reacting to his situation. {doc_brown} delivers a single line before continuing his frantic physical reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Medium shot of only {doc_brown}. He looks around urgently, visibly alarmed and trying to determine what to do next. No dialogue.\n\n[Shot 2: 1.5s] The camera makes a quick subtle push toward {doc_brown}. His eyes widen as he suddenly throws his hands outward and says with frantic urgency, <d>[English]I need to get back to 1985!</d>\n\n[Shot 3: 4.5s] {doc_brown} completely finishes speaking. He hurriedly turns, looks around for a way out, and begins moving with frantic determination. The camera loosely tracks his movement.\n\n[Shot 4: 7.2s] {doc_brown} abruptly stops and looks off-camera as though he has spotted what he needs. He points toward it, then quickly rushes out of frame.\n\n[Shot 5: 9.2s] The camera holds briefly on the now-empty space where {doc_brown} had been standing. No dialogue.\n\n{doc_brown} is the only speaking character. His dialogue is spoken in the established voice of §doc_brown§. No other voices or dialogue are audible.\n\noverall_soundscape:\n\nNatural environmental ambience underneath {doc_brown}'s voice, with subtle movement and clothing sounds as he turns and rushes away.\n\nnon_diegetic_music:\n\nA brief tense, energetic cinematic orchestral underscore builds beneath the scene and rises slightly as {doc_brown} rushes out of frame.",
+        "video_fps": 24,
+        "video_max_side": 1536,
+        "defer_media_loading": true,
+        "compiler_mode": "legacy",
+        "compiler_video_usage": "continuation",
+        "compiler_audio_usage": "reference",
+        "compiler_voice_isolation": false,
+        "auto_crop_voice_references": true,
+        "refmod_subject_only": false,
+        "compiler_reference_order": "first_speech",
+        "compiler_templates": "",
+        "Open Reference Library": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 183,
+      "type": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+      "pos": [
+        -776.6665710629918,
+        1043.6683105003538
+      ],
+      "size": [
+        477.75,
+        588
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 407
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 408
+        },
+        {
+          "name": "audio_vae",
+          "type": "VAE",
+          "link": 410
+        },
+        {
+          "name": "target_latent",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 420
+        },
+        {
+          "name": "first_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "last_frame",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_image_0",
+          "name": "ref_images.ref_image_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 400
+        },
+        {
+          "name": "ref_images.ref_image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 412
+        },
+        {
+          "label": "ref_video_0",
+          "name": "ref_videos.ref_video_0",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "label": "ref_video_audio_0",
+          "name": "ref_video_audios.ref_video_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "ref_video_audios.ref_video_audio_1",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "label": "ref_audio_0",
+          "name": "ref_audios.ref_audio_0",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 415
+        },
+        {
+          "name": "ref_audios.ref_audio_1",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 416
+        },
+        {
+          "name": "ref_audios.ref_audio_2",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 417
+        },
+        {
+          "name": "reference_bundle",
+          "shape": 7,
+          "type": "SKEBA_H3_REFERENCE_BUNDLE",
+          "link": 422
+        },
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 411
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 404
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 405
+        },
+        {
+          "name": "length",
+          "type": "INT",
+          "widget": {
+            "name": "length"
+          },
+          "link": 406
+        },
+        {
+          "name": "ref_images.ref_image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 413
+        },
+        {
+          "name": "ref_images.ref_image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 414
+        },
+        {
+          "name": "ref_images.ref_image_4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "ref_video_audios.ref_video_audio_2",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            409
+          ]
+        },
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            421
+          ]
+        },
+        {
+          "name": "cache_status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "BASE PASS - Cached References + First/Last",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "0a3db87cd477761a1d2887f0f5c980afc642e4c4",
+        "Node name for S&R": "SkebaCachedMiniMaxH3ReferenceFirstLast",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "",
+        1344,
+        768,
+        124,
+        "match",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "prompt": "",
+        "width": 1344,
+        "height": 768,
+        "length": 124,
+        "ref_image_size": "match",
+        "cache_mode": "auto"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 184,
+      "type": "DisplayText",
+      "pos": [
+        -1238.368603138906,
+        866.067924338938
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 418
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "kikotools",
+        "ver": "1.0.28",
+        "Node name for S&R": "DisplayText",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "[s=10]\n\nsubject_definitions:\n\n<Picture 1> Wardrobe: his established referenced outfit and appearance.\n\nsummary:\n\n[reference generation] The target video shows <Picture 1> urgently reacting to his situation. <Picture 1> delivers a single line before continuing his frantic physical reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Medium shot of only <Picture 1>. He looks around urgently, visibly alarmed and trying to determine what to do next. No dialogue.\n\n[Shot 2: 1.5s] The camera makes a quick subtle push toward <Picture 1>. His eyes widen as he suddenly throws his hands outward and says with frantic urgency, <d>[English]I need to get back to 1985!</d>\n\n[Shot 3: 4.5s] <Picture 1> completely finishes speaking. He hurriedly turns, looks around for a way out, and begins moving with frantic determination. The camera loosely tracks his movement.\n\n[Shot 4: 7.2s] <Picture 1> abruptly stops and looks off-camera as though he has spotted what he needs. He points toward it, then quickly rushes out of frame.\n\n[Shot 5: 9.2s] The camera holds briefly on the now-empty space where <Picture 1> had been standing. No dialogue.\n\n<Picture 1> is the only speaking character. His dialogue is spoken in the established voice of <Audio 1>. No other voices or dialogue are audible.\n\noverall_soundscape:\n\nNatural environmental ambience underneath <Picture 1>'s voice, with subtle movement and clothing sounds as he turns and rushes away.\n\nnon_diegetic_music:\n\nA brief tense, energetic cinematic orchestral underscore builds beneath the scene and rises slightly as <Picture 1> rushes out of frame.",
+        null
+      ],
+      "widgets_values_named": {
+        "text_display": "[s=10]\n\nsubject_definitions:\n\n<Picture 1> Wardrobe: his established referenced outfit and appearance.\n\nsummary:\n\n[reference generation] The target video shows <Picture 1> urgently reacting to his situation. <Picture 1> delivers a single line before continuing his frantic physical reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Medium shot of only <Picture 1>. He looks around urgently, visibly alarmed and trying to determine what to do next. No dialogue.\n\n[Shot 2: 1.5s] The camera makes a quick subtle push toward <Picture 1>. His eyes widen as he suddenly throws his hands outward and says with frantic urgency, <d>[English]I need to get back to 1985!</d>\n\n[Shot 3: 4.5s] <Picture 1> completely finishes speaking. He hurriedly turns, looks around for a way out, and begins moving with frantic determination. The camera loosely tracks his movement.\n\n[Shot 4: 7.2s] <Picture 1> abruptly stops and looks off-camera as though he has spotted what he needs. He points toward it, then quickly rushes out of frame.\n\n[Shot 5: 9.2s] The camera holds briefly on the now-empty space where <Picture 1> had been standing. No dialogue.\n\n<Picture 1> is the only speaking character. His dialogue is spoken in the established voice of <Audio 1>. No other voices or dialogue are audible.\n\noverall_soundscape:\n\nNatural environmental ambience underneath <Picture 1>'s voice, with subtle movement and clothing sounds as he turns and rushes away.\n\nnon_diegetic_music:\n\nA brief tense, energetic cinematic orchestral underscore builds beneath the scene and rises slightly as <Picture 1> rushes out of frame.",
+        "copy_text": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 185,
+      "type": "SkebaH3CompilerTemplates",
+      "pos": [
+        -2828.6496663731637,
+        1337.6342306873123
+      ],
+      "size": [
+        560,
+        650
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "compiler_templates",
+          "type": "STRING",
+          "links": [
+            419
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "4bc6ac44924f8a617f7ffc7dfa49c824db2bd763",
+        "Node name for S&R": "SkebaH3CompilerTemplates",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "[[subject]] is [[description]].",
+        " in [[media]]",
+        ", [[description]]",
+        ". [[picture]]: [[description]]",
+        "[[video]] is a whole-video reference.[[description]]",
+        "[[video]] is a camera-motion and temporal-structure reference.[[description]]",
+        "[[video]] is the source video whose ending is continued.[[description]]",
+        "[[video]] is the source video for the target video edit.[[description]]",
+        "[[audio]] is the synchronized audio track of [[video]] and is referenced without copying the original signal.",
+        "[[audio]] is the synchronized audio track of [[video]] and is reused in the target video.",
+        "[[audio]] is the [[role]] reference referenced without copying the original signal.[[description]]",
+        "[[audio]] is the [[role]] reference reused in the target video.[[description]]",
+        "[[audio]] is the voice-timbre reference for [[subject]][[speaker]].",
+        "[[audio]] is the source of the vocal audio reused for [[subject]][[speaker]].",
+        " [[audio]] applies exclusively to [[subject]][[speaker]] and provides [[name]]’s vocal timbre and delivery.",
+        " [[audio]] applies exclusively to [[subject]][[speaker]].",
+        " Voice characteristics: [[voice_description]]",
+        ", using the voice identity referenced exclusively from [[audio]],",
+        ", using vocal audio directly reused from [[audio]],",
+        "the recognizable voice timbre referenced from [[audio]]",
+        "vocal audio directly reused from [[audio]]",
+        "using [[phrase]]",
+        "in [[description]]",
+        "Voice-identity binding is strict and exclusive throughout the target video: [[bindings]]. These mappings never swap, merge, transfer, or influence one another.",
+        "The target video is an edited version of [[sources]].",
+        "[[audio]] exclusively provides the voice-timbre reference for [[identity]].",
+        "[[audio]] supplies vocal audio reused exclusively for [[identity]].",
+        "[[task_prefix]] ",
+        " (appears in [[shots]])",
+        "[[subject]][[appearances]]: fully_preserved - the referenced identity, appearance, wardrobe, and defining visual characteristics are retained.",
+        "[[audio]]: reference - its vocal timbre and delivery guide only the dialogue produced by [[identity]], without copying the original audio signal.",
+        "[[audio]]: reuse - the supplied vocal signal is reused only for [[identity]].",
+        ""
+      ],
+      "widgets_values_named": {
+        "subject_definition": "[[subject]] is [[description]].",
+        "subject_media": " in [[media]]",
+        "subject_description": ", [[description]]",
+        "picture_description": ". [[picture]]: [[description]]",
+        "video_reference": "[[video]] is a whole-video reference.[[description]]",
+        "video_motion_reference": "[[video]] is a camera-motion and temporal-structure reference.[[description]]",
+        "video_continuation": "[[video]] is the source video whose ending is continued.[[description]]",
+        "video_editing": "[[video]] is the source video for the target video edit.[[description]]",
+        "soundtrack_reference": "[[audio]] is the synchronized audio track of [[video]] and is referenced without copying the original signal.",
+        "soundtrack_reuse": "[[audio]] is the synchronized audio track of [[video]] and is reused in the target video.",
+        "media_audio_reference": "[[audio]] is the [[role]] reference referenced without copying the original signal.[[description]]",
+        "media_audio_reuse": "[[audio]] is the [[role]] reference reused in the target video.[[description]]",
+        "voice_reference": "[[audio]] is the voice-timbre reference for [[subject]][[speaker]].",
+        "voice_reuse": "[[audio]] is the source of the vocal audio reused for [[subject]][[speaker]].",
+        "voice_exclusive_reference": " [[audio]] applies exclusively to [[subject]][[speaker]] and provides [[name]]’s vocal timbre and delivery.",
+        "voice_exclusive_reuse": " [[audio]] applies exclusively to [[subject]][[speaker]].",
+        "voice_characteristics": " Voice characteristics: [[voice_description]]",
+        "dialogue_binding_reference": ", using the voice identity referenced exclusively from [[audio]],",
+        "dialogue_binding_reuse": ", using vocal audio directly reused from [[audio]],",
+        "voice_cue_reference": "the recognizable voice timbre referenced from [[audio]]",
+        "voice_cue_reuse": "vocal audio directly reused from [[audio]]",
+        "voice_cue_introduction": "using [[phrase]]",
+        "text_voice_introduction": "in [[description]]",
+        "global_binding": "Voice-identity binding is strict and exclusive throughout the target video: [[bindings]]. These mappings never swap, merge, transfer, or influence one another.",
+        "summary_editing": "The target video is an edited version of [[sources]].",
+        "summary_voice_reference": "[[audio]] exclusively provides the voice-timbre reference for [[identity]].",
+        "summary_voice_reuse": "[[audio]] supplies vocal audio reused exclusively for [[identity]].",
+        "summary_task_prefix": "[[task_prefix]] ",
+        "retention_appearances": " (appears in [[shots]])",
+        "retention_subject": "[[subject]][[appearances]]: fully_preserved - the referenced identity, appearance, wardrobe, and defining visual characteristics are retained.",
+        "retention_voice_reference": "[[audio]]: reference - its vocal timbre and delivery guide only the dialogue produced by [[identity]], without copying the original audio signal.",
+        "retention_voice_reuse": "[[audio]]: reuse - the supplied vocal signal is reused only for [[identity]].",
+        "template_editor": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      2,
+      2,
+      0,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      2,
+      1,
+      3,
+      1,
+      "AUDIO"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      3,
+      1,
+      12,
+      0,
+      "AUDIO"
+    ],
+    [
+      8,
+      5,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      5,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      7,
+      0,
+      14,
+      1,
+      "MASK"
+    ],
+    [
+      12,
+      7,
+      1,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      9,
+      0,
+      11,
+      1,
+      "VAE"
+    ],
+    [
+      14,
+      10,
+      0,
+      12,
+      1,
+      "VAE"
+    ],
+    [
+      15,
+      11,
+      0,
+      13,
+      0,
+      "LATENT"
+    ],
+    [
+      16,
+      12,
+      0,
+      13,
+      1,
+      "LATENT"
+    ],
+    [
+      17,
+      13,
+      0,
+      14,
+      0,
+      "LATENT"
+    ],
+    [
+      19,
+      15,
+      0,
+      16,
+      0,
+      "MODEL"
+    ],
+    [
+      21,
+      17,
+      0,
+      21,
+      0,
+      "MODEL"
+    ],
+    [
+      22,
+      17,
+      0,
+      20,
+      0,
+      "MODEL"
+    ],
+    [
+      26,
+      20,
+      0,
+      24,
+      1,
+      "GUIDER"
+    ],
+    [
+      27,
+      21,
+      0,
+      24,
+      3,
+      "SIGMAS"
+    ],
+    [
+      28,
+      22,
+      0,
+      24,
+      2,
+      "SAMPLER"
+    ],
+    [
+      29,
+      23,
+      0,
+      24,
+      0,
+      "NOISE"
+    ],
+    [
+      30,
+      24,
+      0,
+      25,
+      0,
+      "LATENT"
+    ],
+    [
+      31,
+      25,
+      0,
+      26,
+      0,
+      "LATENT"
+    ],
+    [
+      32,
+      25,
+      1,
+      27,
+      0,
+      "LATENT"
+    ],
+    [
+      33,
+      9,
+      0,
+      26,
+      1,
+      "VAE"
+    ],
+    [
+      34,
+      10,
+      0,
+      27,
+      1,
+      "VAE"
+    ],
+    [
+      35,
+      26,
+      0,
+      28,
+      0,
+      "IMAGE"
+    ],
+    [
+      36,
+      27,
+      0,
+      28,
+      1,
+      "AUDIO"
+    ],
+    [
+      38,
+      7,
+      2,
+      31,
+      0,
+      "STRING"
+    ],
+    [
+      360,
+      164,
+      1,
+      165,
+      0,
+      "CLIP"
+    ],
+    [
+      370,
+      164,
+      0,
+      167,
+      0,
+      "MODEL"
+    ],
+    [
+      371,
+      165,
+      0,
+      167,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      380,
+      16,
+      0,
+      174,
+      0,
+      "MODEL"
+    ],
+    [
+      381,
+      174,
+      0,
+      17,
+      0,
+      "MODEL"
+    ],
+    [
+      382,
+      9,
+      0,
+      174,
+      1,
+      "VAE"
+    ],
+    [
+      383,
+      10,
+      0,
+      174,
+      2,
+      "VAE"
+    ],
+    [
+      384,
+      2,
+      2,
+      28,
+      2,
+      "FLOAT"
+    ],
+    [
+      385,
+      5,
+      0,
+      167,
+      1,
+      "IMAGE"
+    ],
+    [
+      387,
+      173,
+      0,
+      5,
+      1,
+      "INT"
+    ],
+    [
+      388,
+      173,
+      1,
+      5,
+      2,
+      "INT"
+    ],
+    [
+      390,
+      1,
+      0,
+      176,
+      0,
+      "VIDEO"
+    ],
+    [
+      391,
+      176,
+      0,
+      2,
+      0,
+      "VIDEO"
+    ],
+    [
+      393,
+      177,
+      0,
+      7,
+      1,
+      "MASK"
+    ],
+    [
+      395,
+      178,
+      0,
+      179,
+      0,
+      "IMAGE"
+    ],
+    [
+      396,
+      179,
+      0,
+      180,
+      0,
+      "IMAGE"
+    ],
+    [
+      397,
+      181,
+      0,
+      178,
+      0,
+      "MASK"
+    ],
+    [
+      398,
+      181,
+      0,
+      177,
+      0,
+      "MASK"
+    ],
+    [
+      399,
+      167,
+      0,
+      181,
+      0,
+      "MASK"
+    ],
+    [
+      409,
+      183,
+      0,
+      20,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      418,
+      182,
+      0,
+      184,
+      0,
+      "STRING"
+    ],
+    [
+      419,
+      185,
+      0,
+      182,
+      0,
+      "STRING"
+    ],
+    [
+      421,
+      183,
+      1,
+      24,
+      4,
+      "LATENT"
+    ],
+    [
+      37,
+      28,
+      0,
+      29,
+      0,
+      "VIDEO"
+    ],
+    [
+      407,
+      18,
+      0,
+      183,
+      0,
+      "CLIP"
+    ],
+    [
+      408,
+      9,
+      0,
+      183,
+      1,
+      "VAE"
+    ],
+    [
+      410,
+      10,
+      0,
+      183,
+      2,
+      "VAE"
+    ],
+    [
+      420,
+      14,
+      0,
+      183,
+      3,
+      "LATENT"
+    ],
+    [
+      400,
+      182,
+      2,
+      183,
+      6,
+      "IMAGE"
+    ],
+    [
+      412,
+      182,
+      3,
+      183,
+      7,
+      "IMAGE"
+    ],
+    [
+      415,
+      182,
+      11,
+      183,
+      11,
+      "AUDIO"
+    ],
+    [
+      416,
+      182,
+      12,
+      183,
+      12,
+      "AUDIO"
+    ],
+    [
+      417,
+      182,
+      13,
+      183,
+      13,
+      "AUDIO"
+    ],
+    [
+      411,
+      182,
+      0,
+      183,
+      15,
+      "STRING"
+    ],
+    [
+      404,
+      173,
+      0,
+      183,
+      16,
+      "INT"
+    ],
+    [
+      405,
+      173,
+      1,
+      183,
+      17,
+      "INT"
+    ],
+    [
+      406,
+      3,
+      2,
+      183,
+      18,
+      "INT"
+    ],
+    [
+      413,
+      182,
+      4,
+      183,
+      19,
+      "IMAGE"
+    ],
+    [
+      414,
+      182,
+      5,
+      183,
+      20,
+      "IMAGE"
+    ],
+    [
+      422,
+      182,
+      20,
+      183,
+      14,
+      "SKEBA_H3_REFERENCE_BUNDLE"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1. Source video, valid H3 length, and generation mask",
+      "bounding": [
+        -2550,
+        -170,
+        2500,
+        850
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2. MiniMax H3 models",
+      "bounding": [
+        -2550,
+        740,
+        1500,
+        900
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3. Prompt conditioning",
+      "bounding": [
+        -1080,
+        950,
+        940,
+        700
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4. Per-row masked sampling",
+      "bounding": [
+        -560,
+        1030,
+        850,
+        700
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5. Decode source-preserving result",
+      "bounding": [
+        250,
+        1030,
+        1660,
+        600
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "frontendVersion": "1.53.10",
+    "ds": {
+      "scale": 0.45,
+      "offset": [
+        4075.9223605431466,
+        -865.1595004973642
+      ]
+    },
+    "ue_links": [],
+    "anomalous_hashes": {
+      "9_minimax_h3_video_vae_int8_convrot.safetensors": {
+        "hash": "",
+        "size": 3171670912
+      },
+      "10_minimax_h3_audio_vae_fp32.safetensors": {
+        "hash": "",
+        "size": 605254808
+      },
+      "15_minimax_h3_fl2va_pruned_int8_convrot.safetensors": {
+        "hash": "",
+        "size": 20970379616
+      },
+      "164_sam3.1_multiplex_fp16.safetensors": {
+        "hash": "",
+        "size": 1745546848
+      }
+    },
+    "links_added_by_ue": [],
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

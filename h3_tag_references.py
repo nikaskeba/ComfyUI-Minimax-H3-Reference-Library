@@ -1,3 +1,4 @@
+from .compiler_templates import CompilerTemplates
 from .reference_images import reference_images
 from .refmod_library import project_records, revision as refmod_revision
 from .refmod_support import build_mods
@@ -320,6 +321,12 @@ class H3TaggedReferencePrompt:
                     "default": False,
                     "tooltip": "Also omit RefMod audio-slot instructions from compiled prose. Leave off for explicit voice binding. RefMod visual-source labels are already omitted. Keeps Subject/Speaker IDs and latent injection; ordinary reference bindings remain.",
                 }),
+                "compiler_reference_order": (["first_speech", "library_order"], {
+                    "default": "first_speech",
+                    "tooltip": "Deterministic mode: first_speech keeps current behavior. library_order disables speaker-first subject/media sorting, using media priority and library/declaration order. Speaker S IDs still follow first dialogue. Slots can change when used references or active voices change.",
+                }),
+                "compiler_templates": ("STRING", {"default": "", "multiline": True,
+                    "tooltip": "Optional versioned JSON from SKEBA H3 Compiler Templates or a script. Blank uses default generated wording. Deterministic mode only."}),
             },
         }
 
@@ -349,18 +356,18 @@ class H3TaggedReferencePrompt:
                    video_max_side=DEFAULT_VIDEO_MAX_SIDE,
                    defer_media_loading=False, compiler_mode="legacy",
                    compiler_video_usage="reference", compiler_audio_usage="reference",
-                   compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False):
+                   compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False, compiler_reference_order="first_speech", compiler_templates=""):
         return (f"{library_revision()}:{catalog_revision()}:{built_in_images_revision()}:"
                 f"{prompt_template}:{video_fps}:"
                 f"{video_max_side}:{defer_media_loading}:{compiler_mode}:{refmod_revision()}:"
                 f"{compiler_video_usage}:{compiler_audio_usage}:{compiler_voice_isolation}:"
-                f"{auto_crop_voice_references}:{refmod_subject_only}")
+                f"{auto_crop_voice_references}:{refmod_subject_only}:{compiler_reference_order}:{compiler_templates}")
 
     def build(self, prompt_template, video_fps=DEFAULT_VIDEO_FPS,
               video_max_side=DEFAULT_VIDEO_MAX_SIDE,
               defer_media_loading=False, compiler_mode="legacy",
               compiler_video_usage="reference", compiler_audio_usage="reference",
-              compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False):
+              compiler_voice_isolation=True, auto_crop_voice_references=True, refmod_subject_only=False, compiler_reference_order="first_speech", compiler_templates=""):
         records = records_by_tag()
         records.update(library_built_in_records())
         records = project_records(records, prompt_template or "")
@@ -369,7 +376,8 @@ class H3TaggedReferencePrompt:
                 prompt_template or "", records, video_usage=compiler_video_usage,
                 audio_usage=compiler_audio_usage, max_images=MAX_IMAGES,
                 max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS,
-                voice_isolation=compiler_voice_isolation, refmod_subject_only=refmod_subject_only)
+                voice_isolation=compiler_voice_isolation, refmod_subject_only=refmod_subject_only,
+                reference_order=compiler_reference_order, compiler_templates=compiler_templates)
             compiled.debug["refmod_subject_only"] = bool(refmod_subject_only)
             prompt, mapping = compiled.prompt, compiled.mapping
             image_tags, audio_tags, video_tags = compiled.images, compiled.audios, compiled.videos
@@ -539,7 +547,7 @@ class H3PromptListValidator:
                 "skip_empty": ("BOOLEAN", {"default": True}),
             },
             "optional": {name: compiler_options[name] for name in (
-                "compiler_video_usage", "compiler_audio_usage", "compiler_voice_isolation")},
+                "compiler_video_usage", "compiler_audio_usage", "compiler_voice_isolation", "compiler_reference_order", "compiler_templates")},
         }
 
     RETURN_TYPES = ("STRING", ["legacy", "deterministic"], "BOOLEAN", "STRING")
@@ -556,9 +564,10 @@ class H3PromptListValidator:
 
     def validate_list(self, text, validation_enabled=True, delimiter="|", skip_empty=True,
                       compiler_video_usage="reference", compiler_audio_usage="reference",
-                      compiler_voice_isolation=True):
+                      compiler_voice_isolation=True, compiler_reference_order="first_speech", compiler_templates=""):
         if not validation_enabled:
             return (text, "legacy", False, "Validation disabled. Compiler mode: legacy.")
+        CompilerTemplates(compiler_templates)
         if not delimiter:
             raise ValueError("H3 prompt list validation: delimiter must not be empty.")
         prompts = text.split(delimiter)
@@ -574,7 +583,7 @@ class H3PromptListValidator:
                 compiled = compile_prompt(
                     prompt, project_records(records, prompt), video_usage=compiler_video_usage,
                     audio_usage=compiler_audio_usage, voice_isolation=compiler_voice_isolation,
-                    max_images=MAX_IMAGES, max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS)
+                    reference_order=compiler_reference_order, compiler_templates=compiler_templates, max_images=MAX_IMAGES, max_audio=MAX_AUDIO, max_videos=MAX_VIDEOS)
             except ValueError as error:
                 errors.append(f"Prompt {number}: {error}")
                 continue

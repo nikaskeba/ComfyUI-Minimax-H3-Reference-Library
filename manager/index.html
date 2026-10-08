@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>H3 Reference Library</title>
-    <link rel="stylesheet" href="/h3-references/static/manager.css?v=19">
+    <link rel="stylesheet" href="/h3-references/static/manager.css?v=20">
 <link rel="stylesheet" href="/h3-built-in-references/static/built-in-cards.css?v=1">
 </head>
 <body data-built-in-tag-mode="library">
@@ -159,6 +159,7 @@
                     <option value="character">Character</option>
                     <option value="location">Location</option>
                     <option value="object">Object</option>
+                    <option value="clothing">Clothing</option>
                     <option value="music">Music</option>
                     <option value="video">Video</option>
                     <option value="uncategorized" hidden>Uncategorized (legacy)</option>
@@ -175,6 +176,7 @@
                 <fieldset id="image-fields">
                     <legend>Image</legend>
                     <label>Image file<input id="image-file" type="file" accept="image/*"></label>
+                    <img id="image-preview" class="primary-image-preview" alt="Main reference image preview" hidden>
                     <label>Description<textarea id="image-description" rows="3" placeholder="A news anchor wearing a blue blazer"></textarea></label>
                     <label id="remove-image-row" class="check-row" hidden><input id="remove-image" type="checkbox"> Remove current image</label>
                     <details id="additional-images-panel">
@@ -207,7 +209,7 @@
     </dialog>
 
     <div id="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="/h3-references/static/manager.js?v=26"></script>
+    <script type="module" src="/h3-references/static/manager.js?v=27"></script>
     <script type="module" src="/h3-built-in-references/static/built-ins.js?v=25"></script>
 </body>
 </html>

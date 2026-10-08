@@ -7,9 +7,10 @@ try {
  const page=await browser.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  const preview='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="blue"/></svg>');
  let submitted='';
- const record={id:'actor',tag:'Actor',category:'other',reference_type:'character',has_image:true,image_url:preview,image_count:2,image_description:'Front view',notes:'Private reminder',additional_images:[{image_file:'side.png',description:'Side view',url:preview}]};
+ const record={id:'actor',tag:'Actor',category:'other',reference_type:'character',has_audio:true,audio_description:'Existing voice',has_image:true,image_url:preview,image_count:2,image_description:'Front view',notes:'Private reminder',additional_images:[{image_file:'side.png',description:'Side view',url:preview}]};
  await page.route('http://library.test/**',async route=>{
   const url=new URL(route.request().url());const json=value=>route.fulfill({contentType:'application/json',body:JSON.stringify(value)});
+  if(url.pathname==='/api/h3-references/voice-description')return json({description:'A warm voice.',seconds:15});
   if(url.pathname==='/api/h3-references/collections')return json({collections:['other']});
   if(url.pathname==='/api/h3-references/records/actor'&&route.request().method()==='PUT'){submitted=route.request().postDataBuffer().toString();return json({record});}
   if(url.pathname==='/api/h3-references/records')return json({records:[record],categories:['other']});
@@ -19,9 +20,27 @@ try {
   try{return route.fulfill({contentType:name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':'text/html',body:await fs.readFile(new URL('../manager/'+name,import.meta.url))});}catch{return route.fulfill({status:404});}
  });
  await page.goto('http://library.test/h3-references');
- await page.getByRole('button',{name:'2 images',exact:true}).click();
+ assert.equal(await page.locator('.record-card .image-count').textContent(),'2');
+ assert.equal(await page.getByRole('button',{name:'2 images',exact:true}).count(),0);
+ await page.locator('.record-card').getByRole('button',{name:'Edit'}).click();
+ await page.locator('#record-dialog').waitFor({state:'visible'});
+ assert.equal(await page.locator('#image-preview').isVisible(),true);
+ assert.equal(await page.locator('#additional-images-panel').evaluate(el=>el.open),false);
+ await page.locator('#additional-images-panel summary').click();
  assert.equal(await page.locator('#additional-images-panel').evaluate(el=>el.open),true);
+ assert.equal(await page.locator('.additional-image-row img').count(),1);
+ assert.equal(await page.locator('.additional-image-row img').evaluate(el=>el.naturalWidth),80);
+ assert.equal(await page.locator('#additional-images-list').evaluate(el=>getComputedStyle(el).flexDirection),'row');
+ await page.locator('#image-file').setInputFiles({name:'replacement.png',mimeType:'image/png',buffer:Buffer.from('fixture')});
+ assert.match(await page.locator('#image-preview').getAttribute('src'),/^blob:/);
+ await page.locator('#image-file').setInputFiles([]);
  assert.equal(await page.locator('#reference-notes').inputValue(),'Private reminder');
+ await page.getByRole('button',{name:'Generate voice description',exact:true}).click();
+ await page.waitForFunction(()=>document.getElementById('audio-description').value==='A warm voice.');
+ await page.getByRole('button',{name:'Undo',exact:true}).click();
+ assert.equal(await page.locator('#audio-description').inputValue(),'Existing voice');
+ await page.getByRole('button',{name:'Generate voice description',exact:true}).click();
+ await page.waitForFunction(()=>document.getElementById('audio-description').value==='A warm voice.');
  await page.locator('#additional-images-list textarea').fill('Profile view with glasses');
  await page.locator('#reference-notes').fill('Updated private reminder');
  await page.locator('#additional-images-files').setInputFiles({name:'new.png',mimeType:'image/png',buffer:Buffer.from('fixture')});
@@ -30,7 +49,7 @@ try {
  assert.equal(await page.locator('.additional-image-row').count(),1);
  await page.locator('#save-record').click();
  await page.locator('#record-dialog').waitFor({state:'hidden'});
- assert.match(submitted,/Profile view with glasses/);assert.match(submitted,/Updated private reminder/);assert.match(submitted,/side.png/);
+ assert.match(submitted,/A warm voice/);assert.match(submitted,/Profile view with glasses/);assert.match(submitted,/Updated private reminder/);assert.match(submitted,/side.png/);
  await page.locator('#records .select-reference').click();
  await page.getByRole('tab',{name:'Reference Creator',exact:true}).click();
  assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
@@ -38,6 +57,12 @@ try {
  await page.locator('#copy-selection').click();assert.doesNotMatch(await page.evaluate(()=>window.copiedGuide),/Private reminder/);
  await page.reload();
  assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
+ await page.getByRole('tab',{name:'Reference Library',exact:true}).click();
+ await page.getByRole('button',{name:'Add reference'}).click();
+ await page.locator('#reference-type').selectOption('clothing');
+ assert.equal(await page.locator('#image-fields').isVisible(),true);
+ assert.equal(await page.locator('#audio-fields').isVisible(),false);
+ assert.equal(await page.locator('#video-fields').isVisible(),false);
  assert.deepEqual(errors,[]);
  console.log('Multiple image editor, descriptions, removal, save payload and private notes passed');
 }finally{await browser.close();}

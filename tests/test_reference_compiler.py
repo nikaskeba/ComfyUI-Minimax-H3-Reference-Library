@@ -26,6 +26,79 @@ def character(image=None, audio=None, **values):
 
 
 class CompilerTests(unittest.TestCase):
+    def test_clothing_uses_numbered_images_as_one_visual_subject(self):
+        records = {"blue_suit": dict(reference_type="clothing", name="Blue suit", image_file="front.png",
+                                      image_description="A tailored navy jacket and trousers.",
+                                      additional_images=[{"image_file": "side.png", "description": "The side seam and fit."}])}
+        source = prompt("{blue_suit}", "[Shot 1: 0s] A person wears {blue_suit}.")
+        result = compiler.compile_prompt(source, records)
+        self.assertEqual(result.images, ["blue_suit", "blue_suit"])
+        self.assertEqual(result.audios, [])
+        self.assertIn("<Subject 1> is Blue suit in <Picture 1>, <Picture 2>", result.prompt)
+        self.assertIn("<Picture 2>: The side seam and fit", result.prompt)
+        self.assertIn("wears <Subject 1>", result.prompt)
+
+    def test_separated_sentence_speakers_with_returning_turns(self):
+        records = {"Jerry Seinfeld_BC": character("jerry.png", "jerry.wav"),
+                   "Newmen_rm": character(None, "refmod:voice"),
+                   "Jerry_Apartment": {"reference_type": "location", "image_file": "room.png", "name": "Apartment"},
+                   "silent": character("silent.png", "silent.wav")}
+        detail = """[Shot 1: 0s] The inherited view begins silently on only {Jerry Seinfeld_BC} inside {Jerry_Apartment}. Hold for a beat.
+[Shot 2: 1.0s] Hard cut to only {Newmen_rm}. He raises one hand defensively and says, <d>[English]I was being neighborly.</d>
+[Shot 3: 3.3s] Hard cut to only {Jerry Seinfeld_BC}. Jerry immediately snaps back, <d>[English]Don't be neighborly!</d>
+[Shot 4: 5.3s] Hard cut to only {Newmen_rm}. He drops the mail onto the counter and says, <d>[English]Fine! You look terrible.</d>
+[Shot 5: 7.8s] Hard cut to only {Jerry Seinfeld_BC}. Jerry points toward the door and shouts, <d>[English]Get out!</d>
+[Shot 6: 9.1s] Hard cut to only {Newmen_rm} at the doorway. He pauses, gives Jerry a smile, and calmly says, <d>[English]Pleasant dreams, Jerry.</d>
+[Shot 7: 11.4s] {Newmen_rm} finishes speaking and exits. {silent} watches."""
+        source = prompt("\n".join("{" + tag + "}" for tag in records), detail)
+        result = compiler.compile_prompt(source, records)
+        self.assertEqual(result.audios, ["Newmen_rm", "Jerry Seinfeld_BC"])
+        self.assertEqual(result.debug["speakers"], {"1": "saved:Newmen_rm", "2": "saved:Jerry Seinfeld_BC"})
+        self.assertEqual(compiler.inferred_saved_voice_tags(source, records), {"Newmen_rm", "Jerry Seinfeld_BC"})
+        self.assertIn("<Audio 1> is the voice-timbre reference", result.prompt)
+        self.assertIn("<Audio 2> is the voice-timbre reference", result.prompt)
+        self.assertNotIn(",.", result.prompt)
+        self.assertIn("[Shot 6: 9.1s]", result.prompt)
+
+    def test_separated_speech_respects_shot_boundaries_and_explicit_voice(self):
+        records = {"a": character("a.png", "a.wav"), "b": character("b.png", "b.wav"),
+                   "room": {"reference_type": "location", "image_file": "room.png", "name": "Room"}}
+        definitions = "{a}\n{b}\n{room}"
+        for detail in (
+            "[Shot 1] Only {a}. He listens silently. <d>[English]Hello.</d>",
+            "[Shot 1] {a} waits. [Shot 2] He says, <d>[English]Hello.</d>",
+            "[Shot 1] {a} stands with {b}. He says, <d>[English]Hello.</d>",
+            "[Shot 1] Only {a}. He does not speak, <d>[English]Hello.</d>",
+        ):
+            with self.subTest(detail=detail):
+                self.assertEqual(compiler.compile_prompt(prompt(definitions, detail), records).audios, [])
+        detail = "[Shot 1: 0s] Only {a} inside {room}. He says, <d>[English §b§]Hello.</d>"
+        source = prompt(definitions, detail)
+        self.assertEqual(compiler.compile_prompt(source, records).audios, ["b"])
+        self.assertEqual(compiler.inferred_saved_voice_tags(source, records), set())
+        plain = source.replace(" §b§", "")
+        self.assertEqual(compiler.compile_prompt(plain, records).audios, ["a"])
+        self.assertEqual(compiler.inferred_saved_voice_tags(plain, records), {"a"})
+
+    def test_library_order_does_not_follow_speaker_order(self):
+        records = {"a": character("a.png", "a.wav"), "b": character("b.png", "b.wav"), "silent": character("c.png", "c.wav")}
+        results = []
+        for first, second in [("a", "b"), ("b", "a")]:
+            text = prompt("{a} {b} {silent}", f"[Shot 1: 1s] {{{first}}} says, <d>[English]Hello.</d> [Shot 2: 3s] {{{second}}} says, <d>[English]Hi.</d>")
+            result = compiler.compile_prompt(text, records, reference_order="library_order")
+            results.append(result)
+            self.assertEqual(result.images, ["a", "b", "silent"])
+            self.assertEqual(result.audios, ["a", "b"])
+            self.assertEqual(result.debug["resources"]["saved:" + first]["speaker"], 1)
+            self.assertEqual(result.debug["resources"]["saved:" + second]["speaker"], 2)
+            self.assertIsNone(result.debug["resources"]["saved:silent"]["speaker"])
+            legacy = compiler.compile_prompt(text, records)
+            self.assertEqual(legacy.audios, [first, second])
+        self.assertEqual(results[1].debug["resources"]["saved:a"]["subject"], 1)
+        self.assertEqual(results[1].debug["resources"]["saved:a"]["audio"], 1)
+        self.assertIn("<Subject 1> (S2)", results[1].prompt)
+
+
     def test_shared_wardrobe_references_stay_with_their_character(self):
         records = {
             "Prison_Uniform":dict(reference_type="object", name="Prison Uniform", image_file="uniform.png"),

@@ -78,7 +78,7 @@ def selection_fields(values):
 
 def direct_refmod_records(records, prompt, voice_tags=None):
     """Resolve filename-based _rm tags without changing the saved library."""
-    voice_tags = voice_tags if voice_tags is not None else set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt)
+    voice_tags = voice_tags if voice_tags is not None else set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt, records)
     requested = {a or b for a,b in re.findall(r"\{([^{}]+_rm)\}|§([^§]+_rm)§", prompt)} - records.keys()
     if not requested:
         return records
@@ -121,7 +121,7 @@ def direct_refmod_records(records, prompt, voice_tags=None):
 
 def project_records(records, prompt):
     """Expose selected RefMod modalities to the existing tag/ownership resolver."""
-    voice_tags = set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt)
+    voice_tags = set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt, records)
     records = direct_refmod_records(records, prompt, voice_tags)
     result = dict(records)
     for tag, original in records.items():

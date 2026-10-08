@@ -7,6 +7,7 @@ const {chromium}=createRequire(import.meta.url)('playwright');
 const browser=await chromium.launch({headless:true,channel:'chrome'});
 try {
  const context=await browser.newContext();const page=await context.newPage();const errors=[];page.on('pageerror',error=>errors.push(error.message));
+ let voiceDescription='Original voice';
  let collection='',imageContext='Use the face and hairstyle.';
  await context.route('http://library.test/**',async route=>{
   const url=new URL(route.request().url());const json=value=>route.fulfill({contentType:'application/json',body:JSON.stringify(value)});
@@ -16,9 +17,11 @@ try {
   if(url.pathname.endsWith('/image-context')){imageContext=route.request().postDataJSON().image_context;return json({image_context:imageContext});}
   if(url.pathname==='/voice.wav')return route.fulfill({status:204});
   if(url.pathname.endsWith('/collection')){collection=route.request().postDataJSON().collection;return json({collection});}
-  if(url.pathname==='/api/h3-built-in-references/records')return json({records:[{tag:'Actor',library_tag:'Actor_BC',attachment_id:'actor',name:'Actor',actor:'Example',franchise:'Series',folder:'good',status:'good',collection,has_image:true,image_url:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="80"><rect width="70" height="80" fill="%23263830"/><text x="20" y="45" fill="white">A</text></svg>'),image_context:imageContext,has_audio:true,audio_url:'/voice.wav'}]});
+  if(url.pathname==='/api/h3-references/voice-description')return json({description:'A warm voice.',seconds:5});
+  if(url.pathname==='/api/h3-built-in-references/records/actor/voice-description'){voiceDescription=route.request().postDataJSON().description;return json({audio_description:voiceDescription});}
+  if(url.pathname==='/api/h3-built-in-references/records')return json({records:[{tag:'Actor',library_tag:'Actor_BC',attachment_id:'actor',name:'Actor',actor:'Example',franchise:'Series',folder:'good',status:'good',collection,has_image:true,image_url:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="80"><rect width="70" height="80" fill="%23263830"/><text x="20" y="45" fill="white">A</text></svg>'),image_context:imageContext,has_audio:true,audio_description:voiceDescription,audio_url:'/voice.wav'}]});
   const name=url.pathname==='/h3-references'?'index.html':url.pathname==='/h3-refmods'?'refmods.html':url.pathname.split('/').pop();
-  if(!['index.html','manager.js','manager.css','built-ins.js','built-ins.css','built-in-cards.css','refmod-catalog.js','reference-guide.js','library-search.js','refmods.html','refmods.js','refmods.css','video-selector.js'].includes(name))return route.fulfill({status:404});
+  if(!['voice-description.js','index.html','manager.js','manager.css','built-ins.js','built-ins.css','built-in-cards.css','refmod-catalog.js','reference-guide.js','library-search.js','refmods.html','refmods.js','refmods.css','video-selector.js'].includes(name))return route.fulfill({status:404});
   return route.fulfill({contentType:name.endsWith('.js')?'text/javascript':name.endsWith('.css')?'text/css':'text/html',body:await fs.readFile(new URL('../manager/'+name,import.meta.url))});
  });
  await page.goto('http://library.test/h3-references');
@@ -51,6 +54,12 @@ try {
  await page.setViewportSize({width:540,height:1000});
  assert.equal(await page.locator('.built-in-row').evaluate(el=>el.scrollWidth<=el.clientWidth),true);
  await page.setViewportSize({width:1500,height:1000});
+ await page.getByRole('button',{name:'Edit voice for Actor',exact:true}).click();
+ await page.getByRole('button',{name:'Generate voice description',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('.builtin-popout textarea').value==='A warm voice.');
+ await page.getByRole('button',{name:'Save voice description',exact:true}).click();
+ await page.waitForFunction(()=>document.getElementById('toast').textContent.includes('Voice description saved'));
+ assert.equal(voiceDescription,'A warm voice.');
  await page.getByRole('button',{name:'Edit collection for Actor',exact:true}).click();
  await collectionInput.fill('sitcom');
  await page.getByRole('button',{name:'Save collection',exact:true}).click();

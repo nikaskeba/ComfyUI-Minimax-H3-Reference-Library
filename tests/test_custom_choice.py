@@ -11,6 +11,14 @@ Node = importlib.import_module(package.__name__ + ".custom_choice").SkebaCustomC
 
 
 class CustomChoiceTests(unittest.TestCase):
+    def test_native_combo_and_dynamic_validation(self):
+        self.assertEqual(Node.INPUT_TYPES()["required"]["selected"][0], ["5", "22", "39", "56"])
+        self.assertIs(Node.VALIDATE_INPUTS("standard\nscene reference", "scene reference"), True)
+        self.assertIs(Node.VALIDATE_INPUTS("5\n22", None), True)
+        self.assertIs(Node.VALIDATE_INPUTS(None, "22"), True)
+        self.assertIsNot(Node.VALIDATE_INPUTS("5\n22", "39"), True)
+        self.assertIsNot(Node.VALIDATE_INPUTS("", "22"), True)
+
     def test_combo_values_remain_strings(self):
         self.assertEqual(Node().choose("5, 22, 39, 56", "22"), ("22",))
         self.assertEqual(Node().choose("standard\npre-cut reinforcement\nscene reference", "scene reference"), ("scene reference",))

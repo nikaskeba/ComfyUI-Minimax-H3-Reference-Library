@@ -11,7 +11,7 @@ from .refmod_library import selection_fields
 
 
 TAG_RE = re.compile(r"^[A-Za-z0-9_-]+$")
-REFERENCE_TYPES = ("character", "location", "object", "music", "video", "uncategorized")
+REFERENCE_TYPES = ("character", "location", "object", "clothing", "music", "video", "uncategorized")
 LIBRARY_LOCK = threading.RLock()
 
 
@@ -140,6 +140,11 @@ def create_record(tag, category="other", image_description="", audio_description
     reference_type = clean_reference_type(reference_type)
     text_voice = reference_type == "character" and bool((audio_description or "").strip())
     refmods = selection_fields(refmod_settings or {})
+    if reference_type == "clothing":
+        if audio_file or video_file or "refmod" in (refmods["appearance_source"], refmods["voice_source"]):
+            raise ValueError("Clothing references accept images only.")
+        if image_file is None and not additional_images:
+            raise ValueError("Clothing references need at least one image.")
     if image_file is None and not additional_images and audio_file is None and video_file is None and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"]):
         raise ValueError(
             "A reference record needs media, or a Character needs a voice description.")
@@ -195,6 +200,11 @@ def update_record(record_id, tag, category="other", image_description="", audio_
         next_image = image_file if image_file is not None else (None if remove_image else old_image)
         next_audio = audio_file if audio_file is not None else (None if remove_audio else old_audio)
         next_video = video_file if video_file is not None else (None if remove_video else old_video)
+        if reference_type == "clothing":
+            if next_audio or next_video or "refmod" in (refmods["appearance_source"], refmods["voice_source"]):
+                raise ValueError("Clothing references accept images only.")
+            if next_image is None and not next_images:
+                raise ValueError("Clothing references need at least one image.")
         text_voice = reference_type == "character" and bool((audio_description or "").strip())
         if (next_image is None and not next_images and next_audio is None and next_video is None
                 and not text_voice and "refmod" not in (refmods["appearance_source"], refmods["voice_source"])):

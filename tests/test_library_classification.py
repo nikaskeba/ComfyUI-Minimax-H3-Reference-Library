@@ -131,6 +131,20 @@ class LibraryClassificationTests(unittest.TestCase):
         )
         self.assertEqual(record["reference_type"], "video")
 
+    def test_clothing_is_image_only_and_persists(self):
+        record = MODULE.create_record("blue_suit", image_file="front.png", reference_type="clothing",
+                                      image_description="A tailored blue suit")
+        self.assertEqual(record["reference_type"], "clothing")
+        updated, *_ = MODULE.update_record(record["id"], "blue_suit", reference_type="clothing",
+                                          additional_images=[{"image_file": "side.png", "description": "Side view"}])
+        self.assertEqual(updated["additional_images"][0]["description"], "Side view")
+        with self.assertRaisesRegex(ValueError, "images only"):
+            MODULE.create_record("hat_audio", image_file="hat.png", audio_file="voice.wav", reference_type="clothing")
+        with self.assertRaisesRegex(ValueError, "images only"):
+            MODULE.update_record(record["id"], "blue_suit", reference_type="clothing", video_file="clip.mp4")
+        with self.assertRaisesRegex(ValueError, "at least one image"):
+            MODULE.create_record("empty_hat", reference_type="clothing")
+
     def test_character_can_store_a_text_only_voice_description(self):
         record = MODULE.create_record(
             "text_voice",

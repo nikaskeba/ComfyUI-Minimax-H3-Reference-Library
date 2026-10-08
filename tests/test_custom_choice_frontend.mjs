@@ -20,6 +20,9 @@ try {
   window.node=new Node();window.node.onNodeCreated();
  },code);
  assert.deepEqual(await page.evaluate(()=>({type:node.widgets[1].type,values:node.widgets[1].options.values,socket:node.inputs[0].type})),{type:'combo',values:['5','22','39','56'],socket:'COMBO'});
+ assert.deepEqual(await page.evaluate(()=>node.size),[290,150]);
+ assert.equal(await page.getByLabel('Custom choices').getAttribute('rows'),'3');
+ assert.equal(await page.getByText('Edit choices',{exact:true}).evaluate(el=>getComputedStyle(el).justifySelf),'start');
  await page.evaluate(()=>node.widgets[1].value='39');
  assert.equal(await page.evaluate(()=>node.widgets[1].value),'39');
  await page.getByText('Edit choices',{exact:true}).click();

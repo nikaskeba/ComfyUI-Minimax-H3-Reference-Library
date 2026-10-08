@@ -1,7 +1,9 @@
+from .voice_description_refmod import SkebaRefModVoiceDescription
 from .refmod_preview import SkebaRefModPreview
 from .reference_audio_preview import SkebaH3ReferenceAudioPreview
 from .quick_launcher import SkebaQuickLauncher
 from .custom_choice import SkebaCustomChoice
+from .compiler_templates import SkebaH3CompilerTemplates
 from .last_rendered_context import SkebaH3LastRenderedContext
 from .workflow_guide import SkebaWorkflowGuide
 from .h3_audio_refine import SkebaH3AudioRefine
@@ -44,9 +46,11 @@ from .server import register_routes
 register_routes()
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaRefModVoiceDescription": SkebaRefModVoiceDescription,
     "SkebaH3ReferenceAudioPreview": SkebaH3ReferenceAudioPreview,
     "SkebaH3LastRenderedContext": SkebaH3LastRenderedContext,
     "SkebaCustomChoice": SkebaCustomChoice,
+    "SkebaH3CompilerTemplates": SkebaH3CompilerTemplates,
     "SkebaWorkflowGuide": SkebaWorkflowGuide,
     "SkebaPromptListText": PromptListTextNode,
     "SkebaQuickLauncher": SkebaQuickLauncher,
@@ -88,9 +92,11 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaRefModVoiceDescription": "SKEBA RefMod Voice Description",
     "SkebaH3ReferenceAudioPreview": "SKEBA H3 Reference Audio Preview",
     "SkebaH3LastRenderedContext": "SKEBA H3 Last Rendered Context",
     "SkebaCustomChoice": "SKEBA Custom Choice",
+    "SkebaH3CompilerTemplates": "SKEBA H3 Compiler Templates",
     "SkebaWorkflowGuide": "SKEBA Workflow Guide (HTML)",
     "SkebaPromptListText": "SKEBA Prompt List Text",
     "SkebaQuickLauncher": "SKEBA Quick Launcher",

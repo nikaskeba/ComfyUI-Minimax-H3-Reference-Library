@@ -1,3 +1,4 @@
+import {voiceDescriptionControl, requestVoiceDescription} from "./voice-description.js";
 import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "/h3-references/static/library-search.js?v=2";
 import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
 import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=3";
@@ -6,13 +7,14 @@ const apiRoot = "/api/h3-references/records";
 const imageExtensions = new Set(["jpg", "jpeg", "png", "webp", "gif", "bmp", "tif", "tiff"]);
 const audioExtensions = new Set(["aac", "flac", "m4a", "mp3", "mp4", "ogg", "opus", "wav", "webm"]);
 const videoExtensions = new Set(["avi", "m4v", "mkv", "mov", "mp4", "mpeg", "mpg", "webm"]);
-const categoryPriority = ["character", "narrator", "location", "voice", "object", "style", "other"];
-const referenceTypes = ["character", "location", "object", "music", "video", "uncategorized"];
+const categoryPriority = ["character", "narrator", "location", "voice", "object", "clothing", "style", "other"];
+const referenceTypes = ["character", "location", "object", "clothing", "music", "video", "uncategorized"];
 const assignableReferenceTypes = referenceTypes.filter((referenceType) => referenceType !== "uncategorized");
 const mediaByReferenceType = {
     character: ["image", "audio"],
     location: ["image"],
     object: ["image", "audio"],
+    clothing: ["image"],
     music: ["audio"],
     video: ["video"],
     uncategorized: ["image", "audio", "video"],
@@ -28,7 +30,7 @@ const elements = Object.fromEntries([
     "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
     "reference-notes", "additional-images-panel", "additional-images-count", "additional-images-list", "additional-images-files",
-    "image-fields", "audio-fields", "video-fields", "image-file", "image-description", "audio-file", "audio-description", "video-file", "video-description",
+    "image-fields", "audio-fields", "video-fields", "image-file", "image-preview", "image-description", "audio-file", "audio-description", "video-file", "video-description",
     "remove-image-row", "remove-image", "remove-audio-row", "remove-audio", "remove-video-row", "remove-video", "record-error", "save-record", "toast",
     "open-bulk-import", "bulk-import-dialog", "close-bulk-import", "import-progress", "import-progress-text", "built-in-top-search",
 ].map((id) => [id, document.getElementById(id)]));
@@ -336,7 +338,17 @@ function recordCard(record) {
     badges.className = "media-badges";
     badges.append(badge(categoryLabel(record.category || "other"), "category"));
     badges.append(badge(referenceTypeLabel(normalizedReferenceType(record)), "reference-type"));
-    if (record.has_image) badges.append(badge("Image", ""));
+    if (record.has_image) {
+        const imageBadge = badge("Image", "");
+        if ((record.image_count || 0) > 1) {
+            const count = document.createElement("small");
+            count.className = "image-count";
+            count.textContent = record.image_count;
+            count.setAttribute("aria-label", `${record.image_count} images`);
+            imageBadge.append(count);
+        }
+        badges.append(imageBadge);
+    }
     if (record.appearance_refmod || record.voice_refmod) badges.append(badge("RefMod", "video"));
     if (record.has_audio) badges.append(badge("Audio", "audio"));
     if (record.has_video) badges.append(badge("Video", "video"));
@@ -363,7 +375,6 @@ function recordCard(record) {
     const select = button(selected ? "Selected" : "Select", `select-reference${selected ? " selected" : ""}`, () => toggleSelection(record.id));
     const copyVoice = button("Copy voice", "secondary", () => copyVoiceTag(record));
     const edit = button("Edit", "secondary", () => openEditor(record));
-    if ((record.image_count || 0) > 1) actions.append(button(`${record.image_count} images`, "secondary", async () => { await openEditor(record); elements["additional-images-panel"].open = true; }));
     const remove = button("Delete", "danger", () => removeRecord(record));
     actions.append(select);
     if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) actions.append(copyVoice);
@@ -391,6 +402,7 @@ function categoryHeading(category) {
         location: "Locations",
         voice: "Voices",
         object: "Objects",
+        clothing: "Clothing",
         style: "Styles",
         other: "Other",
     };
@@ -553,6 +565,15 @@ function draftDescriptions(draft) {
         });
         label.append(description);
         group.append(label);
+        if (kind === "audio") {
+            const control = voiceDescriptionControl(description, () => {
+                if (!draft.audio) return null;
+                const file = draft.audio, form = new FormData();
+                form.append("audio", file);
+                return {key: file, run: () => requestVoiceDescription(form)};
+            });
+            group.append(control.element);
+        }
     }
     return group;
 }
@@ -818,13 +839,35 @@ function clearDrafts() {
 
 let additionalImages = [];
 let imagePreviewURLs = [];
+let primaryImagePreviewURL = null;
+function updatePrimaryImagePreview(record = null) {
+    if (primaryImagePreviewURL) URL.revokeObjectURL(primaryImagePreviewURL);
+    primaryImagePreviewURL = null;
+    const file = elements["image-file"].files[0];
+    if (file) primaryImagePreviewURL = URL.createObjectURL(file);
+    const existing = !elements["remove-image"].checked && record?.image_url;
+    const url = primaryImagePreviewURL || existing;
+    elements["image-preview"].hidden = !url;
+    if (url) elements["image-preview"].src = url;
+    else elements["image-preview"].removeAttribute("src");
+}
+elements["image-file"].addEventListener("change", () => {
+    updatePrimaryImagePreview(state.records.find(record => record.id === elements["record-id"].value));
+});
+elements["remove-image"].addEventListener("change", () => {
+    updatePrimaryImagePreview(state.records.find(record => record.id === elements["record-id"].value));
+});
+elements["record-dialog"].addEventListener("close", () => {
+    if (primaryImagePreviewURL) URL.revokeObjectURL(primaryImagePreviewURL);
+    primaryImagePreviewURL = null;
+});
 function renderAdditionalImages() {
     elements["additional-images-count"].textContent = `(${additionalImages.length})`;
     elements["additional-images-list"].replaceChildren(...additionalImages.map((image, index) => {
         const row = document.createElement("div"); row.className = "additional-image-row";
         const preview = document.createElement("img"); preview.src = image.url; preview.alt = `Additional image ${index + 1}`;
-        const label = document.createElement("label"); label.textContent = `Additional image ${index + 1} description`;
-        const description = document.createElement("textarea"); description.rows = 3; description.value = image.description || "";
+        const label = document.createElement("label"); label.textContent = `Image ${index + 2} description`;
+        const description = document.createElement("textarea"); description.rows = 2; description.value = image.description || "";
         description.addEventListener("input", () => { image.description = description.value; });
         label.append(description);
         row.append(preview, label, button("Remove", "secondary", () => { additionalImages.splice(index, 1); renderAdditionalImages(); }));
@@ -846,7 +889,8 @@ async function openEditor(record = null) {
     elements["record-form"].reset();
     for (const url of imagePreviewURLs) URL.revokeObjectURL(url);
     imagePreviewURLs = [];
-    additionalImages = (record?.additional_images || []).map(image => ({...image, url: `${image.url}?v=${encodeURIComponent(record.updated_at || "")}`}));
+    additionalImages = (record?.additional_images || []).map(image => ({...image,
+        url: image.url.startsWith("data:") ? image.url : `${image.url}?v=${encodeURIComponent(record.updated_at || "")}`}));
     elements["additional-images-panel"].open = false;
     elements["reference-notes"].value = record?.notes || "";
     renderAdditionalImages();
@@ -863,6 +907,7 @@ async function openEditor(record = null) {
     elements["remove-image-row"].hidden = !(record?.has_primary_image ?? record?.has_image);
     elements["remove-audio-row"].hidden = !record?.has_audio;
     elements["remove-video-row"].hidden = !record?.has_video;
+    updatePrimaryImagePreview(record);
     elements["record-dialog"].showModal();
 }
 
@@ -1152,3 +1197,19 @@ window.addEventListener("storage",event=>{
  if(event.key==="skeba-reference-selection"||event.key===null){state.selected=new Set(JSON.parse(localStorage.getItem("skeba-reference-selection")||"[]"));renderRecords();renderSelectionGuide();}
 });
 window.addEventListener("focus",loadRefmodSelection);
+
+const voiceDescription = voiceDescriptionControl(elements["audio-description"], () => {
+    if (!elements["record-dialog"].open || elements["audio-fields"].hidden) return null;
+    const file = elements["audio-file"].files[0];
+    const id = elements["record-id"].value;
+    const record = state.records.find(row => String(row.id) === id);
+    if (!file && (!record?.has_audio || elements["remove-audio"].checked)) return null;
+    const form = new FormData();
+    if (file) form.append("audio", file);
+    else {form.append("kind", "library"); form.append("id", id);}
+    return {key: file || id, run: () => requestVoiceDescription(form)};
+});
+elements["audio-fields"].append(voiceDescription.element);
+elements["record-form"].addEventListener("change", () => voiceDescription.refresh());
+elements["record-dialog"].addEventListener("close", () => voiceDescription.invalidate());
+new MutationObserver(() => voiceDescription.invalidate()).observe(elements["record-dialog"], {attributes:true, attributeFilter:["open"]});
