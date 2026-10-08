@@ -11,15 +11,16 @@ try {
   const app={registerExtension(ext){window.ext=ext;}};
   new Function('app','setWidgetConfig',code.replace(/^import .*;\r?\n/gm,'').replace('export function','function'))(app,(socket,config)=>socket.config=config);
   class Node {
-   constructor(){this.inputs=[];this.widgets=[{name:'choices',value:'5\n22\n39\n56'},{name:'selected',value:'22'},{name:'output_type',value:'text'}];this.graph={setDirtyCanvas(){}};}
+   constructor(){this.inputs=[{name:'choices',type:'STRING',widget:{name:'choices'},link:null}];this.widgets=[{name:'choices',value:'5\n22\n39\n56'},{name:'selected',value:'22'},{name:'output_type',value:'text'}];this.graph={setDirtyCanvas(){}};}
    addInput(name,type,options){const slot={name,type,...options};this.inputs.push(slot);return slot;}
+   removeInput(index){this.inputs.splice(index,1);}
    setSize(size){this.size=size;}
    addDOMWidget(name,type,element,options){document.body.append(element);this.widgets.push({name,type,options});}
   }
   await window.ext.beforeRegisterNodeDef(Node,{name:'SkebaCustomChoice',input:{required:{choices:['STRING',{default:'5\n22\n39\n56'}]}}});
   window.node=new Node();window.node.onNodeCreated();
  },code);
- assert.deepEqual(await page.evaluate(()=>({type:node.widgets[1].type,values:node.widgets[1].options.values,socket:node.inputs[0].type})),{type:'combo',values:['5','22','39','56'],socket:'COMBO'});
+ assert.deepEqual(await page.evaluate(()=>({type:node.widgets[1].type,values:node.widgets[1].options.values,sockets:node.inputs.map(x=>({name:x.name,type:x.type})),choices:node.widgets[0].value})),{type:'combo',values:['5','22','39','56'],sockets:[{name:'selected',type:'COMBO'}],choices:'5\n22\n39\n56'});
  assert.deepEqual(await page.evaluate(()=>node.size),[290,150]);
  assert.equal(await page.getByLabel('Custom choices').getAttribute('rows'),'3');
  assert.equal(await page.getByText('Edit choices',{exact:true}).evaluate(el=>getComputedStyle(el).justifySelf),'start');

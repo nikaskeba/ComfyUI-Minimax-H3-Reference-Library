@@ -55,7 +55,16 @@ try {
  assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedGuide=text;}}}));
  await page.locator('#copy-selection').click();assert.doesNotMatch(await page.evaluate(()=>window.copiedGuide),/Private reminder/);
+ await page.locator('#hide-guide-details').check();
+ assert.match(await page.locator('#selection-guide').textContent(),/\{Actor\}Voice: §Actor§/);
+ assert.doesNotMatch(await page.locator('#selection-guide').textContent(),/Front view|Profile view|A warm voice|Private reminder/);
+ await page.locator('#copy-selection').click();
+ assert.match(await page.evaluate(()=>window.copiedGuide),/\{Actor\}[\s\S]*Voice tag: §Actor§/);
+ assert.doesNotMatch(await page.evaluate(()=>window.copiedGuide),/Front view|Profile view|A warm voice/);
  await page.reload();
+ assert.equal(await page.locator('#hide-guide-details').isChecked(),true);
+ assert.doesNotMatch(await page.locator('#selection-guide').textContent(),/Private reminder/);
+ await page.locator('#hide-guide-details').uncheck();
  assert.match(await page.locator('#selection-guide').textContent(),/Private reminder/);
  await page.getByRole('tab',{name:'Reference Library',exact:true}).click();
  await page.getByRole('button',{name:'Add reference'}).click();

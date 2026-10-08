@@ -76,7 +76,7 @@ function selectedGroups(selectedRecords) {
         ]);
 }
 
-export function renderReferenceGuide(records, elements, onRemove) {
+export function renderReferenceGuide(records, elements, onRemove, showDetails = true) {
     const groups = selectedGroups(records);
     const hasSelection = groups.length > 0;
     elements["selection-empty"].hidden = hasSelection;
@@ -93,14 +93,14 @@ export function renderReferenceGuide(records, elements, onRemove) {
             typeGroup.className = "selection-type-group";
             const typeHeading = document.createElement("h4");
             typeHeading.textContent = referenceTypeHeading(referenceType);
-            typeGroup.append(typeHeading, ...records.map(record => selectionItem(record, onRemove)));
+            typeGroup.append(typeHeading, ...records.map(record => selectionItem(record, onRemove, showDetails)));
             return typeGroup;
         }));
         return group;
     }));
 }
 
-function selectionItem(record, onRemove) {
+function selectionItem(record, onRemove, showDetails) {
     const item = document.createElement("div");
     item.className = "selection-item";
     if (onRemove) {
@@ -116,17 +116,21 @@ function selectionItem(record, onRemove) {
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
     if (!record.is_refmod || record.has_visual) item.append(tag);
-    for (const [index, image] of (record.additional_images || []).entries()) {
-        if (image.description) item.append(descriptionLine(`Additional image ${index + 1}`, image.description));
+    if (showDetails) {
+        for (const [index, image] of (record.additional_images || []).entries()) {
+            if (image.description) item.append(descriptionLine(`Additional image ${index + 1}`, image.description));
+        }
+        if (record.notes) item.append(descriptionLine("Notes (not sent to generation)", record.notes));
     }
-    if (record.notes) item.append(descriptionLine("Notes (not sent to generation)", record.notes));
     if (record.built_in) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
         voiceTag.textContent = `Voice: \u00a7${record.tag}\u00a7`;
         item.append(voiceTag);
-        item.append(descriptionLine("Portrayal", portrayalText(record)));
-        if (record.has_image) item.append(descriptionLine("Image", "Attached"));
+        if (showDetails) {
+            item.append(descriptionLine("Portrayal", portrayalText(record)));
+            if (record.has_image) item.append(descriptionLine("Image", "Attached"));
+        }
         return item;
     }
     if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) {
@@ -135,10 +139,12 @@ function selectionItem(record, onRemove) {
         voiceTag.textContent = `Voice: §${record.tag}§`;
         item.append(voiceTag);
     }
-    if (record.image_description) item.append(descriptionLine("Image", record.image_description));
-    if (record.audio_description) item.append(descriptionLine("Voice", record.audio_description));
-    if (record.video_description) item.append(descriptionLine("Video", record.video_description));
-    if (!record.image_description && !record.audio_description && !record.video_description) item.append(descriptionLine("Description", "None"));
+    if (showDetails) {
+        if (record.image_description) item.append(descriptionLine("Image", record.image_description));
+        if (record.audio_description) item.append(descriptionLine("Voice", record.audio_description));
+        if (record.video_description) item.append(descriptionLine("Video", record.video_description));
+        if (!record.image_description && !record.audio_description && !record.video_description) item.append(descriptionLine("Description", "None"));
+    }
     return item;
 }
 
@@ -149,7 +155,7 @@ function descriptionLine(label, description) {
     return line;
 }
 
-export function referenceGuideText(records) {
+export function referenceGuideText(records, showDetails = true) {
     return selectedGroups(records).map(([category, typeGroups]) => {
         const lines = [categoryHeading(category).toUpperCase()];
         for (const [referenceType, records] of typeGroups) {
@@ -158,19 +164,23 @@ export function referenceGuideText(records) {
                 if (!record.is_refmod || record.has_visual) lines.push(`{${record.tag}}`);
                 if (record.built_in) {
                     lines.push(`Voice tag: \u00a7${record.tag}\u00a7`);
-                    lines.push(`Portrayal: ${portrayalText(record)}`);
-                    if (record.has_image) lines.push("Image: Attached");
+                    if (showDetails) {
+                        lines.push(`Portrayal: ${portrayalText(record)}`);
+                        if (record.has_image) lines.push("Image: Attached");
+                    }
                     lines.push("");
                     continue;
                 }
                 if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
-                if (record.image_description) lines.push(`Image: ${record.image_description}`);
-                for (const [index, image] of (record.additional_images || []).entries()) {
-                    if (image.description) lines.push(`Additional image ${index + 1}: ${image.description}`);
+                if (showDetails) {
+                    if (record.image_description) lines.push(`Image: ${record.image_description}`);
+                    for (const [index, image] of (record.additional_images || []).entries()) {
+                        if (image.description) lines.push(`Additional image ${index + 1}: ${image.description}`);
+                    }
+                    if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
+                    if (record.video_description) lines.push(`Video: ${record.video_description}`);
+                    if (!record.image_description && !record.audio_description && !record.video_description) lines.push("Description: None");
                 }
-                if (record.audio_description) lines.push(`Voice: ${record.audio_description}`);
-                if (record.video_description) lines.push(`Video: ${record.video_description}`);
-                if (!record.image_description && !record.audio_description && !record.video_description) lines.push("Description: None");
                 lines.push("");
             }
         }

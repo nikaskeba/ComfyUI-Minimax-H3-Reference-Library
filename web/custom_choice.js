@@ -16,6 +16,39 @@ app.registerExtension({
             const result = created?.apply(this, args);
             const choices = this.widgets.find(widget => widget.name === "choices");
             const selected = this.widgets.find(widget => widget.name === "selected");
+            const selectedInput = () => this.inputs?.find(input => input.name === "selected" || input.widget?.name === "selected");
+            const removeUnusedChoicesInput = () => {
+                const index = this.inputs?.findIndex(input => input.name === "choices" || input.widget?.name === "choices");
+                if (index >= 0 && this.inputs[index].link == null) this.removeInput(index);
+            };
+            const updateHosts = source => {
+                const rootGraph = this.graph?.rootGraph;
+                if (!rootGraph || this.graph === rootGraph) return;
+                for (const graph of [rootGraph, ...rootGraph.subgraphs.values()]) {
+                    for (const host of graph.nodes) {
+                        if (host.subgraph !== this.graph) continue;
+                        const input = host.inputs.find(input => input._subgraphSlot === source);
+                        if (input) input.type = "COMBO";
+                        host.rebuildInputWidgetBindings();
+                    }
+                }
+            };
+            const migrateChoicesInput = () => {
+                const sourceSlot = this.inputs?.find(input => input.name === "choices" || input.widget?.name === "choices");
+                const link = sourceSlot?.link != null ? this.graph?.getLink(sourceSlot.link) : null;
+                const source = link && this.graph?.inputNode?.slots[link.origin_slot];
+                if (!source || link.origin_id !== this.graph.inputNode.id || source.linkIds.length !== 1) {
+                    removeUnusedChoicesInput();
+                    return;
+                }
+                source.disconnect();
+                source.type = "COMBO";
+                source.connect(selectedInput(), this);
+                removeUnusedChoicesInput();
+                updateHosts(source);
+            };
+            this.skebaMigrateChoicesInput = migrateChoicesInput;
+            removeUnusedChoicesInput();
             choices.type = "converted-widget";
             choices.computeSize = () => [0, -4];
             if (choices.inputEl) choices.inputEl.hidden = true;
@@ -25,7 +58,7 @@ app.registerExtension({
             const edit = document.createElement("button"); edit.textContent = "Edit choices";
             edit.style.cssText = "justify-self:start;padding:3px 8px";
             const panel = document.createElement("div"); panel.hidden = true;
-            const hint = document.createElement("p"); hint.textContent = "One choice per line (or comma-separated). Values must match the target node exactly. Expose selected as a subgraph input to show these choices on the outer node.";
+            const hint = document.createElement("p"); hint.textContent = "One choice per line (or comma-separated). Values must match the target node exactly. The selected dropdown is the subgraph control.";
             hint.style.margin = "4px 0";
             const input = document.createElement("textarea"); input.rows = 3; input.setAttribute("aria-label", "Custom choices");
             input.style.cssText = "width:100%;box-sizing:border-box;resize:vertical";
@@ -36,7 +69,7 @@ app.registerExtension({
             const refresh = () => {
                 const values = parseChoices(choices.value);
                 selected.options = {...selected.options, values};
-                let socket = this.inputs?.find(input => input.widget?.name === "selected" || input.name === "selected");
+                let socket = selectedInput();
                 if (!socket) socket = this.addInput("selected", "COMBO", {widget: {name: "selected"}});
                 socket.type = "COMBO";
                 socket.widget ??= {name: "selected"};
@@ -44,10 +77,7 @@ app.registerExtension({
                 const rootGraph = this.graph?.rootGraph;
                 if (rootGraph && this.graph !== rootGraph) {
                     for (const graph of [rootGraph, ...rootGraph.subgraphs.values()]) {
-                        for (const host of graph.nodes) {
-                            if (host.subgraph !== this.graph) continue;
-                            host.rebuildInputWidgetBindings();
-                        }
+                        for (const host of graph.nodes) if (host.subgraph === this.graph) host.rebuildInputWidgetBindings();
                     }
                 }
                 // Preserve invalid saved values for backend validation, not silent substitution.
@@ -65,7 +95,7 @@ app.registerExtension({
             for (const event of ["pointerdown", "keydown", "wheel"]) root.addEventListener(event, e => e.stopPropagation());
             panel.append(hint, input, error, apply, cancel); root.append(edit, panel);
             this.addDOMWidget("choice_editor", "custom", root, {serialize: false, getMinHeight: () => 36});
-            this.skebaChoiceRefresh = () => { close(); refresh(); };
+            this.skebaChoiceRefresh = () => { close(); refresh(); queueMicrotask(migrateChoicesInput); };
             this.setSize([290, 150]); this.resizable = true;
             refresh();
             return result;
@@ -74,6 +104,12 @@ app.registerExtension({
         nodeType.prototype.onConfigure = function (...args) {
             const result = configure?.apply(this, args);
             this.skebaChoiceRefresh?.();
+            return result;
+        };
+        const connectionsChanged = nodeType.prototype.onConnectionsChange;
+        nodeType.prototype.onConnectionsChange = function (type, index, connected, link, slot, ...rest) {
+            const result = connectionsChanged?.call(this, type, index, connected, link, slot, ...rest);
+            if (connected && this.inputs?.[index]?.name === "choices") queueMicrotask(() => this.skebaMigrateChoicesInput?.());
             return result;
         };
     },

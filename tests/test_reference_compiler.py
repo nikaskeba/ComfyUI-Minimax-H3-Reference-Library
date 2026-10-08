@@ -38,6 +38,23 @@ class CompilerTests(unittest.TestCase):
         self.assertIn("<Picture 2>: The side seam and fit", result.prompt)
         self.assertIn("wears <Subject 1>", result.prompt)
 
+    def test_clothing_in_character_wardrobe_defines_outfit_once(self):
+        records = {
+            "celestial_rm": character("celestial.png"),
+            "George_Outfit_Plaid": dict(reference_type="clothing", name="George plaid outfit",
+                                       image_file="outfit.png"),
+        }
+        definition = ("{celestial_rm} portrays George. Wardrobe: {George_Outfit_Plaid}. "
+                      "She remains clearly a woman.")
+        result = compiler.compile_prompt(prompt(definition), records)
+        self.assertEqual(result.images, ["celestial_rm", "George_Outfit_Plaid"])
+        self.assertIn("Wardrobe: <Subject 2>.", result.prompt)
+        self.assertEqual(result.prompt.count("is George plaid outfit in <Picture 2>"), 1)
+        explicit = compiler.compile_prompt(prompt(definition + "\n{George_Outfit_Plaid}"), records)
+        self.assertEqual(explicit.prompt.count("is George plaid outfit in <Picture 2>"), 1)
+        with self.assertRaisesRegex(ValueError, "MISSING_SUBJECT_DEFINITION"):
+            compiler.compile_prompt(prompt("{celestial_rm}", "{George_Outfit_Plaid} is shown."), records)
+
     def test_separated_sentence_speakers_with_returning_turns(self):
         records = {"Jerry Seinfeld_BC": character("jerry.png", "jerry.wav"),
                    "Newmen_rm": character(None, "refmod:voice"),

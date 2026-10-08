@@ -81,11 +81,17 @@ try {
  assert.equal(await page.locator('#reference-creator-tab').isVisible(),false);
  await page.getByRole('tab',{name:'Reference Creator',exact:true}).click();
  assert.equal(await page.locator('#selection-guide').isVisible(),true);
+ await page.locator('#hide-guide-details').check();
+ guide=await page.locator('#selection-guide').textContent();
+ for(const tag of ['{Narrator}','{Actor_BC}','{actor_rm}','§actor_rm§'])assert.ok(guide.includes(tag),tag);
+ assert.doesNotMatch(guide,/Dark jacket|Deep voice|Played by|Image: Attached/);
  await page.reload();
  await page.waitForFunction(()=>document.getElementById('selection-guide').textContent.includes('{Actor_BC}')&&document.getElementById('selection-guide').textContent.includes('{actor_rm}'));
+ assert.equal(await page.locator('#hide-guide-details').isChecked(),true);
  assert.equal(await page.locator('#reference-creator-tab').isVisible(),true);
  await page.evaluate(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.copiedGuide=text;}}}));
  await page.locator('#copy-selection').click();assert.match(await page.evaluate(()=>window.copiedGuide),/§actor_rm§/);
+ assert.doesNotMatch(await page.evaluate(()=>window.copiedGuide),/Dark jacket|Deep voice|Played by|Image: Attached/);
  await page.locator('#clear-selection').click();await page.locator('#selection-empty').waitFor({state:'visible'});
  await mods.locator('#assets').getByRole('button',{name:'Select',exact:true}).waitFor();
  assert.deepEqual(await mods.evaluate(()=>['skeba-reference-selection','skeba-built-in-selection','skeba-refmod-selection'].map(key=>JSON.parse(localStorage.getItem(key)||'[]'))),[[],[],[]]);

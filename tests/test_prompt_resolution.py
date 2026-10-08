@@ -718,6 +718,22 @@ class PromptListValidatorTests(unittest.TestCase):
         self.assertEqual(compiled[0].count("Wardrobe: wearing <Subject"),2)
         self.assertEqual(compiled[0].count("is Prison Uniform."),1)
 
+    def test_clothing_nested_in_character_definition_validates(self):
+        from unittest.mock import patch
+        records = {"celestial_rm": dict(reference_type="character", name="Celestial"),
+                   "George_Outfit_Plaid": dict(reference_type="clothing", name="George plaid outfit",
+                                               image_file="outfit.png")}
+        source = ("subject_definitions:\n"
+                  "{celestial_rm} portrays George. Wardrobe: {George_Outfit_Plaid}. She remains clearly a woman.\n\n"
+                  "detailed_description:\n[Shot 1: 0s] {celestial_rm} waits quietly.\n"
+                  "overall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A")
+        with patch.object(MODULE, "records_by_tag", return_value=records), patch.object(MODULE, "library_built_in_records", return_value={}):
+            validated = MODULE.H3PromptListValidator().validate_list(source)
+            compiled = MODULE.H3TaggedReferencePrompt().build(source, compiler_mode=validated[1], defer_media_loading=True)
+        self.assertIn("Validated all 1 prompts", validated[3])
+        self.assertIn("Wardrobe: <Subject", compiled[0])
+        self.assertIn("is George plaid outfit in <Picture", compiled[0])
+
     def test_inline_subject_and_duration_in_list(self):
         source = "[new_location] [s=15]\nsubject_definitions:\n<object:coffee_cup = A white porcelain cup.>\ndetailed_description:\ntimeline:\n[Shot 1] A view of <object:coffee_cup>.\noverall_soundscape:\nRoom tone.\nnon_diegetic_music:\nN/A"
         result = MODULE.H3PromptListValidator().validate_list(source + "|" + source.replace("[new_location] [s=15]", ""))

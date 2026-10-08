@@ -1,6 +1,6 @@
 import {voiceDescriptionControl, requestVoiceDescription} from "./voice-description.js";
 import {bindLibrarySearch,bindLibraryCollection,restoreLibraryCollection} from "/h3-references/static/library-search.js?v=2";
-import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=1";
+import {renderReferenceGuide,referenceGuideText} from "./reference-guide.js?v=2";
 import {groupCatalog,refmodGuideRecord} from "./refmod-catalog.js?v=3";
 let refmodSelectionRequest=0;
 const apiRoot = "/api/h3-references/records";
@@ -27,7 +27,7 @@ const elements = Object.fromEntries([
     "library-count", "category-filter", "type-filter", "media-filter", "search", "add-reference", "clear-drafts", "drop-zone", "bulk-files",
     "drafts", "draft-actions", "draft-summary", "import-drafts", "import-error", "refresh", "empty-state",
     "records", "record-dialog", "record-form", "dialog-title", "close-dialog", "cancel-dialog",
-    "clear-selection", "copy-selection", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
+    "clear-selection", "copy-selection", "hide-guide-details", "selection-empty", "selection-guide", "record-id", "tag", "category", "reference-type",
     "new-category-row", "new-category", "category-options",
     "reference-notes", "additional-images-panel", "additional-images-count", "additional-images-list", "additional-images-files",
     "image-fields", "audio-fields", "video-fields", "image-file", "image-preview", "image-description", "audio-file", "audio-description", "video-file", "video-description",
@@ -1037,7 +1037,7 @@ function toggleSelection(recordId) {
 function selectedGuideRecords() {
     return [...state.records.filter(item => state.selected.has(item.id)), ...state.builtInSelected, ...state.refmodSelected];
 }
-function renderSelectionGuide() { renderReferenceGuide(selectedGuideRecords(), elements, removeGuideReference); }
+function renderSelectionGuide() { renderReferenceGuide(selectedGuideRecords(), elements, removeGuideReference, !elements["hide-guide-details"].checked); }
 function removeGuideReference(record) {
     if (record.built_in) {
         window.dispatchEvent(new CustomEvent("skeba-unselect-built-in", {detail: {tag: record.library_tag}}));
@@ -1057,7 +1057,7 @@ function removeGuideReference(record) {
     }
 }
 
-function selectionGuideText() { return referenceGuideText(selectedGuideRecords()); }
+function selectionGuideText() { return referenceGuideText(selectedGuideRecords(), !elements["hide-guide-details"].checked); }
 
 async function copySelectionGuide() {
     try {
@@ -1114,6 +1114,11 @@ window.addEventListener("skeba-built-in-selection-change", (event) => {
     renderSelectionGuide();
 });
 elements["copy-selection"].addEventListener("click", copySelectionGuide);
+elements["hide-guide-details"].checked = localStorage.getItem("skeba-hide-guide-details") === "true";
+elements["hide-guide-details"].addEventListener("change", () => {
+    localStorage.setItem("skeba-hide-guide-details", String(elements["hide-guide-details"].checked));
+    renderSelectionGuide();
+});
 elements["add-reference"].addEventListener("click", () => openEditor());
 elements.tag.addEventListener("blur", () => {
     const normalized = normalizeTag(elements.tag.value);

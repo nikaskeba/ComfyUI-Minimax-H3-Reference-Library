@@ -562,6 +562,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
     rendered = {}
     definition_blocks = []
     definition_prefix = ""
+    nested_clothing = set()
     for section, text in sections.items():
         spans = [usage for usage in usages if usage[0] == section]
         if section == "subject_definitions":
@@ -580,6 +581,8 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                 pieces = [render(r, section, voice, start)]
                 previous = end
                 for _, nested_start, nested_end, nested_id, nested_voice in spans[i+1:stop]:
+                    if owner.type == "character" and resources[nested_id].type == "clothing" and not nested_voice:
+                        nested_clothing.add(nested_id)
                     pieces.extend((text[previous:nested_start],
                                    render(resources[nested_id], "definition_reference", nested_voice, nested_start)))
                     previous = nested_end
@@ -592,6 +595,9 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
             previous = end
         pieces.append(text[previous:])
         rendered[section] = "".join(pieces).strip()
+    for rid in nested_clothing - definitions:
+        r = resources[rid]
+        definition_blocks.append((r.subject, 0, render(r, "subject_definitions", False, 0)))
     missing = [r.id for r in subjects if r.id not in definitions]
     if missing:
         fail("MISSING_SUBJECT_DEFINITION", ", ".join(missing))
