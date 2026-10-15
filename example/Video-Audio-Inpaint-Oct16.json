@@ -1,7 +1,7 @@
 {
   "id": "1dcd1078-ea8c-4e0f-8d94-a297a2511618",
   "revision": 0,
-  "last_node_id": 1369,
+  "last_node_id": 1373,
   "last_link_id": 2411,
   "nodes": [
     {
@@ -16,7 +16,7 @@
         122
       ],
       "flags": {},
-      "order": 247,
+      "order": 254,
       "mode": 0,
       "inputs": [
         {
@@ -263,7 +263,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 120,
+      "order": 125,
       "mode": 0,
       "inputs": [
         {
@@ -512,7 +512,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 133,
+      "order": 138,
       "mode": 0,
       "inputs": [
         {
@@ -591,7 +591,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 134,
+      "order": 139,
       "mode": 0,
       "inputs": [
         {
@@ -748,7 +748,7 @@
         190
       ],
       "flags": {},
-      "order": 161,
+      "order": 180,
       "mode": 0,
       "inputs": [
         {
@@ -884,7 +884,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 178,
+      "order": 199,
       "mode": 0,
       "inputs": [
         {
@@ -959,7 +959,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 176,
+      "order": 197,
       "mode": 0,
       "inputs": [
         {
@@ -1034,7 +1034,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 213,
+      "order": 222,
       "mode": 0,
       "inputs": [
         {
@@ -1107,7 +1107,7 @@
         162
       ],
       "flags": {},
-      "order": 256,
+      "order": 263,
       "mode": 0,
       "inputs": [
         {
@@ -1203,7 +1203,7 @@
         230
       ],
       "flags": {},
-      "order": 249,
+      "order": 256,
       "mode": 0,
       "inputs": [
         {
@@ -1460,7 +1460,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 159,
+      "order": 164,
       "mode": 0,
       "inputs": [
         {
@@ -1619,7 +1619,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 160,
+      "order": 165,
       "mode": 0,
       "inputs": [
         {
@@ -1860,7 +1860,7 @@
         110
       ],
       "flags": {},
-      "order": 123,
+      "order": 128,
       "mode": 0,
       "inputs": [
         {
@@ -2429,7 +2429,7 @@
         134
       ],
       "flags": {},
-      "order": 255,
+      "order": 262,
       "mode": 0,
       "inputs": [
         {
@@ -2518,7 +2518,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 257,
+      "order": 264,
       "mode": 0,
       "inputs": [
         {
@@ -2591,7 +2591,7 @@
         114
       ],
       "flags": {},
-      "order": 132,
+      "order": 137,
       "mode": 0,
       "inputs": [
         {
@@ -2669,7 +2669,7 @@
         86
       ],
       "flags": {},
-      "order": 167,
+      "order": 172,
       "mode": 0,
       "inputs": [
         {
@@ -2831,7 +2831,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 202,
+      "order": 212,
       "mode": 0,
       "inputs": [
         {
@@ -2906,7 +2906,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 175,
+      "order": 196,
       "mode": 0,
       "inputs": [
         {
@@ -3002,7 +3002,7 @@
         86
       ],
       "flags": {},
-      "order": 193,
+      "order": 205,
       "mode": 0,
       "inputs": [
         {
@@ -3103,7 +3103,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 203,
+      "order": 213,
       "mode": 0,
       "inputs": [
         {
@@ -3586,7 +3586,7 @@
         66
       ],
       "flags": {},
-      "order": 204,
+      "order": 214,
       "mode": 0,
       "inputs": [
         {
@@ -4245,7 +4245,7 @@
         122
       ],
       "flags": {},
-      "order": 188,
+      "order": 191,
       "mode": 0,
       "inputs": [
         {
@@ -4592,7 +4592,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 164,
+      "order": 169,
       "mode": 0,
       "inputs": [
         {
@@ -4835,7 +4835,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 169,
+      "order": 174,
       "mode": 0,
       "inputs": [
         {
@@ -5106,7 +5106,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 223,
+      "order": 229,
       "mode": 0,
       "inputs": [
         {
@@ -5181,7 +5181,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 222,
+      "order": 228,
       "mode": 0,
       "inputs": [
         {
@@ -5254,7 +5254,7 @@
         124.94008356037602
       ],
       "flags": {},
-      "order": 177,
+      "order": 198,
       "mode": 0,
       "inputs": [
         {
@@ -5367,7 +5367,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 125,
+      "order": 130,
       "mode": 0,
       "inputs": [
         {
@@ -5481,7 +5481,7 @@
         362
       ],
       "flags": {},
-      "order": 237,
+      "order": 244,
       "mode": 0,
       "inputs": [
         {
@@ -5592,7 +5592,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 241,
+      "order": 248,
       "mode": 0,
       "inputs": [
         {
@@ -5815,7 +5815,7 @@
         142
       ],
       "flags": {},
-      "order": 127,
+      "order": 132,
       "mode": 0,
       "inputs": [
         {
@@ -5985,7 +5985,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 240,
+      "order": 247,
       "mode": 0,
       "inputs": [
         {
@@ -6630,7 +6630,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 236,
+      "order": 243,
       "mode": 0,
       "inputs": [
         {
@@ -6989,7 +6989,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 135,
+      "order": 140,
       "mode": 0,
       "inputs": [
         {
@@ -7068,7 +7068,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 136,
+      "order": 141,
       "mode": 0,
       "inputs": [
         {
@@ -7147,7 +7147,7 @@
         160.6875
       ],
       "flags": {},
-      "order": 158,
+      "order": 163,
       "mode": 0,
       "inputs": [
         {
@@ -7241,7 +7241,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 233,
+      "order": 240,
       "mode": 0,
       "inputs": [
         {
@@ -7314,7 +7314,7 @@
         138
       ],
       "flags": {},
-      "order": 232,
+      "order": 239,
       "mode": 0,
       "inputs": [
         {
@@ -7733,7 +7733,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 243,
+      "order": 250,
       "mode": 0,
       "inputs": [
         {
@@ -7885,7 +7885,7 @@
         414
       ],
       "flags": {},
-      "order": 250,
+      "order": 257,
       "mode": 0,
       "inputs": [
         {
@@ -8108,7 +8108,7 @@
         78
       ],
       "flags": {},
-      "order": 244,
+      "order": 251,
       "mode": 0,
       "inputs": [
         {
@@ -8424,7 +8424,7 @@
         150
       ],
       "flags": {},
-      "order": 251,
+      "order": 258,
       "mode": 0,
       "inputs": [
         {
@@ -8506,7 +8506,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 234,
+      "order": 241,
       "mode": 0,
       "inputs": [
         {
@@ -8585,7 +8585,7 @@
       },
       "widgets_values": [
         true,
-        610162864645075,
+        168334701547314,
         "randomize",
         4,
         0.3,
@@ -8595,7 +8595,7 @@
       ],
       "widgets_values_named": {
         "enabled": true,
-        "seed": 610162864645075,
+        "seed": 168334701547314,
         "control_after_generate": "randomize",
         "steps": 4,
         "audio_denoise": 0.3,
@@ -9084,7 +9084,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 191,
+      "order": 194,
       "mode": 0,
       "inputs": [
         {
@@ -9153,7 +9153,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 201,
+      "order": 204,
       "mode": 0,
       "inputs": [
         {
@@ -9317,7 +9317,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 195,
+      "order": 207,
       "mode": 0,
       "inputs": [
         {
@@ -9428,7 +9428,7 @@
         746
       ],
       "flags": {},
-      "order": 197,
+      "order": 200,
       "mode": 0,
       "inputs": [
         {
@@ -9703,7 +9703,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 214,
+      "order": 223,
       "mode": 0,
       "inputs": [
         {
@@ -9858,7 +9858,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 212,
+      "order": 221,
       "mode": 0,
       "inputs": [
         {
@@ -10013,7 +10013,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 208,
+      "order": 218,
       "mode": 0,
       "inputs": [
         {
@@ -10088,7 +10088,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 196,
+      "order": 208,
       "mode": 0,
       "inputs": [
         {
@@ -10167,7 +10167,7 @@
         114
       ],
       "flags": {},
-      "order": 184,
+      "order": 187,
       "mode": 0,
       "inputs": [
         {
@@ -10329,7 +10329,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 145,
+      "order": 150,
       "mode": 0,
       "inputs": [
         {
@@ -10409,7 +10409,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 144,
+      "order": 149,
       "mode": 0,
       "inputs": [
         {
@@ -10488,7 +10488,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 143,
+      "order": 148,
       "mode": 0,
       "inputs": [
         {
@@ -10564,7 +10564,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 142,
+      "order": 147,
       "mode": 0,
       "inputs": [
         {
@@ -10640,7 +10640,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 141,
+      "order": 146,
       "mode": 0,
       "inputs": [
         {
@@ -10716,7 +10716,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 140,
+      "order": 145,
       "mode": 0,
       "inputs": [
         {
@@ -10792,7 +10792,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 139,
+      "order": 144,
       "mode": 0,
       "inputs": [
         {
@@ -10868,7 +10868,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 137,
+      "order": 142,
       "mode": 0,
       "inputs": [
         {
@@ -10944,7 +10944,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 183,
+      "order": 186,
       "mode": 0,
       "inputs": [
         {
@@ -11020,7 +11020,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 182,
+      "order": 185,
       "mode": 0,
       "inputs": [
         {
@@ -11096,7 +11096,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 181,
+      "order": 184,
       "mode": 0,
       "inputs": [
         {
@@ -11171,7 +11171,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 166,
+      "order": 171,
       "mode": 0,
       "inputs": [
         {
@@ -11367,7 +11367,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 179,
+      "order": 182,
       "mode": 0,
       "inputs": [
         {
@@ -11440,7 +11440,7 @@
         130
       ],
       "flags": {},
-      "order": 186,
+      "order": 189,
       "mode": 0,
       "inputs": [
         {
@@ -11547,7 +11547,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 199,
+      "order": 202,
       "mode": 0,
       "inputs": [
         {
@@ -11620,7 +11620,7 @@
         130
       ],
       "flags": {},
-      "order": 124,
+      "order": 129,
       "mode": 0,
       "inputs": [
         {
@@ -12055,7 +12055,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 165,
+      "order": 170,
       "mode": 0,
       "inputs": [
         {
@@ -12233,7 +12233,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 130,
+      "order": 135,
       "mode": 0,
       "inputs": [
         {
@@ -12580,7 +12580,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 253,
+      "order": 260,
       "mode": 0,
       "inputs": [
         {
@@ -12656,7 +12656,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 168,
+      "order": 173,
       "mode": 0,
       "inputs": [
         {
@@ -12752,7 +12752,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 185,
+      "order": 188,
       "mode": 0,
       "inputs": [
         {
@@ -12828,7 +12828,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 138,
+      "order": 143,
       "mode": 0,
       "inputs": [
         {
@@ -13086,7 +13086,7 @@
         720.0290784013564
       ],
       "flags": {},
-      "order": 121,
+      "order": 126,
       "mode": 0,
       "inputs": [
         {
@@ -13190,7 +13190,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 163,
+      "order": 168,
       "mode": 0,
       "inputs": [
         {
@@ -13265,7 +13265,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 226,
+      "order": 232,
       "mode": 0,
       "inputs": [
         {
@@ -13340,7 +13340,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 227,
+      "order": 233,
       "mode": 0,
       "inputs": [
         {
@@ -13413,7 +13413,7 @@
         114
       ],
       "flags": {},
-      "order": 198,
+      "order": 201,
       "mode": 0,
       "inputs": [
         {
@@ -13682,7 +13682,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 146,
+      "order": 151,
       "mode": 0,
       "inputs": [
         {
@@ -13919,7 +13919,7 @@
         346
       ],
       "flags": {},
-      "order": 238,
+      "order": 245,
       "mode": 0,
       "inputs": [
         {
@@ -14064,7 +14064,7 @@
         684.688929852116
       ],
       "flags": {},
-      "order": 128,
+      "order": 133,
       "mode": 0,
       "inputs": [
         {
@@ -14185,11 +14185,11 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "[new_location] [s=15]\n\nsubject_definitions:\n\n{celestial_rm} Preserve the exact recognizable facial identity, hairstyle, and physical appearance of the supplied reference. Wardrobe: wearing a glamorous, sparkling purple 1970s disco dress with platform heels. Instead of normal breasts, two large, anatomically recognizable human feet protrude from the chest area of her dress, with visible heels, arches, soles, and five individually articulated toes on each foot. The feet remain securely attached to her chest, moving independently, wiggling and flexing rhythmically throughout the dance. Her facial expressions are energetic, playful, and exaggerated.\n\n<character:C3PO = C-3PO, the recognizable full-sized golden humanoid protocol droid from Star Wars. His entire body is polished metallic gold with exposed mechanical joints, circular illuminated eyes, a rectangular mouth grille, and rigid robotic limbs. His movements are stiff, awkward, and mechanically precise. He dances beside Celestial without speaking or singing.>\n\n<location:Disco_Studio = A surreal 1970s disco television studio featuring a glowing multicolored dance floor, enormous rotating mirror balls, psychedelic wallpaper, flashing colored spotlights, theatrical fog, and shimmering metallic decorations.>\n\nsummary:\n\nA bizarre, energetic 1970s disco music video featuring Celestial dancing enthusiastically alongside C-3PO. Celestial has two enormous human feet protruding from her chest instead of breasts. She lip-syncs the supplied audio with precise mouth movements while dancing. Her chest-mounted feet wiggle their toes and bounce rhythmically. C-3PO performs hilariously stiff robotic disco moves beside her. The scene becomes increasingly psychedelic and absurd, with rapid camera movements, synchronized lighting, and exaggerated dance choreography.\n\ndetailed_description:\n\n[Shot 1] Authentic 1970s disco television cinematography with saturated colors, soft film grain, and dramatic studio lighting.\n\nA medium-wide frontal shot reveals {celestial_rm} standing beside <character:C3PO> on a glowing disco dance floor.\n\nCelestial's two enormous chest-mounted human feet are clearly visible, with their toes pointing outward.\n\nThe supplied audio begins immediately.\n\nCelestial starts dancing and lip-syncing the supplied audio with accurate mouth synchronization.\n\nC-3PO begins performing awkward robotic disco movements.\n\n[Shot 2] At 00:03.000, medium close-up of {celestial_rm}.\n\nShe continues lip-syncing the exact words and vocal timing of the supplied audio.\n\nHer chest-mounted feet wiggle their toes independently in synchronization with the musical rhythm.\n\nShe sways her hips, raises her arms, and spins playfully.\n\nThe camera follows her movements.\n\n[Shot 3] At 00:06.000, a dynamic two-shot reveals Celestial and C-3PO dancing side by side.\n\nC-3PO performs stiff robotic arm waves, mechanical hip rotations, and awkward disco finger-pointing.\n\nCelestial dances enthusiastically around him.\n\nHer chest-mounted feet flex their arches and wiggle their toes with exaggerated rhythmic precision.\n\nC-3PO remains completely silent.\n\n[Shot 4] At 00:09.000, dramatic low-angle tracking shot.\n\nCelestial moves toward the camera while continuing to lip-sync the supplied audio.\n\nHer facial expressions precisely match the emotional delivery of the original recording.\n\nC-3PO dances behind her, repeatedly attempting to imitate her movements.\n\nThe disco lights flash rapidly.\n\n[Shot 5] At 00:12.000, wide frontal shot.\n\nCelestial and C-3PO perform a synchronized disco dance routine.\n\nCelestial's chest-mounted feet wiggle all ten toes simultaneously.\n\nC-3PO raises both mechanical arms and performs an exaggerated robotic spin.\n\nThe camera rapidly pushes toward Celestial as she finishes lip-syncing the supplied audio.\n\nA spectacular burst of colorful disco lights fills the background.\n\noverall_soundscape:\n\nUse the supplied audio as the exclusive source of vocals and music.\n\nPreserve the original audio's exact words, vocal identity, pitch, timing, rhythm, and musical arrangement.\n\nCelestial performs all audible vocal content through precise lip synchronization.\n\nDo not generate replacement dialogue, additional singing, or new lyrics.\n\nC-3PO remains silent throughout.\n\nSubtle robotic servo movements and disco-floor footsteps may accompany the existing audio without overpowering it.\n\nnon_diegetic_music:\n\nUse the supplied audio unchanged.\n\nAll choreography, camera movements, lighting effects, and chest-mounted foot movements synchronize with the original musical rhythm.\n\nDo not introduce additional background music.\n\n|\n[new_location] [s=15]\n\nsubject_definitions:\n\n{celestial_rm} Preserve the exact recognizable facial identity, hairstyle, and physical appearance of the supplied reference. Wardrobe: wearing a glamorous, sparkling purple 1970s disco dress with platform heels. Instead of normal breasts, two large, anatomically recognizable human feet protrude from the chest area of her dress, with visible heels, arches, soles, and five individually articulated toes on each foot. The feet remain securely attached to her chest, moving independently, wiggling and flexing rhythmically throughout the dance. Her facial expressions are energetic, playful, and exaggerated.\n\n<character:C3PO = C-3PO, the recognizable full-sized golden humanoid protocol droid from Star Wars. His entire body is polished metallic gold with exposed mechanical joints, circular illuminated eyes, a rectangular mouth grille, and rigid robotic limbs. His movements are stiff, awkward, and mechanically precise. He dances beside Celestial without speaking or singing.>\n\n<location:Disco_Studio = A surreal 1970s disco television studio featuring a glowing multicolored dance floor, enormous rotating mirror balls, psychedelic wallpaper, flashing colored spotlights, theatrical fog, and shimmering metallic decorations.>\n\nsummary:\n\nA bizarre, energetic 1970s disco music video featuring Celestial dancing enthusiastically alongside C-3PO. Celestial has two enormous human feet protruding from her chest instead of breasts. She lip-syncs the supplied audio with precise mouth movements while dancing. Her chest-mounted feet wiggle their toes and bounce rhythmically. C-3PO performs hilariously stiff robotic disco moves beside her. The scene becomes increasingly psychedelic and absurd, with rapid camera movements, synchronized lighting, and exaggerated dance choreography.\n\ndetailed_description:\n\n[Shot 1] Authentic 1970s disco television cinematography with saturated colors, soft film grain, and dramatic studio lighting.\n\nA medium-wide frontal shot reveals {celestial_rm} standing beside <character:C3PO> on a glowing disco dance floor.\n\nCelestial's two enormous chest-mounted human feet are clearly visible, with their toes pointing outward.\n\nThe supplied audio begins immediately.\n\nCelestial starts dancing and lip-syncing the supplied audio with accurate mouth synchronization.\n\nC-3PO begins performing awkward robotic disco movements.\n\n[Shot 2] At 00:03.000, medium close-up of {celestial_rm}.\n\nShe continues lip-syncing the exact words and vocal timing of the supplied audio.\n\nHer chest-mounted feet wiggle their toes independently in synchronization with the musical rhythm.\n\nShe sways her hips, raises her arms, and spins playfully.\n\nThe camera follows her movements.\n\n[Shot 3] At 00:06.000, a dynamic two-shot reveals Celestial and C-3PO dancing side by side.\n\nC-3PO performs stiff robotic arm waves, mechanical hip rotations, and awkward disco finger-pointing.\n\nCelestial dances enthusiastically around him.\n\nHer chest-mounted feet flex their arches and wiggle their toes with exaggerated rhythmic precision.\n\nC-3PO remains completely silent.\n\n[Shot 4] At 00:09.000, dramatic low-angle tracking shot.\n\nCelestial moves toward the camera while continuing to lip-sync the supplied audio.\n\nHer facial expressions precisely match the emotional delivery of the original recording.\n\nC-3PO dances behind her, repeatedly attempting to imitate her movements.\n\nThe disco lights flash rapidly.\n\n[Shot 5] At 00:12.000, wide frontal shot.\n\nCelestial and C-3PO perform a synchronized disco dance routine.\n\nCelestial's chest-mounted feet wiggle all ten toes simultaneously.\n\nC-3PO raises both mechanical arms and performs an exaggerated robotic spin.\n\nThe camera rapidly pushes toward Celestial as she finishes lip-syncing the supplied audio.\n\nA spectacular burst of colorful disco lights fills the background.\n\noverall_soundscape:\n\nUse the supplied audio as the exclusive source of vocals and music.\n\nPreserve the original audio's exact words, vocal identity, pitch, timing, rhythm, and musical arrangement.\n\nCelestial performs all audible vocal content through precise lip synchronization.\n\nDo not generate replacement dialogue, additional singing, or new lyrics.\n\nC-3PO remains silent throughout.\n\nSubtle robotic servo movements and disco-floor footsteps may accompany the existing audio without overpowering it.\n\nnon_diegetic_music:\n\nUse the supplied audio unchanged.\n\nAll choreography, camera movements, lighting effects, and chest-mounted foot movements synchronize with the original musical rhythm.\n\nDo not introduce additional background music.",
+        "[new_location] [s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. His appearance, clothing, colors, facial proportions, and hairstyle remain identical throughout all five clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Her appearance and wardrobe remain identical throughout all five clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. He has exaggerated elastic limbs and comically enthusiastic dance movements. His appearance and wardrobe remain identical throughout all five clips.>\n\n<location:Cartoon_High_School = A colorful 1990s American cartoon high school with long hallways, turquoise lockers, checkerboard floors, colorful posters, classroom doors, and large windows. The environment is illustrated using traditional hand-drawn cel animation with thick black outlines, flat saturated colors, and painted backgrounds.>\n\nsummary:\n\nA vibrant 1990s Saturday-morning cartoon music video driven entirely by the supplied audio of \"Don't You (Forget About Me).\" Three original cartoon characters dance and lip-sync in a colorful high school hallway. The lead singer performs the actual vocals from the supplied song while the other characters dance and join in only when corresponding vocals are audible. Every movement, cut, facial expression, and lip movement follows the actual audio timing.\n\ndetailed_description:\n\n[Shot 1] Traditional 1990s hand-drawn Saturday-morning cartoon animation, 24 fps presentation with expressive animation on twos, thick black outlines, saturated colors, and painted backgrounds.\n\nA colorful high school hallway stretches into the distance.\n\nThe three cartoon characters stand together in front of turquoise lockers.\n\nThe camera begins a rhythmic push toward Cartoon_Lead.\n\nThe animation follows the supplied audio from its very first audible moment.\n\nNo additional dialogue.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nCartoon_Lead begins lip-syncing the exact lead vocals audible in the supplied audio.\n\nHis mouth shapes follow the actual sung phonemes, syllables, consonants, vowels, and sustained notes.\n\nHis eyebrows and head movements emphasize the vocal phrasing.\n\nHe performs a dramatic 1980s-inspired shoulder roll.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl slides into frame and begins an energetic side-to-side dance.\n\nCartoon_Friend performs exaggerated elastic knee bends.\n\nCartoon_Lead continues singing only when the supplied audio contains lead vocals.\n\nThe camera cuts on a prominent musical beat.\n\n[Shot 4] At 00:10.000, close-up of Cartoon_Lead.\n\nHe points directly toward the camera during a prominent vocal phrase.\n\nHis mouth movements match the exact timing of the supplied recording.\n\nCartoon_Girl dances behind him.\n\n[Shot 5] At 00:13.000, wide shot.\n\nAll three characters perform a synchronized step-touch dance.\n\nTheir feet contact the floor precisely on the musical beat.\n\nThe camera tracks backward as the characters dance toward it.\n\nContinue the music and animation seamlessly into the next clip.\n\noverall_soundscape:\n\nThe supplied audio recording of \"Don't You (Forget About Me)\" is the sole authoritative soundtrack.\n\nPreserve the original vocals, instrumentation, tempo, rhythm, dynamics, and recording quality.\n\nDo not regenerate, replace, reinterpret, or alter the song.\n\nDo not add spoken dialogue, sound effects, audience laughter, or additional vocals.\n\nAll lip-sync, choreography, editing, and camera movements must follow the supplied audio.\n\nnon_diegetic_music:\n\nUse only the supplied song audio. No additional music.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<location:Cartoon_High_School = The identical colorful 1990s cartoon high school from the previous clip, with turquoise lockers, checkerboard floors, painted backgrounds, classroom doors, and colorful posters.>\n\nsummary:\n\nContinuing directly from the previous clip, the three cartoon characters dance through the school hallway. The animation becomes increasingly energetic, featuring exaggerated 1990s cartoon squash-and-stretch movements, musical transitions, and precise lip-sync to the actual supplied audio. The lead singer remains the primary vocalist.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip's final frame.\n\nThe three characters dance toward the camera in the same hallway.\n\nTheir appearances and clothing remain identical.\n\nThe supplied audio continues from its corresponding next section without restarting.\n\nThe camera tracks backward smoothly.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nHe lip-syncs the exact vocal performance audible in the supplied audio.\n\nHis mouth opens naturally for sustained sung vowels and closes precisely on consonants.\n\nHe dramatically raises one arm overhead.\n\nHis red varsity jacket sways with the movement.\n\n[Shot 3] At 00:06.000, medium shot of Cartoon_Girl.\n\nShe performs an exaggerated spinning dance move.\n\nHer blonde hair and purple headband follow the rotation with traditional cartoon secondary motion.\n\nShe does not lip-sync unless corresponding backing vocals are audible.\n\n[Shot 4] At 00:09.000, medium shot of Cartoon_Friend.\n\nHe performs a ridiculous moonwalk.\n\nHis oversized sneakers stretch and squash against the checkerboard floor.\n\nHis glasses bounce rhythmically.\n\nThe camera cuts on a strong musical accent.\n\n[Shot 5] At 00:12.000, medium-wide shot.\n\nCartoon_Lead slides into the foreground, continuing accurate lip-sync.\n\nCartoon_Girl and Cartoon_Friend perform synchronized dance movements behind him.\n\nTheir movements align with the actual beat and musical phrasing.\n\nContinue seamlessly into the next clip.\n\noverall_soundscape:\n\nPreserve the supplied song audio without modification.\n\nNo dialogue, additional vocals, laughter, or sound effects.\n\nThe music determines the timing of every animated movement and camera cut.\n\nnon_diegetic_music:\n\nOnly the supplied recording of \"Don't You (Forget About Me).\"\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<location:Cartoon_Gymnasium = A colorful 1990s cartoon high school gymnasium connected to the hallway, featuring polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a small raised stage. The environment uses the same traditional hand-painted cel-animation aesthetic as the previous clips.>\n\nsummary:\n\nThe music video transitions from the school hallway into a colorful gymnasium. The three cartoon characters perform increasingly elaborate synchronized dance choreography. Cartoon_Lead continues accurate lip-sync to the supplied vocals while the other characters perform exaggerated cartoon dance routines. The music remains continuous and determines the visual timing.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip.\n\nCartoon_Lead pushes open a pair of gymnasium doors on a musical accent.\n\nThe three characters dance into the gymnasium.\n\nThe camera follows them through the doorway.\n\nThe supplied song continues uninterrupted.\n\n[Shot 2] At 00:03.000, medium-close shot of Cartoon_Lead.\n\nHe performs accurate phoneme-level lip-sync to the vocals currently audible in the supplied recording.\n\nHis eyes widen expressively during stronger vocal phrases.\n\nHe points dramatically toward the gymnasium stage.\n\n[Shot 3] At 00:06.000, wide shot.\n\nCartoon_Girl leaps onto the polished gymnasium floor and performs a spinning dance move.\n\nCartoon_Friend attempts to imitate her but spins too quickly.\n\nHis cartoon body stretches comically before snapping back into its normal proportions.\n\n[Shot 4] At 00:09.000, medium shot of Cartoon_Lead.\n\nHe dances toward the camera while continuing precise vocal lip-sync.\n\nHis facial expressions emphasize the emotional intensity of the recording.\n\nThe camera performs a rhythmic push-in.\n\n[Shot 5] At 00:12.000, wide shot.\n\nThe three characters line up across the gymnasium floor.\n\nThey perform a synchronized side-step, shoulder roll, and dramatic arm raise.\n\nTheir choreography matches the supplied song's beat.\n\nThe camera rises slightly to reveal the colorful gymnasium.\n\nContinue directly into the next clip.\n\noverall_soundscape:\n\nUse the supplied song recording exclusively.\n\nPreserve its original vocals, rhythm, instrumentation, and dynamics.\n\nNo additional dialogue or sound effects.\n\nLip-sync and choreography must be driven by the audio.\n\nnon_diegetic_music:\n\nOnly the supplied song audio.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the identical 1990s cartoon design.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Preserve the identical 1990s cartoon design.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Preserve the identical 1990s cartoon design.>\n\n<location:Cartoon_Gymnasium = The identical colorful cartoon gymnasium from the previous clip, featuring polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a raised stage.>\n\nsummary:\n\nContinuing in the gymnasium, the music video becomes a full cartoon dance performance. The lead singer takes center stage while the other two characters perform synchronized choreography. Exaggerated squash-and-stretch animation, colorful lighting effects, and expressive facial animation emphasize the music's rhythm and emotional intensity.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip's final shot.\n\nThe three cartoon characters dance toward the raised gymnasium stage.\n\nThe camera tracks alongside them.\n\nThe supplied audio continues from its corresponding next section.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead standing on the stage.\n\nHe lip-syncs precisely to the current vocal phrase.\n\nHis mouth shapes follow the actual phonemes and sustained notes.\n\nHis eyebrows move expressively.\n\nHe raises one arm dramatically toward the ceiling.\n\n[Shot 3] At 00:06.000, wide shot.\n\nCartoon_Girl and Cartoon_Friend perform synchronized dance movements on either side of the stage.\n\nThey alternate side-steps, shoulder rolls, and exaggerated cartoon spins.\n\nTheir feet land on the actual musical beats.\n\n[Shot 4] At 00:09.000, close-up of Cartoon_Lead.\n\nHe performs an expressive singing gesture toward the camera.\n\nHis mouth remains synchronized with the supplied lead vocal.\n\nThe camera slowly pushes closer during a sustained vocal phrase, if one occurs in the audio.\n\n[Shot 5] At 00:12.000, wide shot.\n\nThe three characters perform a coordinated jump.\n\nTheir bodies stretch slightly upward in exaggerated traditional cartoon animation.\n\nThey land together on a strong musical beat.\n\nColorful stage lights flash in synchronization with the music.\n\nContinue seamlessly into the final clip.\n\noverall_soundscape:\n\nThe supplied recording remains the sole soundtrack.\n\nNo additional dialogue, sound effects, or audience laughter.\n\nAll vocal animation, choreography, and editing must remain synchronized with the original audio.\n\nnon_diegetic_music:\n\nOnly the supplied song recording.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the exact character design from the previous four clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Preserve the exact character design from the previous four clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Preserve the exact character design from the previous four clips.>\n\n<location:Cartoon_Gymnasium = The identical colorful 1990s cartoon gymnasium from the previous clips, with polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a raised stage.>\n\nsummary:\n\nThe final 15 seconds of this five-part cartoon music video feature an energetic synchronized dance sequence in the gymnasium. Cartoon_Lead continues singing along with the supplied audio while Cartoon_Girl and Cartoon_Friend perform increasingly exaggerated choreography. The sequence concludes with a memorable freeze-frame pose in the style of a classic 1990s animated television music video.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip.\n\nThe three cartoon characters stand on the gymnasium stage.\n\nTheir appearance, clothing, and animation style remain unchanged.\n\nThe supplied audio continues uninterrupted from the previous segment.\n\nThe camera begins a rhythmic circular tracking movement.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nHe lip-syncs accurately to the actual vocals audible in the supplied audio.\n\nHis facial expressions follow the emotion and intensity of the singer's performance.\n\nHis mouth movements remain precisely aligned with the recording.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl performs a fast spinning dance move.\n\nCartoon_Friend attempts a dramatic slide across the stage.\n\nHis oversized sneakers squeak visually through exaggerated squash-and-stretch animation, without adding sound effects.\n\nCartoon_Lead continues performing in the center.\n\n[Shot 4] At 00:09.000, close-up of Cartoon_Lead.\n\nThe camera pushes toward his expressive cartoon face.\n\nHe performs accurate lip-sync during the current vocal phrase.\n\nHis eyebrows rise and his arm extends dramatically toward the audience.\n\n[Shot 5] At 00:12.000, wide shot.\n\nAll three characters perform a synchronized final dance combination.\n\nTheir movements remain synchronized with the actual audio rather than an assumed musical climax.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nThe three characters strike a dramatic group pose.\n\nThe image briefly freezes in the style of a classic 1990s cartoon music video.\n\nColorful geometric shapes appear behind them.\n\nThe supplied music continues naturally without an artificial ending.\n\noverall_soundscape:\n\nUse only the supplied song recording.\n\nPreserve the original vocals, instrumentation, tempo, dynamics, and audio quality.\n\nDo not introduce new dialogue, vocal performances, sound effects, or laughter.\n\nAll animation remains synchronized with the audio.\n\nnon_diegetic_music:\n\nOnly the supplied recording of \"Don't You (Forget About Me).\"",
         ""
       ],
       "widgets_values_named": {
-        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n{celestial_rm} Preserve the exact recognizable facial identity, hairstyle, and physical appearance of the supplied reference. Wardrobe: wearing a glamorous, sparkling purple 1970s disco dress with platform heels. Instead of normal breasts, two large, anatomically recognizable human feet protrude from the chest area of her dress, with visible heels, arches, soles, and five individually articulated toes on each foot. The feet remain securely attached to her chest, moving independently, wiggling and flexing rhythmically throughout the dance. Her facial expressions are energetic, playful, and exaggerated.\n\n<character:C3PO = C-3PO, the recognizable full-sized golden humanoid protocol droid from Star Wars. His entire body is polished metallic gold with exposed mechanical joints, circular illuminated eyes, a rectangular mouth grille, and rigid robotic limbs. His movements are stiff, awkward, and mechanically precise. He dances beside Celestial without speaking or singing.>\n\n<location:Disco_Studio = A surreal 1970s disco television studio featuring a glowing multicolored dance floor, enormous rotating mirror balls, psychedelic wallpaper, flashing colored spotlights, theatrical fog, and shimmering metallic decorations.>\n\nsummary:\n\nA bizarre, energetic 1970s disco music video featuring Celestial dancing enthusiastically alongside C-3PO. Celestial has two enormous human feet protruding from her chest instead of breasts. She lip-syncs the supplied audio with precise mouth movements while dancing. Her chest-mounted feet wiggle their toes and bounce rhythmically. C-3PO performs hilariously stiff robotic disco moves beside her. The scene becomes increasingly psychedelic and absurd, with rapid camera movements, synchronized lighting, and exaggerated dance choreography.\n\ndetailed_description:\n\n[Shot 1] Authentic 1970s disco television cinematography with saturated colors, soft film grain, and dramatic studio lighting.\n\nA medium-wide frontal shot reveals {celestial_rm} standing beside <character:C3PO> on a glowing disco dance floor.\n\nCelestial's two enormous chest-mounted human feet are clearly visible, with their toes pointing outward.\n\nThe supplied audio begins immediately.\n\nCelestial starts dancing and lip-syncing the supplied audio with accurate mouth synchronization.\n\nC-3PO begins performing awkward robotic disco movements.\n\n[Shot 2] At 00:03.000, medium close-up of {celestial_rm}.\n\nShe continues lip-syncing the exact words and vocal timing of the supplied audio.\n\nHer chest-mounted feet wiggle their toes independently in synchronization with the musical rhythm.\n\nShe sways her hips, raises her arms, and spins playfully.\n\nThe camera follows her movements.\n\n[Shot 3] At 00:06.000, a dynamic two-shot reveals Celestial and C-3PO dancing side by side.\n\nC-3PO performs stiff robotic arm waves, mechanical hip rotations, and awkward disco finger-pointing.\n\nCelestial dances enthusiastically around him.\n\nHer chest-mounted feet flex their arches and wiggle their toes with exaggerated rhythmic precision.\n\nC-3PO remains completely silent.\n\n[Shot 4] At 00:09.000, dramatic low-angle tracking shot.\n\nCelestial moves toward the camera while continuing to lip-sync the supplied audio.\n\nHer facial expressions precisely match the emotional delivery of the original recording.\n\nC-3PO dances behind her, repeatedly attempting to imitate her movements.\n\nThe disco lights flash rapidly.\n\n[Shot 5] At 00:12.000, wide frontal shot.\n\nCelestial and C-3PO perform a synchronized disco dance routine.\n\nCelestial's chest-mounted feet wiggle all ten toes simultaneously.\n\nC-3PO raises both mechanical arms and performs an exaggerated robotic spin.\n\nThe camera rapidly pushes toward Celestial as she finishes lip-syncing the supplied audio.\n\nA spectacular burst of colorful disco lights fills the background.\n\noverall_soundscape:\n\nUse the supplied audio as the exclusive source of vocals and music.\n\nPreserve the original audio's exact words, vocal identity, pitch, timing, rhythm, and musical arrangement.\n\nCelestial performs all audible vocal content through precise lip synchronization.\n\nDo not generate replacement dialogue, additional singing, or new lyrics.\n\nC-3PO remains silent throughout.\n\nSubtle robotic servo movements and disco-floor footsteps may accompany the existing audio without overpowering it.\n\nnon_diegetic_music:\n\nUse the supplied audio unchanged.\n\nAll choreography, camera movements, lighting effects, and chest-mounted foot movements synchronize with the original musical rhythm.\n\nDo not introduce additional background music.\n\n|\n[new_location] [s=15]\n\nsubject_definitions:\n\n{celestial_rm} Preserve the exact recognizable facial identity, hairstyle, and physical appearance of the supplied reference. Wardrobe: wearing a glamorous, sparkling purple 1970s disco dress with platform heels. Instead of normal breasts, two large, anatomically recognizable human feet protrude from the chest area of her dress, with visible heels, arches, soles, and five individually articulated toes on each foot. The feet remain securely attached to her chest, moving independently, wiggling and flexing rhythmically throughout the dance. Her facial expressions are energetic, playful, and exaggerated.\n\n<character:C3PO = C-3PO, the recognizable full-sized golden humanoid protocol droid from Star Wars. His entire body is polished metallic gold with exposed mechanical joints, circular illuminated eyes, a rectangular mouth grille, and rigid robotic limbs. His movements are stiff, awkward, and mechanically precise. He dances beside Celestial without speaking or singing.>\n\n<location:Disco_Studio = A surreal 1970s disco television studio featuring a glowing multicolored dance floor, enormous rotating mirror balls, psychedelic wallpaper, flashing colored spotlights, theatrical fog, and shimmering metallic decorations.>\n\nsummary:\n\nA bizarre, energetic 1970s disco music video featuring Celestial dancing enthusiastically alongside C-3PO. Celestial has two enormous human feet protruding from her chest instead of breasts. She lip-syncs the supplied audio with precise mouth movements while dancing. Her chest-mounted feet wiggle their toes and bounce rhythmically. C-3PO performs hilariously stiff robotic disco moves beside her. The scene becomes increasingly psychedelic and absurd, with rapid camera movements, synchronized lighting, and exaggerated dance choreography.\n\ndetailed_description:\n\n[Shot 1] Authentic 1970s disco television cinematography with saturated colors, soft film grain, and dramatic studio lighting.\n\nA medium-wide frontal shot reveals {celestial_rm} standing beside <character:C3PO> on a glowing disco dance floor.\n\nCelestial's two enormous chest-mounted human feet are clearly visible, with their toes pointing outward.\n\nThe supplied audio begins immediately.\n\nCelestial starts dancing and lip-syncing the supplied audio with accurate mouth synchronization.\n\nC-3PO begins performing awkward robotic disco movements.\n\n[Shot 2] At 00:03.000, medium close-up of {celestial_rm}.\n\nShe continues lip-syncing the exact words and vocal timing of the supplied audio.\n\nHer chest-mounted feet wiggle their toes independently in synchronization with the musical rhythm.\n\nShe sways her hips, raises her arms, and spins playfully.\n\nThe camera follows her movements.\n\n[Shot 3] At 00:06.000, a dynamic two-shot reveals Celestial and C-3PO dancing side by side.\n\nC-3PO performs stiff robotic arm waves, mechanical hip rotations, and awkward disco finger-pointing.\n\nCelestial dances enthusiastically around him.\n\nHer chest-mounted feet flex their arches and wiggle their toes with exaggerated rhythmic precision.\n\nC-3PO remains completely silent.\n\n[Shot 4] At 00:09.000, dramatic low-angle tracking shot.\n\nCelestial moves toward the camera while continuing to lip-sync the supplied audio.\n\nHer facial expressions precisely match the emotional delivery of the original recording.\n\nC-3PO dances behind her, repeatedly attempting to imitate her movements.\n\nThe disco lights flash rapidly.\n\n[Shot 5] At 00:12.000, wide frontal shot.\n\nCelestial and C-3PO perform a synchronized disco dance routine.\n\nCelestial's chest-mounted feet wiggle all ten toes simultaneously.\n\nC-3PO raises both mechanical arms and performs an exaggerated robotic spin.\n\nThe camera rapidly pushes toward Celestial as she finishes lip-syncing the supplied audio.\n\nA spectacular burst of colorful disco lights fills the background.\n\noverall_soundscape:\n\nUse the supplied audio as the exclusive source of vocals and music.\n\nPreserve the original audio's exact words, vocal identity, pitch, timing, rhythm, and musical arrangement.\n\nCelestial performs all audible vocal content through precise lip synchronization.\n\nDo not generate replacement dialogue, additional singing, or new lyrics.\n\nC-3PO remains silent throughout.\n\nSubtle robotic servo movements and disco-floor footsteps may accompany the existing audio without overpowering it.\n\nnon_diegetic_music:\n\nUse the supplied audio unchanged.\n\nAll choreography, camera movements, lighting effects, and chest-mounted foot movements synchronize with the original musical rhythm.\n\nDo not introduce additional background music.",
+        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. His appearance, clothing, colors, facial proportions, and hairstyle remain identical throughout all five clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Her appearance and wardrobe remain identical throughout all five clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. He has exaggerated elastic limbs and comically enthusiastic dance movements. His appearance and wardrobe remain identical throughout all five clips.>\n\n<location:Cartoon_High_School = A colorful 1990s American cartoon high school with long hallways, turquoise lockers, checkerboard floors, colorful posters, classroom doors, and large windows. The environment is illustrated using traditional hand-drawn cel animation with thick black outlines, flat saturated colors, and painted backgrounds.>\n\nsummary:\n\nA vibrant 1990s Saturday-morning cartoon music video driven entirely by the supplied audio of \"Don't You (Forget About Me).\" Three original cartoon characters dance and lip-sync in a colorful high school hallway. The lead singer performs the actual vocals from the supplied song while the other characters dance and join in only when corresponding vocals are audible. Every movement, cut, facial expression, and lip movement follows the actual audio timing.\n\ndetailed_description:\n\n[Shot 1] Traditional 1990s hand-drawn Saturday-morning cartoon animation, 24 fps presentation with expressive animation on twos, thick black outlines, saturated colors, and painted backgrounds.\n\nA colorful high school hallway stretches into the distance.\n\nThe three cartoon characters stand together in front of turquoise lockers.\n\nThe camera begins a rhythmic push toward Cartoon_Lead.\n\nThe animation follows the supplied audio from its very first audible moment.\n\nNo additional dialogue.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nCartoon_Lead begins lip-syncing the exact lead vocals audible in the supplied audio.\n\nHis mouth shapes follow the actual sung phonemes, syllables, consonants, vowels, and sustained notes.\n\nHis eyebrows and head movements emphasize the vocal phrasing.\n\nHe performs a dramatic 1980s-inspired shoulder roll.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl slides into frame and begins an energetic side-to-side dance.\n\nCartoon_Friend performs exaggerated elastic knee bends.\n\nCartoon_Lead continues singing only when the supplied audio contains lead vocals.\n\nThe camera cuts on a prominent musical beat.\n\n[Shot 4] At 00:10.000, close-up of Cartoon_Lead.\n\nHe points directly toward the camera during a prominent vocal phrase.\n\nHis mouth movements match the exact timing of the supplied recording.\n\nCartoon_Girl dances behind him.\n\n[Shot 5] At 00:13.000, wide shot.\n\nAll three characters perform a synchronized step-touch dance.\n\nTheir feet contact the floor precisely on the musical beat.\n\nThe camera tracks backward as the characters dance toward it.\n\nContinue the music and animation seamlessly into the next clip.\n\noverall_soundscape:\n\nThe supplied audio recording of \"Don't You (Forget About Me)\" is the sole authoritative soundtrack.\n\nPreserve the original vocals, instrumentation, tempo, rhythm, dynamics, and recording quality.\n\nDo not regenerate, replace, reinterpret, or alter the song.\n\nDo not add spoken dialogue, sound effects, audience laughter, or additional vocals.\n\nAll lip-sync, choreography, editing, and camera movements must follow the supplied audio.\n\nnon_diegetic_music:\n\nUse only the supplied song audio. No additional music.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. Preserve the exact character design and wardrobe from the previous clip.>\n\n<location:Cartoon_High_School = The identical colorful 1990s cartoon high school from the previous clip, with turquoise lockers, checkerboard floors, painted backgrounds, classroom doors, and colorful posters.>\n\nsummary:\n\nContinuing directly from the previous clip, the three cartoon characters dance through the school hallway. The animation becomes increasingly energetic, featuring exaggerated 1990s cartoon squash-and-stretch movements, musical transitions, and precise lip-sync to the actual supplied audio. The lead singer remains the primary vocalist.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip's final frame.\n\nThe three characters dance toward the camera in the same hallway.\n\nTheir appearances and clothing remain identical.\n\nThe supplied audio continues from its corresponding next section without restarting.\n\nThe camera tracks backward smoothly.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nHe lip-syncs the exact vocal performance audible in the supplied audio.\n\nHis mouth opens naturally for sustained sung vowels and closes precisely on consonants.\n\nHe dramatically raises one arm overhead.\n\nHis red varsity jacket sways with the movement.\n\n[Shot 3] At 00:06.000, medium shot of Cartoon_Girl.\n\nShe performs an exaggerated spinning dance move.\n\nHer blonde hair and purple headband follow the rotation with traditional cartoon secondary motion.\n\nShe does not lip-sync unless corresponding backing vocals are audible.\n\n[Shot 4] At 00:09.000, medium shot of Cartoon_Friend.\n\nHe performs a ridiculous moonwalk.\n\nHis oversized sneakers stretch and squash against the checkerboard floor.\n\nHis glasses bounce rhythmically.\n\nThe camera cuts on a strong musical accent.\n\n[Shot 5] At 00:12.000, medium-wide shot.\n\nCartoon_Lead slides into the foreground, continuing accurate lip-sync.\n\nCartoon_Girl and Cartoon_Friend perform synchronized dance movements behind him.\n\nTheir movements align with the actual beat and musical phrasing.\n\nContinue seamlessly into the next clip.\n\noverall_soundscape:\n\nPreserve the supplied song audio without modification.\n\nNo dialogue, additional vocals, laughter, or sound effects.\n\nThe music determines the timing of every animated movement and camera cut.\n\nnon_diegetic_music:\n\nOnly the supplied recording of \"Don't You (Forget About Me).\"\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Traditional 1990s hand-drawn cartoon design. Preserve exact appearance.>\n\n<location:Cartoon_Gymnasium = A colorful 1990s cartoon high school gymnasium connected to the hallway, featuring polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a small raised stage. The environment uses the same traditional hand-painted cel-animation aesthetic as the previous clips.>\n\nsummary:\n\nThe music video transitions from the school hallway into a colorful gymnasium. The three cartoon characters perform increasingly elaborate synchronized dance choreography. Cartoon_Lead continues accurate lip-sync to the supplied vocals while the other characters perform exaggerated cartoon dance routines. The music remains continuous and determines the visual timing.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip.\n\nCartoon_Lead pushes open a pair of gymnasium doors on a musical accent.\n\nThe three characters dance into the gymnasium.\n\nThe camera follows them through the doorway.\n\nThe supplied song continues uninterrupted.\n\n[Shot 2] At 00:03.000, medium-close shot of Cartoon_Lead.\n\nHe performs accurate phoneme-level lip-sync to the vocals currently audible in the supplied recording.\n\nHis eyes widen expressively during stronger vocal phrases.\n\nHe points dramatically toward the gymnasium stage.\n\n[Shot 3] At 00:06.000, wide shot.\n\nCartoon_Girl leaps onto the polished gymnasium floor and performs a spinning dance move.\n\nCartoon_Friend attempts to imitate her but spins too quickly.\n\nHis cartoon body stretches comically before snapping back into its normal proportions.\n\n[Shot 4] At 00:09.000, medium shot of Cartoon_Lead.\n\nHe dances toward the camera while continuing precise vocal lip-sync.\n\nHis facial expressions emphasize the emotional intensity of the recording.\n\nThe camera performs a rhythmic push-in.\n\n[Shot 5] At 00:12.000, wide shot.\n\nThe three characters line up across the gymnasium floor.\n\nThey perform a synchronized side-step, shoulder roll, and dramatic arm raise.\n\nTheir choreography matches the supplied song's beat.\n\nThe camera rises slightly to reveal the colorful gymnasium.\n\nContinue directly into the next clip.\n\noverall_soundscape:\n\nUse the supplied song recording exclusively.\n\nPreserve its original vocals, rhythm, instrumentation, and dynamics.\n\nNo additional dialogue or sound effects.\n\nLip-sync and choreography must be driven by the audio.\n\nnon_diegetic_music:\n\nOnly the supplied song audio.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the identical 1990s cartoon design.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Preserve the identical 1990s cartoon design.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Preserve the identical 1990s cartoon design.>\n\n<location:Cartoon_Gymnasium = The identical colorful cartoon gymnasium from the previous clip, featuring polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a raised stage.>\n\nsummary:\n\nContinuing in the gymnasium, the music video becomes a full cartoon dance performance. The lead singer takes center stage while the other two characters perform synchronized choreography. Exaggerated squash-and-stretch animation, colorful lighting effects, and expressive facial animation emphasize the music's rhythm and emotional intensity.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip's final shot.\n\nThe three cartoon characters dance toward the raised gymnasium stage.\n\nThe camera tracks alongside them.\n\nThe supplied audio continues from its corresponding next section.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead standing on the stage.\n\nHe lip-syncs precisely to the current vocal phrase.\n\nHis mouth shapes follow the actual phonemes and sustained notes.\n\nHis eyebrows move expressively.\n\nHe raises one arm dramatically toward the ceiling.\n\n[Shot 3] At 00:06.000, wide shot.\n\nCartoon_Girl and Cartoon_Friend perform synchronized dance movements on either side of the stage.\n\nThey alternate side-steps, shoulder rolls, and exaggerated cartoon spins.\n\nTheir feet land on the actual musical beats.\n\n[Shot 4] At 00:09.000, close-up of Cartoon_Lead.\n\nHe performs an expressive singing gesture toward the camera.\n\nHis mouth remains synchronized with the supplied lead vocal.\n\nThe camera slowly pushes closer during a sustained vocal phrase, if one occurs in the audio.\n\n[Shot 5] At 00:12.000, wide shot.\n\nThe three characters perform a coordinated jump.\n\nTheir bodies stretch slightly upward in exaggerated traditional cartoon animation.\n\nThey land together on a strong musical beat.\n\nColorful stage lights flash in synchronization with the music.\n\nContinue seamlessly into the final clip.\n\noverall_soundscape:\n\nThe supplied recording remains the sole soundtrack.\n\nNo additional dialogue, sound effects, or audience laughter.\n\nAll vocal animation, choreography, and editing must remain synchronized with the original audio.\n\nnon_diegetic_music:\n\nOnly the supplied song recording.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with thick dark brown pompadour hair, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. Preserve the exact character design from the previous four clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, purple headband, large green eyes, yellow cropped jacket, pink shirt, turquoise high-waisted jeans, and white sneakers. Preserve the exact character design from the previous four clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, green hoodie, baggy purple trousers, and orange sneakers. Preserve the exact character design from the previous four clips.>\n\n<location:Cartoon_Gymnasium = The identical colorful 1990s cartoon gymnasium from the previous clips, with polished wooden floors, basketball hoops, folded bleachers, colorful banners, large windows, and a raised stage.>\n\nsummary:\n\nThe final 15 seconds of this five-part cartoon music video feature an energetic synchronized dance sequence in the gymnasium. Cartoon_Lead continues singing along with the supplied audio while Cartoon_Girl and Cartoon_Friend perform increasingly exaggerated choreography. The sequence concludes with a memorable freeze-frame pose in the style of a classic 1990s animated television music video.\n\ndetailed_description:\n\n[Shot 1] Continue directly from the previous clip.\n\nThe three cartoon characters stand on the gymnasium stage.\n\nTheir appearance, clothing, and animation style remain unchanged.\n\nThe supplied audio continues uninterrupted from the previous segment.\n\nThe camera begins a rhythmic circular tracking movement.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nHe lip-syncs accurately to the actual vocals audible in the supplied audio.\n\nHis facial expressions follow the emotion and intensity of the singer's performance.\n\nHis mouth movements remain precisely aligned with the recording.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl performs a fast spinning dance move.\n\nCartoon_Friend attempts a dramatic slide across the stage.\n\nHis oversized sneakers squeak visually through exaggerated squash-and-stretch animation, without adding sound effects.\n\nCartoon_Lead continues performing in the center.\n\n[Shot 4] At 00:09.000, close-up of Cartoon_Lead.\n\nThe camera pushes toward his expressive cartoon face.\n\nHe performs accurate lip-sync during the current vocal phrase.\n\nHis eyebrows rise and his arm extends dramatically toward the audience.\n\n[Shot 5] At 00:12.000, wide shot.\n\nAll three characters perform a synchronized final dance combination.\n\nTheir movements remain synchronized with the actual audio rather than an assumed musical climax.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nThe three characters strike a dramatic group pose.\n\nThe image briefly freezes in the style of a classic 1990s cartoon music video.\n\nColorful geometric shapes appear behind them.\n\nThe supplied music continues naturally without an artificial ending.\n\noverall_soundscape:\n\nUse only the supplied song recording.\n\nPreserve the original vocals, instrumentation, tempo, dynamics, and audio quality.\n\nDo not introduce new dialogue, vocal performances, sound effects, or laughter.\n\nAll animation remains synchronized with the audio.\n\nnon_diegetic_music:\n\nOnly the supplied recording of \"Don't You (Forget About Me).\"",
         "prompt_list_editor": ""
       },
       "color": "#232",
@@ -14221,7 +14221,7 @@
         826
       ],
       "flags": {},
-      "order": 129,
+      "order": 134,
       "mode": 0,
       "inputs": [
         {
@@ -14483,7 +14483,7 @@
         566
       ],
       "flags": {},
-      "order": 239,
+      "order": 246,
       "mode": 0,
       "inputs": [
         {
@@ -14686,7 +14686,7 @@
         534
       ],
       "flags": {},
-      "order": 174,
+      "order": 179,
       "mode": 0,
       "inputs": [
         {
@@ -14892,7 +14892,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 162,
+      "order": 167,
       "mode": 0,
       "inputs": [
         {
@@ -14984,7 +14984,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 147,
+      "order": 152,
       "mode": 0,
       "inputs": [
         {
@@ -15140,7 +15140,7 @@
         834
       ],
       "flags": {},
-      "order": 122,
+      "order": 127,
       "mode": 0,
       "inputs": [
         {
@@ -15728,7 +15728,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 148,
+      "order": 153,
       "mode": 0,
       "inputs": [
         {
@@ -15961,7 +15961,7 @@
         442
       ],
       "flags": {},
-      "order": 224,
+      "order": 230,
       "mode": 4,
       "inputs": [
         {
@@ -16185,7 +16185,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 180,
+      "order": 183,
       "mode": 0,
       "inputs": [
         {
@@ -16276,7 +16276,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 131,
+      "order": 136,
       "mode": 0,
       "inputs": [
         {
@@ -16367,7 +16367,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 149,
+      "order": 154,
       "mode": 0,
       "inputs": [
         {
@@ -16686,7 +16686,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 187,
+      "order": 190,
       "mode": 0,
       "inputs": [
         {
@@ -17087,7 +17087,7 @@
         694
       ],
       "flags": {},
-      "order": 242,
+      "order": 249,
       "mode": 0,
       "inputs": [
         {
@@ -17198,7 +17198,7 @@
         "minimax_h3_bf16_CONSERVATIVE_v5.safetensors",
         2,
         0.2,
-        189094424345749,
+        1103272818044694,
         "randomize",
         1,
         "res_multistep",
@@ -17220,7 +17220,7 @@
         "upscale_model": "minimax_h3_bf16_CONSERVATIVE_v5.safetensors",
         "steps": 2,
         "denoise": 0.2,
-        "seed": 189094424345749,
+        "seed": 1103272818044694,
         "control_after_generate": "randomize",
         "cfg": 1,
         "sampler_name": "res_multistep",
@@ -17344,7 +17344,7 @@
         354
       ],
       "flags": {},
-      "order": 245,
+      "order": 252,
       "mode": 4,
       "inputs": [
         {
@@ -17428,7 +17428,7 @@
         1,
         "euler",
         "normal",
-        108148531103385,
+        683592754916615,
         "randomize",
         1
       ],
@@ -17440,7 +17440,7 @@
         "refine_cfg": 1,
         "sampler_name": "euler",
         "scheduler": "normal",
-        "seed": 108148531103385,
+        "seed": 683592754916615,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -17551,7 +17551,7 @@
         354
       ],
       "flags": {},
-      "order": 170,
+      "order": 175,
       "mode": 0,
       "inputs": [
         {
@@ -17635,7 +17635,7 @@
         1,
         "euler",
         "normal",
-        775550108775467,
+        784799578378982,
         "randomize",
         1
       ],
@@ -17647,7 +17647,7 @@
         "refine_cfg": 1,
         "sampler_name": "euler",
         "scheduler": "normal",
-        "seed": 775550108775467,
+        "seed": 784799578378982,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -17760,7 +17760,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 192,
+      "order": 195,
       "mode": 0,
       "inputs": [
         {
@@ -17916,7 +17916,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 150,
+      "order": 155,
       "mode": 0,
       "inputs": [
         {
@@ -18142,7 +18142,7 @@
         142
       ],
       "flags": {},
-      "order": 151,
+      "order": 156,
       "mode": 0,
       "inputs": [
         {
@@ -18304,7 +18304,7 @@
         566
       ],
       "flags": {},
-      "order": 221,
+      "order": 231,
       "mode": 0,
       "inputs": [
         {
@@ -18481,7 +18481,7 @@
         300
       ],
       "flags": {},
-      "order": 229,
+      "order": 236,
       "mode": 0,
       "inputs": [
         {
@@ -18589,7 +18589,7 @@
         202
       ],
       "flags": {},
-      "order": 252,
+      "order": 259,
       "mode": 0,
       "inputs": [
         {
@@ -18672,7 +18672,7 @@
         150
       ],
       "flags": {},
-      "order": 189,
+      "order": 192,
       "mode": 0,
       "inputs": [
         {
@@ -18858,7 +18858,7 @@
         180
       ],
       "flags": {},
-      "order": 230,
+      "order": 237,
       "mode": 0,
       "inputs": [
         {
@@ -18949,7 +18949,7 @@
         70
       ],
       "flags": {},
-      "order": 200,
+      "order": 203,
       "mode": 0,
       "inputs": [
         {
@@ -19354,7 +19354,7 @@
         70
       ],
       "flags": {},
-      "order": 190,
+      "order": 193,
       "mode": 0,
       "inputs": [
         {
@@ -19433,7 +19433,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 152,
+      "order": 157,
       "mode": 0,
       "inputs": [
         {
@@ -19509,7 +19509,7 @@
         150
       ],
       "flags": {},
-      "order": 171,
+      "order": 176,
       "mode": 0,
       "inputs": [
         {
@@ -19851,7 +19851,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 217,
+      "order": 226,
       "mode": 0,
       "inputs": [
         {
@@ -19926,7 +19926,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 216,
+      "order": 225,
       "mode": 0,
       "inputs": [
         {
@@ -19999,7 +19999,7 @@
         90
       ],
       "flags": {},
-      "order": 126,
+      "order": 131,
       "mode": 0,
       "inputs": [
         {
@@ -20066,7 +20066,7 @@
         80
       ],
       "flags": {},
-      "order": 235,
+      "order": 242,
       "mode": 0,
       "inputs": [
         {
@@ -20137,7 +20137,7 @@
         220
       ],
       "flags": {},
-      "order": 246,
+      "order": 253,
       "mode": 0,
       "inputs": [
         {
@@ -20241,7 +20241,7 @@
         138.24060720559055
       ],
       "flags": {},
-      "order": 218,
+      "order": 227,
       "mode": 0,
       "inputs": [
         {
@@ -20311,7 +20311,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 153,
+      "order": 158,
       "mode": 0,
       "inputs": [
         {
@@ -20464,7 +20464,7 @@
         290
       ],
       "flags": {},
-      "order": 194,
+      "order": 206,
       "mode": 0,
       "inputs": [
         {
@@ -20484,6 +20484,14 @@
             "name": "default_duration"
           },
           "link": 2310
+        },
+        {
+          "name": "start_frame",
+          "type": "INT",
+          "widget": {
+            "name": "start_frame"
+          },
+          "link": 2408
         },
         {
           "name": "context_length",
@@ -20508,14 +20516,6 @@
             "name": "bypass"
           },
           "link": 2313
-        },
-        {
-          "name": "start_frame",
-          "type": "INT",
-          "widget": {
-            "name": "start_frame"
-          },
-          "link": 2408
         }
       ],
       "outputs": [
@@ -20630,9 +20630,17 @@
         961.404434839968
       ],
       "flags": {},
-      "order": 207,
+      "order": 217,
       "mode": 0,
       "inputs": [
+        {
+          "name": "video",
+          "type": "COMBO",
+          "widget": {
+            "name": "video"
+          },
+          "link": 2409
+        },
         {
           "name": "start_frame",
           "type": "INT",
@@ -20656,14 +20664,6 @@
             "name": "video_origin_frame"
           },
           "link": 2330
-        },
-        {
-          "name": "video",
-          "type": "COMBO",
-          "widget": {
-            "name": "video"
-          },
-          "link": 2409
         }
       ],
       "outputs": [
@@ -20750,8 +20750,8 @@
         0,
         "custom audio",
         "forgetabou5me.mp3",
-        1113,
-        "source video inpaint",
+        4619,
+        "audio drives video",
         ""
       ],
       "widgets_values_named": {
@@ -20762,8 +20762,8 @@
         "reference_frame": 0,
         "audio_source": "custom audio",
         "custom_audio": "forgetabou5me.mp3",
-        "custom_audio_start_frame": 1113,
-        "video_generation_mode": "source video inpaint",
+        "custom_audio_start_frame": 4619,
+        "video_generation_mode": "audio drives video",
         "source_frame_picker": ""
       },
       "color": "#223",
@@ -20795,7 +20795,7 @@
         180
       ],
       "flags": {},
-      "order": 254,
+      "order": 261,
       "mode": 0,
       "inputs": [
         {
@@ -20918,7 +20918,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 206,
+      "order": 216,
       "mode": 0,
       "inputs": [
         {
@@ -20999,7 +20999,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 154,
+      "order": 159,
       "mode": 0,
       "inputs": [
         {
@@ -21156,7 +21156,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 172,
+      "order": 177,
       "mode": 0,
       "inputs": [
         {
@@ -21311,7 +21311,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 155,
+      "order": 160,
       "mode": 0,
       "inputs": [
         {
@@ -21748,7 +21748,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 173,
+      "order": 178,
       "mode": 0,
       "inputs": [
         {
@@ -21901,7 +21901,7 @@
         26
       ],
       "flags": {},
-      "order": 225,
+      "order": 234,
       "mode": 0,
       "inputs": [
         {
@@ -21969,7 +21969,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 228,
+      "order": 235,
       "mode": 0,
       "inputs": [
         {
@@ -22059,7 +22059,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 156,
+      "order": 161,
       "mode": 0,
       "inputs": [
         {
@@ -22215,7 +22215,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 157,
+      "order": 162,
       "mode": 0,
       "inputs": [
         {
@@ -22442,7 +22442,7 @@
         220
       ],
       "flags": {},
-      "order": 231,
+      "order": 238,
       "mode": 0,
       "inputs": [
         {
@@ -22580,7 +22580,7 @@
         220
       ],
       "flags": {},
-      "order": 248,
+      "order": 255,
       "mode": 0,
       "inputs": [
         {
@@ -22839,7 +22839,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 215,
+      "order": 224,
       "mode": 0,
       "inputs": [
         {
@@ -22914,7 +22914,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 205,
+      "order": 215,
       "mode": 0,
       "inputs": [
         {
@@ -23007,10 +23007,10 @@
       ],
       "size": [
         360,
-        200
+        234
       ],
       "flags": {},
-      "order": 145,
+      "order": 166,
       "mode": 0,
       "inputs": [
         {
@@ -23083,6 +23083,7 @@
           ]
         }
       ],
+      "title": "Fit prompts to remaining video",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -23107,14 +23108,14 @@
       "widgets_values": [
         "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4",
         0,
-        15.0,
+        15,
         22,
         0
       ],
       "widgets_values_named": {
         "video": "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4",
         "start_frame": 0,
-        "default_duration": 15.0,
+        "default_duration": 15,
         "context_length": 22,
         "settling_frames": 0
       },
@@ -23131,8 +23132,7 @@
             "outputs": []
           }
         }
-      },
-      "title": "Fit prompts to remaining video"
+      }
     },
     {
       "id": 1368,
@@ -23148,7 +23148,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 146,
+      "order": 181,
       "mode": 0,
       "inputs": [
         {
@@ -23227,7 +23227,7 @@
         90
       ],
       "flags": {},
-      "order": 145,
+      "order": 120,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -23240,6 +23240,7 @@
           ]
         }
       ],
+      "title": "Settling frames - set before loop",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -23282,8 +23283,247 @@
             "outputs": []
           }
         }
+      }
+    },
+    {
+      "id": 1370,
+      "type": "SkebaWorkflowGuide",
+      "pos": [
+        -8410.916886058189,
+        2777.835625212551
+      ],
+      "size": [
+        542.8881795767502,
+        1048.6207894860963
+      ],
+      "flags": {},
+      "order": 121,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "38455d82b440b9d6ce8ca82507f0d59b76c59296",
+        "Node name for S&R": "SkebaWorkflowGuide",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
       },
-      "title": "Settling frames - set before loop"
+      "widgets_values": [
+        "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">Inpainting Options</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Choose what the workflow selects, then choose which side of that selection can change.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">1. Select the subject</h3>\n    <p><strong style=\"color:#fff;\">Person inpaint — true / false:</strong> Set to <strong style=\"color:#fff;\">true</strong> when the target is a person. Set to <strong style=\"color:#fff;\">false</strong> for an object, animal, clothing, or another non-person target.</p>\n    <p style=\"margin-bottom:0;\"><strong style=\"color:#fff;\">What to inpaint:</strong> When Person inpaint is true, choose <strong style=\"color:#fff;\">whole person</strong>, <strong style=\"color:#fff;\">face</strong>, or <strong style=\"color:#fff;\">head including hair</strong>.</p>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">2. Describe the target</h3>\n    <p style=\"margin:0;\"><strong style=\"color:#fff;\">Text box:</strong> Describe the thing to select—for example, “the red jacket” or “the penguin on the left.” SAM3.1 uses this description with the <strong style=\"color:#fff;\">Fixed SAM3 reference frame</strong> selected in the video source node, then tracks the target through the clip.</p>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#ffe0a3;margin:0 0 8px;\">3. Choose what can change</h3>\n    <p><strong style=\"color:#fff;\">Invert mask — false:</strong> Change the selected character or object and keep the surrounding background.</p>\n    <p style=\"margin-bottom:0;\"><strong style=\"color:#fff;\">Invert mask — true:</strong> Keep the selected character or object and change the surrounding background.</p>\n  </div>\n\n  <div style=\"background:#35283d;border-left:5px solid #d4a5ee;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#edc5ff;margin:0 0 8px;\">4. Keep the original outside the edit</h3>\n    <p style=\"margin:0;\"><strong style=\"color:#fff;\">Readd composition — true / false:</strong> When true, the final composite places the generated area over the original video and restores the original pixels outside the mask. This can protect the surroundings, but a visible edge or halo may appear. Set false to use the generated frame without that final composite.</p>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Quick example:</strong> To change a person while keeping the room, use <strong style=\"color:#fff;\">Person inpaint: true</strong>, choose <strong style=\"color:#fff;\">whole person</strong>, and set <strong style=\"color:#fff;\">Invert mask: false</strong>.</p>\n</div>",
+        ""
+      ],
+      "widgets_values_named": {
+        "html": "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">Inpainting Options</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Choose what the workflow selects, then choose which side of that selection can change.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">1. Select the subject</h3>\n    <p><strong style=\"color:#fff;\">Person inpaint — true / false:</strong> Set to <strong style=\"color:#fff;\">true</strong> when the target is a person. Set to <strong style=\"color:#fff;\">false</strong> for an object, animal, clothing, or another non-person target.</p>\n    <p style=\"margin-bottom:0;\"><strong style=\"color:#fff;\">What to inpaint:</strong> When Person inpaint is true, choose <strong style=\"color:#fff;\">whole person</strong>, <strong style=\"color:#fff;\">face</strong>, or <strong style=\"color:#fff;\">head including hair</strong>.</p>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">2. Describe the target</h3>\n    <p style=\"margin:0;\"><strong style=\"color:#fff;\">Text box:</strong> Describe the thing to select—for example, “the red jacket” or “the penguin on the left.” SAM3.1 uses this description with the <strong style=\"color:#fff;\">Fixed SAM3 reference frame</strong> selected in the video source node, then tracks the target through the clip.</p>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#ffe0a3;margin:0 0 8px;\">3. Choose what can change</h3>\n    <p><strong style=\"color:#fff;\">Invert mask — false:</strong> Change the selected character or object and keep the surrounding background.</p>\n    <p style=\"margin-bottom:0;\"><strong style=\"color:#fff;\">Invert mask — true:</strong> Keep the selected character or object and change the surrounding background.</p>\n  </div>\n\n  <div style=\"background:#35283d;border-left:5px solid #d4a5ee;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#edc5ff;margin:0 0 8px;\">4. Keep the original outside the edit</h3>\n    <p style=\"margin:0;\"><strong style=\"color:#fff;\">Readd composition — true / false:</strong> When true, the final composite places the generated area over the original video and restores the original pixels outside the mask. This can protect the surroundings, but a visible edge or halo may appear. Set false to use the generated frame without that final composite.</p>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Quick example:</strong> To change a person while keeping the room, use <strong style=\"color:#fff;\">Person inpaint: true</strong>, choose <strong style=\"color:#fff;\">whole person</strong>, and set <strong style=\"color:#fff;\">Invert mask: false</strong>.</p>\n</div>",
+        "workflow_guide": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 1371,
+      "type": "SkebaWorkflowGuide",
+      "pos": [
+        -7814.760635310602,
+        3330.7281025503457
+      ],
+      "size": [
+        525.951984431118,
+        1227.7540608977106
+      ],
+      "flags": {},
+      "order": 122,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "38455d82b440b9d6ce8ca82507f0d59b76c59296",
+        "Node name for S&R": "SkebaWorkflowGuide",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">Video and Audio Source</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Choose one of two tracks with <strong style=\"color:#fff;\">video_generation_mode</strong> in <strong style=\"color:#fff;\">SKEBA H3 Inpaint Source Window</strong>.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">Track 1: source video inpaint</h3>\n    <p style=\"margin:0;\">Starts with an existing video. The workflow selects a subject or area, then changes that part of the video. Choose <strong style=\"color:#fff;\">source video inpaint</strong> under <strong style=\"color:#fff;\">video_generation_mode</strong>.</p>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">Track 2: audio drives video</h3>\n    <p style=\"margin:0;\">Generates the picture from your prompt and chosen audio. It does not track or inpaint a subject in the source video. Choose <strong style=\"color:#fff;\">audio drives video</strong> under <strong style=\"color:#fff;\">video_generation_mode</strong>.</p>\n  </div>\n\n  <h3 style=\"color:#f5cb83;\">Video controls</h3>\n  <ul style=\"padding-left:22px;\">\n    <li><strong style=\"color:#fff;\">video:</strong> Pick the source video. For audio-only generation, choose <strong style=\"color:#fff;\">(no source video)</strong>.</li>\n    <li><strong style=\"color:#fff;\">Video start frame:</strong> Choose where the first prompt starts. Drag the slider, enter a frame number, or press <strong style=\"color:#fff;\">Use playhead</strong>. At 24 frames per second, frame 240 is 10 seconds in.</li>\n    <li><strong style=\"color:#fff;\">Fixed SAM3 reference frame:</strong> Pick a clear frame of the subject to track. This remains the tracking reference as the loop moves forward. It does not change the video start.</li>\n    <li><strong style=\"color:#fff;\">Upload video:</strong> Add a video file and select it as the source.</li>\n  </ul>\n\n  <h3 style=\"color:#c5a7ff;\">Audio controls</h3>\n  <p>Use <strong style=\"color:#fff;\">audio_source</strong> to choose one of these options:</p>\n  <ul style=\"padding-left:22px;\">\n    <li><strong style=\"color:#fff;\">video audio:</strong> Use the sound from the source video at the matching time.</li>\n    <li><strong style=\"color:#fff;\">custom audio:</strong> Use a separate track selected under <strong style=\"color:#fff;\">custom_audio</strong>. Set its beginning with <strong style=\"color:#fff;\">Custom audio start frame</strong>. It advances as the video loop advances.</li>\n    <li><strong style=\"color:#fff;\">generate new audio:</strong> Provide no preserved source sound and let H3 generate the audio.</li>\n    <li><strong style=\"color:#fff;\">Upload audio:</strong> Add a separate audio file; this also switches <strong style=\"color:#fff;\">audio_source</strong> to <strong style=\"color:#fff;\">custom audio</strong>.</li>\n  </ul>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:12px;margin-top:18px;border-radius:6px;\">\n    <strong style=\"color:#ffe0a3;\">Running multiple prompts?</strong>\n    <span> <strong style=\"color:#fff;\">SKEBA H3 Inpaint Batch Fit</strong> checks the remaining source video before the loop. It shortens the final prompt if necessary and skips prompts after the video ends. If selected source audio runs out first, the missing part is filled with silence.</span>\n  </div>\n</div>",
+        ""
+      ],
+      "widgets_values_named": {
+        "html": "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">Video and Audio Source</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Choose one of two tracks with <strong style=\"color:#fff;\">video_generation_mode</strong> in <strong style=\"color:#fff;\">SKEBA H3 Inpaint Source Window</strong>.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">Track 1: source video inpaint</h3>\n    <p style=\"margin:0;\">Starts with an existing video. The workflow selects a subject or area, then changes that part of the video. Choose <strong style=\"color:#fff;\">source video inpaint</strong> under <strong style=\"color:#fff;\">video_generation_mode</strong>.</p>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">Track 2: audio drives video</h3>\n    <p style=\"margin:0;\">Generates the picture from your prompt and chosen audio. It does not track or inpaint a subject in the source video. Choose <strong style=\"color:#fff;\">audio drives video</strong> under <strong style=\"color:#fff;\">video_generation_mode</strong>.</p>\n  </div>\n\n  <h3 style=\"color:#f5cb83;\">Video controls</h3>\n  <ul style=\"padding-left:22px;\">\n    <li><strong style=\"color:#fff;\">video:</strong> Pick the source video. For audio-only generation, choose <strong style=\"color:#fff;\">(no source video)</strong>.</li>\n    <li><strong style=\"color:#fff;\">Video start frame:</strong> Choose where the first prompt starts. Drag the slider, enter a frame number, or press <strong style=\"color:#fff;\">Use playhead</strong>. At 24 frames per second, frame 240 is 10 seconds in.</li>\n    <li><strong style=\"color:#fff;\">Fixed SAM3 reference frame:</strong> Pick a clear frame of the subject to track. This remains the tracking reference as the loop moves forward. It does not change the video start.</li>\n    <li><strong style=\"color:#fff;\">Upload video:</strong> Add a video file and select it as the source.</li>\n  </ul>\n\n  <h3 style=\"color:#c5a7ff;\">Audio controls</h3>\n  <p>Use <strong style=\"color:#fff;\">audio_source</strong> to choose one of these options:</p>\n  <ul style=\"padding-left:22px;\">\n    <li><strong style=\"color:#fff;\">video audio:</strong> Use the sound from the source video at the matching time.</li>\n    <li><strong style=\"color:#fff;\">custom audio:</strong> Use a separate track selected under <strong style=\"color:#fff;\">custom_audio</strong>. Set its beginning with <strong style=\"color:#fff;\">Custom audio start frame</strong>. It advances as the video loop advances.</li>\n    <li><strong style=\"color:#fff;\">generate new audio:</strong> Provide no preserved source sound and let H3 generate the audio.</li>\n    <li><strong style=\"color:#fff;\">Upload audio:</strong> Add a separate audio file; this also switches <strong style=\"color:#fff;\">audio_source</strong> to <strong style=\"color:#fff;\">custom audio</strong>.</li>\n  </ul>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:12px;margin-top:18px;border-radius:6px;\">\n    <strong style=\"color:#ffe0a3;\">Running multiple prompts?</strong>\n    <span> <strong style=\"color:#fff;\">SKEBA H3 Inpaint Batch Fit</strong> checks the remaining source video before the loop. It shortens the final prompt if necessary and skips prompts after the video ends. If selected source audio runs out first, the missing part is filled with silence.</span>\n  </div>\n</div>",
+        "workflow_guide": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 1372,
+      "type": "SkebaWorkflowGuide",
+      "pos": [
+        -6845.8552837299,
+        4570.9647023321795
+      ],
+      "size": [
+        525.951984431118,
+        1227.7540608977106
+      ],
+      "flags": {},
+      "order": 123,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "38455d82b440b9d6ce8ca82507f0d59b76c59296",
+        "Node name for S&R": "SkebaWorkflowGuide",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">SKEBA H3 Prompt List Validator</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Check the entire prompt list before the generation loop begins. If a prompt has an error, the validator identifies its number and stops the list before any clip is generated.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">Main controls</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">text:</strong> Connect or paste the complete prompt list, before it is split for the loop.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled — VALIDATE / DETERMINISTIC:</strong> Check every prompt and set the connected compiler to deterministic mode.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled — SKIP / LEGACY:</strong> Pass the text through without checking it and set the connected compiler to legacy mode.</li>\n      <li><strong style=\"color:#fff;\">delimiter:</strong> The character between prompts. The default is <strong style=\"color:#fff;\">|</strong>.</li>\n      <li><strong style=\"color:#fff;\">skip_empty:</strong> Ignore empty sections when checking the list. The original text output stays unchanged.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">Compiler options</h3>\n    <p style=\"margin-top:0;\">When validation is enabled, these options should match the settings on <strong style=\"color:#fff;\">H3 Tagged Reference Prompt</strong> inside the loop.</p>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">compiler_video_usage:</strong> Choose <strong style=\"color:#fff;\">reference</strong>, <strong style=\"color:#fff;\">motion_reference</strong>, <strong style=\"color:#fff;\">continuation</strong>, or <strong style=\"color:#fff;\">editing</strong> to describe how selected video references will be used.</li>\n      <li><strong style=\"color:#fff;\">compiler_audio_usage:</strong> <strong style=\"color:#fff;\">reference</strong> uses audio as guidance; <strong style=\"color:#fff;\">reuse</strong> requests reuse of the source audio.</li>\n      <li><strong style=\"color:#fff;\">compiler_voice_isolation:</strong> Add explicit voice-owner binding instructions for speaking characters when enabled.</li>\n      <li><strong style=\"color:#fff;\">compiler_reference_order:</strong> <strong style=\"color:#fff;\">first_speech</strong> prioritizes speaking order; <strong style=\"color:#fff;\">library_order</strong> keeps library/declaration order for references. Speaker IDs still follow first dialogue.</li>\n      <li><strong style=\"color:#fff;\">compiler_templates:</strong> Optional template JSON controlling generated wording. Leave blank for the default wording.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#ffe0a3;margin:0 0 8px;\">Outputs</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">text:</strong> The original prompt list, unchanged. Connect this to your splitter or loop.</li>\n      <li><strong style=\"color:#fff;\">compiler_mode:</strong> Connect this to the compiler’s <strong style=\"color:#fff;\">compiler_mode</strong> input to switch between deterministic and legacy mode.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled:</strong> The selected on/off value for other workflow controls.</li>\n      <li><strong style=\"color:#fff;\">report:</strong> Shows which prompts passed, reference counts, and any warnings.</li>\n    </ul>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Tip:</strong> A prompt-list error identifies the affected prompt before the loop starts, so earlier clips do not have to render just to discover a later prompt is invalid.</p>\n</div>",
+        ""
+      ],
+      "widgets_values_named": {
+        "html": "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:20px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">SKEBA H3 Prompt List Validator</h2>\n  <p style=\"color:#b8c9dc;margin-top:0;\">Check the entire prompt list before the generation loop begins. If a prompt has an error, the validator identifies its number and stops the list before any clip is generated.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 8px;\">Main controls</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">text:</strong> Connect or paste the complete prompt list, before it is split for the loop.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled — VALIDATE / DETERMINISTIC:</strong> Check every prompt and set the connected compiler to deterministic mode.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled — SKIP / LEGACY:</strong> Pass the text through without checking it and set the connected compiler to legacy mode.</li>\n      <li><strong style=\"color:#fff;\">delimiter:</strong> The character between prompts. The default is <strong style=\"color:#fff;\">|</strong>.</li>\n      <li><strong style=\"color:#fff;\">skip_empty:</strong> Ignore empty sections when checking the list. The original text output stays unchanged.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 8px;\">Compiler options</h3>\n    <p style=\"margin-top:0;\">When validation is enabled, these options should match the settings on <strong style=\"color:#fff;\">H3 Tagged Reference Prompt</strong> inside the loop.</p>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">compiler_video_usage:</strong> Choose <strong style=\"color:#fff;\">reference</strong>, <strong style=\"color:#fff;\">motion_reference</strong>, <strong style=\"color:#fff;\">continuation</strong>, or <strong style=\"color:#fff;\">editing</strong> to describe how selected video references will be used.</li>\n      <li><strong style=\"color:#fff;\">compiler_audio_usage:</strong> <strong style=\"color:#fff;\">reference</strong> uses audio as guidance; <strong style=\"color:#fff;\">reuse</strong> requests reuse of the source audio.</li>\n      <li><strong style=\"color:#fff;\">compiler_voice_isolation:</strong> Add explicit voice-owner binding instructions for speaking characters when enabled.</li>\n      <li><strong style=\"color:#fff;\">compiler_reference_order:</strong> <strong style=\"color:#fff;\">first_speech</strong> prioritizes speaking order; <strong style=\"color:#fff;\">library_order</strong> keeps library/declaration order for references. Speaker IDs still follow first dialogue.</li>\n      <li><strong style=\"color:#fff;\">compiler_templates:</strong> Optional template JSON controlling generated wording. Leave blank for the default wording.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:14px;margin:16px 0;border-radius:6px;\">\n    <h3 style=\"color:#ffe0a3;margin:0 0 8px;\">Outputs</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">text:</strong> The original prompt list, unchanged. Connect this to your splitter or loop.</li>\n      <li><strong style=\"color:#fff;\">compiler_mode:</strong> Connect this to the compiler’s <strong style=\"color:#fff;\">compiler_mode</strong> input to switch between deterministic and legacy mode.</li>\n      <li><strong style=\"color:#fff;\">validation_enabled:</strong> The selected on/off value for other workflow controls.</li>\n      <li><strong style=\"color:#fff;\">report:</strong> Shows which prompts passed, reference counts, and any warnings.</li>\n    </ul>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Tip:</strong> A prompt-list error identifies the affected prompt before the loop starts, so earlier clips do not have to render just to discover a later prompt is invalid.</p>\n</div>",
+        "workflow_guide": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 1373,
+      "type": "SkebaWorkflowGuide",
+      "pos": [
+        -7374.773082334836,
+        4567.595414795029
+      ],
+      "size": [
+        525.951984431118,
+        1227.7540608977106
+      ],
+      "flags": {},
+      "order": 124,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "h3-reference-library",
+        "ver": "38455d82b440b9d6ce8ca82507f0d59b76c59296",
+        "Node name for S&R": "SkebaWorkflowGuide",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:18px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">SKEBA Prompt List Text</h2>\n  <p>Write one clip per prompt. Separate prompts with <strong style=\"color:#75f0d7;\">|</strong>. Use <strong style=\"color:#fff;\">Raw text</strong> to edit everything or <strong style=\"color:#fff;\">Formatted view</strong> to edit one prompt at a time.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:12px;margin:14px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 6px;\">Prompt format</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">[s=15]</strong> sets this clip’s requested length in seconds.</li>\n      <li><strong style=\"color:#fff;\">[new_location]</strong> marks a scene change when needed.</li>\n      <li><strong style=\"color:#fff;\">subject_definitions:</strong> lists the characters, locations, and objects used in this prompt.</li>\n      <li><strong style=\"color:#fff;\">summary:</strong> briefly establishes the setting and action.</li>\n      <li><strong style=\"color:#fff;\">detailed_description:</strong> contains the shots, actions, and dialogue.</li>\n      <li><strong style=\"color:#fff;\">overall_soundscape:</strong> describes environmental sound and effects.</li>\n      <li><strong style=\"color:#fff;\">non_diegetic_music:</strong> describes background music; use <strong style=\"color:#fff;\">N/A</strong> when there is none.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:12px;margin:14px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 6px;\">Reference tags</h3>\n    <p style=\"margin:0 0 8px;\">Use the same tag in <strong style=\"color:#fff;\">subject_definitions:</strong> and wherever that subject appears. The deterministic compiler replaces saved tags with numbered references and connects their selected media.</p>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">{Jerry Seinfeld_BC}</strong> — a saved character.</li>\n      <li><strong style=\"color:#fff;\">{celestial_rm}</strong> — a selected RefMod.</li>\n      <li><strong style=\"color:#fff;\">&lt;location:coffee_shop = A cozy coffee shop.&gt;</strong> — a temporary reference defined in this prompt.</li>\n      <li><strong style=\"color:#fff;\">&lt;d&gt;[English]Hello!&lt;/d&gt;</strong> — spoken dialogue. Put the speaking character in the same shot so the compiler can identify the voice.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:12px;margin:14px 0;border-radius:6px;\">\n    <strong style=\"color:#ffe0a3;\">VALIDATE / DETERMINISTIC:</strong>\n    <span> Each <strong style=\"color:#fff;\">|</strong>-separated prompt must follow this format and define the tags it uses. Prompts are independent: repeat needed definitions in every prompt. The validator checks the full list before generation.</span>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Shot example:</strong> <code style=\"color:#75f0d7;\">[Shot 1: 0s] Establish the room. [Shot 2: 1.0s] {Jerry Seinfeld_BC} says, &lt;d&gt;[English]Hello!&lt;/d&gt;</code></p>\n</div>",
+        ""
+      ],
+      "widgets_values_named": {
+        "html": "<div style=\"font:14px/1.55 Arial,sans-serif;color:#dce6f2;background:#171e28;padding:18px;border-radius:12px;\">\n  <h2 style=\"color:#fff;margin:0 0 8px;\">SKEBA Prompt List Text</h2>\n  <p>Write one clip per prompt. Separate prompts with <strong style=\"color:#75f0d7;\">|</strong>. Use <strong style=\"color:#fff;\">Raw text</strong> to edit everything or <strong style=\"color:#fff;\">Formatted view</strong> to edit one prompt at a time.</p>\n\n  <div style=\"background:#183b3b;border-left:5px solid #55d6bd;padding:12px;margin:14px 0;border-radius:6px;\">\n    <h3 style=\"color:#75f0d7;margin:0 0 6px;\">Prompt format</h3>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">[s=15]</strong> sets this clip’s requested length in seconds.</li>\n      <li><strong style=\"color:#fff;\">[new_location]</strong> marks a scene change when needed.</li>\n      <li><strong style=\"color:#fff;\">subject_definitions:</strong> lists the characters, locations, and objects used in this prompt.</li>\n      <li><strong style=\"color:#fff;\">summary:</strong> briefly establishes the setting and action.</li>\n      <li><strong style=\"color:#fff;\">detailed_description:</strong> contains the shots, actions, and dialogue.</li>\n      <li><strong style=\"color:#fff;\">overall_soundscape:</strong> describes environmental sound and effects.</li>\n      <li><strong style=\"color:#fff;\">non_diegetic_music:</strong> describes background music; use <strong style=\"color:#fff;\">N/A</strong> when there is none.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#253454;border-left:5px solid #8bb8ff;padding:12px;margin:14px 0;border-radius:6px;\">\n    <h3 style=\"color:#a8ccff;margin:0 0 6px;\">Reference tags</h3>\n    <p style=\"margin:0 0 8px;\">Use the same tag in <strong style=\"color:#fff;\">subject_definitions:</strong> and wherever that subject appears. The deterministic compiler replaces saved tags with numbered references and connects their selected media.</p>\n    <ul style=\"margin:0;padding-left:22px;\">\n      <li><strong style=\"color:#fff;\">{Jerry Seinfeld_BC}</strong> — a saved character.</li>\n      <li><strong style=\"color:#fff;\">{celestial_rm}</strong> — a selected RefMod.</li>\n      <li><strong style=\"color:#fff;\">&lt;location:coffee_shop = A cozy coffee shop.&gt;</strong> — a temporary reference defined in this prompt.</li>\n      <li><strong style=\"color:#fff;\">&lt;d&gt;[English]Hello!&lt;/d&gt;</strong> — spoken dialogue. Put the speaking character in the same shot so the compiler can identify the voice.</li>\n    </ul>\n  </div>\n\n  <div style=\"background:#302b1d;border-left:5px solid #f5cb83;padding:12px;margin:14px 0;border-radius:6px;\">\n    <strong style=\"color:#ffe0a3;\">VALIDATE / DETERMINISTIC:</strong>\n    <span> Each <strong style=\"color:#fff;\">|</strong>-separated prompt must follow this format and define the tags it uses. Prompts are independent: repeat needed definitions in every prompt. The validator checks the full list before generation.</span>\n  </div>\n\n  <p style=\"color:#b8c9dc;margin-bottom:0;\"><strong style=\"color:#fff;\">Shot example:</strong> <code style=\"color:#75f0d7;\">[Shot 1: 0s] Establish the room. [Shot 2: 1.0s] {Jerry Seinfeld_BC} says, &lt;d&gt;[English]Hello!&lt;/d&gt;</code></p>\n</div>",
+        "workflow_guide": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
     }
   ],
   "links": [
@@ -25208,6 +25448,62 @@
       "MODEL"
     ],
     [
+      1679,
+      918,
+      0,
+      912,
+      2,
+      "BOOLEAN"
+    ],
+    [
+      2397,
+      1365,
+      2,
+      1364,
+      0,
+      "BOOLEAN"
+    ],
+    [
+      2354,
+      1344,
+      3,
+      1312,
+      1,
+      "STRING"
+    ],
+    [
+      2373,
+      1344,
+      4,
+      1353,
+      0,
+      "BOOLEAN"
+    ],
+    [
+      2404,
+      258,
+      3,
+      1367,
+      0,
+      "SKEBA_PROMPT_LIST"
+    ],
+    [
+      2410,
+      1367,
+      4,
+      1368,
+      0,
+      "STRING"
+    ],
+    [
+      2411,
+      1369,
+      0,
+      912,
+      1,
+      "INT"
+    ],
+    [
       764,
       362,
       0,
@@ -25216,12 +25512,28 @@
       "INT"
     ],
     [
+      2395,
+      1363,
+      0,
+      334,
+      2,
+      "BOOLEAN"
+    ],
+    [
       767,
       365,
       0,
       269,
       1,
       "INT"
+    ],
+    [
+      2396,
+      1363,
+      0,
+      269,
+      2,
+      "BOOLEAN"
     ],
     [
       789,
@@ -25253,14 +25565,6 @@
       0,
       265,
       4,
-      "BOOLEAN"
-    ],
-    [
-      1679,
-      918,
-      0,
-      912,
-      2,
       "BOOLEAN"
     ],
     [
@@ -25420,7 +25724,7 @@
       1045,
       0,
       1323,
-      3,
+      4,
       "INT"
     ],
     [
@@ -25428,7 +25732,7 @@
       920,
       0,
       1323,
-      4,
+      5,
       "INT"
     ],
     [
@@ -25436,15 +25740,23 @@
       373,
       0,
       1323,
-      5,
+      6,
       "BOOLEAN"
+    ],
+    [
+      2408,
+      1367,
+      3,
+      1323,
+      3,
+      "INT"
     ],
     [
       2314,
       1323,
       0,
       1324,
-      0,
+      1,
       "INT"
     ],
     [
@@ -25452,7 +25764,7 @@
       1323,
       1,
       1324,
-      1,
+      2,
       "INT"
     ],
     [
@@ -25460,48 +25772,40 @@
       1323,
       5,
       1324,
+      3,
+      "INT"
+    ],
+    [
+      2409,
+      1367,
+      2,
+      1324,
+      0,
+      "*"
+    ],
+    [
+      2405,
+      818,
+      0,
+      1367,
+      1,
+      "FLOAT"
+    ],
+    [
+      2406,
+      1045,
+      0,
+      1367,
       2,
       "INT"
     ],
     [
-      2395,
-      1363,
+      2407,
+      1369,
       0,
-      334,
-      2,
-      "BOOLEAN"
-    ],
-    [
-      2396,
-      1363,
-      0,
-      269,
-      2,
-      "BOOLEAN"
-    ],
-    [
-      2397,
-      1365,
-      2,
-      1364,
-      0,
-      "BOOLEAN"
-    ],
-    [
-      2354,
-      1344,
+      1367,
       3,
-      1312,
-      1,
-      "STRING"
-    ],
-    [
-      2373,
-      1344,
-      4,
-      1353,
-      0,
-      "BOOLEAN"
+      "INT"
     ],
     [
       811,
@@ -25814,70 +26118,6 @@
       546,
       28,
       "INT"
-    ],
-    [
-      2404,
-      258,
-      3,
-      1367,
-      0,
-      "SKEBA_PROMPT_LIST"
-    ],
-    [
-      2405,
-      818,
-      0,
-      1367,
-      1,
-      "FLOAT"
-    ],
-    [
-      2406,
-      1045,
-      0,
-      1367,
-      2,
-      "INT"
-    ],
-    [
-      2407,
-      1369,
-      0,
-      1367,
-      3,
-      "INT"
-    ],
-    [
-      2408,
-      1367,
-      3,
-      1323,
-      6,
-      "INT"
-    ],
-    [
-      2409,
-      1367,
-      2,
-      1324,
-      3,
-      "*"
-    ],
-    [
-      2410,
-      1367,
-      4,
-      1368,
-      0,
-      "STRING"
-    ],
-    [
-      2411,
-      1369,
-      0,
-      912,
-      1,
-      "INT"
     ]
   ],
   "groups": [
@@ -26105,8 +26345,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -26722,8 +26962,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -27709,8 +27949,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -28816,8 +29056,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -29361,8 +29601,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -30006,8 +30246,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 43,
-          "lastNodeId": 1366,
-          "lastLinkId": 2403,
+          "lastNodeId": 1373,
+          "lastLinkId": 2411,
           "lastRerouteId": 11
         },
         "revision": 0,
@@ -32257,10 +32497,10 @@
       }
     ],
     "ds": {
-      "scale": 0.45,
+      "scale": 0.1400141751792554,
       "offset": [
-        9049.097760514542,
-        -1895.4273989234591
+        9939.523519066433,
+        -1057.2652110184774
       ]
     },
     "linkExtensions": [
