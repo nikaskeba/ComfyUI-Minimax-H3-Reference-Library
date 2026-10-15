@@ -91,6 +91,19 @@ main { width: min(1500px, 100%); margin: 0 auto; padding: 24px clamp(18px, 4vw, 
 .manager-tab { min-width: 180px; color: var(--muted); background: transparent; font-weight: 700; }
 .manager-tab.active { border-color: var(--accent); background: #1c2d26; color: var(--text); }
 .manager-tab-panel[hidden] { display: none; }
+.library-guide { max-width: 1200px; margin: 0 auto; }
+.guide-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 18px 0; }
+.guide-card { padding: 18px; border: 1px solid var(--border); border-radius: 10px; background: #1b2530; line-height: 1.55; }
+.guide-card h3 { margin: 0 0 10px; color: #99c7ff; }
+.guide-card p { margin: 0 0 12px; }
+.guide-card p:last-child { margin-bottom: 0; }
+.guide-card code, .guide-callout code { color: #93e7c8; }
+.guide-card a { color: #99c7ff; }
+.guide-callout { border-left: 4px solid #59ceb0; border-radius: 7px; background: #1c3433; padding: 14px 18px; line-height: 1.55; }
+.guide-callout strong { color: #a5f3dc; }
+.guide-note { background: #343024; border-color: #edc276; }
+.guide-note strong { color: #ffe0a0; }
+@media (max-width: 760px) { .guide-grid { grid-template-columns: 1fr; } }
 section { padding: 22px 0 28px; border-bottom: 1px solid var(--border); }
 .section-heading { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-bottom: 16px; }
 .drop-zone {

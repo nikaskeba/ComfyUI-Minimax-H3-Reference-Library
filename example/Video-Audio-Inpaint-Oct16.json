@@ -1,8 +1,8 @@
 {
   "id": "1dcd1078-ea8c-4e0f-8d94-a297a2511618",
   "revision": 0,
-  "last_node_id": 1368,
-  "last_link_id": 2410,
+  "last_node_id": 1369,
+  "last_link_id": 2411,
   "nodes": [
     {
       "id": 334,
@@ -6241,8 +6241,7 @@
           "type": "*",
           "links": [
             1681,
-            2312,
-            2407
+            2312
           ]
         }
       ],
@@ -11453,6 +11452,14 @@
           "link": 1659
         },
         {
+          "name": "settling_frames",
+          "type": "INT",
+          "widget": {
+            "name": "settling_frames"
+          },
+          "link": 2411
+        },
+        {
           "name": "bypass",
           "type": "BOOLEAN",
           "widget": {
@@ -11494,7 +11501,8 @@
         "ue_properties": {
           "widget_ue_connectable": {
             "length": true,
-            "bypass": true
+            "bypass": true,
+            "settling_frames": true
           },
           "version": "7.8",
           "input_ue_unconnectable": {}
@@ -23206,6 +23214,76 @@
           }
         }
       }
+    },
+    {
+      "id": 1369,
+      "type": "PrimitiveInt",
+      "pos": [
+        -2040,
+        3390
+      ],
+      "size": [
+        290,
+        90
+      ],
+      "flags": {},
+      "order": 145,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "INT",
+          "type": "INT",
+          "links": [
+            2407,
+            2411
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.38.0",
+        "Node name for S&R": "PrimitiveInt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        0,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "value": 0,
+        "fixed": "fixed"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "title": "Settling frames - set before loop"
     }
   ],
   "links": [
@@ -25182,7 +25260,7 @@
       918,
       0,
       912,
-      1,
+      2,
       "BOOLEAN"
     ],
     [
@@ -25763,7 +25841,7 @@
     ],
     [
       2407,
-      920,
+      1369,
       0,
       1367,
       3,
@@ -25792,6 +25870,14 @@
       1368,
       0,
       "STRING"
+    ],
+    [
+      2411,
+      1369,
+      0,
+      912,
+      1,
+      "INT"
     ]
   ],
   "groups": [

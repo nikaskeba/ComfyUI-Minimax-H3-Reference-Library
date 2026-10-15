@@ -245,6 +245,9 @@ class WorkflowWiringTests(unittest.TestCase):
         checker = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintWindowValidate")
         source_of = lambda node, name: links[next(i["link"] for i in node["inputs"] if i["name"] == name)][1]
         self.assertEqual(source_of(fitter, "prompt_batch"), 258)
+        self.assertEqual(source_of(fitter, "settling_frames"), 1369)
+        self.assertEqual(source_of(nodes[912], "settling_frames"), 1369)
+        self.assertNotEqual(source_of(fitter, "settling_frames"), 920)
         self.assertEqual(source_of(nodes[257], "initial_value1"), fitter["id"])
         self.assertEqual(source_of(nodes[257], "remaining"), fitter["id"])
         self.assertEqual(source_of(planner, "prompt_batch"), fitter["id"])
