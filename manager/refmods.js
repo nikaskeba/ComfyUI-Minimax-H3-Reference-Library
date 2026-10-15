@@ -7,7 +7,7 @@ const fields=["reference_type","collection","name","file","subject_name","appear
 const selected=new Set(JSON.parse(localStorage.getItem("skeba-refmod-selection")||"[]"));
 const numeric=new Set(["resolution","grid","steps","video_seconds","audio_seconds"]);
 let voiceControl;
-let sources=[],existing=null,companion=null,catalog=[],groups=[],folder="",uploading=0,busy=false,frameRows=[],storedVoice=null,keepVoice=true,previewData={frames:[],audio:null},baseline="";
+let sources=[],existing=null,companion=null,catalog=[],groups=[],uploading=0,busy=false,frameRows=[],storedVoice=null,keepVoice=true,previewData={frames:[],audio:null},baseline="";
 const status=(message,error=false)=>{$("status").textContent=message;$("status").className=error?"error":"";};
 async function request(url,options={}){const response=await fetch(url,options),text=await response.text();let result;try{result=JSON.parse(text);}catch{throw new Error(`${url} returned ${response.status} with a non-JSON response. Restart ComfyUI after updating the nodes, then refresh this page.`);}if(!response.ok)throw new Error(typeof result.error==="string"?result.error:JSON.stringify(result));return result;}
 const selection=row=>({file:row.file,member:row.member??null});
@@ -49,10 +49,9 @@ function renderSources(){
 }
 async function upload(files){if(busy)return;uploading++;summary();try{for(const file of files){status(`Uploading ${file.name}...`);const data=new FormData();data.append("file",file);const source=await request("/api/h3-refmods/sources",{method:"POST",body:data});sources.push({...source,start:0,end:0,include_audio:source.kind==="video"});renderSources();remember();}status("Sources ready.");}catch(error){status(error.message,true);}finally{uploading--;summary();$("upload").value="";}}
 function chip(text,kind="neutral"){const el=document.createElement("span");el.className="chip "+kind;el.textContent=text;return el;}
-function renderFolders(){const names=[...new Set(groups.map(group=>group.folder))].sort();$("folders").replaceChildren();for(const name of ["",...names]){const control=button(name||"All RefMods",()=>{folder=name;renderFolders();renderCatalog();});control.classList.toggle("active",folder===name);$("folders").append(control);}}
 function renderCatalog(){
  $("assets").replaceChildren();const query=$("search").value.toLowerCase(),kind=$("kind-filter").value;
- const shown=groups.filter(group=>(!$("type-filter").value||(group.primary.reference_type||"character")===$("type-filter").value)&&(!$("collection-filter").value||group.primary.collection===$("collection-filter").value)&&(!folder||group.folder===folder)&&(!kind||(kind==="paired"?group.visual&&group.audio:kind==="visual"?group.visual:group.audio))&&`${group.name} ${group.files.join(" ")} ${group.rows.map(row=>row.description||"").join(" ")}`.toLowerCase().includes(query));
+ const shown=groups.filter(group=>(!$("type-filter").value||(group.primary.reference_type||"character")===$("type-filter").value)&&(!$("collection-filter").value||group.primary.collection===$("collection-filter").value)&&(!kind||(kind==="paired"?group.visual&&group.audio:kind==="visual"?group.visual:group.audio))&&`${group.name} ${group.files.join(" ")} ${group.rows.map(row=>row.description||"").join(" ")}`.toLowerCase().includes(query));
  for(const group of shown){const card=document.createElement("article");card.className="asset";const thumb=group.rows.find(row=>row.preview),preview=document.createElement(thumb?"img":"div");preview.className="asset-preview"+(thumb?"":" asset-placeholder");if(thumb){preview.src=previewURL(thumb);preview.alt=group.name;preview.loading="lazy";}else preview.textContent=group.audio&&!group.visual?"Audio":"RefMod";
  const body=document.createElement("div"),name=document.createElement("div"),badges=document.createElement("div"),files=document.createElement("div"),actions=document.createElement("div"),details=document.createElement("details");body.className="asset-body";name.className="asset-name";name.textContent=group.name;badges.className="badges";files.className="asset-files";files.textContent=group.files.join(" + ");actions.className="asset-actions";
  if(group.visual){const v=group.visual;badges.append(chip(`${v.kind} · ${Number(v.token_count).toLocaleString()} tokens`,"visual"),chip(`${v.mode==="encode"?"full":"compressed"} · ${v.latent_t??"?"} frames · ${v.latent_h??"?"}×${v.latent_w??"?"}`));}
@@ -70,7 +69,7 @@ async function removeGroup(group){
  await request("/api/h3-refmods/records",{method:"DELETE",headers:{"Content-Type":"application/json"},body:JSON.stringify({selections})});
  if(existing&&group.files.includes(existing.file)){reset();showView(false);}await refresh();status(`Deleted ${group.name}.`);
 }
-async function refresh(){await loadCollections();catalog=await request("/api/h3-refmods/records");groups=groupCatalog(catalog);renderFolders();renderCatalog();}
+async function refresh(){await loadCollections();catalog=await request("/api/h3-refmods/records");groups=groupCatalog(catalog);renderCatalog();}
 async function edit(group){
  if(busy)return;if(group.primary.error)throw new Error(group.primary.error);const row=group.primary;
  const meta=await request(`/api/h3-refmods/detail?file=${encodeURIComponent(row.file)}&member=${row.member??""}`);const members=meta.kind==="bundle"?meta.members:[meta];const visual=members.find(m=>m.kind!=="audio");

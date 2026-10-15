@@ -1162,6 +1162,7 @@ class MiniMaxH3MotionContextSaveLatent:
         return {
             "required": {
                 "latent": ("LATENT", {
+                    "lazy": True,
                     "tooltip": "The sampler's output latent (the same one "
                                "you wire into the decode nodes)."}),
                 "filename_prefix": ("STRING", {
@@ -1180,6 +1181,13 @@ class MiniMaxH3MotionContextSaveLatent:
                                "old behaviour, a new numbered file every "
                                "run (numbers count runs, not clips)."}),
             },
+            "optional": {
+                "save_if_next_prompt": ("BOOLEAN", {
+                    "default": True,
+                    "tooltip": "Connect current_prompt < prompt_count to skip saving "
+                               "the final clip. When false, the upstream refiner "
+                               "is not evaluated."}),
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -1191,7 +1199,14 @@ class MiniMaxH3MotionContextSaveLatent:
                    "Context node can pin audio from it via the matching "
                    "Load node.")
 
-    def save(self, latent, filename_prefix, clip_index=0):
+    def check_lazy_status(self, filename_prefix, clip_index=0,
+                          save_if_next_prompt=True, latent=None, **kwargs):
+        return ["latent"] if save_if_next_prompt and latent is None else []
+
+    def save(self, latent, filename_prefix, clip_index=0,
+             save_if_next_prompt=True):
+        if not save_if_next_prompt:
+            return ("",)
         if _st_save is None:
             raise RuntimeError("h3_motion_context: safetensors is not "
                                "available; cannot save latents.")
