@@ -25,7 +25,7 @@ from .h3_multi_guide import SkebaMiniMaxH3MultiFrameGuideTest
 from .h3_upscale_context import SkebaH3UpscaleContextGuides
 from .h3_person_reference_mask import SkebaPersonReferenceMask
 from .h3_mask_composite import SkebaH3FinalInpaintComposite
-from .h3_inpaint_source_loop import SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate
+from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate
 from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode
 from .h3_av_connector import (
     SkebaH3AVConnectorAssembleTest,
@@ -91,6 +91,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3UpscaleContextGuides": SkebaH3UpscaleContextGuides,
     "SkebaPersonReferenceMask": SkebaPersonReferenceMask,
     "SkebaH3FinalInpaintComposite": SkebaH3FinalInpaintComposite,
+    "SkebaH3InpaintBatchFit": SkebaH3InpaintBatchFit,
     "SkebaH3InpaintWindowPlan": SkebaH3InpaintWindowPlan,
     "SkebaH3InpaintSourceWindow": SkebaH3InpaintSourceWindow,
     "SkebaH3InpaintWindowValidate": SkebaH3InpaintWindowValidate,
@@ -152,6 +153,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3UpscaleContextGuides": "SKEBA H3 Upscale Context Guides",
     "SkebaPersonReferenceMask": "SKEBA Reference Subject Mask (2 Tracks)",
     "SkebaH3FinalInpaintComposite": "SKEBA H3 Final Inpaint Composite",
+    "SkebaH3InpaintBatchFit": "SKEBA H3 Inpaint Batch Fit",
     "SkebaH3InpaintWindowPlan": "SKEBA H3 Inpaint Loop Window Plan",
     "SkebaH3InpaintSourceWindow": "SKEBA H3 Inpaint Source Window",
     "SkebaH3InpaintWindowValidate": "SKEBA H3 Inpaint Loop Validate",

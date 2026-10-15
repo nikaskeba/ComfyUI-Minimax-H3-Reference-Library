@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import functools
 from pathlib import Path
 import re
 import subprocess
@@ -14,6 +15,7 @@ FPS = 24
 H3_RUNS = (124, 107, 90, 73, 56, 39, 22, 5, 1)
 _DURATION_TAG = re.compile(r"\[s\s*=\s*([^\]]+)\]", re.IGNORECASE)
 _SCENE_TAG = re.compile(r"\[new_location\]", re.IGNORECASE)
+_SHOT_TAG = re.compile(r"(?m)^[ \t]*\[Shot\s+\d+(?:\s*:\s*[^\]]+)?\]", re.IGNORECASE)
 _VIDEO_EXTENSIONS = {".mp4", ".mkv", ".mov", ".webm", ".avi", ".m4v"}
 _AUDIO_EXTENSIONS = {".wav", ".mp3", ".flac", ".m4a", ".ogg", ".opus", ".aac", ".mp4", ".mkv"}
 
@@ -96,6 +98,66 @@ def plan_windows(
     return plans
 
 
+def _fit_duration_tag(prompt: str, frames: int) -> str:
+    seconds = f"{frames / FPS:.6f}".rstrip("0").rstrip(".")
+    replacement = f"[s={seconds}]"
+    if _DURATION_TAG.search(prompt):
+        prompt = _DURATION_TAG.sub(replacement, prompt, count=1)
+    else:
+        prompt = replacement + "\n" + prompt
+    # Remove only shots whose explicit start is outside the shortened clip.
+    # Unknown/untimed shots remain authored text; never guess their position.
+    for shot in _SHOT_TAG.finditer(prompt):
+        marker = shot.group(0)
+        seconds = None
+        inline = re.search(r":\s*(\d+(?:\.\d+)?)s\s*\]", marker, re.IGNORECASE)
+        if inline:
+            seconds = float(inline.group(1))
+        else:
+            line = prompt[shot.end():prompt.find("\n", shot.end()) if "\n" in prompt[shot.end():] else len(prompt)]
+            clock = re.search(r"\bAt\s+(?:(\d+):)?(\d{2})\.(\d{1,3})\b", line, re.IGNORECASE)
+            if clock:
+                seconds = (int(clock.group(1) or 0) * 60 + int(clock.group(2))
+                           + int(clock.group(3).ljust(3, "0")) / 1000)
+        if seconds is not None and seconds >= frames / FPS:
+            tail = re.search(r"(?m)^[ \t]*(?:overall_soundscape|non_diegetic_music)\s*:",
+                             prompt[shot.start():], re.IGNORECASE)
+            end = shot.start() + tail.start() if tail else len(prompt)
+            return prompt[:shot.start()].rstrip() + "\n\n" + prompt[end:].lstrip()
+    return prompt
+
+
+def fit_prompt_batch(prompt_batch: list[str], total_frames: int, start_frame: int,
+                     default_seconds: float, context_length: int,
+                     settling_frames: int = 0) -> tuple[list[str], list[dict]]:
+    """Keep only prompts that can consume real source frames on H3's grid."""
+    if total_frames <= start_frame:
+        raise ValueError("No source-video frames remain after the selected starting frame.")
+    fitted = []
+    plans = []
+    for prompt in prompt_batch:
+        candidate = plan_windows(fitted + [prompt], start_frame, default_seconds,
+                                 context_length, settling_frames)[-1]
+        available = total_frames - candidate["source_start_frame"]
+        if available < candidate["render_frames"]:
+            maximum = 5 + ((available - 5) // 17) * 17 if available >= 5 else 0
+            if maximum <= candidate["head_trim"]:
+                break
+            prompt = _fit_duration_tag(prompt, maximum - candidate["head_trim"])
+            candidate = plan_windows(fitted + [prompt], start_frame, default_seconds,
+                                     context_length, settling_frames)[-1]
+            if candidate["render_frames"] > available:
+                raise ValueError("Could not fit the final prompt to the remaining source-video frames.")
+        fitted.append(prompt)
+        plans.append(candidate)
+    if not fitted:
+        raise ValueError(
+            "Fewer than five usable H3 source frames remain at this starting frame. "
+            "Move the start earlier or choose a longer video."
+        )
+    return fitted, plans
+
+
 class SkebaH3InpaintWindowPlan:
     CATEGORY = "Skeba AI Nodes - Reference/Experimental"
     FUNCTION = "plan"
@@ -150,6 +212,89 @@ def _ffmpeg_executable() -> str:
     from imageio_ffmpeg import get_ffmpeg_exe
 
     return get_ffmpeg_exe()
+
+
+@functools.lru_cache(maxsize=16)
+def _normalized_video_frame_count(path: str, size: int, mtime_ns: int) -> int:
+    """Count the same 24 fps frames that _decode_window will address."""
+    del size, mtime_ns
+    cmd = [_ffmpeg_executable(), "-v", "error", "-i", path,
+           "-vf", f"fps=fps={FPS}:start_time=0", "-an", "-f", "null", "-",
+           "-progress", "pipe:1", "-nostats"]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode:
+        raise ValueError("Could not count normalized source-video frames: "
+                         + result.stderr.strip()[-400:])
+    counts = re.findall(r"(?m)^frame=(\d+)\s*$", result.stdout)
+    if not counts:
+        raise ValueError("Source video contains no decodable 24 fps frames.")
+    return int(counts[-1])
+
+
+class SkebaH3InpaintBatchFit:
+    CATEGORY = "Skeba AI Nodes - Reference/Experimental"
+    FUNCTION = "fit"
+    RETURN_TYPES = ("SKEBA_PROMPT_LIST", "INT", "*", "INT", "STRING")
+    RETURN_NAMES = ("prompt_batch", "count", "video", "start_frame", "status")
+    DESCRIPTION = (
+        "Before the loop, fit prompts to the real normalized 24 fps source. "
+        "Shortens the final prompt on H3's frame grid and omits prompts after "
+        "the video ends. Select the source video and starting frame here."
+    )
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {
+            "prompt_batch": ("SKEBA_PROMPT_LIST", {"forceInput": True}),
+            "video": (["(no source video)"] + _source_files(),),
+            "start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000}),
+            "default_duration": ("FLOAT", {"default": 15.0, "min": 0.01, "max": 3600.0}),
+            "context_length": ("INT", {"default": 22, "min": 0, "max": 124}),
+            "settling_frames": ("INT", {"default": 0, "min": 0, "max": 4096}),
+        }}
+
+    @classmethod
+    def IS_CHANGED(cls, prompt_batch, video, start_frame, default_duration,
+                   context_length, settling_frames):
+        if video == "(no source video)":
+            return (tuple(prompt_batch), video, start_frame, default_duration,
+                    context_length, settling_frames)
+        import folder_paths
+        stat = Path(folder_paths.get_annotated_filepath(video)).stat()
+        return (tuple(prompt_batch), video, stat.st_size, stat.st_mtime_ns, start_frame,
+                default_duration, context_length, settling_frames)
+
+    def fit(self, prompt_batch, video, start_frame=0, default_duration=15.0,
+            context_length=22, settling_frames=0):
+        if not isinstance(prompt_batch, list) or not prompt_batch:
+            raise ValueError("Inpaint source loop needs a nonempty prompt batch.")
+        if video == "(no source video)":
+            plan_windows(prompt_batch, start_frame, default_duration,
+                         context_length, settling_frames)
+            return (prompt_batch, len(prompt_batch), video, int(start_frame),
+                    "No source video selected; prompt durations are unchanged.")
+        import folder_paths
+        if Path(video).name != video or Path(video).suffix.lower() not in _VIDEO_EXTENSIONS:
+            raise ValueError("Choose an uploaded source video from the ComfyUI input folder.")
+        input_dir = Path(folder_paths.get_input_directory()).resolve()
+        path = Path(folder_paths.get_annotated_filepath(video)).resolve()
+        if not path.is_file() or not path.is_relative_to(input_dir):
+            raise ValueError("Source video must be inside the ComfyUI input folder.")
+        stat = path.stat()
+        total = _normalized_video_frame_count(str(path), stat.st_size, stat.st_mtime_ns)
+        fitted, plans = fit_prompt_batch(prompt_batch, total, int(start_frame),
+                                         default_duration, context_length, settling_frames)
+        omitted = len(prompt_batch) - len(fitted)
+        adjusted = fitted[-1] != prompt_batch[len(fitted) - 1]
+        status = (f"{total} normalized 24 fps source frames; {len(fitted)} of "
+                  f"{len(prompt_batch)} prompts fit. "
+                  f"Last clip appends {plans[-1]['appended_frames']} frames "
+                  f"({plans[-1]['appended_frames'] / FPS:.3f}s).")
+        if adjusted:
+            status += " Final prompt duration shortened to the remaining H3 frame grid."
+        if omitted:
+            status += f" {omitted} prompt(s) beyond the source end omitted."
+        return (fitted, len(fitted), video, int(start_frame), status)
 
 
 def _video_size(path: str) -> tuple[int, int]:
@@ -225,23 +370,15 @@ def _decode_audio_window(path: str, start: int, count: int, sample_rate: int = 4
             "Could not load source audio for this window: "
             + result.stderr.decode("utf-8", "replace")[-400:]
         )
-    if not result.stdout:
-        raise ValueError(
-            f"Source audio is too short for frames {start}–{start + count - 1}. "
-            "Choose an earlier starting frame or a longer audio file."
-        )
-    waveform = torch.frombuffer(bytearray(result.stdout), dtype=torch.float32)
+    waveform = (torch.frombuffer(bytearray(result.stdout), dtype=torch.float32)
+                if result.stdout else torch.empty(0, dtype=torch.float32))
     available = waveform.numel() // 2
     wanted = last - first
-    if available < wanted - 2:
-        raise ValueError(
-            f"Source audio is too short for frames {start}–{start + count - 1}: "
-            f"{available} of {wanted} samples per channel."
-        )
     waveform = waveform[:2 * min(available, wanted)].reshape(-1, 2).T.unsqueeze(0).contiguous()
     if available < wanted:
         waveform = torch.nn.functional.pad(waveform, (0, wanted - available))
-    return {"waveform": waveform, "sample_rate": sample_rate}
+    return {"waveform": waveform, "sample_rate": sample_rate,
+            "padded_silence_seconds": max(0, wanted - available) / sample_rate}
 
 
 class SkebaH3InpaintSourceWindow:
@@ -250,22 +387,25 @@ class SkebaH3InpaintSourceWindow:
     RETURN_TYPES = ("IMAGE", "AUDIO", "STRING", "IMAGE", "*", "*")
     RETURN_NAMES = ("frames", "audio", "status", "fixed_reference_frame", "audio_mask_mode", "video_generation_mode")
     DESCRIPTION = (
-        "Read an exact frame window from an uploaded video after normalizing its "
-        "whole timeline to 24 fps. Audio uses the same frame-indexed time window."
+        "Loads the current prompt's source-video window on a normalized 24 fps timeline. "
+        "Use Video start to choose where the loop begins, and Reference frame to choose "
+        "one fixed image for subject tracking. Audio may come from the video, a separate "
+        "track, or generation. Short source audio is padded with silence. The window "
+        "planner normally supplies start_frame and frame_count for each prompt."
     )
 
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {
-            "video": (["(no source video)"] + _source_files(),),
-            "start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000}),
-            "frame_count": ("INT", {"default": 124, "min": 5, "max": 100000}),
-            "video_origin_frame": ("INT", {"default": 0, "min": 0, "max": 100000000}),
-            "reference_frame": ("INT", {"default": 0, "min": 0, "max": 100000000}),
-            "audio_source": (["video audio", "custom audio", "generate new audio"],),
-            "custom_audio": (["(none)"] + _source_files(_AUDIO_EXTENSIONS),),
-            "custom_audio_start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000}),
-            "video_generation_mode": (["source video inpaint", "audio drives video"],),
+            "video": (["(no source video)"] + _source_files(), {"tooltip": "Video to inpaint or use as source context. Select (no source video) only for audio-driven video generation."}),
+            "start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "First source frame on the normalized 24 fps timeline. In a loop, connect the window planner; change the initial position on Batch Fit."}),
+            "frame_count": ("INT", {"default": 124, "min": 5, "max": 100000, "tooltip": "Number of source frames to load for this prompt, including continuation overlap. Connect the window planner for automatic H3 lengths."}),
+            "video_origin_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "Original loop start frame. Keeps separately selected audio aligned as subsequent video windows advance."}),
+            "reference_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "One fixed frame from the source video used as the subject-tracking reference throughout the loop. It does not set the clip start."}),
+            "audio_source": (["video audio", "custom audio", "generate new audio"], {"tooltip": "Video audio follows the source video; custom audio follows its own start position; generate new audio leaves the incoming audio blank for H3."}),
+            "custom_audio": (["(none)"] + _source_files(_AUDIO_EXTENSIONS), {"tooltip": "Separate audio file used only when Audio source is custom audio. Missing audio at the end is filled with silence."}),
+            "custom_audio_start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "Where custom audio begins, measured in 24 fps frame units. It advances with the video loop, so 24 means one second into the track."}),
+            "video_generation_mode": (["source video inpaint", "audio drives video"], {"tooltip": "Source video inpaint edits the selected video and enables tracking. Audio drives video generates the picture from the prompt and selected audio, without subject tracking."}),
         }}
 
     @classmethod
@@ -354,6 +494,9 @@ class SkebaH3InpaintSourceWindow:
             raise ValueError(f"Unknown video generation mode: {video_generation_mode}")
         audio_detail = (f"; custom audio frames {audio_start}–{audio_start + count - 1}"
                         if audio_source == "custom audio" else "")
+        if audio.get("padded_silence_seconds", 0):
+            audio_detail += (f"; padded {audio['padded_silence_seconds']:.3f}s "
+                             "of missing source audio with silence")
         video_detail = ("no source video; text generates the picture"
                         if no_video else
                         f"{width}x{height}; fixed SAM3 reference frame {ref_index}")

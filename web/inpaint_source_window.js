@@ -13,12 +13,35 @@ function plannerFor(node) {
     return link ? app.graph.getNodeById(link.origin_id) : null;
 }
 
-function frameField(label, read, write, mediaKind = "video") {
+function batchFitFor(node) {
+    const planner = plannerFor(node);
+    const linkId = planner?.inputs?.find((input) => input.name === "start_frame")?.link;
+    const link = linkId == null ? null : app.graph.links[linkId];
+    const upstream = link ? app.graph.getNodeById(link.origin_id) : null;
+    return upstream?.type === "SkebaH3InpaintBatchFit" ? upstream : null;
+}
+
+function sourceControl(node, name) {
+    if (name === "video") return control(batchFitFor(node), "video") || control(node, "video");
+    if (name === "start_frame") return control(batchFitFor(node), "start_frame") || control(plannerFor(node), "start_frame");
+    return control(node, name);
+}
+
+function frameField(label, read, write, mediaKind = "video", help = "") {
     const row = document.createElement("div");
     row.style.cssText = "margin:8px 0;padding:8px;border:1px solid #454b57;border-radius:7px;background:#1e232b";
     const heading = document.createElement("div");
     heading.textContent = label;
     heading.style.cssText = "font-weight:600;margin-bottom:5px;color:#d9e4f3";
+    if (help) {
+        const icon = document.createElement("span");
+        icon.textContent = " ⓘ";
+        icon.title = help;
+        icon.setAttribute("aria-label", help);
+        icon.style.cssText = "cursor:help;color:#8eb8ef;font-weight:400";
+        heading.append(icon);
+        row.title = help;
+    }
     const video = document.createElement(mediaKind);
     video.controls = true;
     video.preload = "metadata";
@@ -77,18 +100,18 @@ app.registerExtension({
             const intro = document.createElement("div");
             intro.textContent = "Select the source start and one fixed frame for SAM3. Use the video playhead or drag either slider.";
             intro.style.cssText = "color:#b8c5d8;line-height:1.4";
-            const start = frameField("Video start frame", () => control(plannerFor(node), "start_frame")?.value ?? 0, (frame) => {
-                const widget = control(plannerFor(node), "start_frame");
+            const start = frameField("Video start frame", () => sourceControl(node, "start_frame")?.value ?? 0, (frame) => {
+                const widget = sourceControl(node, "start_frame");
                 if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
-            });
+            }, "video", "Choose where the first prompt starts in the source video. Later prompts advance automatically. Drag, type a frame number, or use the preview playhead. Positions use normalized 24 fps.");
             const reference = frameField("Fixed SAM3 reference frame", () => control(node, "reference_frame")?.value ?? 0, (frame) => {
                 const widget = control(node, "reference_frame");
                 if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
-            });
+            }, "video", "Pick a clear frame of the subject for tracking. This image stays fixed as the reference across the loop; it does not change the video start.");
             const audio = frameField("Custom audio start frame", () => control(node, "custom_audio_start_frame")?.value ?? 0, (frame) => {
                 const widget = control(node, "custom_audio_start_frame");
                 if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
-            }, "audio");
+            }, "audio", "Choose where the separate audio track begins. Its position then advances with each video window. If the track runs short, the missing tail is silent.");
             const status = document.createElement("div");
             status.style.cssText = "color:#b8c5d8;margin:4px 0";
             const uploadRow = document.createElement("div");
@@ -114,7 +137,7 @@ app.registerExtension({
                         const response = await api.fetchApi("/upload/image", { method: "POST", body });
                         if (!response.ok) throw new Error(await response.text());
                         const result = await response.json();
-                        const widget = control(node, widgetName);
+                        const widget = sourceControl(node, widgetName);
                         if (!widget) throw new Error(`Missing ${widgetName} selector`);
                         const values = widget.options?.values;
                         if (Array.isArray(values) && !values.includes(result.name)) values.push(result.name);
@@ -135,9 +158,11 @@ app.registerExtension({
             };
             makeUpload("Upload video", "video/*,.mkv,.mov,.m4v", "video");
             makeUpload("Upload audio", "audio/*,.wav,.mp3,.flac,.m4a,.ogg,.opus,.aac", "custom_audio");
+            uploadRow.children[0].title = "Add a source video to ComfyUI's input folder and select it for this window.";
+            uploadRow.children[2].title = "Add a separate audio track; this also selects Custom audio as the audio source.";
             root.append(intro, uploadRow, status, start.row, reference.row, audio.row);
             const refresh = () => {
-                const filename = String(control(node, "video")?.value ?? "");
+                const filename = String(sourceControl(node, "video")?.value ?? "");
                 const hasVideo = !!filename && !filename.startsWith("(");
                 if (hasVideo) {
                     const url = api.apiURL(`/view?${new URLSearchParams({ filename, type: "input" })}`);
@@ -173,18 +198,30 @@ app.registerExtension({
                     audio.update(audio.read());
                 }
             };
-            for (const widgetName of ["video", "audio_source", "custom_audio", "video_generation_mode"]) {
-                const widget = control(node, widgetName);
-                if (!widget) continue;
-                const oldCallback = widget.callback;
-                widget.callback = function () { oldCallback?.apply(this, arguments); refresh(); };
-            }
+            const bindSourceCallbacks = () => {
+                for (const widgetName of ["video", "audio_source", "custom_audio", "video_generation_mode"]) {
+                    const widget = sourceControl(node, widgetName);
+                    if (!widget || widget.__skebaSourceRefreshFor === node.id) continue;
+                    const oldCallback = widget.callback;
+                    widget.callback = function () { oldCallback?.apply(this, arguments); refresh(); };
+                    widget.__skebaSourceRefreshFor = node.id;
+                }
+            };
+            bindSourceCallbacks();
             this.addDOMWidget("source_frame_picker", "custom", root,
                 { serialize: false, getMinHeight: () => 515 });
             this.setSize([Math.max(this.size[0], 410), Math.max(this.size[1], 760)]);
             setTimeout(refresh, 0);
             const oldConfigure = this.onConfigure;
-            this.onConfigure = function () { oldConfigure?.apply(this, arguments); setTimeout(refresh, 0); };
+            this.onConfigure = function () {
+                oldConfigure?.apply(this, arguments);
+                setTimeout(() => { bindSourceCallbacks(); refresh(); }, 0);
+            };
+            const oldConnectionsChange = this.onConnectionsChange;
+            this.onConnectionsChange = function () {
+                oldConnectionsChange?.apply(this, arguments);
+                setTimeout(() => { bindSourceCallbacks(); refresh(); }, 0);
+            };
         };
     },
 });

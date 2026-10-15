@@ -71,16 +71,29 @@ def built_in_images_revision():
 
 
 def built_in_attachment_id(record):
-    value = library_built_in_tag_value(record)
+    value = _manifest_tag(record)
     return hashlib.sha256(value.encode("utf-8")).hexdigest()[:24]
 
 
+def _manifest_tag(record):
+    """Keep pre-shortening attachment keys stable for existing libraries."""
+    value = record.get("legacy_tag", record.get("tag", record["name"]))
+    return f"{value}_BC"
+
+
+def _manifest_tag_for_value(tag):
+    for record in list_built_in_references():
+        if library_built_in_tag_value(record) == tag:
+            return _manifest_tag(record)
+    return tag
+
+
 def built_in_image_filename(record):
-    return _read_attachment_manifest()["images"].get(library_built_in_tag_value(record))
+    return _read_attachment_manifest()["images"].get(_manifest_tag(record))
 
 
 def built_in_audio_filename(record):
-    return _read_attachment_manifest().get("audio", {}).get(library_built_in_tag_value(record))
+    return _read_attachment_manifest().get("audio", {}).get(_manifest_tag(record))
 
 
 def set_built_in_audio(record, filename):
@@ -88,7 +101,7 @@ def set_built_in_audio(record, filename):
         raise ValueError("Built-in character audio filename is invalid.")
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        tag = library_built_in_tag_value(record)
+        tag = _manifest_tag(record)
         audio = manifest.setdefault("audio", {})
         previous = audio.get(tag)
         audio[tag] = filename
@@ -102,7 +115,7 @@ def set_built_in_voice_description(record, description):
         raise ValueError("Voice description must be text.")
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        manifest.setdefault("voice_descriptions", {})[library_built_in_tag_value(record)] = description.strip()
+        manifest.setdefault("voice_descriptions", {})[_manifest_tag(record)] = description.strip()
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
         _write_attachment_manifest(manifest)
     return description.strip()
@@ -111,7 +124,7 @@ def set_built_in_voice_description(record, description):
 def remove_built_in_audio(record):
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        previous = manifest.get("audio", {}).pop(library_built_in_tag_value(record), None)
+        previous = manifest.get("audio", {}).pop(_manifest_tag(record), None)
         if previous is not None:
             manifest["revision"] = int(manifest.get("revision", 0)) + 1
             _write_attachment_manifest(manifest)
@@ -121,7 +134,7 @@ def remove_built_in_audio(record):
 def built_in_image_context(record):
     manifest = _read_attachment_manifest()
     return manifest.get("image_contexts", {}).get(
-        library_built_in_tag_value(record), "")
+        _manifest_tag(record), "")
 
 
 def set_built_in_image(record, filename):
@@ -129,7 +142,7 @@ def set_built_in_image(record, filename):
         raise ValueError("Built-in character image filename is invalid.")
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        tag = library_built_in_tag_value(record)
+        tag = _manifest_tag(record)
         previous = manifest["images"].get(tag)
         manifest["images"][tag] = filename
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
@@ -140,7 +153,7 @@ def set_built_in_image(record, filename):
 def set_built_in_image_context(record, description):
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        tag = library_built_in_tag_value(record)
+        tag = _manifest_tag(record)
         if not manifest["images"].get(tag):
             raise ValueError(
                 "Attach an image before adding built-in character image context.")
@@ -158,7 +171,7 @@ def set_built_in_image_context(record, description):
 def remove_built_in_image(record):
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        tag = library_built_in_tag_value(record)
+        tag = _manifest_tag(record)
         previous = manifest["images"].pop(tag, None)
         manifest.setdefault("image_contexts", {}).pop(tag, None)
         if previous is not None:
@@ -235,11 +248,33 @@ def _parse_catalog(revision):
 def _with_tags(records):
     records = [dict(record) for record in records]
     name_counts = Counter(record["name"].casefold() for record in records)
+    reserved = {record["name"].casefold() for record in records
+                if name_counts[record["name"].casefold()] == 1}
     for record in records:
         tag = record["name"]
         if name_counts[record["name"].casefold()] > 1:
             qualifiers = [value for value in (record["actor"], record["franchise"]) if value]
-            tag = " | ".join((tag, *qualifiers))
+            record["legacy_tag"] = " | ".join((tag, *qualifiers))
+            short_name = record["name"].rsplit("/", 1)[-1].strip()
+            actor_parts = record["actor"].split()
+            surname = actor_parts[-1].strip(".,") if actor_parts else ""
+            if surname.casefold() in {"jr", "sr", "ii", "iii", "iv"} and len(actor_parts) > 1:
+                surname = actor_parts[-2].strip(".,") + surname
+            slug = lambda value: re.sub(r"[^A-Za-z0-9]+", "_", value).strip("_")
+            for candidate in (
+                f"{slug(short_name)}_{slug(surname)}",
+                f"{slug(record['name'])}_{slug(record['actor'])}",
+                f"{slug(record['name'])}_{slug(record['actor'])}_{slug(record['franchise'])}",
+            ):
+                if candidate and candidate.casefold() not in reserved:
+                    tag = candidate
+                    break
+            else:
+                suffix = hashlib.sha256(record["legacy_tag"].encode("utf-8")).hexdigest()[:8]
+                tag = f"{slug(record['name'])}_{suffix}"
+        if "|" in tag:
+            tag = tag.replace("|", "_")
+        reserved.add(tag.casefold())
         record["tag"] = tag
     return records
 
@@ -296,22 +331,23 @@ def library_built_in_records():
     result = {}
     for record in list_built_in_references():
         tag = library_built_in_tag_value(record)
+        manifest_tag = _manifest_tag(record)
         result[tag] = {
-            **manifest.get("refmods", {}).get(tag, {}),
+            **manifest.get("refmods", {}).get(manifest_tag, {}),
             "id": f"built-in:{tag}",
             "tag": tag,
             "category": "built-in-characters",
-            "collection": manifest.get("collections", {}).get(tag, ""),
+            "collection": manifest.get("collections", {}).get(manifest_tag, ""),
             "reference_type": "character",
             "image_description": (
-                f"{_description(record)}. Image context: {image_contexts[tag]}"
-                if attachments.get(tag) and image_contexts.get(tag)
+                f"{_description(record)}. Image context: {image_contexts[manifest_tag]}"
+                if attachments.get(manifest_tag) and image_contexts.get(manifest_tag)
                 else _description(record)
             ),
-            "image_context": image_contexts.get(tag, "") if attachments.get(tag) else "",
-            "audio_description": manifest.get("voice_descriptions", {}).get(tag, _voice_description(record)),
-            "image_file": attachments.get(tag),
-            "audio_file": manifest.get("audio", {}).get(tag),
+            "image_context": image_contexts.get(manifest_tag, "") if attachments.get(manifest_tag) else "",
+            "audio_description": manifest.get("voice_descriptions", {}).get(manifest_tag, _voice_description(record)),
+            "image_file": attachments.get(manifest_tag),
+            "audio_file": manifest.get("audio", {}).get(manifest_tag),
             "video_file": None,
             "video_has_audio": False,
             "built_in": True,
@@ -326,7 +362,7 @@ def set_built_in_refmods(tag, settings):
     settings = selection_fields(settings)
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        manifest.setdefault("refmods", {})[tag] = settings
+        manifest.setdefault("refmods", {})[_manifest_tag_for_value(tag)] = settings
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
         _write_attachment_manifest(manifest)
 
@@ -337,7 +373,7 @@ def set_built_in_collection(tag, collection):
         raise ValueError("Collection must contain only letters, numbers, '_' or '-'.")
     with ATTACHMENT_LOCK:
         manifest = _read_attachment_manifest()
-        manifest.setdefault("collections", {})[tag] = collection
+        manifest.setdefault("collections", {})[_manifest_tag_for_value(tag)] = collection
         manifest["revision"] = int(manifest.get("revision", 0)) + 1
         _write_attachment_manifest(manifest)
     return collection
@@ -346,6 +382,8 @@ def set_built_in_collection(tag, collection):
 def resolve_built_in_prompt(prompt_template, records=None):
     records = _with_tags(records) if records is not None else list_built_in_references()
     by_tag = {record["tag"].casefold(): record for record in records}
+    by_tag.update({record["legacy_tag"].casefold(): record for record in records
+                   if "legacy_tag" in record})
     by_name = {}
     for record in records:
         by_name.setdefault(record["name"].casefold(), []).append(record)

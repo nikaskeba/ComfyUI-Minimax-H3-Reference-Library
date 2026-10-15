@@ -20,6 +20,36 @@ SPEC.loader.exec_module(MODULE)
 
 
 class WindowPlanTests(unittest.TestCase):
+    def test_short_tail_removes_only_out_of_range_timed_shots(self):
+        prompt = ("[s=15]\n\ndetailed_description:\n"
+                  "[Shot 1: 0s] Establish.\n\n"
+                  "[Shot 2: 4.0s] Speak.\n\n"
+                  "[Shot 3: 12.0s] Too late.\n\n"
+                  "overall_soundscape:\nRoom tone.\n\n"
+                  "non_diegetic_music:\nN/A")
+        fitted = MODULE._fit_duration_tag(prompt, 226)
+        self.assertIn("[s=9.416667]", fitted)
+        self.assertIn("[Shot 2: 4.0s]", fitted)
+        self.assertNotIn("[Shot 3: 12.0s]", fitted)
+        self.assertIn("overall_soundscape:\nRoom tone.", fitted)
+        old = "[Shot 1] Establish.\n[Shot 2] At 00:12.000, Too late.\nnon_diegetic_music:\nN/A"
+        self.assertNotIn("[Shot 2]", MODULE._fit_duration_tag(old, 226))
+
+    def test_batch_fit_shortens_final_prompt_and_omits_exhausted_prompts(self):
+        prompts = ["[s=15] one", "[s=15] two", "[s=15] three"]
+        fitted, plans = MODULE.fit_prompt_batch(prompts, 620, 0, 15, 22)
+        self.assertEqual(len(fitted), 2)
+        self.assertEqual(plans[-1]["source_end_frame"], 617)
+        self.assertEqual(plans[-1]["head_trim"], 22)
+        self.assertIn("[s=10.625]", fitted[-1])
+        self.assertEqual(fitted[0], prompts[0])
+        ten_second_tail, tail_plans = MODULE.fit_prompt_batch(
+            ["[s=15] one"], 240, 0, 15, 22)
+        self.assertEqual(tail_plans[0]["render_frames"], 226)
+        self.assertIn("[s=9.416667]", ten_second_tail[0])
+        with self.assertRaisesRegex(ValueError, "Fewer than five"):
+            MODULE.fit_prompt_batch(prompts, 4, 0, 15, 22)
+
     def test_three_prompts_advance_by_saved_frames(self):
         plans = MODULE.plan_windows(["[s=15] one", "[s=15] two", "[s=15] three"],
                                     104, 12, 22)
@@ -116,6 +146,41 @@ class FrameWindowLoaderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "only .* required normalized"):
             MODULE._decode_window(str(path), 140, 22, 24, 16)
 
+    def test_exact_normalized_count_and_short_audio_silence(self):
+        for fps in (24, 30):
+            path = self._make_video(fps)
+            stat = path.stat()
+            self.assertEqual(MODULE._normalized_video_frame_count(
+                str(path), stat.st_size, stat.st_mtime_ns), 144)
+        short = self.root / "short_audio.wav"
+        with wave.open(str(short), "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(44100)
+            wav.writeframes(np.ones(44100 * 2, dtype=np.int16).tobytes())
+        audio = MODULE._decode_audio_window(str(short), 0, 124)
+        self.assertEqual(audio["waveform"].shape[-1], round(124 * 44100 / 24))
+        self.assertGreater(float(audio["waveform"][..., :44100].abs().mean()), 0)
+        self.assertEqual(float(audio["waveform"][..., 2 * 44100:].abs().max()), 0)
+        self.assertGreater(audio["padded_silence_seconds"], 3)
+        ended = MODULE._decode_audio_window(str(short), 124, 22)
+        self.assertEqual(float(ended["waveform"].abs().max()), 0)
+
+    def test_batch_fit_uses_selected_video_and_reports_omitted_prompts(self):
+        path = self._make_video(30)
+        fake_paths = types.SimpleNamespace(
+            get_input_directory=lambda: str(self.root),
+            get_annotated_filepath=lambda name: str(self.root / name),
+        )
+        with patch.dict(sys.modules, {"folder_paths": fake_paths}):
+            prompts, count, video, start, status = MODULE.SkebaH3InpaintBatchFit().fit(
+                ["[s=15] first", "[s=15] second"], path.name, 0, 15, 22, 0)
+        self.assertEqual(count, 1)
+        self.assertEqual(video, path.name)
+        self.assertEqual(start, 0)
+        self.assertIn("1 prompt(s) beyond the source end omitted", status)
+        self.assertIn("[s=5.875]", prompts[0])
+
     def test_fixed_reference_and_audio_source_modes(self):
         path = self._make_video(30)
         custom = self.root / "custom.wav"
@@ -170,16 +235,22 @@ class FrameWindowLoaderTests(unittest.TestCase):
 
 class WorkflowWiringTests(unittest.TestCase):
     def test_loop_uses_planned_window_and_validates_append(self):
-        graph = json.loads((ROOT / "example/Minimax_Upscale_Loop_Workflow-Oct_13Inpainting.json")
+        graph = json.loads((ROOT / "example/Video-Audio-Inpaint-Oct16.json")
                            .read_text(encoding="utf-8"))
         nodes = {node["id"]: node for node in graph["nodes"]}
         links = {link[0]: link for link in graph["links"]}
         planner = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintWindowPlan")
+        fitter = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintBatchFit")
         loader = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintSourceWindow")
         checker = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintWindowValidate")
         source_of = lambda node, name: links[next(i["link"] for i in node["inputs"] if i["name"] == name)][1]
-        self.assertEqual(source_of(planner, "prompt_batch"), 258)
+        self.assertEqual(source_of(fitter, "prompt_batch"), 258)
+        self.assertEqual(source_of(nodes[257], "initial_value1"), fitter["id"])
+        self.assertEqual(source_of(nodes[257], "remaining"), fitter["id"])
+        self.assertEqual(source_of(planner, "prompt_batch"), fitter["id"])
+        self.assertEqual(source_of(planner, "start_frame"), fitter["id"])
         self.assertEqual(source_of(planner, "index"), 267)
+        self.assertEqual(source_of(loader, "video"), fitter["id"])
         self.assertEqual(source_of(loader, "start_frame"), planner["id"])
         self.assertEqual(source_of(loader, "frame_count"), planner["id"])
         self.assertEqual(source_of(loader, "video_origin_frame"), planner["id"])
@@ -193,7 +264,7 @@ class WorkflowWiringTests(unittest.TestCase):
         self.assertEqual(source_of(nodes[1312], "frames"), loader["id"])
         self.assertEqual(source_of(nodes[1170], "audio_mode"), loader["id"])
         self.assertEqual(source_of(nodes[1292], "generated_video"), 298)
-        self.assertEqual(source_of(nodes[300], "latent_image"), 1170)
+        self.assertEqual(source_of(nodes[300], "latent_image"), 1358)
         for link in graph["links"]:
             lid, src, src_slot, dst, dst_slot, _ = link
             self.assertIn(lid, nodes[src]["outputs"][src_slot]["links"])

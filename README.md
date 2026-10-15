@@ -388,8 +388,11 @@ The node expands it without the show or franchise name:
 <d>[English in George Costanza's voice as played by Jason Alexander] Damn, Jerry.</d>
 ```
 
-When a character has multiple portrayals, the catalog supplies an actor-specific
-tag such as `^Bruce Wayne / Batman | Christian Bale | The Dark Knight^`.
+When a character has multiple portrayals, the catalog supplies a short,
+actor-specific tag such as `^Batman_Bale^` or `{Batman_Bale_BC}`. Tags never
+contain `|`, so they work in `|`-delimited prompt lists. The actor and show
+remain in the expanded reference description. Existing attached media stays
+linked; replace older `|`-bearing tags in saved prompt lists with the new tags.
 The character page can search and sort by character, actor, or show in either
 alphabetical direction. Selected characters appear together in a visible guide;
 **Copy selected guide** copies each character and voice tag as one line, for

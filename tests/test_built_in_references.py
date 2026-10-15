@@ -59,9 +59,35 @@ class BuiltInReferenceTests(unittest.TestCase):
         self.assertGreaterEqual(len(batmen), 4)
         self.assertEqual(len({record["tag"] for record in batmen}), len(batmen))
         self.assertIn(
-            "Bruce Wayne / Batman | Christian Bale | The Dark Knight",
+            "Batman_Bale",
             {record["tag"] for record in batmen},
         )
+        self.assertIn("Batman_Affleck", {record["tag"] for record in batmen})
+        self.assertTrue(all("|" not in record["tag"] for record in records))
+        self.assertEqual(len({record["tag"].casefold() for record in records}), len(records))
+
+    def test_short_duplicate_tag_keeps_existing_attachment_metadata(self):
+        record = next(record for record in MODULE.list_built_in_references()
+                      if record["name"] == "Bruce Wayne / Batman"
+                      and record["actor"] == "Ben Affleck")
+        old_tag = "Bruce Wayne / Batman | Ben Affleck | Batman v Superman_BC"
+        with tempfile.TemporaryDirectory() as directory, mock.patch.object(
+                MODULE, "_attachment_manifest_path",
+                return_value=Path(directory) / "attachments.json"):
+            manifest = {"version": 2, "revision": 1,
+                        "images": {old_tag: "batman.png"},
+                        "audio": {old_tag: "batman.wav"},
+                        "voice_descriptions": {old_tag: "A low, measured voice."},
+                        "collections": {old_tag: "dc"}}
+            MODULE._write_attachment_manifest(manifest)
+            self.assertEqual(MODULE.library_built_in_tag(record), "{Batman_Affleck_BC}")
+            self.assertEqual(MODULE.built_in_image_filename(record), "batman.png")
+            converted = MODULE.library_built_in_records()["Batman_Affleck_BC"]
+            self.assertEqual(converted["audio_file"], "batman.wav")
+            self.assertEqual(converted["audio_description"], "A low, measured voice.")
+            self.assertEqual(converted["collection"], "dc")
+            MODULE.set_built_in_collection("Batman_Affleck_BC", "comics")
+            self.assertEqual(MODULE.library_built_in_records()["Batman_Affleck_BC"]["collection"], "comics")
 
     def test_reference_library_namespace_uses_bc_suffix(self):
         records = MODULE.list_built_in_references()
@@ -150,14 +176,17 @@ class BuiltInReferenceTests(unittest.TestCase):
 
     def test_portrayal_specific_tag_resolves_and_short_duplicate_is_rejected(self):
         prompt, mapping = MODULE.resolve_built_in_prompt(
-            "^Bruce Wayne / Batman | Christian Bale | The Dark Knight^ enters."
+            "^Batman_Bale^ enters."
         )
 
         self.assertEqual(
             prompt,
             "Bruce Wayne / Batman played by Christian Bale featured on The Dark Knight enters.",
         )
-        self.assertIn("Christian Bale | The Dark Knight^ ->", mapping)
+        self.assertIn("^Batman_Bale^ ->", mapping)
+        old_prompt, _ = MODULE.resolve_built_in_prompt(
+            "^Bruce Wayne / Batman | Christian Bale | The Dark Knight^ enters.")
+        self.assertEqual(old_prompt, prompt)
         with self.assertRaisesRegex(ValueError, "multiple portrayals"):
             MODULE.resolve_built_in_prompt("^Bruce Wayne / Batman^ enters.")
 
