@@ -58,7 +58,7 @@ The compiler owns all Subject, Picture, Audio, and Speaker numbers. Never assume
 
 ### Active speakers, natural timing, and intentional exceptions
 
-Prefer solo dialogue coverage and one active speaker per shot. An intentionally requested multi-character dialogue shot is allowed: identify the active speaker explicitly, keep visible non-speakers silent, and selectively specify closed lips if unwanted lip synchronization is likely. Non-speakers may blink, gesture, and react naturally; silence does not require frozen expressions. Simultaneous dialogue is only for an intentional overlap. Use the default speaking-shot isolation guidance below whenever the story does not require an exception.
+Prefer no more than two active speakers per generated clip and one active speaker per speaking shot. Other characters may remain present and react silently. An intentionally requested multi-character dialogue shot is allowed: identify the active speaker explicitly, keep visible non-speakers silent, and selectively specify closed lips if unwanted lip synchronization is likely. Non-speakers may blink, gesture, and react naturally; silence does not require frozen expressions. Simultaneous dialogue is only for an intentional overlap. Use the default speaking-shot isolation guidance below whenever the story does not require an exception.
 
 Allow a line to finish naturally before the next speaker starts. Budget time for the words, speaking rate, accent, comedy beat, physical action, and any intended audience/listener reaction. Avoid both rushed speech and oversized empty windows. Mouth closure is a natural handoff, not mandatory boilerplate after every line; describe it selectively when necessary. Preserve the two-sentence-per-shot limit and user-supplied words.
 
@@ -338,11 +338,25 @@ For example, a silent arrival at 0.0s followed by a speaker at 1.5s and the next
 
 Use shot timing and direct character attribution to establish dialogue handoffs. Do not append formulaic speech-completion or mouth-closure instructions after dialogue. Keep shots and speaking turns in playback order. Respect the requested overall clip length; if the dialogue cannot fit naturally, use fewer turns or split across clips when permitted, rather than crowding the timestamps or silently changing the spoken words. Every newly authored shot includes its start time inside its marker, including silent shots. Older untimed markers remain readable for backward compatibility.
 
+### H3 timing and complexity
+
+Optimize each clip for reliable execution rather than maximum story density. For a 12–15 second clip, normally plan **3–4 shots, 2–4 dialogue lines, no more than two active speakers in the entire prompt, one active speaker per speaking shot, no more than one significant physical action, and one primary comedic beat or reveal**. These are authoring defaults, not compiler limits. Other characters may be present in silent establishing, action, or reaction shots; their visual presence does not require them to speak. Four short lines can share three speaking shots when one of the two speakers delivers two within the two-sentence-per-shot limit and the full timing still fits. Avoid more than five shots unless each is extremely simple and the cuts leave enough time for dialogue and action.
+
+Plan the silent opening, speech, required action, reactions, and speaker handoffs before assigning shot timestamps. Do not compress dialogue, shorten fixed lines, or rush the last speaker to fit `[s=x]`. If the minimum needed time approaches the full clip duration, remove an optional shot or beat, increase a flexible clip duration, or split the sequence into another independently defined prompt. Keep required dialogue and physical continuity intact.
+
+When a story scene needs three or more speaking characters, distribute their turns across shorter prompts where possible. The two-speaker preference applies to each independently generated clip, not the entire story scene. Shorter `[s=x]` clips are acceptable when they leave every line and handoff enough time; do not shorten a clip so far that its dialogue becomes rushed. Keep silent characters' positions and the visible final-frame composition continuous across the split, and do not add `[new_location]` merely because a different pair speaks next.
+
+### Prompt compression within each clip
+
+Describe only information needed for the current shot. Prefer `Close on {Jerry Seinfeld_BC}, baffled.` over a repeated description of Jerry's established position, location, and eyeline when those details have not changed. Keep the active speaker and any meaningful change in framing, action, position, or sound clear. Do not repeat location, wardrobe, or state in every shot after `subject_definitions` and `summary` establish them. Reinforce an identity anchor, visible environment, or exact position where a new cut, re-entry, speaker change, or continuation handoff could otherwise cause confusion.
+
+Compression applies **within** a prompt. Every new prompt remains self-contained: repeat its needed reference declarations and complete story-specific wardrobe, and restate concrete inherited positions and props in its summary. Never replace those requirements with "same as before" or omit a movement needed to connect two clips.
+
 ### HARD RULE — DIALOGUE TIMING BY WORD COUNT
 
 Calculate dialogue timing before assigning shot timestamps. Do not estimate speaking windows by evenly dividing the clip. These are conservative authoring estimates, not measured speech durations or a guarantee of generated timing; no compiler timing validation is implied.
 
-For ordinary conversational English, budget **0.40 seconds per spoken word** (approximately 150 words per minute). Count only spoken words inside the dialogue block, excluding language headers, character/voice tags, and staging. Count contractions as one word; count numbers and abbreviations according to their intended spoken form.
+For ordinary conversational English, budget **0.40 seconds per spoken word** (approximately 150 words per minute). A genuinely rapid delivery may reach roughly 180 words per minute (0.33 seconds per word); do not choose that rate solely to fit more dialogue. Count only spoken words inside the dialogue block, excluding language headers, character/voice tags, and staging. Count contractions as one word; count numbers and abbreviations according to their intended spoken form.
 
 ```text
 estimated_speech_duration = (word_count × seconds_per_word) + punctuation_pauses
@@ -350,17 +364,22 @@ earliest_next_shot = dialogue_start + max(1.25, estimated_speech_duration) + 0.3
 next_shot_start = ceil(earliest_next_shot × 10) / 10
 ```
 
+This formula covers speech and its handoff. For the whole shot, also budget required action before or after speech and any reaction that cannot overlap it. Estimate **minimum shot time = speech time + non-overlapping action time + non-overlapping reaction time + handoff**. An action before speech moves `dialogue_start` later than the shot marker; do not hide it inside the speaking window.
+
 Add these approximate pauses:
 
 - Comma: **+0.15 seconds**.
 - Sentence-ending period: **+0.25 seconds**.
 - Question mark or exclamation mark: **+0.25 seconds**.
 - Ellipsis or deliberate hesitation: **+0.40 seconds**.
-- Explicit comedic/reaction beat: **+0.50–1.00 seconds**, when required.
+- Simple gesture or visible reaction: **0.5–1.0 seconds**, when required.
+- Substantial physical action: **1.5–3.0 seconds**, when required.
+- Normal audience laugh: **0.6–1.0 seconds**, when deliberately included.
+- Strong punchline or reveal laugh: **1.2–2.0 seconds**, when deliberately included.
 
-Treat an ellipsis as one pause, not three periods. Treat combined terminal punctuation such as `?!` as one ending pause. Do not count the same explicitly described hesitation or reaction twice.
+Treat an ellipsis as one pause, not three periods. Treat combined terminal punctuation such as `?!` as one ending pause. Add action and reaction time only for events that cannot occur during speech or another compatible action; overlapping gestures do not each require a separate window. Do not count the same hesitation, reaction, or laugh twice. Audience laughter is never added automatically.
 
-Reserve at least **1.25 seconds** for very short dialogue, then **0.35 seconds** before the next speaker's shot begins. Round the resulting next-shot timestamp **upward to the nearest 0.1 second**, never downward. Apply the speech window and closing margin before the clip ends for its final line too. If a shot contains multiple dialogue events, budget each event sequentially, including intervening actions; the maximum two spoken sentences per shot still applies.
+Reserve at least **1.25 seconds** for very short dialogue, then **0.35 seconds** before the next speaker's shot begins. This handoff usually supplies the desired **0.3–0.6 seconds of visual settling** around a major speaker change; do not add another settling margin unless the cut needs one. Round the resulting next-shot timestamp **upward to the nearest 0.1 second**, never downward. Apply the speech window and closing margin before the clip ends for its final line too. If a shot contains multiple dialogue events, budget each event sequentially, including intervening actions; the maximum two spoken sentences per shot still applies.
 
 `dialogue_start` is when speech actually begins, not necessarily the cut time. Add time for required walking, gestures, visual establishment, or other actions before speech. Preserve the silent opening Shot 1 and the new-location speech buffer; those are additional to the spoken line's budget.
 
@@ -376,6 +395,8 @@ Choose delivery rates deliberately:
 Adjust the rate for unusually fast, slow, emotional, hesitant, shouted, or deliberately comedic delivery. Do not assume shouting means fast speech. For other languages, use an appropriate natural speaking estimate rather than blindly applying English word counts. Never choose a faster rate merely to force the exchange into the available duration.
 
 Example: “Does this look clean to you?” contains six words. At 0.40 seconds per word plus a 0.25-second question pause, speech needs approximately **2.65 seconds**. If dialogue starts at **1.0s**, the next shot may begin no earlier than **4.0s**, including the 0.35-second handoff. Any action before the line moves that cut later.
+
+For a 12-second clip, a workable plan might be a silent 1.0-second opening, two separate speaking shots of about 3.0 seconds each for short lines, then one silent physical reveal and reaction through the end. For a 15-second clip, two longer speaking shots might each need about 4.0 seconds after the opening, leaving one final shot for the action and, if requested, its audience reaction. Calculate the actual words and events before using either layout; these are examples of available time, not automatic cut points.
 
 Calculate the required clip duration from its dialogue, opening setup, actions, and handoffs. When duration is flexible, select `[s=x]` to accommodate that total. If the timeline exceeds the user's desired maximum or the workflow's supported clip length, split the exchange into another independently defined prompt instead of accelerating speech unnaturally. Preserve fixed dialogue and speaker ownership; if splitting is explicitly prohibited, flag the conflict instead of silently shortening or rushing the lines.
 
@@ -458,9 +479,9 @@ Use precise camera terminology:
 Qualify movement when useful with `small/large amplitude` and `slow/fast speed`, e.g. `a slow push in with small amplitude`.
 
 Do not add technical camera specifications merely to make a prompt sound cinematic. Use them when they provide meaningful visual direction and keep them consistent across shots unless a change is intentional.
-Begin with one or two English sentences establishing presentation/style before `[Shot 1: 0s]`. Use sequential `[Shot N: Xs]` markers with explicit start times for every shot; follow the natural speaking-length guidance above before placing each cut. For each shot establish composition, visible appearance and positions, environment and lighting, actions/state changes, camera movement (type, amplitude, speed when relevant), current sound, and where references take effect. At an important entity's first visible appearance, describe the referenced characteristics actually visible in that shot. Do not reduce this section to plot or reference mappings.
+Establish presentation/style and initial composition in `[Shot 1: 0s]`. Use sequential `[Shot N: Xs]` markers with explicit start times for every shot; follow the natural speaking-length guidance above before placing each cut. In later shots describe the composition, action, speaker, sound, or state that actually changes. At an important entity's first visible appearance, describe the referenced characteristics needed to identify it from that shot. Add environment, lighting, camera movement, and reference details where they affect the current beat rather than repeating a complete checklist in every shot. Do not reduce this section to plot or reference mappings.
 
-For generation prompts, normally aim for 350-500 English words here. Dialogue-heavy scenes prioritize a feasible complete spoken timeline over reaching that range. Editing detail scales with the changes. One shot alone is not a reason to omit necessary detail; do not invent additional action to pad a word count. Write events in playback order, because the compiler assigns speakers in source order rather than sorting timestamps.
+Use as many words as needed for clear, feasible staging; there is no word-count target for `detailed_description`. Dialogue-heavy scenes prioritize a complete spoken timeline. Editing detail scales with the changes. Do not add shots or action to fill space. Write events in playback order, because the compiler assigns speakers in source order rather than sorting timestamps.
 
 Use semantic tags for entities in actions and speech. Additional staging belongs before or after the speech pattern, not inserted inside its required structure.
 
@@ -526,42 +547,39 @@ Keep each complete spoken turn with its intended performer. The compiler discove
 
 Use `<scenetrans>` and `<cutoff>` only for intentionally continuous dialogue across a cut or intentionally truncated speech. For ordinary turn-taking, finish the line before the next shot. Keep each entire dialogue block on the same speaking face when practical.
 
-### Prefer simple one-pass dialogue rotation
+### Prefer two active speakers per clip
 
-For multi-character dialogue, optimize the scene structure for reliable speaker and voice binding before optimizing for conversational back-and-forth.
+For multi-character dialogue, optimize for reliable speaker and voice binding before conversational back-and-forth. Prefer at most two active speakers in each prompt, especially when they have separate saved or RefMod voice references. A third character can remain visually present and react silently. Do not add a spoken line merely to give every visible character a turn.
 
-When three or more referenced characters speak in a short clip:
+When three or more characters need dialogue in one story scene, first consider dividing that scene into two or more independently timed prompts. Give each prompt a clear visual starting state and at most two speakers. Preserve the chronological dialogue, complete per-prompt definitions, and same-location continuation handoff. Do not cut or reassign user-supplied lines to meet this preference.
+
+If the story genuinely requires three or more speakers inside a single clip and the timing fits:
 
 1. Prefer ONE speaking turn per character whenever the scene can still communicate the intended joke or story beat.
 2. Prefer a simple forward speaker sequence, `A → B → C`, over a returning sequence, `A → B → C → A`.
 3. Avoid returning to an earlier speaker merely to add a reaction line, tag line, or explanation. If the final joke can be assigned naturally to the last speaker in the rotation, prefer that structure.
-4. Reduce the total number of dialogue handoffs. For a roughly 15-second clip, prefer 2–3 speaking shots rather than 4–5 short speaking shots when multiple referenced voices are active. This is a pacing preference, not a requirement to give every visible character dialogue.
+4. Reduce the total number of dialogue handoffs. Use one complete turn per speaker in a forward sequence where possible; do not add rapid return turns to fill the clip.
 5. Give every speaking shot enough uninterrupted time for the complete line, with enough time before changing speakers. Do not schedule rapid cuts simply to increase the number of jokes.
 6. Make each character's dialogue strongly characteristic of that character's immediate role, attitude, or concern. Avoid generic lines that could plausibly belong to several characters in the scene.
 7. Use silent multi-character establishing or reaction shots separately from dialogue shots. Establish who is present and the physical situation silently, then begin the one-character-per-shot dialogue rotation.
 8. If a scene is experiencing voice or identity mixing, simplify in this order: remove unnecessary dialogue turns; eliminate return turns to previous speakers; increase time between speaker changes; shorten individual lines; strengthen character-specific wording.
 9. Do not preserve an extra dialogue turn solely because conventional conversation would normally require a response. A separate silent visual reaction can provide the conversational beat without introducing another voice event. Do not automatically add audience laughter after dialogue.
 
-PREFERRED:
+PREFERRED FOR A THREE-CHARACTER STORY SCENE:
+
+- Prompt 1: A, B, and C are established silently; A speaks, then B speaks. End on a concrete visible state.
+- Prompt 2: Begin from Prompt 1's final visible state; after a silent handoff, C speaks and, if needed, one of the others replies.
+
+Each prompt has no more than two active speakers. Use a shorter duration for either prompt if its actual dialogue and action fit naturally.
+
+IF ONE CLIP IS NECESSARY, PREFER:
 
 - Silent establishing shot with A, B, and C.
-- Shot 2: A speaks and completely finishes.
-- Shot 3: B speaks and completely finishes.
-- Shot 4: C speaks and delivers the final joke.
+- One speaking shot for A, then B, then C, each with enough time to finish.
 
-`A → B → C`
+`A → B → C` is preferable to `A → B → C → A → B` within one clip.
 
-AVOID WHEN POSSIBLE:
-
-- Shot 1: A speaks.
-- Shot 2: B speaks.
-- Shot 3: C speaks.
-- Shot 4: A speaks again.
-- Shot 5: B adds another reaction.
-
-`A → B → C → A → B`
-
-The second structure creates additional speaker re-entry and voice handoffs. Use it only when the story genuinely requires the additional exchange. This is an authoring preference, not a compiler validation rule. When revising supplied dialogue, preserve explicitly fixed words and speaker assignments; do not silently cut or reassign required dialogue just to achieve a one-pass rotation.
+This is an authoring preference, not a compiler validation rule. Preserve fixed dialogue, speaker assignments, and timing when the story requires an exception.
 
 ### Keep dialogue endings free of automatic follow-up prose
 
@@ -1017,7 +1035,7 @@ Before delivery, check the Ref2VA contract above: independent identities and anc
 Before returning a prompt:
 
 1. Confirm deterministic mode is the target. Preserve exact known saved tags, and declare all temporary references directly in subject_definitions, with no separate declaration prefix or duplicate bare temporary entry.
-2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Reject dialogue quotations, paraphrases, recaps, implied speaking, speaking-order instructions, and first-word/delivery cues; summary describes visible action and may describe reference roles without cueing speech. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 uses `[Shot 1: 0s]`, establishes the overall style and initial composition, and contains no speech. Dialogue begins in Shot 2 or later. Later shots use strictly increasing timestamps within the clip duration. Check that dialogue and actions can finish naturally before the next cut.
+2. Check English section prose and all five headings exactly once in order: subject_definitions, summary, detailed_description, overall_soundscape, non_diegetic_music. Require a nonempty scene-level summary before detailed_description; do not omit it because the scene is short or continues the previous clip. Keep shot markers, timestamps, dialogue, and voice tags out of summary. Reject dialogue quotations, paraphrases, recaps, implied speaking, speaking-order instructions, and first-word/delivery cues; summary describes visible action and may describe reference roles without cueing speech. Normally omit authored retention_analysis; verify it exists in compiled six-section output. Omit the old timeline heading. Put `detailed_description:` on its own line before Shot 1. Shot 1 uses `[Shot 1: 0s]`, establishes the overall style and initial composition, and contains no speech. Dialogue begins in Shot 2 or later. Later shots use strictly increasing timestamps within the clip duration. For 12–15 seconds, check the usual 3–4-shot, 2–4-line budget and prefer no more than two active speakers before adding another beat; more than five shots need exceptionally simple content. Check that dialogue, non-overlapping actions, reactions, and handoffs can finish naturally before the next cut and before clip end.
 3. Remove manually authored runtime numbers, voice-binding blocks, and task headers. Keep semantic references in actions and only the language inside dialogue brackets.
 4. Check the intended performer for each speaking turn and directly attribute the dialogue to its character tag. Use `<d>[English]...</d>` (or the spoken language) without a voice tag in the brackets. Preserve spoken words after the brackets. Keep events in playback order; normally let the compiler generate retention_analysis.
 5. Validate every prompt in isolation. For multi-prompt sequences, the ONLY valid sequence separator is a single `|` on its own line. Split at each `|` and pretend all earlier prompt declarations and definitions are unavailable. Never use labels such as `PROMPT 1`, `PROMPT 2`, `Scene 1`, or `Clip 1` as separators.
@@ -1068,8 +1086,8 @@ Before returning a prompt:
    - Distinguish visible handoff continuity from broader spatial continuity: characters outside the inherited final framing retain their established physical positions even though Shot 1 should not mention them merely to preserve state.
    
    DIALOGUE ROTATION:
-   - For short clips with three or more referenced speakers, prefer one turn each in a forward sequence, with 2–3 speaking shots in roughly 15 seconds where the story permits.
-   - Remove unnecessary return turns before tightening cut timing. Keep necessary exchanges and fixed dialogue, allow enough time for each complete line, and use separate silent shots for multi-character reactions.
+   - Count active speakers per prompt. Prefer no more than two even when more characters are visually present; divide a longer scene into shorter self-contained prompts where each line and handoff fits.
+   - If three or more must speak in one clip, prefer one turn each in a forward sequence. Remove unnecessary return turns before tightening cut timing. Keep necessary exchanges and fixed dialogue, and use separate silent shots for multi-character reactions.
 
    CONCRETE ACTIONS / SCRIPTED SPEECH:
    - Scan summary and shot prose for vague intentions, future events, and implied speech such as "prepares to explain himself" or "about to reply". Replace them with the actual visible action.
@@ -1080,7 +1098,7 @@ Before returning a prompt:
    - Scan each `[Shot N: Xs]` independently.
    - Count the distinct characters with explicit dialogue events inside that shot.
    - The allowed count is 0 or 1.
-   - If two or more different characters speak inside one shot, split their turns into separate sequential shots while preserving the original dialogue and staging. Calculate each line using DIALOGUE TIMING BY WORD COUNT: default 0.40 seconds per spoken English word plus punctuation pauses, minimum 1.25-second speaking window, then 0.35-second handoff; round next-shot starts upward to 0.1 seconds. Include pre-speech actions and reserve the final line's margin before clip end. Split across prompts when the total exceeds the permitted clip duration.
+   - If two or more different characters speak inside one shot, split their turns into separate sequential shots while preserving the original dialogue and staging. Calculate each line using DIALOGUE TIMING BY WORD COUNT: default 0.40 seconds per spoken English word plus punctuation pauses, minimum 1.25-second speaking window, then 0.35-second handoff; round next-shot starts upward to 0.1 seconds. Include pre-speech actions, non-overlapping reactions and any requested audience laugh, and reserve the final line's margin before clip end. Split across prompts when the total exceeds the permitted clip duration.
    - Count spoken sentences across all dialogue blocks in the shot: the maximum is two. Split longer turns into additional shots at sentence boundaries, preserving the dialogue, speaker attribution, and natural timing. Multiple clauses from the same character may remain only within this limit.
    - In every speaking shot, count all characters shown, named, described, or referenced in staging prose, not just speakers: only the speaking character is allowed in default solo coverage. For an intentional exception, explicitly identify the active speaker and keep non-speakers silent. Remove unnecessary off-camera/listener mentions, repeat the matching character attribution for every dialogue event, and omit automatic speech-completion, mouth-closure, or laughter endings. Put multi-character reactions in separate silent shots.
 

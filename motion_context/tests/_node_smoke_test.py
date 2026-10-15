@@ -431,11 +431,13 @@ def main():
             context_frames=context, context_length="22",
             audio_context_length=22, context_latent=small)
     except ValueError as e:
-        assert "cannot be resized" in str(e), str(e)
+        assert "different latent grid" in str(e), str(e)
+        assert "previous base-pass latent" in str(e), str(e)
         print("resolution change: refused, with the reason and the two "
               "resolutions named")
     else:
         raise AssertionError("mismatched latent did not refuse")
+
 
     # nothing wired at all
     try:

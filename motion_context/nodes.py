@@ -550,6 +550,7 @@ class MiniMaxH3MotionContext:
         height = int(video.shape[3]) * 16
         frame_count = _pixel_frames(latent_t)
 
+
         if reencode_audio_context and audio_context_enabled and context_latent is not None:
             if audio_vae is None:
                 raise ValueError(
@@ -637,9 +638,12 @@ class MiniMaxH3MotionContext:
                 # nearly always a mistake, so say so instead.
                 raise ValueError(
                     "h3_motion_context: context_latent is %dx%d but this "
-                    "clip is %dx%d. A latent cannot be resized, so the "
-                    "previous clip has to be regenerated at this "
-                    "resolution, or the chain restarted here. This "
+                    "clip is %dx%d. Motion Context cannot pin video tokens "
+                    "from a different latent grid. In a two-pass workflow, "
+                    "load the previous base-pass latent for the base-grid "
+                    "Motion Context, even when its conditioning feeds an "
+                    "upscaler. Use an upscaled latent only when the current "
+                    "Motion Context latent has that same upscale grid. This "
                     "invocation received bypass=False (ENABLED)."
                     % (src_w, src_h, width, height))
             if int(src_video.shape[1]) != int(video.shape[1]):

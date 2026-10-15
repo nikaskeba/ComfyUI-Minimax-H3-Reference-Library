@@ -3,10 +3,11 @@ from .refmod_preview import SkebaRefModPreview
 from .reference_audio_preview import SkebaH3ReferenceAudioPreview
 from .quick_launcher import SkebaQuickLauncher
 from .custom_choice import SkebaCustomChoice
+from .midi_for_ableton import SkebaMidiForAbleton
 from .compiler_templates import SkebaH3CompilerTemplates
 from .last_rendered_context import SkebaH3LastRenderedContext
 from .workflow_guide import SkebaWorkflowGuide
-from .h3_audio_refine import SkebaH3AudioRefine
+from .h3_audio_refine import SkebaH3AudioRefine, SkebaH3AudioInpaintRange, SkebaH3AudioEditMask, SkebaH3VideoEditMask, SkebaH3VideoLatentAnchorBlend, SkebaH3FinishInpaintLatent, SkebaH3AVInpaintRange
 from .refmod_studio import SkebaRefModStudio
 from .refmod_create import SkebaCreateH3RefMod
 from .refmod_apply import SkebaH3RefModApply
@@ -21,6 +22,11 @@ from .cached_h3_reference import (
 from .h3_guide_resize import SkebaH3GuideResizeToLatent
 from .h3_guide_bypass import SkebaMiniMaxH3AddGuideBypass
 from .h3_multi_guide import SkebaMiniMaxH3MultiFrameGuideTest
+from .h3_upscale_context import SkebaH3UpscaleContextGuides
+from .h3_person_reference_mask import SkebaPersonReferenceMask
+from .h3_mask_composite import SkebaH3FinalInpaintComposite
+from .h3_inpaint_source_loop import SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate
+from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode
 from .h3_av_connector import (
     SkebaH3AVConnectorAssembleTest,
     SkebaH3AVConnectorFinalizeTest,
@@ -50,11 +56,18 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3ReferenceAudioPreview": SkebaH3ReferenceAudioPreview,
     "SkebaH3LastRenderedContext": SkebaH3LastRenderedContext,
     "SkebaCustomChoice": SkebaCustomChoice,
+    "SkebaMidiForAbleton": SkebaMidiForAbleton,
     "SkebaH3CompilerTemplates": SkebaH3CompilerTemplates,
     "SkebaWorkflowGuide": SkebaWorkflowGuide,
     "SkebaPromptListText": PromptListTextNode,
     "SkebaQuickLauncher": SkebaQuickLauncher,
     "SkebaH3AudioRefine": SkebaH3AudioRefine,
+    "SkebaH3AudioInpaintRange": SkebaH3AudioInpaintRange,
+    "SkebaH3AudioEditMask": SkebaH3AudioEditMask,
+    "SkebaH3VideoEditMask": SkebaH3VideoEditMask,
+    "SkebaH3VideoLatentAnchorBlend": SkebaH3VideoLatentAnchorBlend,
+    "SkebaH3FinishInpaintLatent": SkebaH3FinishInpaintLatent,
+    "SkebaH3AVInpaintRange": SkebaH3AVInpaintRange,
     "SkebaRefModPreview": SkebaRefModPreview,
     "SkebaRefModStudio": SkebaRefModStudio,
     "SkebaCreateH3RefMod": SkebaCreateH3RefMod,
@@ -75,6 +88,14 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3GuideResizeToLatent": SkebaH3GuideResizeToLatent,
     "SkebaMiniMaxH3AddGuideBypass": SkebaMiniMaxH3AddGuideBypass,
     "SkebaMiniMaxH3MultiFrameGuideTest": SkebaMiniMaxH3MultiFrameGuideTest,
+    "SkebaH3UpscaleContextGuides": SkebaH3UpscaleContextGuides,
+    "SkebaPersonReferenceMask": SkebaPersonReferenceMask,
+    "SkebaH3FinalInpaintComposite": SkebaH3FinalInpaintComposite,
+    "SkebaH3InpaintWindowPlan": SkebaH3InpaintWindowPlan,
+    "SkebaH3InpaintSourceWindow": SkebaH3InpaintSourceWindow,
+    "SkebaH3InpaintWindowValidate": SkebaH3InpaintWindowValidate,
+    "SkebaH3InpaintLatentMode": SkebaH3InpaintLatentMode,
+    "SkebaH3InpaintVideoMode": SkebaH3InpaintVideoMode,
     "SkebaMiniMaxH3AVConnectorGuideTest": SkebaMiniMaxH3AVConnectorGuideTest,
     "SkebaH3AVConnectorFinalizeTest": SkebaH3AVConnectorFinalizeTest,
     "SkebaH3AVConnectorAssembleTest": SkebaH3AVConnectorAssembleTest,
@@ -96,11 +117,18 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3ReferenceAudioPreview": "SKEBA H3 Reference Audio Preview",
     "SkebaH3LastRenderedContext": "SKEBA H3 Last Rendered Context",
     "SkebaCustomChoice": "SKEBA Custom Choice",
+    "SkebaMidiForAbleton": "SKEBA MIDI for Ableton",
     "SkebaH3CompilerTemplates": "SKEBA H3 Compiler Templates",
     "SkebaWorkflowGuide": "SKEBA Workflow Guide (HTML)",
     "SkebaPromptListText": "SKEBA Prompt List Text",
     "SkebaQuickLauncher": "SKEBA Quick Launcher",
     "SkebaH3AudioRefine": "SKEBA H3 Audio Refine (Optional)",
+    "SkebaH3AudioInpaintRange": "SKEBA H3 Audio Inpaint Range (Experimental)",
+    "SkebaH3AudioEditMask": "SKEBA H3 Audio Edit Mask (Before Sampling)",
+    "SkebaH3VideoEditMask": "SKEBA H3 Video Edit Mask (Before Sampling)",
+    "SkebaH3VideoLatentAnchorBlend": "SKEBA H3 Video Latent Anchor Blend",
+    "SkebaH3FinishInpaintLatent": "SKEBA H3 Finish Inpaint Latent",
+    "SkebaH3AVInpaintRange": "SKEBA H3 Video + Audio Inpaint Range (Experimental)",
     "SkebaRefModPreview": "SKEBA RefMod Frame / Audio Preview",
     "SkebaRefModStudio": "SKEBA RefMod Studio Create / Edit",
     "SkebaCreateH3RefMod": "SKEBA Create H3 RefMod",
@@ -121,6 +149,14 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3GuideResizeToLatent": "H3 Guide Resize to Latent",
     "SkebaMiniMaxH3AddGuideBypass": "SKEBA MiniMax H3 Add Guide with Bypass",
     "SkebaMiniMaxH3MultiFrameGuideTest": "SKEBA MiniMax H3 Multi-Frame Guide",
+    "SkebaH3UpscaleContextGuides": "SKEBA H3 Upscale Context Guides",
+    "SkebaPersonReferenceMask": "SKEBA Reference Subject Mask (2 Tracks)",
+    "SkebaH3FinalInpaintComposite": "SKEBA H3 Final Inpaint Composite",
+    "SkebaH3InpaintWindowPlan": "SKEBA H3 Inpaint Loop Window Plan",
+    "SkebaH3InpaintSourceWindow": "SKEBA H3 Inpaint Source Window",
+    "SkebaH3InpaintWindowValidate": "SKEBA H3 Inpaint Loop Validate",
+    "SkebaH3InpaintLatentMode": "SKEBA H3 Inpaint / Audio-Driven Latent",
+    "SkebaH3InpaintVideoMode": "SKEBA H3 Inpaint / Audio-Driven Video",
     "SkebaMiniMaxH3AVConnectorGuideTest": "SKEBA MiniMax H3 AV Connector Guide",
     "SkebaH3AVConnectorFinalizeTest": "SKEBA H3 AV Connector Finalize",
     "SkebaH3AVConnectorAssembleTest": "SKEBA H3 AV Connector Assemble",
