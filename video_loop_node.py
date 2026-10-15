@@ -1,7 +1,9 @@
 import math
+from pathlib import Path
 
 import torch
 import torchaudio
+import folder_paths
 
 from comfy_api.latest import InputImpl, Types
 from .disk_video import DiskClip, combine_disk_clips
@@ -9,6 +11,12 @@ from .audio_seams import seam_samples, seam_gain
 
 
 class CombineVideoClipsNode:
+    @staticmethod
+    def _audio_files():
+        extensions = {".wav", ".mp3", ".flac", ".m4a", ".ogg", ".opus", ".aac", ".mp4", ".mkv", ".mov"}
+        return sorted(path.name for path in Path(folder_paths.get_input_directory()).iterdir()
+                      if path.is_file() and path.suffix.lower() in extensions)
+
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -17,6 +25,9 @@ class CombineVideoClipsNode:
             },
             "optional": {
                 "audio_seam_ms": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 50.0, "step": 1.0, "tooltip": "Export-only audio de-click fades. Try 10 ms; 0 disables. No change to video timing."}),
+                "use_original_audio": ("BOOLEAN", {"default": False, "tooltip": "For disk clips, replace their audio at final combine with one continuous span from original_audio_file. Turn off when H3 generates the audio."}),
+                "original_audio_file": (["(none)"] + cls._audio_files(), {"tooltip": "The original video or audio file in ComfyUI input. Choose the same source used by the inpaint window."}),
+                "original_audio_start_frame": ("INT", {"default": 0, "min": 0, "tooltip": "First audio frame at 24 fps. Match the inpaint window's custom audio start, or its video start when using video audio."}),
                 "starting_video": ("VIDEO", {"tooltip": "Video placed before the accumulated clips; resized to fit with black bars if needed."}),
                 "ending_video": ("VIDEO", {"tooltip": "Video placed after the accumulated clips; resized to fit with black bars if needed."}),
             },
@@ -27,10 +38,22 @@ class CombineVideoClipsNode:
     FUNCTION = "combine"
     CATEGORY = "Skeba AI Nodes - Utilities"
 
-    def combine(self, accumulation, starting_video=None, ending_video=None, audio_seam_ms=0):
+    def combine(self, accumulation, starting_video=None, ending_video=None, audio_seam_ms=0,
+                use_original_audio=False, original_audio_file="(none)", original_audio_start_frame=0):
         videos = list(accumulation.get("accum", []))
+        original_audio_path = None
+        if use_original_audio:
+            if original_audio_file == "(none)" or original_audio_file not in self._audio_files():
+                raise ValueError("Select an uploaded original audio/video file before enabling original-audio combine.")
+            original_audio_path = Path(folder_paths.get_annotated_filepath(original_audio_file)).resolve()
+            if not original_audio_path.is_file() or not original_audio_path.is_relative_to(Path(folder_paths.get_input_directory()).resolve()):
+                raise ValueError("Original audio must be a file inside the ComfyUI input folder.")
         if videos and all(isinstance(video, DiskClip) for video in videos):
-            return combine_disk_clips(videos, starting_video, ending_video, audio_seam_ms)
+            return combine_disk_clips(videos, starting_video, ending_video, audio_seam_ms,
+                                      original_audio_path=original_audio_path,
+                                      original_audio_start_frame=original_audio_start_frame)
+        if use_original_audio:
+            raise ValueError("Original-audio combine requires clips saved to disk with Skeba Save Clip to File.")
         target_index = int(starting_video is not None) if videos else 0
         if starting_video is not None:
             videos.insert(0, starting_video)

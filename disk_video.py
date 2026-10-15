@@ -389,7 +389,8 @@ def _join_audio(paths, destination, audio_seam_ms=0):
                     remaining -= count
 
 
-def combine_disk_clips(clips, starting_video=None, ending_video=None, audio_seam_ms=0):
+def combine_disk_clips(clips, starting_video=None, ending_video=None, audio_seam_ms=0,
+                       original_audio_path=None, original_audio_start_frame=0):
     paths = [Path(clip.get_stream_source()) for clip in clips]
     geometry = _geometry(paths[0])
     if any(_geometry(path) != geometry for path in paths[1:]):
@@ -407,11 +408,30 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None, audio_seam
         manifest.write_text("".join("file '" + path.resolve().as_posix().replace("'", "'\\''") + "'\n"
                                     for path in paths), encoding="utf-8")
         audio = Path(temporary) / "joined.wav"
-        _join_audio(paths, audio, audio_seam_ms)
+        if original_audio_path is None:
+            _join_audio(paths, audio, audio_seam_ms)
+            audio_input = audio
+            audio_filter = []
+        else:
+            original_audio_path = Path(original_audio_path).resolve()
+            if not original_audio_path.is_file():
+                raise ValueError("The selected original audio file no longer exists.")
+            if int(original_audio_start_frame) < 0:
+                raise ValueError("Original audio start frame must be zero or greater.")
+            with av.open(str(original_audio_path)) as source:
+                if not source.streams.audio:
+                    raise ValueError("The selected original audio/video file has no audio track.")
+            audio_input = original_audio_path
+            duration = sum(_clip_metadata(path)["duration_seconds"] for path in paths)
+            start = int(original_audio_start_frame) / 24
+            # One continuous source span avoids the per-clip AAC joins entirely.
+            # Pad a short source with silence, matching the source-window behavior.
+            audio_filter = ["-filter:a", f"aresample=48000,atrim=start={start:.9f}:duration={duration:.9f},"
+                            f"asetpts=PTS-STARTPTS,apad,atrim=duration={duration:.9f}"]
         result = subprocess.run([_ffmpeg(), "-hide_banner", "-loglevel", "error", "-y",
                              "-f", "concat", "-safe", "0", "-i", str(manifest),
-                             "-i", str(audio), "-map", "0:v:0", "-map", "1:a:0",
-                             "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+                             "-i", str(audio_input), "-map", "0:v:0", "-map", "1:a:0",
+                             "-c:v", "copy", *audio_filter, "-c:a", "aac", "-b:a", "320k",
                              "-movflags", "+faststart", str(output)], capture_output=True, text=True,
                             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     if result.returncode:
@@ -419,6 +439,8 @@ def combine_disk_clips(clips, starting_video=None, ending_video=None, audio_seam
     _update_manifest(directory, combined={
         **_clip_metadata(output),
         "audio_seam_ms": audio_seam_ms,
+        "original_audio_file": str(original_audio_path) if original_audio_path is not None else None,
+        "original_audio_start_frame": int(original_audio_start_frame) if original_audio_path is not None else None,
         "clips": [{**_clip_metadata(path),
                    "path": path.name if path.parent == directory else str(path.resolve()),
                    "role": "starting" if starting_video is not None and i == 0 else

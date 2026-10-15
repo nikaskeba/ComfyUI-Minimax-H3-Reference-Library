@@ -76,6 +76,43 @@ class DiskVideoTests(unittest.TestCase):
             self.assertEqual(frames, 40)
             self.assertLess(abs(seconds - 40 / 24), .025)
 
+    def test_final_combine_uses_one_continuous_original_audio_span(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
+            first = disk.SaveClipToFile().save(video())["result"][0]
+            second = disk.SaveClipToFile().save(video(), accumulation={"accum": [first]})["result"][0]
+            source = Path(directory) / "original.wav"
+            rate = 48000
+            samples = np.arange(3 * rate)
+            # Half a second of lead-in makes the 12-frame offset observable.
+            signal = np.rint(np.sin(samples * 880 * 2 * np.pi / rate) * 12000).astype('<i2')
+            signal[:rate // 2] = 0
+            with wave.open(str(source), "wb") as output:
+                output.setnchannels(1)
+                output.setsampwidth(2)
+                output.setframerate(rate)
+                output.writeframes(signal.tobytes())
+            combined, _ = disk.combine_disk_clips(
+                [first, second], original_audio_path=source, original_audio_start_frame=12)
+            frames, seconds = inspect(combined.get_stream_source())
+            self.assertEqual(frames, 48)
+            self.assertLess(abs(seconds - 2), .025)
+            with av.open(combined.get_stream_source()) as container:
+                output = np.concatenate([frame.to_ndarray().reshape(-1) for frame in container.decode(audio=0)])
+            # The original 880 Hz source continues across the former clip join.
+            for center in (int(.05 * rate), int(.75 * rate), int(1.25 * rate)):
+                window = output[center:center + 4096].astype(float)
+                self.assertGreater(np.sqrt(np.mean(window ** 2)), .05)
+            with wave.open(str(source), "wb") as short:
+                short.setnchannels(1)
+                short.setsampwidth(2)
+                short.setframerate(rate)
+                short.writeframes(signal[:rate].tobytes())
+            padded, _ = disk.combine_disk_clips(
+                [first, second], original_audio_path=source, original_audio_start_frame=12)
+            with av.open(padded.get_stream_source()) as container:
+                tail = np.concatenate([frame.to_ndarray().reshape(-1) for frame in container.decode(audio=0)])
+            self.assertLess(np.sqrt(np.mean(tail[int(1.5 * rate):int(1.6 * rate)].astype(float) ** 2)), .01)
+
     def test_destination_and_random_noise_seed(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(disk.folder_paths, "get_output_directory", return_value=directory):
             saver = disk.SaveClipToFile()

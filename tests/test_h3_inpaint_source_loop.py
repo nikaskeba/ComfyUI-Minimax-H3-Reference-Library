@@ -235,7 +235,7 @@ class FrameWindowLoaderTests(unittest.TestCase):
 
 class WorkflowWiringTests(unittest.TestCase):
     def test_loop_uses_planned_window_and_validates_append(self):
-        graph = json.loads((ROOT / "example/Video-Audio-Inpaint-Oct16.json")
+        graph = json.loads((ROOT / "example/current/Video-Audio-Inpaint-Oct16.json")
                            .read_text(encoding="utf-8"))
         nodes = {node["id"]: node for node in graph["nodes"]}
         links = {link[0]: link for link in graph["links"]}
@@ -268,6 +268,12 @@ class WorkflowWiringTests(unittest.TestCase):
         self.assertEqual(source_of(nodes[1170], "audio_mode"), loader["id"])
         self.assertEqual(source_of(nodes[1292], "generated_video"), 298)
         self.assertEqual(source_of(nodes[300], "latent_image"), 1358)
+        combined = nodes[261]["widgets_values_named"]
+        source_audio = loader["widgets_values_named"]
+        self.assertTrue(combined["use_original_audio"])
+        self.assertEqual(combined["original_audio_file"], source_audio["custom_audio"])
+        self.assertEqual(combined["original_audio_start_frame"],
+                         source_audio["custom_audio_start_frame"])
         for link in graph["links"]:
             lid, src, src_slot, dst, dst_slot, _ = link
             self.assertIn(lid, nodes[src]["outputs"][src_slot]["links"])
