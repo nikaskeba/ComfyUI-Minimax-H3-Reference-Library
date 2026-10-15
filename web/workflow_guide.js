@@ -56,7 +56,7 @@ app.registerExtension({
                 editing = edit;
                 source.style.display = edit ? "block" : "none"; frame.style.display = edit ? "none" : "block";
                 toggle.textContent = edit ? "Preview" : "Edit HTML";
-                hint.textContent = edit ? "Saved with the workflow · Ctrl/Cmd+Enter to preview" : "Double-click to edit";
+                hint.textContent = edit ? "Saved with the workflow · Ctrl/Cmd+Enter to preview" : "Select and copy text here; click Edit HTML to change it";
                 if (edit) { source.value = html.value || ""; source.focus(); }
                 else frame.srcdoc = guideDocument(html.value || "");
             }
@@ -66,9 +66,6 @@ app.registerExtension({
                 if ((event.ctrlKey || event.metaKey) && event.key === "Enter") { event.preventDefault(); show(false); }
             };
             toggle.onclick = () => show(!editing);
-            frame.onload = () => {
-                frame.contentDocument?.addEventListener("dblclick", event => { event.preventDefault(); show(true); });
-            };
             root.addEventListener("pointerdown", event => event.stopPropagation());
             root.addEventListener("wheel", event => event.stopPropagation());
             toolbar.append(toggle, hint); root.append(toolbar, source, frame);
@@ -82,10 +79,6 @@ app.registerExtension({
         const configured = nodeType.prototype.onConfigure;
         nodeType.prototype.onConfigure = function (...args) {
             const result = configured?.apply(this, args); this.skebaGuideRestore?.(); return result;
-        };
-        const doubleClicked = nodeType.prototype.onDblClick;
-        nodeType.prototype.onDblClick = function (...args) {
-            this.skebaGuideEdit?.(); return doubleClicked?.apply(this, args);
         };
     },
 });
