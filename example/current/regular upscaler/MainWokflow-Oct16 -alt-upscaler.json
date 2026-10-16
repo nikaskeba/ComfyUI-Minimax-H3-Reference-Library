@@ -8586,7 +8586,7 @@
       },
       "widgets_values": [
         true,
-        1021139181175666,
+        583086675322405,
         "randomize",
         4,
         0.3,
@@ -8596,7 +8596,7 @@
       ],
       "widgets_values_named": {
         "enabled": true,
-        "seed": 1021139181175666,
+        "seed": 583086675322405,
         "control_after_generate": "randomize",
         "steps": 4,
         "audio_denoise": 0.3,
@@ -12113,12 +12113,12 @@
         "__skeba_bgcolor_base": "#335"
       },
       "widgets_values": [
-        "h3_context",
+        "h3_context_upscaled",
         1,
         false
       ],
       "widgets_values_named": {
-        "latent_path": "h3_context",
+        "latent_path": "h3_context_upscaled",
         "clip_index": 1,
         "bypass": false
       },
@@ -14190,11 +14190,11 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive blue-gray eyes, distinctive nose, mouth, jawline, and facial proportions from the supplied reference. He portrays Michael Scott playing Andy Dufresne as his ridiculous alter ego Prison Mike. His appearance must match the attached image: a bright purple bandana with white paisley patterns wrapped around his head, expressive wide eyes, exaggerated serious facial expressions, and unmistakable Michael Scott facial features. Wardrobe: gray 1940s prison uniform with rolled sleeves, prison identification number, and the SAME PURPLE PAISLEY BANDANA from the reference image. The bandana must remain visible throughout the entire scene. Voice: §Michael Scott_BC§. Personality: extremely confident, completely ignorant about prison, and convinced he is the toughest inmate alive.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable facial identity, distinctive deep-set eyes, facial proportions, natural expressions, and calm demeanor from the supplied reference. He portrays Ellis Boyd \"Red\" Redding from The Shawshank Redemption. Wardrobe: weathered gray 1940s prison uniform with an open collar. His hair is closely cropped, and he carries himself with quiet authority. Voice: §Ellis Boyd 'Red' Redding_BC§. Personality: calm, observant, intelligent, and deeply skeptical of Prison Mike.\n\n<location:Shawshank_Courtyard = The imposing stone courtyard of Shawshank State Penitentiary in 1947. Massive gray prison walls, guard towers, iron gates, rows of prisoners in gray uniforms, and an overcast sky. Cinematic period-accurate 1940s prison atmosphere.>\n\nsummary:\n\nSCENE 1 — THE ARRIVAL.\n\nRecreate the iconic arrival of Andy Dufresne at Shawshank Prison, except Andy is Michael Scott dressed as Prison Mike.\n\nThe scene begins with the same solemn, intimidating atmosphere as the original film. Red watches the new prisoner enter the courtyard. Prison Mike immediately attempts to establish himself as the most feared inmate in Shawshank.\n\nThe humor comes from Michael's complete inability to be intimidating.\n\ndetailed_description:\n\n[Shot 1] Cinematic 1990s prison drama photography, realistic live-action characters, muted colors, dramatic natural lighting, and subtle film grain.\n\nA prison bus arrives at Shawshank.\n\nPrisoners watch from the courtyard.\n\nMichael Scott steps off the bus wearing his gray prison uniform and bright purple paisley bandana.\n\nHis recognizable face is prominently visible.\n\nHe attempts an intimidating walk but looks nervous.\n\n[Shot 2] At 00:03.000, tight facial close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I remember the first time I saw Prison Mike. Didn't look like much.</d> Subjects lips remain closed.\n\nRed watches Michael approach.\n\n[Shot 3] At 00:06.000, tight facial close-up of Prison Mike.\n\nMichael narrows his eyes dramatically.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Listen up, criminals. I'm Prison Mike. And I've seen things.</d> Subjects lips remain closed.\n\nHe aggressively adjusts his purple bandana.\n\n[Shot 4] At 00:10.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Like what?</d> Subjects lips remain closed.\n\n[Shot 5] At 00:12.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]The cafeteria at Dunder Mifflin. On chili day.</d> Subjects lips remain closed.\n\nMichael stares intensely.\n\nRed slowly turns away.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nMichael stands alone in the courtyard, trying to look dangerous.\n\nA guard points him toward the intake line.\n\nMichael reluctantly shuffles away.\n\noverall_soundscape:\n\nRealistic prison ambience, distant iron gates, footsteps, guard whistles, and subdued prisoner conversations.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nThe comedy is entirely deadpan.\n\nnon_diegetic_music:\n\nSomber orchestral strings inspired by classic 1990s prison dramas.\n\nA subtle comedic bass note accompanies Michael's final line.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity from the supplied image. Michael Scott portrays Andy Dufresne as Prison Mike. Wardrobe: weathered gray 1940s prison uniform, rolled sleeves, and his distinctive BRIGHT PURPLE BANDANA WITH WHITE PAISLEY PATTERNS. The bandana must match the supplied image and remain clearly visible. His expressions are exaggerated but his performance remains completely serious. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm expressions, distinctive eyes, and natural voice. Wardrobe: gray 1940s prison uniform. He portrays the same Red from The Shawshank Redemption. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Prison_Yard = The exercise yard of Shawshank State Penitentiary in 1947. Tall stone walls, chain-link fences, gravel walkways, wooden benches, and groups of prisoners walking beneath a gray sky.>\n\nsummary:\n\nSCENE 2 — THE FIRST CONVERSATION.\n\nRecreate the iconic scene where Andy approaches Red in the prison yard to obtain contraband.\n\nPrison Mike approaches Red with the same seriousness as Andy Dufresne, but instead of asking for a rock hammer, he wants something considerably less useful.\n\nRed is baffled by the request.\n\ndetailed_description:\n\n[Shot 1] Cinematic medium-wide shot.\n\nRed walks slowly through the prison yard.\n\nPrison Mike approaches him, wearing his purple bandana.\n\nMichael glances suspiciously over both shoulders.\n\nThe camera moves closer to their recognizable faces.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]I hear you're the guy who can get things.</d> Subjects lips remain closed.\n\nMichael looks around nervously.\n\n[Shot 3] At 00:05.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Depends what you're looking for.</d> Subjects lips remain closed.\n\nRed remains completely serious.\n\n[Shot 4] At 00:07.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]World's Best Boss mug. Ceramic. Eleven ounces.</d> Subjects lips remain closed.\n\nMichael leans closer conspiratorially.\n\n[Shot 5] At 00:11.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You're serving two life sentences.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:13.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Then get the large one.</d> Subjects lips remain closed.\n\nMichael nods decisively.\n\nRed stares at him.\n\nAbrupt cut.\n\noverall_soundscape:\n\nSubdued prison yard ambience, distant basketball bouncing, footsteps on gravel, and occasional guard whistles.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nGentle melancholy orchestral strings.\n\nMusic stops briefly for Michael's final line.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity and expressions. He plays Prison Mike, the absurd replacement for Andy Dufresne. Wardrobe: dusty gray 1940s prison work uniform with rolled sleeves and the exact bright purple paisley bandana from the supplied image. His bandana remains visible throughout. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm mannerisms, and distinctive voice. Wardrobe: dusty gray prison work uniform with rolled sleeves. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Rooftop = The flat rooftop of Shawshank State Penitentiary during a hot summer afternoon in 1949. Tar buckets, roofing tools, gravel, brick parapets, and a panoramic view of the prison grounds. Golden afternoon sunlight.>\n\nsummary:\n\nSCENE 3 — THE ROOFTOP.\n\nRecreate the famous Shawshank rooftop scene where Andy negotiates with the guards to obtain cold beers for his fellow prisoners.\n\nPrison Mike has somehow convinced the guards to provide drinks.\n\nHowever, instead of beer, he has obtained something that makes the prisoners deeply uncomfortable.\n\nRed struggles to understand Michael's reasoning.\n\ndetailed_description:\n\n[Shot 1] Cinematic wide shot of the Shawshank rooftop.\n\nSeveral prisoners sit along a brick parapet enjoying a break from roofing work.\n\nRed sits beside Prison Mike.\n\nEach prisoner holds a white paper cup.\n\nMichael proudly surveys the group.\n\nHis purple bandana contrasts absurdly with the grim prison environment.\n\n[Shot 2] At 00:03.000, close-up of Red examining his cup.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Andy got us cold beers. You got us... warm milk?</d> Subjects lips remain closed.\n\nRed looks at the cup in disbelief.\n\n[Shot 3] At 00:07.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]It's calcium, Red. We're building strong bones. Strong teams.</d> Subjects lips remain closed.\n\nMichael raises his cup proudly.\n\n[Shot 4] At 00:11.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]We're building a roof.</d> Subjects lips remain closed.\n\n[Shot 5] At 00:13.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]And a family.</d> Subjects lips remain closed.\n\nMichael smiles emotionally.\n\n[Shot 6] At 00:14.000, wide shot.\n\nMichael raises his milk in a toast.\n\nThe other prisoners silently stare at their cups.\n\nRed closes his eyes in disappointment.\n\noverall_soundscape:\n\nSummer wind, distant prison activity, paper cups rustling, and roofing tools.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nWarm, sentimental orchestral music resembling an inspirational prison drama.\n\nThe music becomes absurdly triumphant when Michael raises his milk.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive eyes, distinctive mouth, and facial proportions. Michael Scott plays Andy Dufresne as Prison Mike. Wardrobe: gray 1940s prison uniform with rolled sleeves and the SAME BRIGHT PURPLE PAISLEY BANDANA from the supplied image. The bandana remains clearly visible. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, deep-set eyes, and calm expressions. Wardrobe: gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Library = The old prison library at Shawshank State Penitentiary. Tall wooden bookshelves, dusty volumes, wooden reading tables, barred windows, vintage desk lamps, and an old record player connected to the prison's public-address system. Warm dusty sunlight filters through the windows.>\n\nsummary:\n\nSCENE 4 — THE LIBRARY AND THE MUSIC.\n\nRecreate the famous Shawshank scene where Andy broadcasts beautiful opera music throughout the prison.\n\nPrison Mike has taken control of the prison public-address system.\n\nInstead of Mozart, he broadcasts his own motivational management presentation.\n\nRed is horrified.\n\ndetailed_description:\n\n[Shot 1] Cinematic medium-wide shot.\n\nPrison Mike sits behind a wooden desk in the Shawshank library.\n\nAn old microphone and record player sit in front of him.\n\nHe wears his unmistakable purple bandana.\n\nRed stands nearby, watching suspiciously.\n\nMichael switches on the prison-wide public-address system.\n\n[Shot 2] At 00:02.000, tight facial close-up of Michael speaking into the microphone.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Attention, Shawshank! This is your regional manager speaking!</d> Subjects lips remain closed.\n\nMichael smiles proudly.\n\n[Shot 3] At 00:06.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike, that's the prison intercom.</d> Subjects lips remain closed.\n\nRed gestures urgently toward the microphone.\n\n[Shot 4] At 00:09.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Exactly. Mandatory team-building exercise!</d> Subjects lips remain closed.\n\nHe presses another button.\n\n[Shot 5] At 00:12.000, dramatic wide shot.\n\nEvery loudspeaker throughout the prison begins blasting an absurdly cheerful corporate motivational jingle.\n\nPrisoners in the yard stare upward in disbelief.\n\nThe camera returns to the library.\n\nMichael raises both arms triumphantly.\n\nRed buries his face in his hands.\n\n[Shot 6] At 00:14.000, tight close-up of Michael.\n\nMichael smiles proudly while the cheerful corporate jingle echoes throughout Shawshank.\n\nAbrupt cut.\n\noverall_soundscape:\n\nOld microphone feedback, vintage public-address crackling, dusty library ambience, and an absurdly upbeat corporate motivational jingle.\n\nOnly Michael and Red speak.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with solemn orchestral strings.\n\nTransition into an intentionally cheesy 1990s corporate training jingle when Michael activates the intercom.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity and expressions. He portrays Andy Dufresne as Prison Mike. Wardrobe: soaked gray prison uniform, muddy trousers, and his distinctive BRIGHT PURPLE PAISLEY BANDANA from the supplied reference image. The bandana remains wrapped around his head even during the escape. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm expressions, and distinctive voice. Wardrobe: gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Escape = The interior of Shawshank State Penitentiary during a violent thunderstorm. A narrow prison cell, a concealed opening behind a wall poster, a cramped underground drainage tunnel, and an open muddy field beyond the prison walls. Heavy rain and dramatic lightning.>\n\nsummary:\n\nSCENE 5 — THE GREAT ESCAPE.\n\nRecreate the iconic Shawshank escape sequence.\n\nPrison Mike has spent years secretly digging a tunnel behind a poster in his cell.\n\nRed discovers his escape plan, only to learn that Michael's tunnel does not lead outside the prison.\n\nMichael is nevertheless convinced that his escape is a triumph.\n\nThe scene includes a parody of the famous rain-soaked arms-raised freedom shot.\n\ndetailed_description:\n\n[Shot 1] Cinematic prison cell interior at night.\n\nHeavy thunder shakes the building.\n\nRed stands beside Michael's bunk.\n\nMichael proudly pulls aside a large poster on the wall.\n\nBehind it is a dark tunnel.\n\nMichael wears his purple bandana and looks enormously pleased with himself.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Twenty years, Red. Twenty years digging this tunnel.</d> Subjects lips remain closed.\n\nMichael points proudly toward the opening.\n\n[Shot 3] At 00:06.000, medium close-up of Red looking through the tunnel.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike... that goes into the laundry room.</d> Subjects lips remain closed.\n\nRed looks utterly exhausted.\n\n[Shot 4] At 00:09.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Exactly. Fresh clothes. New identity.</d> Subjects lips remain closed.\n\nMichael grins confidently.\n\n[Shot 5] At 00:12.000, dramatic cinematic transition.\n\nMichael crawls through the tunnel and emerges into the prison laundry room.\n\nA large industrial washing machine is overflowing with water.\n\nWater sprays from a broken pipe above him.\n\n[Shot 6] At 00:13.000, iconic low-angle medium-wide shot.\n\nMichael stands beneath the spraying pipe, soaking wet.\n\nHe throws both arms toward the ceiling, recreating Andy Dufresne's famous rain-soaked freedom pose.\n\nHis purple bandana is drenched but remains firmly attached.\n\nBehind him, washing machines spin.\n\nHe smiles triumphantly.\n\nThe camera slowly rises.\n\nAbrupt cut.\n\noverall_soundscape:\n\nHeavy thunder, rain, distant prison bells, dripping water, washing machines, and a broken pipe spraying water.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nEpic, emotional orchestral score.\n\nThe music swells triumphantly during Michael's arms-raised pose, treating the laundry room as though it were freedom.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive eyes, mouth, jawline, and facial proportions from the supplied reference image. He portrays Andy Dufresne as Prison Mike. Wardrobe: casual white short-sleeved shirt, beige trousers, brown sandals, and his unmistakable BRIGHT PURPLE PAISLEY BANDANA WITH WHITE PATTERNS. The bandana remains identical to the original supplied image. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable facial identity, calm mannerisms, and distinctive voice. Wardrobe: casual light-colored short-sleeved shirt, brown trousers, and simple shoes. He portrays the same Red from The Shawshank Redemption. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Zihuatanejo_Beach = A beautiful secluded beach in Zihuatanejo, Mexico. Bright turquoise ocean, white sand, gentle waves, palm trees, and a small wooden fishing boat resting on the beach. Warm golden afternoon sunlight. The setting visually resembles the famous final reunion scene from The Shawshank Redemption.>\n\nsummary:\n\nSCENE 6 — THE REUNION.\n\nRecreate the emotional final scene of The Shawshank Redemption, where Red travels to Mexico and reunites with Andy on a beautiful beach.\n\nRed walks across the sand and finds Prison Mike working on a small fishing boat.\n\nThe reunion initially appears genuinely emotional.\n\nHowever, Michael reveals that he has already started a new business venture.\n\nThe scene ends with an absurd but heartfelt final joke.\n\ndetailed_description:\n\n[Shot 1] Cinematic wide establishing shot of the beautiful Mexican coastline.\n\nTurquoise waves roll gently onto white sand.\n\nA small wooden fishing boat rests near the water.\n\nMichael Scott stands beside the boat, wearing his white shirt, beige trousers, and unmistakable purple paisley bandana.\n\nHe works on the boat with a paintbrush.\n\nRed approaches slowly across the beach.\n\n[Shot 2] At 00:03.000, tight facial close-up of Red.\n\nHis expression becomes emotional as he recognizes Michael.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]After all those years... you finally made it.</d> Subjects lips remain closed.\n\nRed smiles warmly.\n\n[Shot 3] At 00:06.000, tight close-up of Michael.\n\nMichael turns toward Red.\n\nHis eyes widen with genuine happiness.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red! Welcome to Dunder Mifflin Mexico!</d> Subjects lips remain closed.\n\nMichael opens his arms enthusiastically.\n\n[Shot 4] At 00:09.000, medium shot of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You started another paper company?</d> Subjects lips remain closed.\n\nRed looks toward the boat.\n\n[Shot 5] At 00:12.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]No. A prison-themed resort.</d> Subjects lips remain closed.\n\nMichael smiles proudly.\n\n[Shot 6] At 00:13.500, dramatic wide shot.\n\nThe camera reveals the fishing boat.\n\nA large hand-painted sign on its side reads:\n\n\"PRISON MIKE'S ESCAPE EXPERIENCE\"\n\nBelow it, smaller text reads:\n\n\"CHECK-IN IS MANDATORY\"\n\nMichael and Red embrace emotionally beside the boat.\n\nRed looks deeply concerned.\n\nMichael smiles triumphantly.\n\nThe camera pulls back to reveal the beautiful ocean.\n\nFreeze-frame at 15 seconds.\n\noverall_soundscape:\n\nGentle ocean waves, tropical birds, warm coastal breeze, footsteps in sand, and quiet wooden boat movements.\n\nOnly Michael and Red speak.\n\nNo laugh track.\n\nCRITICAL CHARACTER CONTINUITY:\n\nMichael Scott must retain his recognizable Steve Carell face throughout all six scenes.\n\nMichael always wears the same purple paisley Prison Mike bandana from the supplied reference image.\n\nRed must retain his recognizable Morgan Freeman appearance and natural speaking voice.\n\nTheir facial identities, voices, and body proportions must never change.\n\nThe film's dramatic visual language remains serious, even when the dialogue is absurd.\n\nnon_diegetic_music:\n\nBegin with a beautiful, emotional orchestral theme reminiscent of a classic 1990s prison drama.\n\nThe music swells during the reunion.\n\nEnd with an inspirational orchestral flourish as the camera reveals Prison Mike's ridiculous business sign.",
+        "[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity as Michael Scott from The Office. His appearance must closely match the supplied reference image: short dark brown hair, large expressive eyes, distinctive facial proportions, exaggerated serious expressions, and a PURPLE BANDANA with white paisley patterns wrapped around his head. Wardrobe: worn gray 1940s prison uniform, with the purple bandana prominently visible at all times. He is playing Andy Dufresne from The Shawshank Redemption, but behaves exactly like Michael Scott performing his ridiculous Prison Mike character. Voice: §Michael Scott_BC§. His personality is overly confident, theatrical, insecure, and completely oblivious.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve the exact recognizable appearance of Morgan Freeman portraying Ellis Boyd \"Red\" Redding in The Shawshank Redemption. Older Black man with short graying hair, distinctive facial features, warm expressive eyes, and a calm, observant demeanor. Wardrobe: worn gray 1940s prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is deep, warm, reflective, philosophical, and delivered with complete seriousness despite the absurdity of Michael's behavior.\n\n<location:Shawshank_Prison = A massive, oppressive 1940s American stone prison with towering gray walls, iron gates, guard towers, barred windows, and a crowded outdoor prison courtyard. Cinematography faithfully evokes the dramatic period atmosphere of The Shawshank Redemption.>\n\nsummary:\n\nA cinematic parody of Andy Dufresne's arrival at Shawshank Prison. Instead of the quiet, mysterious Andy, Michael Scott arrives dressed as Prison Mike, wearing his iconic purple paisley bandana. Red watches from the prison courtyard and delivers solemn narration about the strangest prisoner he has ever encountered. Michael attempts to establish himself as the most intimidating inmate in Shawshank, immediately embarrassing himself.\n\ndetailed_description:\n\n[Shot 1] A sweeping cinematic crane shot reveals Shawshank Prison in 1947.\n\nA prison bus approaches the enormous iron gates.\n\nDozens of prisoners gather in the courtyard to watch the new arrivals.\n\nThe cinematography is dramatic, desaturated, and faithful to a prestigious 1990s prison drama.\n\n[Shot 2] At 00:02.000, medium close-up of Red watching from the courtyard.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I remember the first time I saw Prison Mike. Some men arrive carrying secrets. He arrived wearing a purple bandana.</d> Subjects lips remain closed.\n\n[Shot 3] At 00:06.000, dramatic slow-motion shot.\n\nMichael Scott steps off the prison bus wearing his gray prison uniform and enormous purple paisley bandana.\n\nHe looks around with exaggerated confidence.\n\nThe camera pushes toward his recognizable face.\n\n[Shot 4] At 00:09.000, tight facial close-up of Michael Scott.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Listen up, convicts! I'm Prison Mike! I've survived the Dementors!</d> Subjects lips remain closed.\n\nMichael aggressively points toward the other prisoners.\n\n[Shot 5] At 00:12.000, medium shot.\n\nMichael dramatically spreads his arms.\n\nA prison guard silently points toward the entrance.\n\nMichael immediately becomes frightened and obediently walks inside.\n\n[Shot 6] At 00:14.000, close-up of Red.\n\nRed watches Michael disappear through the gates.\n\nHe slowly shakes his head.\n\nCut to black.\n\noverall_soundscape:\n\nAuthentic 1940s prison ambience, heavy iron gates, distant prisoner conversations, footsteps, and dramatic cinematic atmosphere.\n\nRed's narration sounds like a solemn, prestigious prison drama.\n\nMichael's dialogue uses his recognizable exaggerated Prison Mike performance.\n\nNo studio audience laughter.\n\nnon_diegetic_music:\n\nMelancholic orchestral strings and piano inspired by classic 1990s prison dramas.\n\nMusic swells during Michael's dramatic arrival and abruptly diminishes when he becomes frightened.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, expressive eyes, dark hair, and purple paisley bandana matching the supplied reference. Wardrobe: worn gray 1940s prison uniform with the purple bandana always visible. Personality: overly confident, desperately eager to impress, and oblivious to how ridiculous he sounds. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, short graying hair, calm expression, and worn gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. Deep, philosophical narration delivered with absolute seriousness.\n\n<location:Shawshank_Prison_Yard = A large 1940s stone prison courtyard surrounded by high gray walls, iron fences, guard towers, and groups of prisoners walking in circles. The same Shawshank Prison established previously.>\n\nsummary:\n\nRecreation of Andy Dufresne's first meeting with Red. Michael Scott approaches Red in the prison yard, hoping to acquire a rock hammer. Unfortunately, Michael has completely misunderstood what the tool is for. Red begins to realize that this new prisoner is not the mysterious genius everyone expected.\n\ndetailed_description:\n\n[Shot 1] Wide cinematic shot of Shawshank Prison's courtyard.\n\nRed sits quietly on a wooden bench.\n\nMichael approaches wearing his purple bandana.\n\nThe camera tracks alongside Michael with dramatic seriousness.\n\n[Shot 2] At 00:02.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red, I need a rock hammer. And maybe a tiny hard hat.</d> Subjects lips remain closed.\n\nMichael gestures toward his head.\n\n[Shot 3] At 00:05.000, tight close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]What exactly are you planning to do with a rock hammer?</d> Subjects lips remain closed.\n\nRed studies Michael suspiciously.\n\n[Shot 4] At 00:08.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Start a rock band. Prison Mike and the Hard Times.</d> Subjects lips remain closed.\n\nMichael performs an enthusiastic imaginary guitar solo.\n\n[Shot 5] At 00:11.000, tight close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]That was the moment I realized Mike wasn't digging his way out of anything.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nMichael continues playing imaginary guitar.\n\nSeveral prisoners silently walk away.\n\nRed looks exhausted.\n\nCut.\n\noverall_soundscape:\n\nQuiet prison courtyard ambience, distant prisoners, footsteps, and occasional guard whistles.\n\nDialogue remains natural and cinematic.\n\nRed's narration is completely deadpan.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nGentle melancholic piano and strings.\n\nA brief dramatic guitar chord accompanies Michael's imaginary rock performance.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable facial identity and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: gray 1940s prison uniform, sleeves rolled up, purple bandana always visible. Voice: §Michael Scott_BC§. Michael is theatrical, overconfident, and completely oblivious.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his recognizable face, graying hair, thoughtful expression, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration remains deep, philosophical, and serious.\n\n<location:Shawshank_Rooftop = The flat rooftop of Shawshank Prison during a hot summer afternoon in 1949. Prisoners repair the roof while armed guards supervise. Buckets of tar, wooden ladders, brick parapets, and distant green countryside establish the setting.>\n\nsummary:\n\nRecreation of the famous Shawshank rooftop scene where Andy negotiates beers for his fellow prisoners. Michael Scott attempts to negotiate a reward for the workers but requests something considerably less impressive. Red watches in disbelief as Michael tries to turn prison labor into an office team-building exercise.\n\ndetailed_description:\n\n[Shot 1] Sweeping cinematic shot of prisoners repairing the prison rooftop beneath the hot afternoon sun.\n\nRed sits beside several exhausted prisoners.\n\nMichael stands confidently near the rooftop supervisor.\n\nHis purple bandana flutters in the wind.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]These men deserve a reward. Three beers apiece! And a pizza party!</d> Subjects lips remain closed.\n\nMichael gestures dramatically toward the workers.\n\n[Shot 3] At 00:05.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]For one afternoon, Mike made us feel like free men. Employees, technically.</d> Subjects lips remain closed.\n\nRed watches the rooftop workers.\n\n[Shot 4] At 00:09.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]And everybody gets a Dundie for outstanding incarceration!</d> Subjects lips remain closed.\n\nMichael proudly raises a tiny golden office trophy.\n\n[Shot 5] At 00:12.000, wide cinematic shot.\n\nThe prisoners sit together on the rooftop drinking beer.\n\nMichael stands in front of them holding his trophy.\n\nNobody applauds.\n\n[Shot 6] At 00:14.000, tight close-up of Red.\n\nRed takes a slow sip of beer.\n\nHe gives Michael a deeply disappointed look.\n\nCut.\n\noverall_soundscape:\n\nSummer wind, distant birds, prison guards, construction tools, glass bottles, and subtle rooftop ambience.\n\nRed's narration remains emotionally sincere despite the absurdity.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nWarm, nostalgic orchestral strings inspired by classic prison dramas.\n\nMusic becomes briefly triumphant during Michael's trophy presentation.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, distinctive expressions, and purple paisley bandana matching the supplied reference image. Wardrobe: gray 1940s prison uniform, purple bandana always visible. Voice: §Michael Scott_BC§. He behaves like an enthusiastic, incompetent office manager.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, short graying hair, calm demeanor, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. Narration is warm, reflective, and philosophical.\n\n<location:Shawshank_Warden_Office = A formal 1940s prison office with dark wooden furniture, a large desk, filing cabinets, bookshelves, an old record player, and tall barred windows. An adjoining prison courtyard is visible through the windows.>\n\nsummary:\n\nRecreation of Andy Dufresne's famous opera broadcast. Michael Scott locks himself inside the prison office and takes control of the loudspeaker system. Instead of playing a beautiful classical recording, he broadcasts his own enthusiastic performance of a terrible inspirational office song. Red delivers an emotional narration as the prisoners listen in stunned silence.\n\ndetailed_description:\n\n[Shot 1] Dramatic medium-wide shot inside the warden's office.\n\nMichael Scott stands beside an old microphone and record player.\n\nHis purple bandana remains prominently visible.\n\nHe locks the office door.\n\n[Shot 2] At 00:02.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Attention, Shawshank! This one's called Everybody Dance Now! Prison Mike remix!</d> Subjects lips remain closed.\n\nMichael enthusiastically activates the microphone.\n\n[Shot 3] At 00:05.000, medium-wide shot of the prison courtyard.\n\nDozens of prisoners stop walking and look toward the loudspeakers.\n\nMichael's terrible off-key singing begins over the prison speakers, consisting of enthusiastic wordless vocalizing.\n\n[Shot 4] At 00:08.000, close-up of Red standing in the courtyard.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Some things are too beautiful for words. Unfortunately, Mike had plenty of words.</d> Subjects lips remain closed.\n\n[Shot 5] At 00:12.000, medium shot inside the office.\n\nMichael dances enthusiastically while singing into the microphone.\n\nHe performs an awkward spin and accidentally knocks over a stack of files.\n\n[Shot 6] At 00:14.000, wide shot of the prison courtyard.\n\nEvery prisoner stands completely motionless.\n\nOne prisoner slowly covers his ears.\n\nCut.\n\noverall_soundscape:\n\nAuthentic prison ambience, crackling vintage loudspeakers, Michael's exaggerated off-key vocalizing, scattered papers, and distant guard shouting.\n\nRed's narration remains solemn and sincere.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with solemn orchestral strings.\n\nTransition into a deliberately awful, tinny 1940s-style prison loudspeaker performance.\n\nReturn to melancholy orchestral music during Red's narration.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, expressive eyes, and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: filthy gray 1940s prison uniform, with the purple bandana prominently visible. His clothes become muddy and wet during the escape. Voice: §Michael Scott_BC§. He remains overly dramatic, theatrical, and self-important.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable face, graying hair, thoughtful expression, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is solemn, philosophical, and delivered with emotional gravity.\n\n<location:Shawshank_Escape = A dark 1940s prison cell containing a narrow iron bed, stone walls, a small barred window, and a large poster covering a hidden tunnel. The tunnel leads into a filthy underground drainage pipe, eventually opening into a stormy field outside Shawshank Prison.>\n\nsummary:\n\nRecreation of Andy Dufresne's legendary escape through the prison sewer. Michael Scott finally attempts to escape Shawshank through a hidden tunnel behind a poster. However, his grand escape is ruined by his inability to handle the disgusting sewer. Red narrates Michael's journey with the same gravity as a legendary tale of freedom.\n\ndetailed_description:\n\n[Shot 1] Dramatic cinematic shot inside Michael's dark prison cell.\n\nMichael removes a large poster from the wall, revealing a narrow tunnel.\n\nHe wears his iconic purple paisley bandana.\n\nLightning flashes through the barred window.\n\n[Shot 2] At 00:02.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Prison Mike is officially going off the grid!</d> Subjects lips remain closed.\n\nHe confidently crawls into the tunnel.\n\n[Shot 3] At 00:05.000, cinematic tracking shot inside the sewer.\n\nMichael crawls through a disgusting drainage pipe.\n\nHe immediately recoils from the smell.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Oh God! This is worse than the Scranton men's room!</d> Subjects lips remain closed.\n\n[Shot 4] At 00:08.000, dramatic exterior wide shot.\n\nMichael emerges from the sewer into a rain-soaked field.\n\nHe stands beneath the stormy night sky.\n\nHis prison uniform is filthy.\n\nHis purple bandana remains securely attached.\n\n[Shot 5] At 00:10.000, low-angle cinematic shot.\n\nMichael spreads his arms toward the sky, recreating the iconic Shawshank rain-soaked freedom pose.\n\nHeavy rain pours down.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike crawled through five hundred yards of sewage. Then asked if it counted as overtime.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, tight facial close-up of Michael.\n\nMichael stands triumphantly in the rain.\n\nSuddenly, his expression changes to horror.\n\nHe looks down at his filthy clothes.\n\nHe silently begins gagging.\n\nCut to black.\n\noverall_soundscape:\n\nHeavy thunder, torrential rain, sewer water, echoing tunnel ambience, distant prison alarms, and dramatic cinematic atmosphere.\n\nRed's narration remains completely serious.\n\nMichael's dialogue is exaggerated and theatrical.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with tense orchestral strings.\n\nBuild toward a powerful triumphant orchestral crescendo as Michael emerges into the rain.\n\nAbruptly cut the triumphant music when Michael begins gagging.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable facial identity, expressive eyes, dark hair, and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: casual light blue short-sleeved shirt, beige trousers, and the same purple paisley bandana. Michael is now a free man but still behaves exactly like Prison Mike. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, graying hair, expressive eyes, and calm demeanor. Wardrobe: modest beige jacket, light-colored shirt, and dark trousers. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is warm, philosophical, and emotionally sincere.\n\n<location:Zihuatanejo_Beach = A beautiful, peaceful Mexican Pacific coastline with turquoise ocean water, soft white sand, tropical vegetation, warm golden sunlight, and a small wooden boat resting beside the beach. The setting resembles the iconic final reunion location from The Shawshank Redemption.>\n\nsummary:\n\nRecreation of the emotional final reunion between Andy Dufresne and Red on the Mexican coast. Red finally discovers Michael Scott living peacefully on a tropical beach. The scene begins as a heartfelt cinematic reunion, complete with sweeping ocean photography and emotional narration. Michael immediately ruins the moment by revealing that he has opened a branch of Dunder Mifflin in Mexico.\n\ndetailed_description:\n\n[Shot 1] Sweeping cinematic aerial shot of a beautiful Mexican beach.\n\nTurquoise ocean waves gently wash against the white sand.\n\nMichael Scott stands beside a small wooden boat.\n\nHe wears a light blue shirt, beige trousers, and his iconic purple paisley bandana.\n\n[Shot 2] At 00:02.000, medium close-up of Red walking along the beach.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I guess some birds aren't meant to be caged. Some are meant to manage regional paper sales.</d> Subjects lips remain closed.\n\nRed smiles emotionally.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nMichael notices Red approaching.\n\nHis face lights up.\n\nHe runs toward Red with exaggerated excitement.\n\n[Shot 4] At 00:08.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red! Welcome to Dunder Mifflin Mexico! You're my new assistant regional manager!</d> Subjects lips remain closed.\n\nMichael spreads his arms enthusiastically.\n\n[Shot 5] At 00:12.000, medium close-up of Red.\n\nRed stops walking.\n\nHis warm smile slowly disappears.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You gotta be kidding me.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, sweeping wide cinematic shot.\n\nMichael enthusiastically hugs a completely motionless Red.\n\nBehind them, a small crooked wooden sign reads:\n\n\"DUNDER MIFFLIN — ZIHUATANEJO BRANCH\"\n\nThe ocean sparkles beneath the golden sunlight.\n\nFade to black.\n\noverall_soundscape:\n\nGentle ocean waves, distant seabirds, tropical wind, footsteps on sand, and warm cinematic ambience.\n\nRed's narration is emotionally sincere and philosophical.\n\nMichael's dialogue is delivered with enthusiastic Michael Scott energy.\n\nNo studio audience laughter.\n\nnon_diegetic_music:\n\nWarm, emotional orchestral strings and piano reminiscent of the closing moments of a classic 1990s prison drama.\n\nThe music swells during the reunion.\n\nA brief awkward musical pause follows Red's final line.\n\nEnd with a gentle orchestral resolution.",
         ""
       ],
       "widgets_values_named": {
-        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive blue-gray eyes, distinctive nose, mouth, jawline, and facial proportions from the supplied reference. He portrays Michael Scott playing Andy Dufresne as his ridiculous alter ego Prison Mike. His appearance must match the attached image: a bright purple bandana with white paisley patterns wrapped around his head, expressive wide eyes, exaggerated serious facial expressions, and unmistakable Michael Scott facial features. Wardrobe: gray 1940s prison uniform with rolled sleeves, prison identification number, and the SAME PURPLE PAISLEY BANDANA from the reference image. The bandana must remain visible throughout the entire scene. Voice: §Michael Scott_BC§. Personality: extremely confident, completely ignorant about prison, and convinced he is the toughest inmate alive.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable facial identity, distinctive deep-set eyes, facial proportions, natural expressions, and calm demeanor from the supplied reference. He portrays Ellis Boyd \"Red\" Redding from The Shawshank Redemption. Wardrobe: weathered gray 1940s prison uniform with an open collar. His hair is closely cropped, and he carries himself with quiet authority. Voice: §Ellis Boyd 'Red' Redding_BC§. Personality: calm, observant, intelligent, and deeply skeptical of Prison Mike.\n\n<location:Shawshank_Courtyard = The imposing stone courtyard of Shawshank State Penitentiary in 1947. Massive gray prison walls, guard towers, iron gates, rows of prisoners in gray uniforms, and an overcast sky. Cinematic period-accurate 1940s prison atmosphere.>\n\nsummary:\n\nSCENE 1 — THE ARRIVAL.\n\nRecreate the iconic arrival of Andy Dufresne at Shawshank Prison, except Andy is Michael Scott dressed as Prison Mike.\n\nThe scene begins with the same solemn, intimidating atmosphere as the original film. Red watches the new prisoner enter the courtyard. Prison Mike immediately attempts to establish himself as the most feared inmate in Shawshank.\n\nThe humor comes from Michael's complete inability to be intimidating.\n\ndetailed_description:\n\n[Shot 1] Cinematic 1990s prison drama photography, realistic live-action characters, muted colors, dramatic natural lighting, and subtle film grain.\n\nA prison bus arrives at Shawshank.\n\nPrisoners watch from the courtyard.\n\nMichael Scott steps off the bus wearing his gray prison uniform and bright purple paisley bandana.\n\nHis recognizable face is prominently visible.\n\nHe attempts an intimidating walk but looks nervous.\n\n[Shot 2] At 00:03.000, tight facial close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I remember the first time I saw Prison Mike. Didn't look like much.</d> Subjects lips remain closed.\n\nRed watches Michael approach.\n\n[Shot 3] At 00:06.000, tight facial close-up of Prison Mike.\n\nMichael narrows his eyes dramatically.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Listen up, criminals. I'm Prison Mike. And I've seen things.</d> Subjects lips remain closed.\n\nHe aggressively adjusts his purple bandana.\n\n[Shot 4] At 00:10.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Like what?</d> Subjects lips remain closed.\n\n[Shot 5] At 00:12.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]The cafeteria at Dunder Mifflin. On chili day.</d> Subjects lips remain closed.\n\nMichael stares intensely.\n\nRed slowly turns away.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nMichael stands alone in the courtyard, trying to look dangerous.\n\nA guard points him toward the intake line.\n\nMichael reluctantly shuffles away.\n\noverall_soundscape:\n\nRealistic prison ambience, distant iron gates, footsteps, guard whistles, and subdued prisoner conversations.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nThe comedy is entirely deadpan.\n\nnon_diegetic_music:\n\nSomber orchestral strings inspired by classic 1990s prison dramas.\n\nA subtle comedic bass note accompanies Michael's final line.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity from the supplied image. Michael Scott portrays Andy Dufresne as Prison Mike. Wardrobe: weathered gray 1940s prison uniform, rolled sleeves, and his distinctive BRIGHT PURPLE BANDANA WITH WHITE PAISLEY PATTERNS. The bandana must match the supplied image and remain clearly visible. His expressions are exaggerated but his performance remains completely serious. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm expressions, distinctive eyes, and natural voice. Wardrobe: gray 1940s prison uniform. He portrays the same Red from The Shawshank Redemption. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Prison_Yard = The exercise yard of Shawshank State Penitentiary in 1947. Tall stone walls, chain-link fences, gravel walkways, wooden benches, and groups of prisoners walking beneath a gray sky.>\n\nsummary:\n\nSCENE 2 — THE FIRST CONVERSATION.\n\nRecreate the iconic scene where Andy approaches Red in the prison yard to obtain contraband.\n\nPrison Mike approaches Red with the same seriousness as Andy Dufresne, but instead of asking for a rock hammer, he wants something considerably less useful.\n\nRed is baffled by the request.\n\ndetailed_description:\n\n[Shot 1] Cinematic medium-wide shot.\n\nRed walks slowly through the prison yard.\n\nPrison Mike approaches him, wearing his purple bandana.\n\nMichael glances suspiciously over both shoulders.\n\nThe camera moves closer to their recognizable faces.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]I hear you're the guy who can get things.</d> Subjects lips remain closed.\n\nMichael looks around nervously.\n\n[Shot 3] At 00:05.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Depends what you're looking for.</d> Subjects lips remain closed.\n\nRed remains completely serious.\n\n[Shot 4] At 00:07.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]World's Best Boss mug. Ceramic. Eleven ounces.</d> Subjects lips remain closed.\n\nMichael leans closer conspiratorially.\n\n[Shot 5] At 00:11.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You're serving two life sentences.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:13.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Then get the large one.</d> Subjects lips remain closed.\n\nMichael nods decisively.\n\nRed stares at him.\n\nAbrupt cut.\n\noverall_soundscape:\n\nSubdued prison yard ambience, distant basketball bouncing, footsteps on gravel, and occasional guard whistles.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nGentle melancholy orchestral strings.\n\nMusic stops briefly for Michael's final line.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity and expressions. He plays Prison Mike, the absurd replacement for Andy Dufresne. Wardrobe: dusty gray 1940s prison work uniform with rolled sleeves and the exact bright purple paisley bandana from the supplied image. His bandana remains visible throughout. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm mannerisms, and distinctive voice. Wardrobe: dusty gray prison work uniform with rolled sleeves. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Rooftop = The flat rooftop of Shawshank State Penitentiary during a hot summer afternoon in 1949. Tar buckets, roofing tools, gravel, brick parapets, and a panoramic view of the prison grounds. Golden afternoon sunlight.>\n\nsummary:\n\nSCENE 3 — THE ROOFTOP.\n\nRecreate the famous Shawshank rooftop scene where Andy negotiates with the guards to obtain cold beers for his fellow prisoners.\n\nPrison Mike has somehow convinced the guards to provide drinks.\n\nHowever, instead of beer, he has obtained something that makes the prisoners deeply uncomfortable.\n\nRed struggles to understand Michael's reasoning.\n\ndetailed_description:\n\n[Shot 1] Cinematic wide shot of the Shawshank rooftop.\n\nSeveral prisoners sit along a brick parapet enjoying a break from roofing work.\n\nRed sits beside Prison Mike.\n\nEach prisoner holds a white paper cup.\n\nMichael proudly surveys the group.\n\nHis purple bandana contrasts absurdly with the grim prison environment.\n\n[Shot 2] At 00:03.000, close-up of Red examining his cup.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Andy got us cold beers. You got us... warm milk?</d> Subjects lips remain closed.\n\nRed looks at the cup in disbelief.\n\n[Shot 3] At 00:07.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]It's calcium, Red. We're building strong bones. Strong teams.</d> Subjects lips remain closed.\n\nMichael raises his cup proudly.\n\n[Shot 4] At 00:11.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]We're building a roof.</d> Subjects lips remain closed.\n\n[Shot 5] At 00:13.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]And a family.</d> Subjects lips remain closed.\n\nMichael smiles emotionally.\n\n[Shot 6] At 00:14.000, wide shot.\n\nMichael raises his milk in a toast.\n\nThe other prisoners silently stare at their cups.\n\nRed closes his eyes in disappointment.\n\noverall_soundscape:\n\nSummer wind, distant prison activity, paper cups rustling, and roofing tools.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nWarm, sentimental orchestral music resembling an inspirational prison drama.\n\nThe music becomes absurdly triumphant when Michael raises his milk.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive eyes, distinctive mouth, and facial proportions. Michael Scott plays Andy Dufresne as Prison Mike. Wardrobe: gray 1940s prison uniform with rolled sleeves and the SAME BRIGHT PURPLE PAISLEY BANDANA from the supplied image. The bandana remains clearly visible. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, deep-set eyes, and calm expressions. Wardrobe: gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Library = The old prison library at Shawshank State Penitentiary. Tall wooden bookshelves, dusty volumes, wooden reading tables, barred windows, vintage desk lamps, and an old record player connected to the prison's public-address system. Warm dusty sunlight filters through the windows.>\n\nsummary:\n\nSCENE 4 — THE LIBRARY AND THE MUSIC.\n\nRecreate the famous Shawshank scene where Andy broadcasts beautiful opera music throughout the prison.\n\nPrison Mike has taken control of the prison public-address system.\n\nInstead of Mozart, he broadcasts his own motivational management presentation.\n\nRed is horrified.\n\ndetailed_description:\n\n[Shot 1] Cinematic medium-wide shot.\n\nPrison Mike sits behind a wooden desk in the Shawshank library.\n\nAn old microphone and record player sit in front of him.\n\nHe wears his unmistakable purple bandana.\n\nRed stands nearby, watching suspiciously.\n\nMichael switches on the prison-wide public-address system.\n\n[Shot 2] At 00:02.000, tight facial close-up of Michael speaking into the microphone.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Attention, Shawshank! This is your regional manager speaking!</d> Subjects lips remain closed.\n\nMichael smiles proudly.\n\n[Shot 3] At 00:06.000, close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike, that's the prison intercom.</d> Subjects lips remain closed.\n\nRed gestures urgently toward the microphone.\n\n[Shot 4] At 00:09.000, close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Exactly. Mandatory team-building exercise!</d> Subjects lips remain closed.\n\nHe presses another button.\n\n[Shot 5] At 00:12.000, dramatic wide shot.\n\nEvery loudspeaker throughout the prison begins blasting an absurdly cheerful corporate motivational jingle.\n\nPrisoners in the yard stare upward in disbelief.\n\nThe camera returns to the library.\n\nMichael raises both arms triumphantly.\n\nRed buries his face in his hands.\n\n[Shot 6] At 00:14.000, tight close-up of Michael.\n\nMichael smiles proudly while the cheerful corporate jingle echoes throughout Shawshank.\n\nAbrupt cut.\n\noverall_soundscape:\n\nOld microphone feedback, vintage public-address crackling, dusty library ambience, and an absurdly upbeat corporate motivational jingle.\n\nOnly Michael and Red speak.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with solemn orchestral strings.\n\nTransition into an intentionally cheesy 1990s corporate training jingle when Michael activates the intercom.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity and expressions. He portrays Andy Dufresne as Prison Mike. Wardrobe: soaked gray prison uniform, muddy trousers, and his distinctive BRIGHT PURPLE PAISLEY BANDANA from the supplied reference image. The bandana remains wrapped around his head even during the escape. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable face, calm expressions, and distinctive voice. Wardrobe: gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Shawshank_Escape = The interior of Shawshank State Penitentiary during a violent thunderstorm. A narrow prison cell, a concealed opening behind a wall poster, a cramped underground drainage tunnel, and an open muddy field beyond the prison walls. Heavy rain and dramatic lightning.>\n\nsummary:\n\nSCENE 5 — THE GREAT ESCAPE.\n\nRecreate the iconic Shawshank escape sequence.\n\nPrison Mike has spent years secretly digging a tunnel behind a poster in his cell.\n\nRed discovers his escape plan, only to learn that Michael's tunnel does not lead outside the prison.\n\nMichael is nevertheless convinced that his escape is a triumph.\n\nThe scene includes a parody of the famous rain-soaked arms-raised freedom shot.\n\ndetailed_description:\n\n[Shot 1] Cinematic prison cell interior at night.\n\nHeavy thunder shakes the building.\n\nRed stands beside Michael's bunk.\n\nMichael proudly pulls aside a large poster on the wall.\n\nBehind it is a dark tunnel.\n\nMichael wears his purple bandana and looks enormously pleased with himself.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Twenty years, Red. Twenty years digging this tunnel.</d> Subjects lips remain closed.\n\nMichael points proudly toward the opening.\n\n[Shot 3] At 00:06.000, medium close-up of Red looking through the tunnel.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike... that goes into the laundry room.</d> Subjects lips remain closed.\n\nRed looks utterly exhausted.\n\n[Shot 4] At 00:09.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Exactly. Fresh clothes. New identity.</d> Subjects lips remain closed.\n\nMichael grins confidently.\n\n[Shot 5] At 00:12.000, dramatic cinematic transition.\n\nMichael crawls through the tunnel and emerges into the prison laundry room.\n\nA large industrial washing machine is overflowing with water.\n\nWater sprays from a broken pipe above him.\n\n[Shot 6] At 00:13.000, iconic low-angle medium-wide shot.\n\nMichael stands beneath the spraying pipe, soaking wet.\n\nHe throws both arms toward the ceiling, recreating Andy Dufresne's famous rain-soaked freedom pose.\n\nHis purple bandana is drenched but remains firmly attached.\n\nBehind him, washing machines spin.\n\nHe smiles triumphantly.\n\nThe camera slowly rises.\n\nAbrupt cut.\n\noverall_soundscape:\n\nHeavy thunder, rain, distant prison bells, dripping water, washing machines, and a broken pipe spraying water.\n\nNo laugh track.\n\nOnly Michael and Red speak.\n\nnon_diegetic_music:\n\nEpic, emotional orchestral score.\n\nThe music swells triumphantly during Michael's arms-raised pose, treating the laundry room as though it were freedom.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity, expressive eyes, mouth, jawline, and facial proportions from the supplied reference image. He portrays Andy Dufresne as Prison Mike. Wardrobe: casual white short-sleeved shirt, beige trousers, brown sandals, and his unmistakable BRIGHT PURPLE PAISLEY BANDANA WITH WHITE PATTERNS. The bandana remains identical to the original supplied image. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve Morgan Freeman's exact recognizable facial identity, calm mannerisms, and distinctive voice. Wardrobe: casual light-colored short-sleeved shirt, brown trousers, and simple shoes. He portrays the same Red from The Shawshank Redemption. Voice: §Ellis Boyd 'Red' Redding_BC§.\n\n<location:Zihuatanejo_Beach = A beautiful secluded beach in Zihuatanejo, Mexico. Bright turquoise ocean, white sand, gentle waves, palm trees, and a small wooden fishing boat resting on the beach. Warm golden afternoon sunlight. The setting visually resembles the famous final reunion scene from The Shawshank Redemption.>\n\nsummary:\n\nSCENE 6 — THE REUNION.\n\nRecreate the emotional final scene of The Shawshank Redemption, where Red travels to Mexico and reunites with Andy on a beautiful beach.\n\nRed walks across the sand and finds Prison Mike working on a small fishing boat.\n\nThe reunion initially appears genuinely emotional.\n\nHowever, Michael reveals that he has already started a new business venture.\n\nThe scene ends with an absurd but heartfelt final joke.\n\ndetailed_description:\n\n[Shot 1] Cinematic wide establishing shot of the beautiful Mexican coastline.\n\nTurquoise waves roll gently onto white sand.\n\nA small wooden fishing boat rests near the water.\n\nMichael Scott stands beside the boat, wearing his white shirt, beige trousers, and unmistakable purple paisley bandana.\n\nHe works on the boat with a paintbrush.\n\nRed approaches slowly across the beach.\n\n[Shot 2] At 00:03.000, tight facial close-up of Red.\n\nHis expression becomes emotional as he recognizes Michael.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]After all those years... you finally made it.</d> Subjects lips remain closed.\n\nRed smiles warmly.\n\n[Shot 3] At 00:06.000, tight close-up of Michael.\n\nMichael turns toward Red.\n\nHis eyes widen with genuine happiness.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red! Welcome to Dunder Mifflin Mexico!</d> Subjects lips remain closed.\n\nMichael opens his arms enthusiastically.\n\n[Shot 4] At 00:09.000, medium shot of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You started another paper company?</d> Subjects lips remain closed.\n\nRed looks toward the boat.\n\n[Shot 5] At 00:12.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]No. A prison-themed resort.</d> Subjects lips remain closed.\n\nMichael smiles proudly.\n\n[Shot 6] At 00:13.500, dramatic wide shot.\n\nThe camera reveals the fishing boat.\n\nA large hand-painted sign on its side reads:\n\n\"PRISON MIKE'S ESCAPE EXPERIENCE\"\n\nBelow it, smaller text reads:\n\n\"CHECK-IN IS MANDATORY\"\n\nMichael and Red embrace emotionally beside the boat.\n\nRed looks deeply concerned.\n\nMichael smiles triumphantly.\n\nThe camera pulls back to reveal the beautiful ocean.\n\nFreeze-frame at 15 seconds.\n\noverall_soundscape:\n\nGentle ocean waves, tropical birds, warm coastal breeze, footsteps in sand, and quiet wooden boat movements.\n\nOnly Michael and Red speak.\n\nNo laugh track.\n\nCRITICAL CHARACTER CONTINUITY:\n\nMichael Scott must retain his recognizable Steve Carell face throughout all six scenes.\n\nMichael always wears the same purple paisley Prison Mike bandana from the supplied reference image.\n\nRed must retain his recognizable Morgan Freeman appearance and natural speaking voice.\n\nTheir facial identities, voices, and body proportions must never change.\n\nThe film's dramatic visual language remains serious, even when the dialogue is absurd.\n\nnon_diegetic_music:\n\nBegin with a beautiful, emotional orchestral theme reminiscent of a classic 1990s prison drama.\n\nThe music swells during the reunion.\n\nEnd with an inspirational orchestral flourish as the camera reveals Prison Mike's ridiculous business sign.",
+        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Preserve Steve Carell's exact recognizable facial identity as Michael Scott from The Office. His appearance must closely match the supplied reference image: short dark brown hair, large expressive eyes, distinctive facial proportions, exaggerated serious expressions, and a PURPLE BANDANA with white paisley patterns wrapped around his head. Wardrobe: worn gray 1940s prison uniform, with the purple bandana prominently visible at all times. He is playing Andy Dufresne from The Shawshank Redemption, but behaves exactly like Michael Scott performing his ridiculous Prison Mike character. Voice: §Michael Scott_BC§. His personality is overly confident, theatrical, insecure, and completely oblivious.\n\n{Ellis Boyd 'Red' Redding_BC} Preserve the exact recognizable appearance of Morgan Freeman portraying Ellis Boyd \"Red\" Redding in The Shawshank Redemption. Older Black man with short graying hair, distinctive facial features, warm expressive eyes, and a calm, observant demeanor. Wardrobe: worn gray 1940s prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is deep, warm, reflective, philosophical, and delivered with complete seriousness despite the absurdity of Michael's behavior.\n\n<location:Shawshank_Prison = A massive, oppressive 1940s American stone prison with towering gray walls, iron gates, guard towers, barred windows, and a crowded outdoor prison courtyard. Cinematography faithfully evokes the dramatic period atmosphere of The Shawshank Redemption.>\n\nsummary:\n\nA cinematic parody of Andy Dufresne's arrival at Shawshank Prison. Instead of the quiet, mysterious Andy, Michael Scott arrives dressed as Prison Mike, wearing his iconic purple paisley bandana. Red watches from the prison courtyard and delivers solemn narration about the strangest prisoner he has ever encountered. Michael attempts to establish himself as the most intimidating inmate in Shawshank, immediately embarrassing himself.\n\ndetailed_description:\n\n[Shot 1] A sweeping cinematic crane shot reveals Shawshank Prison in 1947.\n\nA prison bus approaches the enormous iron gates.\n\nDozens of prisoners gather in the courtyard to watch the new arrivals.\n\nThe cinematography is dramatic, desaturated, and faithful to a prestigious 1990s prison drama.\n\n[Shot 2] At 00:02.000, medium close-up of Red watching from the courtyard.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I remember the first time I saw Prison Mike. Some men arrive carrying secrets. He arrived wearing a purple bandana.</d> Subjects lips remain closed.\n\n[Shot 3] At 00:06.000, dramatic slow-motion shot.\n\nMichael Scott steps off the prison bus wearing his gray prison uniform and enormous purple paisley bandana.\n\nHe looks around with exaggerated confidence.\n\nThe camera pushes toward his recognizable face.\n\n[Shot 4] At 00:09.000, tight facial close-up of Michael Scott.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Listen up, convicts! I'm Prison Mike! I've survived the Dementors!</d> Subjects lips remain closed.\n\nMichael aggressively points toward the other prisoners.\n\n[Shot 5] At 00:12.000, medium shot.\n\nMichael dramatically spreads his arms.\n\nA prison guard silently points toward the entrance.\n\nMichael immediately becomes frightened and obediently walks inside.\n\n[Shot 6] At 00:14.000, close-up of Red.\n\nRed watches Michael disappear through the gates.\n\nHe slowly shakes his head.\n\nCut to black.\n\noverall_soundscape:\n\nAuthentic 1940s prison ambience, heavy iron gates, distant prisoner conversations, footsteps, and dramatic cinematic atmosphere.\n\nRed's narration sounds like a solemn, prestigious prison drama.\n\nMichael's dialogue uses his recognizable exaggerated Prison Mike performance.\n\nNo studio audience laughter.\n\nnon_diegetic_music:\n\nMelancholic orchestral strings and piano inspired by classic 1990s prison dramas.\n\nMusic swells during Michael's dramatic arrival and abruptly diminishes when he becomes frightened.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, expressive eyes, dark hair, and purple paisley bandana matching the supplied reference. Wardrobe: worn gray 1940s prison uniform with the purple bandana always visible. Personality: overly confident, desperately eager to impress, and oblivious to how ridiculous he sounds. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, short graying hair, calm expression, and worn gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. Deep, philosophical narration delivered with absolute seriousness.\n\n<location:Shawshank_Prison_Yard = A large 1940s stone prison courtyard surrounded by high gray walls, iron fences, guard towers, and groups of prisoners walking in circles. The same Shawshank Prison established previously.>\n\nsummary:\n\nRecreation of Andy Dufresne's first meeting with Red. Michael Scott approaches Red in the prison yard, hoping to acquire a rock hammer. Unfortunately, Michael has completely misunderstood what the tool is for. Red begins to realize that this new prisoner is not the mysterious genius everyone expected.\n\ndetailed_description:\n\n[Shot 1] Wide cinematic shot of Shawshank Prison's courtyard.\n\nRed sits quietly on a wooden bench.\n\nMichael approaches wearing his purple bandana.\n\nThe camera tracks alongside Michael with dramatic seriousness.\n\n[Shot 2] At 00:02.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red, I need a rock hammer. And maybe a tiny hard hat.</d> Subjects lips remain closed.\n\nMichael gestures toward his head.\n\n[Shot 3] At 00:05.000, tight close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]What exactly are you planning to do with a rock hammer?</d> Subjects lips remain closed.\n\nRed studies Michael suspiciously.\n\n[Shot 4] At 00:08.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Start a rock band. Prison Mike and the Hard Times.</d> Subjects lips remain closed.\n\nMichael performs an enthusiastic imaginary guitar solo.\n\n[Shot 5] At 00:11.000, tight close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]That was the moment I realized Mike wasn't digging his way out of anything.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, medium-wide shot.\n\nMichael continues playing imaginary guitar.\n\nSeveral prisoners silently walk away.\n\nRed looks exhausted.\n\nCut.\n\noverall_soundscape:\n\nQuiet prison courtyard ambience, distant prisoners, footsteps, and occasional guard whistles.\n\nDialogue remains natural and cinematic.\n\nRed's narration is completely deadpan.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nGentle melancholic piano and strings.\n\nA brief dramatic guitar chord accompanies Michael's imaginary rock performance.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable facial identity and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: gray 1940s prison uniform, sleeves rolled up, purple bandana always visible. Voice: §Michael Scott_BC§. Michael is theatrical, overconfident, and completely oblivious.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his recognizable face, graying hair, thoughtful expression, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration remains deep, philosophical, and serious.\n\n<location:Shawshank_Rooftop = The flat rooftop of Shawshank Prison during a hot summer afternoon in 1949. Prisoners repair the roof while armed guards supervise. Buckets of tar, wooden ladders, brick parapets, and distant green countryside establish the setting.>\n\nsummary:\n\nRecreation of the famous Shawshank rooftop scene where Andy negotiates beers for his fellow prisoners. Michael Scott attempts to negotiate a reward for the workers but requests something considerably less impressive. Red watches in disbelief as Michael tries to turn prison labor into an office team-building exercise.\n\ndetailed_description:\n\n[Shot 1] Sweeping cinematic shot of prisoners repairing the prison rooftop beneath the hot afternoon sun.\n\nRed sits beside several exhausted prisoners.\n\nMichael stands confidently near the rooftop supervisor.\n\nHis purple bandana flutters in the wind.\n\n[Shot 2] At 00:02.000, tight close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]These men deserve a reward. Three beers apiece! And a pizza party!</d> Subjects lips remain closed.\n\nMichael gestures dramatically toward the workers.\n\n[Shot 3] At 00:05.000, medium close-up of Red.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]For one afternoon, Mike made us feel like free men. Employees, technically.</d> Subjects lips remain closed.\n\nRed watches the rooftop workers.\n\n[Shot 4] At 00:09.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]And everybody gets a Dundie for outstanding incarceration!</d> Subjects lips remain closed.\n\nMichael proudly raises a tiny golden office trophy.\n\n[Shot 5] At 00:12.000, wide cinematic shot.\n\nThe prisoners sit together on the rooftop drinking beer.\n\nMichael stands in front of them holding his trophy.\n\nNobody applauds.\n\n[Shot 6] At 00:14.000, tight close-up of Red.\n\nRed takes a slow sip of beer.\n\nHe gives Michael a deeply disappointed look.\n\nCut.\n\noverall_soundscape:\n\nSummer wind, distant birds, prison guards, construction tools, glass bottles, and subtle rooftop ambience.\n\nRed's narration remains emotionally sincere despite the absurdity.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nWarm, nostalgic orchestral strings inspired by classic prison dramas.\n\nMusic becomes briefly triumphant during Michael's trophy presentation.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, distinctive expressions, and purple paisley bandana matching the supplied reference image. Wardrobe: gray 1940s prison uniform, purple bandana always visible. Voice: §Michael Scott_BC§. He behaves like an enthusiastic, incompetent office manager.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, short graying hair, calm demeanor, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. Narration is warm, reflective, and philosophical.\n\n<location:Shawshank_Warden_Office = A formal 1940s prison office with dark wooden furniture, a large desk, filing cabinets, bookshelves, an old record player, and tall barred windows. An adjoining prison courtyard is visible through the windows.>\n\nsummary:\n\nRecreation of Andy Dufresne's famous opera broadcast. Michael Scott locks himself inside the prison office and takes control of the loudspeaker system. Instead of playing a beautiful classical recording, he broadcasts his own enthusiastic performance of a terrible inspirational office song. Red delivers an emotional narration as the prisoners listen in stunned silence.\n\ndetailed_description:\n\n[Shot 1] Dramatic medium-wide shot inside the warden's office.\n\nMichael Scott stands beside an old microphone and record player.\n\nHis purple bandana remains prominently visible.\n\nHe locks the office door.\n\n[Shot 2] At 00:02.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Attention, Shawshank! This one's called Everybody Dance Now! Prison Mike remix!</d> Subjects lips remain closed.\n\nMichael enthusiastically activates the microphone.\n\n[Shot 3] At 00:05.000, medium-wide shot of the prison courtyard.\n\nDozens of prisoners stop walking and look toward the loudspeakers.\n\nMichael's terrible off-key singing begins over the prison speakers, consisting of enthusiastic wordless vocalizing.\n\n[Shot 4] At 00:08.000, close-up of Red standing in the courtyard.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Some things are too beautiful for words. Unfortunately, Mike had plenty of words.</d> Subjects lips remain closed.\n\n[Shot 5] At 00:12.000, medium shot inside the office.\n\nMichael dances enthusiastically while singing into the microphone.\n\nHe performs an awkward spin and accidentally knocks over a stack of files.\n\n[Shot 6] At 00:14.000, wide shot of the prison courtyard.\n\nEvery prisoner stands completely motionless.\n\nOne prisoner slowly covers his ears.\n\nCut.\n\noverall_soundscape:\n\nAuthentic prison ambience, crackling vintage loudspeakers, Michael's exaggerated off-key vocalizing, scattered papers, and distant guard shouting.\n\nRed's narration remains solemn and sincere.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with solemn orchestral strings.\n\nTransition into a deliberately awful, tinny 1940s-style prison loudspeaker performance.\n\nReturn to melancholy orchestral music during Red's narration.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable face, expressive eyes, and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: filthy gray 1940s prison uniform, with the purple bandana prominently visible. His clothes become muddy and wet during the escape. Voice: §Michael Scott_BC§. He remains overly dramatic, theatrical, and self-important.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable face, graying hair, thoughtful expression, and gray prison uniform. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is solemn, philosophical, and delivered with emotional gravity.\n\n<location:Shawshank_Escape = A dark 1940s prison cell containing a narrow iron bed, stone walls, a small barred window, and a large poster covering a hidden tunnel. The tunnel leads into a filthy underground drainage pipe, eventually opening into a stormy field outside Shawshank Prison.>\n\nsummary:\n\nRecreation of Andy Dufresne's legendary escape through the prison sewer. Michael Scott finally attempts to escape Shawshank through a hidden tunnel behind a poster. However, his grand escape is ruined by his inability to handle the disgusting sewer. Red narrates Michael's journey with the same gravity as a legendary tale of freedom.\n\ndetailed_description:\n\n[Shot 1] Dramatic cinematic shot inside Michael's dark prison cell.\n\nMichael removes a large poster from the wall, revealing a narrow tunnel.\n\nHe wears his iconic purple paisley bandana.\n\nLightning flashes through the barred window.\n\n[Shot 2] At 00:02.000, medium close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Prison Mike is officially going off the grid!</d> Subjects lips remain closed.\n\nHe confidently crawls into the tunnel.\n\n[Shot 3] At 00:05.000, cinematic tracking shot inside the sewer.\n\nMichael crawls through a disgusting drainage pipe.\n\nHe immediately recoils from the smell.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Oh God! This is worse than the Scranton men's room!</d> Subjects lips remain closed.\n\n[Shot 4] At 00:08.000, dramatic exterior wide shot.\n\nMichael emerges from the sewer into a rain-soaked field.\n\nHe stands beneath the stormy night sky.\n\nHis prison uniform is filthy.\n\nHis purple bandana remains securely attached.\n\n[Shot 5] At 00:10.000, low-angle cinematic shot.\n\nMichael spreads his arms toward the sky, recreating the iconic Shawshank rain-soaked freedom pose.\n\nHeavy rain pours down.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]Mike crawled through five hundred yards of sewage. Then asked if it counted as overtime.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, tight facial close-up of Michael.\n\nMichael stands triumphantly in the rain.\n\nSuddenly, his expression changes to horror.\n\nHe looks down at his filthy clothes.\n\nHe silently begins gagging.\n\nCut to black.\n\noverall_soundscape:\n\nHeavy thunder, torrential rain, sewer water, echoing tunnel ambience, distant prison alarms, and dramatic cinematic atmosphere.\n\nRed's narration remains completely serious.\n\nMichael's dialogue is exaggerated and theatrical.\n\nNo laugh track.\n\nnon_diegetic_music:\n\nBegin with tense orchestral strings.\n\nBuild toward a powerful triumphant orchestral crescendo as Michael emerges into the rain.\n\nAbruptly cut the triumphant music when Michael begins gagging.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Michael Scott_BC} Steve Carell portraying Michael Scott as Prison Mike. Preserve his exact recognizable facial identity, expressive eyes, dark hair, and distinctive purple paisley bandana matching the supplied reference image. Wardrobe: casual light blue short-sleeved shirt, beige trousers, and the same purple paisley bandana. Michael is now a free man but still behaves exactly like Prison Mike. Voice: §Michael Scott_BC§.\n\n{Ellis Boyd 'Red' Redding_BC} Morgan Freeman portraying Red Redding. Preserve his exact recognizable facial identity, graying hair, expressive eyes, and calm demeanor. Wardrobe: modest beige jacket, light-colored shirt, and dark trousers. Voice: §Ellis Boyd 'Red' Redding_BC§. His narration is warm, philosophical, and emotionally sincere.\n\n<location:Zihuatanejo_Beach = A beautiful, peaceful Mexican Pacific coastline with turquoise ocean water, soft white sand, tropical vegetation, warm golden sunlight, and a small wooden boat resting beside the beach. The setting resembles the iconic final reunion location from The Shawshank Redemption.>\n\nsummary:\n\nRecreation of the emotional final reunion between Andy Dufresne and Red on the Mexican coast. Red finally discovers Michael Scott living peacefully on a tropical beach. The scene begins as a heartfelt cinematic reunion, complete with sweeping ocean photography and emotional narration. Michael immediately ruins the moment by revealing that he has opened a branch of Dunder Mifflin in Mexico.\n\ndetailed_description:\n\n[Shot 1] Sweeping cinematic aerial shot of a beautiful Mexican beach.\n\nTurquoise ocean waves gently wash against the white sand.\n\nMichael Scott stands beside a small wooden boat.\n\nHe wears a light blue shirt, beige trousers, and his iconic purple paisley bandana.\n\n[Shot 2] At 00:02.000, medium close-up of Red walking along the beach.\n\n{Ellis Boyd 'Red' Redding_BC} narrates using §Ellis Boyd 'Red' Redding_BC§, <d>[English]I guess some birds aren't meant to be caged. Some are meant to manage regional paper sales.</d> Subjects lips remain closed.\n\nRed smiles emotionally.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nMichael notices Red approaching.\n\nHis face lights up.\n\nHe runs toward Red with exaggerated excitement.\n\n[Shot 4] At 00:08.000, tight facial close-up of Michael.\n\n{Michael Scott_BC} says using §Michael Scott_BC§, <d>[English]Red! Welcome to Dunder Mifflin Mexico! You're my new assistant regional manager!</d> Subjects lips remain closed.\n\nMichael spreads his arms enthusiastically.\n\n[Shot 5] At 00:12.000, medium close-up of Red.\n\nRed stops walking.\n\nHis warm smile slowly disappears.\n\n{Ellis Boyd 'Red' Redding_BC} says using §Ellis Boyd 'Red' Redding_BC§, <d>[English]You gotta be kidding me.</d> Subjects lips remain closed.\n\n[Shot 6] At 00:14.000, sweeping wide cinematic shot.\n\nMichael enthusiastically hugs a completely motionless Red.\n\nBehind them, a small crooked wooden sign reads:\n\n\"DUNDER MIFFLIN — ZIHUATANEJO BRANCH\"\n\nThe ocean sparkles beneath the golden sunlight.\n\nFade to black.\n\noverall_soundscape:\n\nGentle ocean waves, distant seabirds, tropical wind, footsteps on sand, and warm cinematic ambience.\n\nRed's narration is emotionally sincere and philosophical.\n\nMichael's dialogue is delivered with enthusiastic Michael Scott energy.\n\nNo studio audience laughter.\n\nnon_diegetic_music:\n\nWarm, emotional orchestral strings and piano reminiscent of the closing moments of a classic 1990s prison drama.\n\nThe music swells during the reunion.\n\nA brief awkward musical pause follows Red's final line.\n\nEnd with a gentle orchestral resolution.",
         "prompt_list_editor": ""
       },
       "color": "#232",
@@ -15225,7 +15225,7 @@
         },
         "skeba_bypass_lane_count": 1,
         "skeba_bypass_lane_types": {},
-        "skeba_playlist": "a942597a3da943a19dd9f0dd33421a21",
+        "skeba_playlist": "eef75867e5004b55a6be18f043202048",
         "skeba_clip_toggles": {
           "preview_clip": true
         },
@@ -17144,7 +17144,7 @@
         1,
         "res_multistep",
         "simple",
-        845337386169873,
+        581246639322967,
         "randomize",
         1
       ],
@@ -17156,7 +17156,7 @@
         "refine_cfg": 1,
         "sampler_name": "res_multistep",
         "scheduler": "simple",
-        "seed": 845337386169873,
+        "seed": 581246639322967,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -17351,7 +17351,7 @@
         1,
         "res_multistep",
         "simple",
-        646089008869977,
+        785433144919999,
         "randomize",
         1
       ],
@@ -17363,7 +17363,7 @@
         "refine_cfg": 1,
         "sampler_name": "res_multistep",
         "scheduler": "simple",
-        "seed": 646089008869977,
+        "seed": 785433144919999,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -20687,182 +20687,6 @@
       "MODEL"
     ],
     [
-      764,
-      362,
-      0,
-      334,
-      1,
-      "INT"
-    ],
-    [
-      2047,
-      1171,
-      2,
-      334,
-      2,
-      "BOOLEAN"
-    ],
-    [
-      767,
-      365,
-      0,
-      269,
-      1,
-      "INT"
-    ],
-    [
-      2046,
-      1171,
-      2,
-      269,
-      2,
-      "BOOLEAN"
-    ],
-    [
-      789,
-      386,
-      0,
-      294,
-      1,
-      "INT"
-    ],
-    [
-      812,
-      408,
-      1,
-      264,
-      0,
-      "INT"
-    ],
-    [
-      773,
-      370,
-      0,
-      264,
-      1,
-      "BOOLEAN"
-    ],
-    [
-      1592,
-      854,
-      0,
-      265,
-      4,
-      "BOOLEAN"
-    ],
-    [
-      1679,
-      918,
-      0,
-      912,
-      1,
-      "BOOLEAN"
-    ],
-    [
-      721,
-      270,
-      1,
-      332,
-      0,
-      "INT"
-    ],
-    [
-      774,
-      371,
-      0,
-      332,
-      1,
-      "BOOLEAN"
-    ],
-    [
-      1750,
-      985,
-      2,
-      970,
-      1,
-      "BOOLEAN"
-    ],
-    [
-      1436,
-      778,
-      0,
-      772,
-      2,
-      "COMBO"
-    ],
-    [
-      1874,
-      1049,
-      0,
-      333,
-      11,
-      "BOOLEAN"
-    ],
-    [
-      1837,
-      1029,
-      0,
-      333,
-      12,
-      "COMBO"
-    ],
-    [
-      1664,
-      913,
-      1,
-      333,
-      13,
-      "INT"
-    ],
-    [
-      1875,
-      1050,
-      0,
-      263,
-      11,
-      "BOOLEAN"
-    ],
-    [
-      1836,
-      1028,
-      0,
-      263,
-      12,
-      "COMBO"
-    ],
-    [
-      1681,
-      920,
-      0,
-      263,
-      13,
-      "INT"
-    ],
-    [
-      1587,
-      852,
-      0,
-      851,
-      4,
-      "STRING"
-    ],
-    [
-      2020,
-      1161,
-      0,
-      1152,
-      5,
-      "COMBO"
-    ],
-    [
-      2019,
-      1160,
-      0,
-      1155,
-      5,
-      "COMBO"
-    ],
-    [
       2050,
       1177,
       0,
@@ -21111,6 +20935,70 @@
       "FLOAT"
     ],
     [
+      764,
+      362,
+      0,
+      334,
+      1,
+      "INT"
+    ],
+    [
+      2047,
+      1171,
+      2,
+      334,
+      2,
+      "BOOLEAN"
+    ],
+    [
+      767,
+      365,
+      0,
+      269,
+      1,
+      "INT"
+    ],
+    [
+      2046,
+      1171,
+      2,
+      269,
+      2,
+      "BOOLEAN"
+    ],
+    [
+      789,
+      386,
+      0,
+      294,
+      1,
+      "INT"
+    ],
+    [
+      812,
+      408,
+      1,
+      264,
+      0,
+      "INT"
+    ],
+    [
+      773,
+      370,
+      0,
+      264,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      1592,
+      854,
+      0,
+      265,
+      4,
+      "BOOLEAN"
+    ],
+    [
       1046,
       343,
       0,
@@ -21325,6 +21213,118 @@
       546,
       28,
       "INT"
+    ],
+    [
+      1679,
+      918,
+      0,
+      912,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      721,
+      270,
+      1,
+      332,
+      0,
+      "INT"
+    ],
+    [
+      774,
+      371,
+      0,
+      332,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      1750,
+      985,
+      2,
+      970,
+      1,
+      "BOOLEAN"
+    ],
+    [
+      1436,
+      778,
+      0,
+      772,
+      2,
+      "COMBO"
+    ],
+    [
+      1874,
+      1049,
+      0,
+      333,
+      11,
+      "BOOLEAN"
+    ],
+    [
+      1837,
+      1029,
+      0,
+      333,
+      12,
+      "COMBO"
+    ],
+    [
+      1664,
+      913,
+      1,
+      333,
+      13,
+      "INT"
+    ],
+    [
+      1875,
+      1050,
+      0,
+      263,
+      11,
+      "BOOLEAN"
+    ],
+    [
+      1836,
+      1028,
+      0,
+      263,
+      12,
+      "COMBO"
+    ],
+    [
+      1681,
+      920,
+      0,
+      263,
+      13,
+      "INT"
+    ],
+    [
+      1587,
+      852,
+      0,
+      851,
+      4,
+      "STRING"
+    ],
+    [
+      2020,
+      1161,
+      0,
+      1152,
+      5,
+      "COMBO"
+    ],
+    [
+      2019,
+      1160,
+      0,
+      1155,
+      5,
+      "COMBO"
     ]
   ],
   "groups": [
@@ -26370,10 +26370,10 @@
       }
     ],
     "ds": {
-      "scale": 0.5107056690951738,
+      "scale": 0.4365756983712694,
       "offset": [
-        6189.821862646126,
-        -3243.6645192012043
+        6647.608607715551,
+        -3380.686782566236
       ]
     },
     "linkExtensions": [

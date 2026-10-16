@@ -8587,7 +8587,7 @@
       },
       "widgets_values": [
         true,
-        563939588936805,
+        143729488800515,
         "randomize",
         4,
         0.3,
@@ -8597,7 +8597,7 @@
       ],
       "widgets_values_named": {
         "enabled": true,
-        "seed": 563939588936805,
+        "seed": 143729488800515,
         "control_after_generate": "randomize",
         "steps": 4,
         "audio_denoise": 0.3,
@@ -11244,7 +11244,7 @@
       },
       "widgets_values": [
         "",
-        true,
+        false,
         "|",
         true,
         "continuation",
@@ -11255,7 +11255,7 @@
       ],
       "widgets_values_named": {
         "text": "",
-        "validation_enabled": true,
+        "validation_enabled": false,
         "delimiter": "|",
         "skip_empty": true,
         "compiler_video_usage": "continuation",
@@ -12117,12 +12117,12 @@
         "__skeba_bgcolor_base": "#335"
       },
       "widgets_values": [
-        "h3_context",
+        "h3_context_upscaled",
         1,
         false
       ],
       "widgets_values_named": {
-        "latent_path": "h3_context",
+        "latent_path": "h3_context_upscaled",
         "clip_index": 1,
         "bypass": false
       },
@@ -14193,11 +14193,11 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "[new_location] [s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. His appearance, clothing, colors, facial proportions, and hairstyle remain identical throughout all five clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Her appearance and wardrobe remain identical throughout all five clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. He has exaggerated elastic limbs and comically enthusiastic dance movements. His appearance and wardrobe remain identical throughout all five clips.>\n\n<location:Cartoon_High_School = A colorful 1990s American cartoon high school with long hallways, turquoise lockers, checkerboard floors, colorful posters, classroom doors, and large windows. The environment is illustrated using traditional hand-drawn cel animation with thick black outlines, flat saturated colors, and painted backgrounds.>\n\nsummary:\n\nA vibrant 1990s Saturday-morning cartoon music video driven entirely by the supplied audio of \"Don't You (Forget About Me).\" Three original cartoon characters dance and lip-sync in a colorful high school hallway. The lead singer performs the actual vocals from the supplied song while the other characters dance and join in only when corresponding vocals are audible. Every movement, cut, facial expression, and lip movement follows the actual audio timing.\n\ndetailed_description:\n\n[Shot 1] Traditional 1990s hand-drawn Saturday-morning cartoon animation, 24 fps presentation with expressive animation on twos, thick black outlines, saturated colors, and painted backgrounds.\n\nA colorful high school hallway stretches into the distance.\n\nThe three cartoon characters stand together in front of turquoise lockers.\n\nThe camera begins a rhythmic push toward Cartoon_Lead.\n\nThe animation follows the supplied audio from its very first audible moment.\n\nNo additional dialogue.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nCartoon_Lead begins lip-syncing the exact lead vocals audible in the supplied audio.\n\nHis mouth shapes follow the actual sung phonemes, syllables, consonants, vowels, and sustained notes.\n\nHis eyebrows and head movements emphasize the vocal phrasing.\n\nHe performs a dramatic 1980s-inspired shoulder roll.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl slides into frame and begins an energetic side-to-side dance.\n\nCartoon_Friend performs exaggerated elastic knee bends.\n\nCartoon_Lead continues singing only when the supplied audio contains lead vocals.\n\nThe camera cuts on a prominent musical beat.\n\n[Shot 4] At 00:10.000, close-up of Cartoon_Lead.\n\nHe points directly toward the camera during a prominent vocal phrase.\n\nHis mouth movements match the exact timing of the supplied recording.\n\nCartoon_Girl dances behind him.\n\n[Shot 5] At 00:13.000, wide shot.\n\nAll three characters perform a synchronized step-touch dance.\n\nTheir feet contact the floor precisely on the musical beat.\n\nThe camera tracks backward as the characters dance toward it.\n\nContinue the music and animation seamlessly into the next clip.\n\noverall_soundscape:\n\nThe supplied audio recording of \"Don't You (Forget About Me)\" is the sole authoritative soundtrack.\n\nPreserve the original vocals, instrumentation, tempo, rhythm, dynamics, and recording quality.\n\nDo not regenerate, replace, reinterpret, or alter the song.\n\nDo not add spoken dialogue, sound effects, audience laughter, or additional vocals.\n\nAll lip-sync, choreography, editing, and camera movements must follow the supplied audio.\n\nnon_diegetic_music:\n\nUse only the supplied song audio. No additional music.\n\n",
+        "woman singing to the song | woman singing to the song",
         ""
       ],
       "widgets_values_named": {
-        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n<character:Cartoon_Lead = A charismatic young adult male cartoon singer with exaggerated 1990s animation proportions, thick dark brown hair styled into a dramatic swooping pompadour, large expressive blue eyes, prominent eyebrows, a red varsity jacket with white sleeves, white T-shirt, blue jeans, and red high-top sneakers. His appearance, clothing, colors, facial proportions, and hairstyle remain identical throughout all five clips.>\n\n<character:Cartoon_Girl = An energetic young adult female cartoon dancer with shoulder-length blonde hair, a purple headband, large expressive green eyes, a bright yellow cropped jacket over a pink shirt, high-waisted turquoise jeans, and white sneakers. Her appearance and wardrobe remain identical throughout all five clips.>\n\n<character:Cartoon_Friend = A lanky young adult male cartoon dancer with messy black hair, oversized round glasses, a green hoodie, baggy purple trousers, and orange sneakers. He has exaggerated elastic limbs and comically enthusiastic dance movements. His appearance and wardrobe remain identical throughout all five clips.>\n\n<location:Cartoon_High_School = A colorful 1990s American cartoon high school with long hallways, turquoise lockers, checkerboard floors, colorful posters, classroom doors, and large windows. The environment is illustrated using traditional hand-drawn cel animation with thick black outlines, flat saturated colors, and painted backgrounds.>\n\nsummary:\n\nA vibrant 1990s Saturday-morning cartoon music video driven entirely by the supplied audio of \"Don't You (Forget About Me).\" Three original cartoon characters dance and lip-sync in a colorful high school hallway. The lead singer performs the actual vocals from the supplied song while the other characters dance and join in only when corresponding vocals are audible. Every movement, cut, facial expression, and lip movement follows the actual audio timing.\n\ndetailed_description:\n\n[Shot 1] Traditional 1990s hand-drawn Saturday-morning cartoon animation, 24 fps presentation with expressive animation on twos, thick black outlines, saturated colors, and painted backgrounds.\n\nA colorful high school hallway stretches into the distance.\n\nThe three cartoon characters stand together in front of turquoise lockers.\n\nThe camera begins a rhythmic push toward Cartoon_Lead.\n\nThe animation follows the supplied audio from its very first audible moment.\n\nNo additional dialogue.\n\n[Shot 2] At 00:03.000, medium close-up of Cartoon_Lead.\n\nCartoon_Lead begins lip-syncing the exact lead vocals audible in the supplied audio.\n\nHis mouth shapes follow the actual sung phonemes, syllables, consonants, vowels, and sustained notes.\n\nHis eyebrows and head movements emphasize the vocal phrasing.\n\nHe performs a dramatic 1980s-inspired shoulder roll.\n\n[Shot 3] At 00:06.000, medium-wide shot.\n\nCartoon_Girl slides into frame and begins an energetic side-to-side dance.\n\nCartoon_Friend performs exaggerated elastic knee bends.\n\nCartoon_Lead continues singing only when the supplied audio contains lead vocals.\n\nThe camera cuts on a prominent musical beat.\n\n[Shot 4] At 00:10.000, close-up of Cartoon_Lead.\n\nHe points directly toward the camera during a prominent vocal phrase.\n\nHis mouth movements match the exact timing of the supplied recording.\n\nCartoon_Girl dances behind him.\n\n[Shot 5] At 00:13.000, wide shot.\n\nAll three characters perform a synchronized step-touch dance.\n\nTheir feet contact the floor precisely on the musical beat.\n\nThe camera tracks backward as the characters dance toward it.\n\nContinue the music and animation seamlessly into the next clip.\n\noverall_soundscape:\n\nThe supplied audio recording of \"Don't You (Forget About Me)\" is the sole authoritative soundtrack.\n\nPreserve the original vocals, instrumentation, tempo, rhythm, dynamics, and recording quality.\n\nDo not regenerate, replace, reinterpret, or alter the song.\n\nDo not add spoken dialogue, sound effects, audience laughter, or additional vocals.\n\nAll lip-sync, choreography, editing, and camera movements must follow the supplied audio.\n\nnon_diegetic_music:\n\nUse only the supplied song audio. No additional music.\n\n",
+        "text": "woman singing to the song | woman singing to the song",
         "prompt_list_editor": ""
       },
       "color": "#232",
@@ -15230,7 +15230,7 @@
         },
         "skeba_bypass_lane_count": 1,
         "skeba_bypass_lane_types": {},
-        "skeba_playlist": "190b51ced80e4402a13b7bf183d60ada",
+        "skeba_playlist": "22a8c138e449469990b282444e4bdf35",
         "skeba_clip_toggles": {
           "preview_clip": true
         },
@@ -15245,7 +15245,8 @@
         "",
         true,
         "",
-        null
+        null,
+        ""
       ],
       "widgets_values_named": {
         "crf": 23,
@@ -15253,7 +15254,8 @@
         "project_name": "",
         "preview_clip": true,
         "prompt": "",
-        "Open Live Playlist": null
+        "Open Live Playlist": null,
+        "skeba_clip_preview": ""
       },
       "_meta": {
         "skeba_tags": {
@@ -17173,7 +17175,7 @@
         1,
         "euler",
         "normal",
-        629931687068193,
+        977297636592913,
         "randomize",
         1
       ],
@@ -17185,7 +17187,7 @@
         "refine_cfg": 1,
         "sampler_name": "euler",
         "scheduler": "normal",
-        "seed": 629931687068193,
+        "seed": 977297636592913,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -17380,7 +17382,7 @@
         1,
         "euler",
         "normal",
-        683599046562469,
+        992291463396287,
         "randomize",
         1
       ],
@@ -17392,7 +17394,7 @@
         "refine_cfg": 1,
         "sampler_name": "euler",
         "scheduler": "normal",
-        "seed": 683599046562469,
+        "seed": 992291463396287,
         "control_after_generate": "randomize",
         "detail_strength": 1
       },
@@ -20634,12 +20636,12 @@
       },
       "widgets_values": [
         "raw value",
-        "raw value",
+        "Prompt 1: source frames 0–361; requested 15s / 360 frames; H3 render 362 frames; continuation trim 0; append source frames 0–361 (362 frames, 15.083s).",
         null
       ],
       "widgets_values_named": {
         "mode": "raw value",
-        "display_0": "raw value",
+        "display_0": "Prompt 1: source frames 0–361; requested 15s / 360 frames; H3 render 362 frames; continuation trim 0; append source frames 0–361 (362 frames, 15.083s).",
         "copy_value": null
       },
       "color": "#323",
@@ -22864,12 +22866,12 @@
       },
       "widgets_values": [
         "raw value",
-        "raw value",
+        "3603 normalized 24 fps source frames; 2 of 2 prompts fit. Last clip appends 357 frames (14.875s).",
         null
       ],
       "widgets_values_named": {
         "mode": "raw value",
-        "display_0": "raw value",
+        "display_0": "3603 normalized 24 fps source frames; 2 of 2 prompts fit. Last clip appends 357 frames (14.875s).",
         "copy_value": null
       },
       "color": "#323",
@@ -33189,10 +33191,10 @@
       }
     ],
     "ds": {
-      "scale": 0.9361378323747647,
+      "scale": 0.6768247413071605,
       "offset": [
-        5805.11197838566,
-        -3857.5720654434
+        5768.121774790218,
+        -3453.015707188996
       ]
     },
     "linkExtensions": [
