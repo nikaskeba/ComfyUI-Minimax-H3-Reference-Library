@@ -33,7 +33,10 @@ class LocalVLMTests(unittest.TestCase):
             folder = model_folder(directory)
             (Path(directory) / "text_clip.safetensors").write_bytes(b"test")
             with patch.object(nodes, "_model_roots", return_value=(Path(directory),)):
-                self.assertEqual(nodes.local_vlm_folders(), [str(folder.resolve())])
+                self.assertEqual(nodes.local_vlm_folders(), ["Qwen-VL"])
+                self.assertEqual(nodes._resolve_model("Qwen-VL", ""), folder.resolve())
+                # Old workflows can still pass their previously saved path.
+                self.assertEqual(nodes._resolve_model(str(folder), ""), folder.resolve())
             self.assertEqual(nodes._resolve_model(str(folder), ""), folder.resolve())
             with self.assertRaisesRegex(ValueError, "single CLIP"):
                 nodes._resolve_model(str(Path(directory) / "text_clip.safetensors"), "")
@@ -45,6 +48,19 @@ class LocalVLMTests(unittest.TestCase):
             (folder / "config.json").write_text('{"model_type":"qwen3_vl"}')
             (folder / "preprocessor_config.json").unlink()
             self.assertFalse(nodes._supported_model(folder))
+
+    def test_duplicate_model_names_are_disambiguated_without_drive_paths(self):
+        with tempfile.TemporaryDirectory() as directory:
+            first_root = Path(directory) / "LLM"
+            second_root = Path(directory) / "clip"
+            first_root.mkdir()
+            second_root.mkdir()
+            first = model_folder(first_root)
+            second = model_folder(second_root)
+            with patch.object(nodes, "_model_roots", return_value=(first_root, second_root)):
+                self.assertEqual(nodes.local_vlm_folders(), ["clip/Qwen-VL", "LLM/Qwen-VL"])
+                self.assertEqual(nodes._resolve_model("LLM/Qwen-VL", ""), first.resolve())
+                self.assertEqual(nodes._resolve_model("clip/Qwen-VL", ""), second.resolve())
 
     def test_loader_uses_local_files_only_and_no_snapshot_download(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -1,6 +1,6 @@
 [project]
 name = "h3-reference-library"
-version = "2.2.0"
+version = "2.2.1"
 description = "Consolidated Skeba reference, batching, bypass, and H3 Motion Context nodes for ComfyUI"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"

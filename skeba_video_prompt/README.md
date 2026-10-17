@@ -4,7 +4,9 @@ Connect a `VIDEO` source to **SKEBA H3 Video to Prompt (Local VLM)** and connect
 **SKEBA H3 Local VLM Loader** to its `vlm` input. The loader lists complete
 Qwen VL model folders in ComfyUI's `models/LLM`, `models/clip`, `models/vlm`,
 `models/video_analyzer`, and registered extra model paths. A custom absolute
-folder can be entered instead. The folder must contain the model weights,
+folder can be entered instead. The dropdown shows relative names such as
+`Qwen-VL/Qwen3-VL-2B-Instruct`; it does not expose the Windows drive path.
+The folder must contain the model weights,
 `config.json`, tokenizer files, and the vision preprocessor. The VLM is loaded
 with `local_files_only=True`; this loader never calls Hugging Face download.
 

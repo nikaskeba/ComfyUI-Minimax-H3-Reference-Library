@@ -6,6 +6,7 @@ under the MIT notice in this directory's LICENSE file.
 
 import json
 import threading
+from collections import Counter
 from pathlib import Path
 from uuid import uuid4
 
@@ -31,17 +32,32 @@ def _model_roots():
     return tuple(dict.fromkeys(path.resolve() for path in roots if path.is_dir()))
 
 
-def local_vlm_folders():
-    """List complete local model folders, including configured extra model paths."""
-    found = set()
+def _model_choices():
+    """Map short, Comfy-style dropdown labels to full local model folders."""
+    found = {}
     for root in _model_roots():
         for parent in (root, *root.iterdir()):
             if not parent.is_dir():
                 continue
             for candidate in (parent, *parent.iterdir()):
                 if candidate.is_dir() and _supported_model(candidate):
-                    found.add(str(candidate.resolve()))
-    return sorted(found, key=str.casefold)
+                    full_path = candidate.resolve()
+                    found[full_path] = (candidate.relative_to(root).as_posix(), root.name)
+    counts = Counter(relative.casefold() for relative, _ in found.values())
+    choices = {}
+    for path, (relative, root_name) in sorted(found.items(), key=lambda item: str(item[0]).casefold()):
+        label = relative if counts[relative.casefold()] == 1 else f"{root_name}/{relative}"
+        unique_label = label
+        suffix = 2
+        while unique_label.casefold() in (value.casefold() for value in choices):
+            unique_label = f"{label} ({suffix})"
+            suffix += 1
+        choices[unique_label] = path
+    return choices
+
+
+def local_vlm_folders():
+    return sorted(_model_choices(), key=str.casefold)
 
 
 def _supported_model(path):
@@ -61,10 +77,20 @@ def _supported_model(path):
 
 
 def _resolve_model(model_folder, custom_folder):
-    choice = custom_folder.strip() if model_folder == "Custom local folder" else model_folder
-    if not choice:
-        raise ValueError("Select a local VLM folder or enter one in custom_folder.")
-    path = Path(choice).expanduser().resolve()
+    if model_folder == "Custom local folder":
+        choice = custom_folder.strip()
+        if not choice:
+            raise ValueError("Select a local VLM folder or enter one in custom_folder.")
+        path = Path(choice).expanduser().resolve()
+    else:
+        path = _model_choices().get(model_folder)
+        if path is None:
+            # Accept previously saved workflows whose widget stored the full
+            # path, even though new dropdown choices use relative names.
+            legacy_path = Path(model_folder).expanduser()
+            if not legacy_path.is_absolute():
+                raise ValueError("That VLM is no longer listed. Refresh ComfyUI and select its model folder again.")
+            path = legacy_path.resolve()
     if not path.is_dir() or not _supported_model(path):
         raise ValueError("Select a complete local Qwen VL folder containing config.json, "
                          "model weights, and processor/tokenizer files. A single CLIP "
