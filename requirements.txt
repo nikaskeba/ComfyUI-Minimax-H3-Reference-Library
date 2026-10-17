@@ -1,3 +1,5 @@
 pretty_midi
 symusic>=0.6.0
 mido
+requests
+json-repair>=0.30,<1

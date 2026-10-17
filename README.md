@@ -777,3 +777,8 @@ For **Base-Pass AV Connector**, connect the same outputs to Starting Video Frame
 This project also contains the former standalone Skeba Music nodes under the same node IDs and the same **Skeba Music** menu category. Existing music workflows keep their node connections. The source, tests, documentation, and example workflows live in `skeba_music/`; its three browser extensions load from this package's `web/` folder.
 
 After updating, disable or remove the old `custom_nodes/Skeba Music` folder to avoid registering duplicate IDs. See `skeba_music/README.md` for the music workflow guide.
+
+
+## Local H3 video-to-prompt analyzer
+
+SKEBA H3 Local VLM Loader selects a complete Qwen vision-language model already stored in ComfyUI model folders, including registered `clip` and `LLM` paths. Connect it to SKEBA H3 Video to Prompt (Local VLM). A normal `CLIP` socket is a text encoder and cannot generate visual descriptions; this node loads the complete VLM folder without downloading it. ASR and audio tagging are optional and off by default. See `skeba_video_prompt/README.md` and the bundled MIT notice for details.
