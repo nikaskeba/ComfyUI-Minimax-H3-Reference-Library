@@ -47,9 +47,14 @@ from .disk_video import SaveClipToFile, CompilePlaylist, FinishPlaylist
 from .playlist_registration import PlaylistWorkflow
 from .playlist_editor import PlaylistRedoInput, PlaylistRedoSave
 from .server import register_routes
+from .skeba_music import MUSIC_NODE_CLASSES
 
 
 register_routes()
+
+MUSIC_NODE_CLASS_MAPPINGS = {
+    node.GET_SCHEMA().node_id: node for node in MUSIC_NODE_CLASSES
+}
 
 NODE_CLASS_MAPPINGS = {
     "SkebaRefModVoiceDescription": SkebaRefModVoiceDescription,
@@ -111,6 +116,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaBypass": SkebaBypass,
     "SkebaUniversalBypass": SkebaUniversalBypass,
     **MOTION_CONTEXT_NODE_CLASS_MAPPINGS,
+    **MUSIC_NODE_CLASS_MAPPINGS,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -173,6 +179,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaBypass": "Skeba Bypass",
     "SkebaUniversalBypass": "Universal Node Bypass",
     **MOTION_CONTEXT_NODE_DISPLAY_NAME_MAPPINGS,
+    **{node_id: node.GET_SCHEMA().display_name
+       for node_id, node in MUSIC_NODE_CLASS_MAPPINGS.items()},
 }
 
 WEB_DIRECTORY = "./web"

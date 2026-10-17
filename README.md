@@ -35,7 +35,7 @@ cd ComfyUI/custom_nodes
 git clone https://github.com/nikaskeba/ComfyUI-Minimax-H3-Reference-Library.git
 ```
 
-Restart ComfyUI after installation. No additional Python packages are required beyond the dependencies included with ComfyUI.
+Restart ComfyUI after installation. Music nodes require pretty_midi, symusic>=0.6.0, and mido; install the package dependencies in ComfyUI's Python environment when using a manual checkout.
 
 ## Usage
 
@@ -770,3 +770,10 @@ Connect the loop-open accumulation from before the current clip is appended; con
 For **SKEBA H3 Motion Context**, connect `context_frames` and `context_audio`, select `context_source = rendered frames/audio`, and supply the video/audio VAEs. This explicitly ignores `context_latent`; the required `latent` input remains the current generation's target latent. Auto retains the existing latent-first behavior.
 
 For **Base-Pass AV Connector**, connect the same outputs to Starting Video Frames (`start_frames`) and Starting Video Audio (`start_audio`), and connect the bypass output. Match the starting overlap length to the loader. The same media can feed an upscale connector with its own target latent/VAEs. Use the AV Connector's existing overlap-finalization path when it handles continuation; avoid also pinning/trimming the same overlap through Motion Context. This change does not automatically rewire saved workflows.
+
+
+## Skeba Music
+
+This project also contains the former standalone Skeba Music nodes under the same node IDs and the same **Skeba Music** menu category. Existing music workflows keep their node connections. The source, tests, documentation, and example workflows live in `skeba_music/`; its three browser extensions load from this package's `web/` folder.
+
+After updating, disable or remove the old `custom_nodes/Skeba Music` folder to avoid registering duplicate IDs. See `skeba_music/README.md` for the music workflow guide.

@@ -1,0 +1,940 @@
+{
+  "id": "e803a4eb-858b-46b8-93e4-d37300742aba",
+  "revision": 1,
+  "last_node_id": 34,
+  "last_link_id": 59,
+  "nodes": [
+    {
+      "id": 15,
+      "type": "DisplayText",
+      "pos": [
+        2720,
+        60
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 52
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "kikotools",
+        "ver": "1.0.28",
+        "Node name for S&R": "DisplayText",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "",
+        null
+      ],
+      "widgets_values_named": {
+        "text_display": "",
+        "copy_text": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": "SkebaSheetSage2AudioToABC",
+      "pos": [
+        1340.1728728956798,
+        -374.73755086711185
+      ],
+      "size": [
+        364.61484375,
+        102
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio_encoder",
+          "type": "AUDIO_ENCODER",
+          "link": 16
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 55
+        }
+      ],
+      "outputs": [
+        {
+          "name": "abc",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            56
+          ]
+        },
+        {
+          "name": "midi",
+          "shape": 6,
+          "type": "YUE2_MIDI",
+          "links": null
+        },
+        {
+          "name": "beat_map",
+          "shape": 6,
+          "type": "STRING",
+          "links": [
+            59
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaSheetSage2AudioToABC",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "full",
+        "skip_invalid_notes"
+      ],
+      "widgets_values_named": {
+        "mode": "full",
+        "abc_error_mode": "skip_invalid_notes"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "SkebaSaveMidi",
+      "pos": [
+        2500,
+        -470
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "midi",
+          "type": "YUE2_MIDI",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaSaveMidi",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Skeba Music/sheetsage_score"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "Skeba Music/sheetsage_score"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": "AudioEncoderLoader",
+      "pos": [
+        740.0815689626621,
+        -381.62037221869565
+      ],
+      "size": [
+        420,
+        80
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO_ENCODER",
+          "type": "AUDIO_ENCODER",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.36.0",
+        "Node name for S&R": "AudioEncoderLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "models": [
+          {
+            "name": "sheetsage2_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/YuE2/resolve/main/audio_encoders/sheetsage2_bf16.safetensors",
+            "directory": "audio_encoders"
+          }
+        ],
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "sheetsage2_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "audio_encoder_name": "sheetsage2_bf16.safetensors"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "type": "SkebaABCToMidi",
+      "pos": [
+        2110,
+        -470
+      ],
+      "size": [
+        270,
+        88
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "abc",
+          "type": "STRING",
+          "widget": {
+            "name": "abc"
+          },
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "midi",
+          "type": "YUE2_MIDI",
+          "links": [
+            20,
+            57
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaABCToMidi",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "abc": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "abc": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 23,
+      "type": "VHS_LoadAudioUpload",
+      "pos": [
+        763.4977250435114,
+        -288.5167223016205
+      ],
+      "size": [
+        256.609375,
+        204
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            50,
+            55
+          ]
+        },
+        {
+          "name": "duration",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "VHS_LoadAudioUpload",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": {
+        "audio": "05 - Blink 182 - What's My Age Again.mp3",
+        "start_time": 0,
+        "duration": 0,
+        "choose audio to upload": "image",
+        "audiopreview": {
+          "params": {
+            "start_time": 0,
+            "duration": 0,
+            "filename": "05 - Blink 182 - What's My Age Again.mp3",
+            "type": "input"
+          }
+        }
+      },
+      "widgets_values_named": {
+        "audio": "05 - Blink 182 - What's My Age Again.mp3",
+        "start_time": 0,
+        "duration": 0,
+        "choose audio to upload": "image",
+        "audiopreview": {
+          "params": {
+            "start_time": 0,
+            "duration": 0,
+            "filename": "05 - Blink 182 - What's My Age Again.mp3",
+            "type": "input"
+          }
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 31,
+      "type": "SkebaMuScriptorGrid",
+      "pos": [
+        1810,
+        -180
+      ],
+      "size": [
+        390.5640625,
+        695
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "abc",
+          "type": "STRING",
+          "link": 51
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 50
+        },
+        {
+          "name": "beat_map",
+          "shape": 7,
+          "type": "STRING",
+          "link": 59
+        }
+      ],
+      "outputs": [
+        {
+          "name": "midi_path",
+          "type": "STRING",
+          "links": [
+            52
+          ]
+        },
+        {
+          "name": "notes_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "midi",
+          "type": "YUE2_MIDI",
+          "links": [
+            58
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaMuScriptorGrid",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "large",
+        "cuda",
+        "auto",
+        false,
+        1,
+        1,
+        1,
+        true,
+        false,
+        "Skeba Music/muscriptor_shared_grid",
+        "Skip malformed",
+        "",
+        "clean_electric_guitar",
+        0.0
+      ],
+      "widgets_values_named": {
+        "model_size": "large",
+        "device": "cuda",
+        "dtype": "auto",
+        "use_sampling": false,
+        "temperature": 1,
+        "cfg_coef": 1,
+        "beam_size": 1,
+        "prelude_forcing": true,
+        "strict_eos": false,
+        "filename_prefix": "Skeba Music/muscriptor_shared_grid",
+        "invalid_notes": "Skip malformed",
+        "audio_path": "",
+        "instruments": "clean_electric_guitar",
+        "tempo_override_bpm": 0.0
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 32,
+      "type": "SkebaSaveMidi",
+      "pos": [
+        2710,
+        -65
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "midi",
+          "type": "YUE2_MIDI",
+          "link": 54
+        }
+      ],
+      "outputs": [
+        {
+          "name": "path",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaSaveMidi",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Skeba Music/combined_shared_grid"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "Skeba Music/combined_shared_grid"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": "SkebaABCSharedTempo",
+      "pos": [
+        1745,
+        -650
+      ],
+      "size": [
+        310,
+        90
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "abc",
+          "type": "STRING",
+          "link": 56
+        }
+      ],
+      "outputs": [
+        {
+          "name": "abc",
+          "type": "STRING",
+          "links": [
+            19,
+            51
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaABCSharedTempo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        160.0
+      ],
+      "widgets_values_named": {
+        "bpm": 160.0
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 34,
+      "type": "SkebaCombineTranscriptionMIDIs",
+      "pos": [
+        2310,
+        -60
+      ],
+      "size": [
+        330,
+        95
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "sheetsage_midi",
+          "type": "YUE2_MIDI",
+          "link": 57
+        },
+        {
+          "name": "muscriptor_midi",
+          "type": "YUE2_MIDI",
+          "link": 58
+        }
+      ],
+      "outputs": [
+        {
+          "name": "midi",
+          "type": "YUE2_MIDI",
+          "links": [
+            54
+          ]
+        },
+        {
+          "name": "report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaCombineTranscriptionMIDIs",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "Nearest 16th"
+      ],
+      "widgets_values_named": {
+        "alignment": "Nearest 16th"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      16,
+      18,
+      0,
+      16,
+      0,
+      "AUDIO_ENCODER"
+    ],
+    [
+      19,
+      33,
+      0,
+      19,
+      0,
+      "STRING"
+    ],
+    [
+      20,
+      19,
+      0,
+      17,
+      0,
+      "YUE2_MIDI"
+    ],
+    [
+      50,
+      23,
+      0,
+      31,
+      1,
+      "AUDIO"
+    ],
+    [
+      51,
+      33,
+      0,
+      31,
+      0,
+      "STRING"
+    ],
+    [
+      52,
+      31,
+      0,
+      15,
+      0,
+      "STRING"
+    ],
+    [
+      54,
+      34,
+      0,
+      32,
+      0,
+      "YUE2_MIDI"
+    ],
+    [
+      55,
+      23,
+      0,
+      16,
+      1,
+      "AUDIO"
+    ],
+    [
+      56,
+      16,
+      0,
+      33,
+      0,
+      "STRING"
+    ],
+    [
+      57,
+      19,
+      0,
+      34,
+      0,
+      "YUE2_MIDI"
+    ],
+    [
+      58,
+      31,
+      2,
+      34,
+      1,
+      "YUE2_MIDI"
+    ],
+    [
+      59,
+      16,
+      2,
+      31,
+      2,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.9941438353874166,
+      "offset": [
+        -578.8144843241537,
+        548.7115053727166
+      ]
+    },
+    "anomalous_hashes": {},
+    "frontendVersion": "1.53.10",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
