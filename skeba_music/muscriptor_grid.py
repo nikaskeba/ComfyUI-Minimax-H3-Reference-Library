@@ -54,8 +54,23 @@ def parse_abc_grid(abc):
         score = Score.from_abc(abc)
         tempos = list(score.tempos)
         meters = list(score.time_signatures)
-        if len(tempos) != 1 or len(meters) != 1:
-            raise ValueError("ABC must have one constant tempo and meter for grid alignment.")
+        if not tempos or not meters:
+            raise ValueError("ABC must decode to a tempo and meter for grid alignment.")
+        # ABC files can repeat an unchanged Q: or M: later in the score. Those
+        # produce extra events, but do not change the constant MIDI grid.
+        if any(not math.isclose(float(event.qpm), float(tempos[0].qpm), rel_tol=1e-5)
+               for event in tempos[1:]):
+            raise ValueError(
+                "ABC changes tempo within the song. This node exports one constant MIDI tempo; "
+                "use a constant-tempo ABC score for grid alignment."
+            )
+        if any((int(event.numerator), int(event.denominator)) !=
+               (int(meters[0].numerator), int(meters[0].denominator))
+               for event in meters[1:]):
+            raise ValueError(
+                "ABC changes meter within the song. This node exports one constant MIDI meter; "
+                "use a constant-meter ABC score for grid alignment."
+            )
         qpm = float(tempos[0].qpm)
         numerator = int(meters[0].numerator)
         denominator = int(meters[0].denominator)

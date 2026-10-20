@@ -76,7 +76,7 @@ function selectedGroups(selectedRecords) {
         ]);
 }
 
-export function renderReferenceGuide(records, elements, onRemove, showDetails = true) {
+export function renderReferenceGuide(records, elements, onRemove, showDetails = true, showVoiceTags = true) {
     const groups = selectedGroups(records);
     const hasSelection = groups.length > 0;
     elements["selection-empty"].hidden = hasSelection;
@@ -93,14 +93,14 @@ export function renderReferenceGuide(records, elements, onRemove, showDetails = 
             typeGroup.className = "selection-type-group";
             const typeHeading = document.createElement("h4");
             typeHeading.textContent = referenceTypeHeading(referenceType);
-            typeGroup.append(typeHeading, ...records.map(record => selectionItem(record, onRemove, showDetails)));
+            typeGroup.append(typeHeading, ...records.map(record => selectionItem(record, onRemove, showDetails, showVoiceTags)));
             return typeGroup;
         }));
         return group;
     }));
 }
 
-function selectionItem(record, onRemove, showDetails) {
+function selectionItem(record, onRemove, showDetails, showVoiceTags) {
     const item = document.createElement("div");
     item.className = "selection-item";
     if (onRemove) {
@@ -115,7 +115,7 @@ function selectionItem(record, onRemove, showDetails) {
     }
     const tag = document.createElement("code");
     tag.textContent = `{${record.tag}}`;
-    if (!record.is_refmod || record.has_visual) item.append(tag);
+    item.append(tag);
     if (showDetails) {
         for (const [index, image] of (record.additional_images || []).entries()) {
             if (image.description) item.append(descriptionLine(`Additional image ${index + 1}`, image.description));
@@ -126,7 +126,7 @@ function selectionItem(record, onRemove, showDetails) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
         voiceTag.textContent = `Voice: \u00a7${record.tag}\u00a7`;
-        item.append(voiceTag);
+        if (showVoiceTags) item.append(voiceTag);
         if (showDetails) {
             item.append(descriptionLine("Portrayal", portrayalText(record)));
             if (record.has_image) item.append(descriptionLine("Image", "Attached"));
@@ -137,7 +137,7 @@ function selectionItem(record, onRemove, showDetails) {
         const voiceTag = document.createElement("code");
         voiceTag.className = "voice-tag";
         voiceTag.textContent = `Voice: §${record.tag}§`;
-        item.append(voiceTag);
+        if (showVoiceTags) item.append(voiceTag);
     }
     if (showDetails) {
         if (record.image_description) item.append(descriptionLine("Image", record.image_description));
@@ -155,15 +155,15 @@ function descriptionLine(label, description) {
     return line;
 }
 
-export function referenceGuideText(records, showDetails = true) {
+export function referenceGuideText(records, showDetails = true, showVoiceTags = true) {
     return selectedGroups(records).map(([category, typeGroups]) => {
         const lines = [categoryHeading(category).toUpperCase()];
         for (const [referenceType, records] of typeGroups) {
             lines.push("", referenceTypeHeading(referenceType).toUpperCase());
             for (const record of records) {
-                if (!record.is_refmod || record.has_visual) lines.push(`{${record.tag}}`);
+                lines.push(`{${record.tag}}`);
                 if (record.built_in) {
-                    lines.push(`Voice tag: \u00a7${record.tag}\u00a7`);
+                    if (showVoiceTags) lines.push(`Voice tag: \u00a7${record.tag}\u00a7`);
                     if (showDetails) {
                         lines.push(`Portrayal: ${portrayalText(record)}`);
                         if (record.has_image) lines.push("Image: Attached");
@@ -171,7 +171,7 @@ export function referenceGuideText(records, showDetails = true) {
                     lines.push("");
                     continue;
                 }
-                if (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description) lines.push(`Voice tag: §${record.tag}§`);
+                if (showVoiceTags && (record.has_audio || record.voice_source === "refmod" || record.has_video_audio || record.audio_description)) lines.push(`Voice tag: §${record.tag}§`);
                 if (showDetails) {
                     if (record.image_description) lines.push(`Image: ${record.image_description}`);
                     for (const [index, image] of (record.additional_images || []).entries()) {

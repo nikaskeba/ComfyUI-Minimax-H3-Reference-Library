@@ -26,6 +26,29 @@ def character(image=None, audio=None, **values):
 
 
 class CompilerTests(unittest.TestCase):
+    def test_audio_only_music_has_no_visual_subject_or_voice_binding(self):
+        records = {"Boards of Canada_rm": dict(reference_type="music", name="Boards of Canada_rm",
+                                                 audio_file="refmod:music.safetensors",
+                                                 audio_description="Warm analog electronic music.")}
+        for tag, expected in (("{Boards of Canada_rm}", "full_reference"),
+                              ("{Boards of Canada_rm: partially}", "partial_reference"),
+                              ("{Boards of Canada_rm: weak}", "weak_reference")):
+            with self.subTest(tag=tag):
+                result = compiler.compile_prompt(prompt(tag, music=f"Use {tag}."), records)
+                self.assertEqual(result.audios, ["Boards of Canada_rm"])
+                self.assertNotIn("<Subject", result.prompt)
+                self.assertNotIn("voice-timbre", result.prompt)
+                self.assertIn(f"<Audio 1>: {expected}", result.prompt)
+                self.assertEqual(result.debug["resources"]["saved:Boards of Canada_rm"]["music_strength"],
+                                 "partially" if "partially" in tag else "weak" if "weak" in tag else "fully")
+
+    def test_music_strength_rejects_nonmusic_and_conflicts(self):
+        with self.assertRaisesRegex(ValueError, "INVALID_MUSIC_STRENGTH"):
+            compiler.compile_prompt(prompt("{hero: weak}"), {"hero": character("face.png")})
+        records = {"score": dict(reference_type="music", audio_file="score.wav")}
+        with self.assertRaisesRegex(ValueError, "CONFLICTING_MUSIC_STRENGTH"):
+            compiler.compile_prompt(prompt("{score: weak}", music="{score: partially}"), records)
+
     def test_clothing_uses_numbered_images_as_one_visual_subject(self):
         records = {"blue_suit": dict(reference_type="clothing", name="Blue suit", image_file="front.png",
                                       image_description="A tailored navy jacket and trousers.",

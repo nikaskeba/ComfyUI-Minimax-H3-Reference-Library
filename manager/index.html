@@ -68,7 +68,7 @@
                 <article class="guide-card"><h3>Reference Library</h3><p>Manage your own characters, locations, objects, clothing, music, and video references. A saved item can hold images with individual descriptions, video, audio, a voice description, and private notes. Select an item to include its tag in Reference Creator.</p><p><strong>Images and audio are optional.</strong> A character can be visual only, voice only, or both. A voice attachment is used by the deterministic compiler only when that character speaks in the prompt.</p><p><code>{news_anchor}</code> is an example of a saved tag. Use the exact tag shown on the card.</p></article>
                 <article class="guide-card"><h3>Built In Characters</h3><p>Browse the built-in character catalog, search by character, actor, or show, and select the characters you need. Built-in tags carry a <code>_BC</code> suffix to avoid collisions with your own references.</p><p>Where available, add an image or voice attachment and edit its voice description. A built-in character can also belong to an optional collection.</p></article>
                 <article class="guide-card"><h3>RefMods</h3><p>RefMods are saved <code>.safetensors</code> references. They may contain appearance, voice, or both. Browse, import, select, export, create, and edit them on the <a href="/h3-refmods">RefMods page</a>. Selected RefMods join the same Reference Creator list as other references.</p><p>For creation or editing, add pictures, video sections, or audio, then choose <strong>Full reference</strong> or <strong>Compressed + refinement</strong>. Encoding uses the video and audio VAEs connected to <strong>SKEBA RefMod Studio Create / Edit</strong> in the open workflow. Saving does not automatically insert the RefMod into a prompt.</p><p>Use the exact RefMod tag shown in the library, for example <code>{celestial_rm}</code>.</p></article>
-                <article class="guide-card"><h3>Reference Creator</h3><p>This tab gathers your selected items from Reference Library, Built In Characters, and RefMods into one copyable guide. You can remove one selection here or clear them all. <strong>Hide details</strong> produces a shorter guide when the full descriptions would distract your prompt-writing tool.</p><p>The guide helps you write prompts; it does not run generation or change saved assets. Copy it, then write each clip’s <code>subject_definitions:</code> and shot text with the needed tags.</p></article>
+                <article class="guide-card"><h3>Reference Creator</h3><p>This tab gathers your selected items from Reference Library, Built In Characters, and RefMods into one copyable guide. You can remove one selection here or clear them all. <strong>Hide details</strong> removes descriptions; <strong>Hide voice tags</strong> removes the optional voice-tag hints. Every item still shows its main <code>{tag}</code>, including audio-only music RefMods.</p><p>The guide helps you write prompts; it does not run generation or change saved assets. Copy it, then write each clip’s <code>subject_definitions:</code> and shot text with the needed tags.</p></article>
             </div>
             <div class="guide-callout guide-note"><strong>Prompt rule</strong><span> Each <code>|</code>-separated prompt is compiled independently. Repeat every needed tag or temporary definition in that prompt’s <code>subject_definitions:</code>. A visual character does not automatically contribute its voice; include a clear speaking event if you want its attached voice considered.</span></div>
         </section>
@@ -80,6 +80,7 @@
                 </div>
                 <div class="creator-actions">
                     <label class="creator-details-toggle"><input id="hide-guide-details" type="checkbox"> Hide details</label>
+                    <label class="creator-details-toggle"><input id="hide-guide-voice-tags" type="checkbox"> Hide voice tags</label>
                     <button id="clear-selection" class="secondary" type="button" disabled>Clear selection</button>
                     <button id="copy-selection" class="primary" type="button" disabled>Copy guide</button>
                 </div>
@@ -222,7 +223,7 @@
     </dialog>
 
     <div id="toast" role="status" aria-live="polite"></div>
-    <script type="module" src="/h3-references/static/manager.js?v=28"></script>
+    <script type="module" src="/h3-references/static/manager.js?v=29"></script>
     <script type="module" src="/h3-built-in-references/static/built-ins.js?v=25"></script>
 </body>
 </html>

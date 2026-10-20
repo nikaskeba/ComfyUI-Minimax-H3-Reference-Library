@@ -97,6 +97,17 @@ class GridTests(unittest.TestCase):
             self.assertEqual((midi.tracks[0][1].numerator, midi.tracks[0][1].denominator), (top, bottom))
             self.assertTrue(all(note["start_tick"] % 120 == note["end_tick"] % 120 == 0 for note in notes))
 
+    def test_repeated_unchanged_abc_tempo_and_meter(self):
+        score = abc(120, bars="CDEF GABc|\nQ:1/4=120\nM:4/4\nCDEF GABc|")
+        qpm, top, bottom, _ = grid.parse_abc_grid(score)
+        self.assertEqual((qpm, top, bottom), (120, 4, 4))
+
+    def test_actual_abc_tempo_or_meter_changes_remain_unsupported(self):
+        with self.assertRaisesRegex(ValueError, "changes tempo"):
+            grid.parse_abc_grid(abc(120, bars="CDEF GABc|\nQ:1/4=140\nCDEF GABc|"))
+        with self.assertRaisesRegex(ValueError, "changes meter"):
+            grid.parse_abc_grid(abc(120, bars="CDEF GABc|\nM:3/4\nCDEF GA|"))
+
     def test_short_sustain_retrigger_and_drum_tracks(self):
         events = pair(1, 0.01, 0.02) + pair(2, 1.0, 3.0) + pair(3, 2.0, 2.4)
         events += pair(4, 1.04, 1.06, 38, "drums")

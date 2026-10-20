@@ -165,7 +165,7 @@ class SkebaH3VideoToPrompt(io.ComfyNode):
             inputs=[
                 io.Video.Input("video"),
                 io.Custom("VLM_MODEL").Input("vlm"),
-                io.Combo.Input("mode", options=["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA", "LTX"],
+                io.Combo.Input("mode", options=["T2VA", "I2VA", "FL2VA", "L2VA", "Ref2VA", "LTX", "SKEBA Tagged"],
                                default="T2VA"),
                 io.Float.Input("duration", default=0.0, min=0.0, max=20.0, step=1.0, optional=True),
                 io.Float.Input("max_seconds", default=0.0, min=0.0, max=600.0, step=1.0,
@@ -187,6 +187,13 @@ class SkebaH3VideoToPrompt(io.ComfyNode):
                 io.Int.Input("max_new_tokens", default=8192, min=256, max=16384,
                              step=256, advanced=True),
                 io.Boolean.Input("unload_vlm", default=False, advanced=True),
+                io.String.Input("analysis_prompt", default=pipeline.ANALYSIS_PROMPT,
+                                multiline=True, optional=True, advanced=True,
+                                tooltip="Instructions for the first video-analysis pass. The original prompt is shown by default; the H3 rewrite guide remains unchanged."),
+                io.String.Input("srt_subtitles", optional=True, force_input=True,
+                                tooltip="Connect the SRT output of Whisper + Nemotron Transcribe. Its timed, speaker-labeled dialogue takes precedence over this node's ASR."),
+                io.String.Input("location_reference", default="", optional=True,
+                                tooltip="Optional existing location tag, such as {10_forward_bar}, for SKEBA Tagged output."),
             ],
             outputs=[io.String.Output(display_name="MiniMax H3 Prompt")],
         )
@@ -196,7 +203,9 @@ class SkebaH3VideoToPrompt(io.ComfyNode):
                 keep_fade=False, frame_fps=1.0, max_frames=24, frame_max_side=512,
                 use_asr=False, asr_model="small", use_audio_tags=False,
                 tags_threshold=pipeline.DEFAULT_TAG_THRESHOLD, tags_max=pipeline.DEFAULT_TAG_MAX,
-                max_new_tokens=8192, unload_vlm=False):
+                max_new_tokens=8192, unload_vlm=False,
+                analysis_prompt=pipeline.ANALYSIS_PROMPT, srt_subtitles=None,
+                location_reference=""):
         if not isinstance(vlm, dict) or vlm.get("kind") != "local" or not hasattr(vlm.get("predictor"), "generate_text"):
             raise ValueError("Connect SKEBA H3 Local VLM Loader to vlm.")
         parent = Path(folder_paths.get_temp_directory()) / "skeba_h3_video_to_prompt"
@@ -213,7 +222,9 @@ class SkebaH3VideoToPrompt(io.ComfyNode):
                 keep_fade=keep_fade, frame_fps=frame_fps, max_frames=max_frames,
                 frame_max_side=frame_max_side, use_asr=use_asr, asr_model=asr_model,
                 use_audio_tags=use_audio_tags, tags_threshold=tags_threshold,
-                tags_max=tags_max, max_new_tokens=max_new_tokens)
+                tags_max=tags_max, max_new_tokens=max_new_tokens,
+                analysis_prompt=analysis_prompt, srt_subtitles=srt_subtitles,
+                location_reference=location_reference)
         finally:
             if unload_vlm:
                 vlm["predictor"].handle.unload()

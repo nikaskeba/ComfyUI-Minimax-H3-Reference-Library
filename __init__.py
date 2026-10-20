@@ -8,6 +8,8 @@ from .compiler_templates import SkebaH3CompilerTemplates
 from .last_rendered_context import SkebaH3LastRenderedContext
 from .workflow_guide import SkebaWorkflowGuide
 from .h3_audio_refine import SkebaH3AudioRefine, SkebaH3AudioInpaintRange, SkebaH3AudioEditMask, SkebaH3VideoEditMask, SkebaH3VideoLatentAnchorBlend, SkebaH3FinishInpaintLatent, SkebaH3AVInpaintRange
+from .h3_tail_refiner import SkebaH3TailClipRefiner
+from .h3_video_latent_resize import SkebaH3VideoLatentResize, SkebaH3AVContextResize, SkebaH3VideoLatentAspectMatch
 from .refmod_studio import SkebaRefModStudio
 from .refmod_create import SkebaCreateH3RefMod
 from .refmod_apply import SkebaH3RefModApply
@@ -71,6 +73,10 @@ NODE_CLASS_MAPPINGS = {
     "SkebaPromptListText": PromptListTextNode,
     "SkebaQuickLauncher": SkebaQuickLauncher,
     "SkebaH3AudioRefine": SkebaH3AudioRefine,
+    "SkebaH3TailClipRefiner": SkebaH3TailClipRefiner,
+    "SkebaH3VideoLatentResize": SkebaH3VideoLatentResize,
+    "SkebaH3AVContextResize": SkebaH3AVContextResize,
+    "SkebaH3VideoLatentAspectMatch": SkebaH3VideoLatentAspectMatch,
     "SkebaH3AudioInpaintRange": SkebaH3AudioInpaintRange,
     "SkebaH3AudioEditMask": SkebaH3AudioEditMask,
     "SkebaH3VideoEditMask": SkebaH3VideoEditMask,
@@ -135,6 +141,10 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaPromptListText": "SKEBA Prompt List Text",
     "SkebaQuickLauncher": "SKEBA Quick Launcher",
     "SkebaH3AudioRefine": "SKEBA H3 Audio Refine (Optional)",
+    "SkebaH3TailClipRefiner": "SKEBA H3 Clip Refiner (Continuation Tail)",
+    "SkebaH3VideoLatentResize": "SKEBA H3 Video Latent Resize",
+    "SkebaH3AVContextResize": "SKEBA H3 AV Context Resize",
+    "SkebaH3VideoLatentAspectMatch": "SKEBA H3 Video Latent Aspect Match",
     "SkebaH3AudioInpaintRange": "SKEBA H3 Audio Inpaint Range (Experimental)",
     "SkebaH3AudioEditMask": "SKEBA H3 Audio Edit Mask (Before Sampling)",
     "SkebaH3VideoEditMask": "SKEBA H3 Video Edit Mask (Before Sampling)",

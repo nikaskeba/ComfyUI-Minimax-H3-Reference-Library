@@ -92,7 +92,7 @@ def merge_transcriptions(sheetsage_midi, muscriptor_midi, alignment="Nearest 16t
         for index, instrument in enumerate(source.instruments, 1):
             name = (instrument.name or f"Part {index}").strip()
             track = mido.MidiTrack()
-            track.append(mido.MetaMessage("track_name", name=f"{label} - {name}", time=0))
+            track.append(mido.MetaMessage("track_name", name=name, time=0))
             channel = 9 if instrument.is_drum else next(melodic_channels)
             if not instrument.is_drum:
                 track.append(mido.Message("program_change", channel=channel, program=instrument.program, time=0))
@@ -116,7 +116,7 @@ def merge_transcriptions(sheetsage_midi, muscriptor_midi, alignment="Nearest 16t
         warning = f" MuScriptor tempo differed; absolute note times were mapped to SheetSage's {bpm:.3f} BPM."
     report = (f"{len(output.tracks) - 1} separate music tracks; SheetSage {counts['SheetSage']} notes; "
               f"MuScriptor {counts['MuScriptor']} notes; {bpm:.3f} BPM, {numerator}/{denominator}; "
-              f"alignment: {alignment}.{warning} Both models remain on separate labeled tracks; this does not correct differing transcription choices.")
+              f"alignment: {alignment}.{warning} Both models remain on separate instrument-named tracks; this does not correct differing transcription choices.")
     return stream.getvalue(), report
 
 
@@ -127,7 +127,7 @@ class SkebaCombineTranscriptionMIDIs(io.ComfyNode):
             node_id="SkebaCombineTranscriptionMIDIs",
             display_name="SKEBA Combine Transcription MIDIs",
             category="Skeba Music",
-            description="Combine SheetSage score MIDI and MuScriptor MIDI as separate labeled tracks on the SheetSage tempo grid.",
+            description="Combine SheetSage score MIDI and MuScriptor MIDI as separate instrument-named tracks on the SheetSage tempo grid.",
             inputs=[
                 io.Custom("YUE2_MIDI").Input("sheetsage_midi"),
                 io.Custom("YUE2_MIDI").Input("muscriptor_midi"),

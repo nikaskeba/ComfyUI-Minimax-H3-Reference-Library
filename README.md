@@ -545,8 +545,18 @@ The five Motion Context nodes are available under
   combiner. An optional boundary luminance matcher can correct a short exposure
   pulse before the pinned head is removed. `match_tail` keeps decoded audio
   duration aligned to picture.
+- **SKEBA H3 Clip Refiner (Continuation Tail)** runs its optional detail
+  resample on only the final Motion Context window, then splices that video
+  tail back into the full AV latent. The Oct 19 workflow uses it before
+  both base and upscale continuation saves, and skips the extra sample on
+  the final prompt. Audio is passed through.
 - **SKEBA H3 Motion Context Save Latent** saves the sampler's combined video and
-  audio latent for a later workflow run.
+  audio latent for a later workflow run. Optional `video_context_length` and
+  `audio_context_length` inputs save only the tail needed by the next Motion
+  Context call. Connect them to the corresponding Motion Context settings;
+  unconnected inputs retain full-latent saves. The Oct 19 example connects
+  both base and upscale saves to its shared context-length setting. If you
+  increase that setting, regenerate the preceding clip to save a longer tail.
 - **SKEBA H3 Motion Context Load Latent** loads that saved latent, including
   indexed loop slots.
 - **SKEBA H3 Seam Exposure Match** fades an exposure correction across the

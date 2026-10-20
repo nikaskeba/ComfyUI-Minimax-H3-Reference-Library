@@ -1,0 +1,963 @@
+{
+  "id": "094bb056-a4bd-4eea-ad2e-d617b61140f1",
+  "revision": 0,
+  "last_node_id": 20,
+  "last_link_id": 20,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "LoadVideo",
+      "pos": [
+        -801.2953591461479,
+        -25.314804502558854
+      ],
+      "size": [
+        320,
+        313.25233644859816
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "slot_index": 0,
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.1",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "LoadVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "Sally vs Chyna   3rd Rock from the Sun.mp4",
+        "image"
+      ],
+      "widgets_values_named": {
+        "file": "Sally vs Chyna   3rd Rock from the Sun.mp4",
+        "upload": "image"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "PreviewAny",
+      "pos": [
+        1149.6526350411807,
+        183.73643229751102
+      ],
+      "size": [
+        460,
+        380
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "source",
+          "type": "*",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.1",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "PreviewAny",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [],
+      "widgets_values_named": {},
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "SkebaH3VideoToPrompt",
+      "pos": [
+        737.1895998954127,
+        152.61032041532314
+      ],
+      "size": [
+        363.13828125,
+        464
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 11
+        },
+        {
+          "name": "vlm",
+          "type": "VLM_MODEL",
+          "link": 7
+        },
+        {
+          "name": "srt_subtitles",
+          "shape": 7,
+          "type": "STRING",
+          "link": 17
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MiniMax H3 Prompt",
+          "type": "STRING",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "b1a6ac68b951f048a08e933707510f52fa53355c",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaH3VideoToPrompt",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "SKEBA Tagged",
+        false,
+        1,
+        24,
+        512,
+        false,
+        "small",
+        false,
+        0.05,
+        12,
+        8192,
+        false,
+        0,
+        0,
+        "You are a video analysis expert. Analyze the supplied video and output structured JSON for accurate multi-shot video reconstruction.\n\nRULES:\n\n- All descriptions in English; preserve original language for dialogue and visible text.\n\n- Detect EVERY camera cut, angle change, reaction shot, and scene transition.\n\n- Create a separate shot for each actual cut. Do not combine multiple shots.\n\n- Continuous camera movements remain within one shot.\n\n- Assign precise absolute timestamps (seconds) to every shot.\n\n- Shots must cover the entire video in playback order without gaps.\n\n- Describe framing, camera angle, subject positions, actions, and environment.\n\n- Include timed actions within shots when significant changes occur.\n\n- Camera motion: type + direction + amplitude + speed; use \"static shot\" if still.\n\n- Maintain consistent subject IDs (C1, C2...) and speaker IDs (S1, S2...).\n\n- Associate dialogue with its shot and timestamp.\n\n- Do not invent dialogue. If audio is unavailable, use readable subtitles or [unclear].\n\n- Do not invent cuts, actions, or details.\n\n- IMPORTANT: Analyze the FULL video. Output ALL detected shots, not just one.\n\n- Output valid JSON only, no Markdown.\n\nJSON SCHEMA:\n\n{\n\n  \"style\": \"visual style, lighting, color, texture\",\n\n  \"duration\": 15.0,\n\n  \"subjects\": [\n\n    {\n\n      \"id\": \"C1\",\n\n      \"description\": \"appearance and clothing\"\n\n    }\n\n  ],\n\n  \"shots\": [\n\n    {\n\n      \"index\": 1,\n\n      \"start\": 0.0,\n\n      \"end\": 3.5,\n\n      \"transition\": \"video start\",\n\n      \"composition\": \"shot size, camera angle, framing, positions\",\n\n      \"subjects\": [\"C1\"],\n\n      \"actions\": \"chronological physical actions\",\n\n      \"timed_events\": [\n\n        {\"time\": 0.0, \"action\": \"initial action\"},\n\n        {\"time\": 1.5, \"action\": \"next action\"}\n\n      ],\n\n      \"camera_motion\": \"static shot\",\n\n      \"environment\": \"location, lighting, background\"\n\n    },\n\n    {\n\n      \"index\": 2,\n\n      \"start\": 3.5,\n\n      \"end\": 7.0,\n\n      \"transition\": \"hard cut\",\n\n      \"composition\": \"new framing and camera angle\",\n\n      \"subjects\": [\"C1\"],\n\n      \"actions\": \"chronological physical actions\",\n\n      \"timed_events\": [\n\n        {\"time\": 3.5, \"action\": \"initial action\"},\n\n        {\"time\": 5.0, \"action\": \"next action\"}\n\n      ],\n\n      \"camera_motion\": \"slow push-in, small amplitude\",\n\n      \"environment\": \"location, lighting, background\"\n\n    }\n\n  ],\n\n  \"speakers\": [\n\n    {\n\n      \"id\": \"S1\",\n\n      \"subject_id\": \"C1\",\n\n      \"description\": \"age, gender, pitch, timbre, rate, accent\"\n\n    }\n\n  ],\n\n  \"dialogue\": [\n\n    {\n\n      \"time\": 2.0,\n\n      \"shot\": 1,\n\n      \"speaker\": \"S1\",\n\n      \"text\": \"[unclear]\",\n\n      \"language\": \"English\",\n\n      \"confidence\": \"low\"\n\n    }\n\n  ],\n\n  \"on_screen_text\": [],\n\n  \"sounds\": \"ambient, physical and non-verbal sounds\"\n\n}\n\nThe schema is illustrative. Generate one shot object per actual shot, regardless of count. The first shot starts at 0.0 and the final shot ends at the video duration. Never collapse multiple cuts into a single shot."
+      ],
+      "widgets_values_named": {
+        "mode": "SKEBA Tagged",
+        "keep_fade": false,
+        "frame_fps": 1,
+        "max_frames": 24,
+        "frame_max_side": 512,
+        "use_asr": false,
+        "asr_model": "small",
+        "use_audio_tags": false,
+        "tags_threshold": 0.05,
+        "tags_max": 12,
+        "max_new_tokens": 8192,
+        "unload_vlm": false,
+        "duration": 0,
+        "max_seconds": 0,
+        "analysis_prompt": "You are a video analysis expert. Analyze the supplied video and output structured JSON for accurate multi-shot video reconstruction.\n\nRULES:\n\n- All descriptions in English; preserve original language for dialogue and visible text.\n\n- Detect EVERY camera cut, angle change, reaction shot, and scene transition.\n\n- Create a separate shot for each actual cut. Do not combine multiple shots.\n\n- Continuous camera movements remain within one shot.\n\n- Assign precise absolute timestamps (seconds) to every shot.\n\n- Shots must cover the entire video in playback order without gaps.\n\n- Describe framing, camera angle, subject positions, actions, and environment.\n\n- Include timed actions within shots when significant changes occur.\n\n- Camera motion: type + direction + amplitude + speed; use \"static shot\" if still.\n\n- Maintain consistent subject IDs (C1, C2...) and speaker IDs (S1, S2...).\n\n- Associate dialogue with its shot and timestamp.\n\n- Do not invent dialogue. If audio is unavailable, use readable subtitles or [unclear].\n\n- Do not invent cuts, actions, or details.\n\n- IMPORTANT: Analyze the FULL video. Output ALL detected shots, not just one.\n\n- Output valid JSON only, no Markdown.\n\nJSON SCHEMA:\n\n{\n\n  \"style\": \"visual style, lighting, color, texture\",\n\n  \"duration\": 15.0,\n\n  \"subjects\": [\n\n    {\n\n      \"id\": \"C1\",\n\n      \"description\": \"appearance and clothing\"\n\n    }\n\n  ],\n\n  \"shots\": [\n\n    {\n\n      \"index\": 1,\n\n      \"start\": 0.0,\n\n      \"end\": 3.5,\n\n      \"transition\": \"video start\",\n\n      \"composition\": \"shot size, camera angle, framing, positions\",\n\n      \"subjects\": [\"C1\"],\n\n      \"actions\": \"chronological physical actions\",\n\n      \"timed_events\": [\n\n        {\"time\": 0.0, \"action\": \"initial action\"},\n\n        {\"time\": 1.5, \"action\": \"next action\"}\n\n      ],\n\n      \"camera_motion\": \"static shot\",\n\n      \"environment\": \"location, lighting, background\"\n\n    },\n\n    {\n\n      \"index\": 2,\n\n      \"start\": 3.5,\n\n      \"end\": 7.0,\n\n      \"transition\": \"hard cut\",\n\n      \"composition\": \"new framing and camera angle\",\n\n      \"subjects\": [\"C1\"],\n\n      \"actions\": \"chronological physical actions\",\n\n      \"timed_events\": [\n\n        {\"time\": 3.5, \"action\": \"initial action\"},\n\n        {\"time\": 5.0, \"action\": \"next action\"}\n\n      ],\n\n      \"camera_motion\": \"slow push-in, small amplitude\",\n\n      \"environment\": \"location, lighting, background\"\n\n    }\n\n  ],\n\n  \"speakers\": [\n\n    {\n\n      \"id\": \"S1\",\n\n      \"subject_id\": \"C1\",\n\n      \"description\": \"age, gender, pitch, timbre, rate, accent\"\n\n    }\n\n  ],\n\n  \"dialogue\": [\n\n    {\n\n      \"time\": 2.0,\n\n      \"shot\": 1,\n\n      \"speaker\": \"S1\",\n\n      \"text\": \"[unclear]\",\n\n      \"language\": \"English\",\n\n      \"confidence\": \"low\"\n\n    }\n\n  ],\n\n  \"on_screen_text\": [],\n\n  \"sounds\": \"ambient, physical and non-verbal sounds\"\n\n}\n\nThe schema is illustrative. Generate one shot object per actual shot, regardless of count. The first shot starts at 0.0 and the final shot ends at the video duration. Never collapse multiple cuts into a single shot."
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "SkebaH3LocalVLMLoader",
+      "pos": [
+        316.61494031184856,
+        333.20807919233494
+      ],
+      "size": [
+        292.5572265625,
+        130
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "vlm",
+          "type": "VLM_MODEL",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "b1a6ac68b951f048a08e933707510f52fa53355c",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SkebaH3LocalVLMLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Qwen-VL/Qwen3-VL-4B-Instruct",
+        "ComfyUI managed (BF16)",
+        "Auto (SDPA)",
+        ""
+      ],
+      "widgets_values_named": {
+        "model_folder": "Qwen-VL/Qwen3-VL-4B-Instruct",
+        "memory_mode": "ComfyUI managed (BF16)",
+        "attention_mode": "Auto (SDPA)",
+        "custom_folder": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "Video Slice",
+      "pos": [
+        -266.2814816561577,
+        108.93390014608886
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            11,
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.1",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "Video Slice",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        0,
+        15,
+        true
+      ],
+      "widgets_values_named": {
+        "start_time": 0,
+        "duration": 15,
+        "strict_duration": true
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "MelBandRoFormerModelLoader",
+      "pos": [
+        -610.6786814009071,
+        510.7598472439972
+      ],
+      "size": [
+        478.6060537550768,
+        70.14246142871252
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "model",
+          "type": "MELROFORMERMODEL",
+          "links": [
+            14
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-MelBandRoFormer",
+        "ver": "b40e263224778ec417114d91d8b3b39934e30de5",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "MelBandRoFormerModelLoader",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.2",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "MelBandRoformer\\MelBandRoformer_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "model_name": "MelBandRoformer\\MelBandRoformer_fp16.safetensors"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": "TrimAudioDuration",
+      "pos": [
+        -340.18466797824203,
+        799.4968885109834
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            15
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.41.1",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "TrimAudioDuration",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        0,
+        15
+      ],
+      "widgets_values_named": {
+        "start_index": 0,
+        "duration": 15
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "MelBandRoFormerSampler",
+      "pos": [
+        -99.10575233982946,
+        635.3314194041586
+      ],
+      "size": [
+        234.1038076399327,
+        46
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MELROFORMERMODEL",
+          "link": 14
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 15
+        }
+      ],
+      "outputs": [
+        {
+          "name": "vocals",
+          "type": "AUDIO",
+          "links": [
+            16
+          ]
+        },
+        {
+          "name": "instruments",
+          "type": "AUDIO",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "ComfyUI-MelBandRoFormer",
+        "ver": "b40e263224778ec417114d91d8b3b39934e30de5",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "MelBandRoFormerSampler",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.5.2",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 18,
+      "type": "WhisperNemotronTranscribe",
+      "pos": [
+        247.62204923560347,
+        726.1272796934101
+      ],
+      "size": [
+        350,
+        230
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "transcript",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 0,
+          "links": []
+        },
+        {
+          "name": "json",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 1,
+          "links": []
+        },
+        {
+          "name": "srt",
+          "shape": 6,
+          "type": "STRING",
+          "slot_index": 2,
+          "links": [
+            17,
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "WhisperNemotronTranscribe",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "large-v3-turbo",
+        "auto",
+        "auto",
+        false
+      ],
+      "widgets_values_named": {
+        "whisper_model": "large-v3-turbo",
+        "language": "auto",
+        "device": "auto",
+        "download_missing_models": false
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 19,
+      "type": "easy getAudioFromVideo",
+      "pos": [
+        -436.59266395313625,
+        683.2730960363817
+      ],
+      "size": [
+        184.9244140625,
+        26
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            19
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "easy getAudioFromVideo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": "DisplayText",
+      "pos": [
+        800.8067366406303,
+        667.6269984774289
+      ],
+      "size": [
+        400,
+        300
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "text",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "kikotools",
+        "ver": "1.0.28",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "DisplayText",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "1\n00:00:06,280 --> 00:00:07,440\n[SPEAKER_01] There you are.\n\n2\n00:00:09,110 --> 00:00:10,730\n[SPEAKER_01] Hey Sally, good to see ya.\n\n3\n00:00:11,410 --> 00:00:12,230\n[SPEAKER_01] Not for long.\n",
+        null
+      ],
+      "widgets_values_named": {
+        "text_display": "1\n00:00:06,280 --> 00:00:07,440\n[SPEAKER_01] There you are.\n\n2\n00:00:09,110 --> 00:00:10,730\n[SPEAKER_01] Hey Sally, good to see ya.\n\n3\n00:00:11,410 --> 00:00:12,230\n[SPEAKER_01] Not for long.\n",
+        "copy_text": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      7,
+      10,
+      0,
+      9,
+      1,
+      "VLM_MODEL"
+    ],
+    [
+      9,
+      9,
+      0,
+      4,
+      0,
+      "STRING"
+    ],
+    [
+      10,
+      1,
+      0,
+      11,
+      0,
+      "VIDEO"
+    ],
+    [
+      11,
+      11,
+      0,
+      9,
+      0,
+      "VIDEO"
+    ],
+    [
+      14,
+      14,
+      0,
+      17,
+      0,
+      "MELROFORMERMODEL"
+    ],
+    [
+      15,
+      16,
+      0,
+      17,
+      1,
+      "AUDIO"
+    ],
+    [
+      16,
+      17,
+      0,
+      18,
+      0,
+      "AUDIO"
+    ],
+    [
+      17,
+      18,
+      2,
+      9,
+      2,
+      "STRING"
+    ],
+    [
+      18,
+      11,
+      0,
+      19,
+      0,
+      "VIDEO"
+    ],
+    [
+      19,
+      19,
+      0,
+      16,
+      0,
+      "AUDIO"
+    ],
+    [
+      20,
+      18,
+      2,
+      20,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "note": "VLM Model Loader (H3) runs the vision model in-process via ComfyUI_VLM_nodes; the model auto-downloads from HuggingFace on first execution. No external services required.",
+    "ue_links": [],
+    "ds": {
+      "scale": 0.7277704002671671,
+      "offset": [
+        114.5249435298341,
+        220.86673804119528
+      ]
+    },
+    "links_added_by_ue": [],
+    "frontendVersion": "1.55.17",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

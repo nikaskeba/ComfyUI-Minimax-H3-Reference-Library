@@ -79,7 +79,7 @@ def selection_fields(values):
 def direct_refmod_records(records, prompt, voice_tags=None):
     """Resolve filename-based _rm tags without changing the saved library."""
     voice_tags = voice_tags if voice_tags is not None else set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt, records)
-    requested = {a or b for a,b in re.findall(r"\{([^{}]+_rm)\}|§([^§]+_rm)§", prompt)} - records.keys()
+    requested = {a or b for a,b in re.findall(r"\{([^{}]+_rm)(?:\s*:\s*(?:fully|partially|weak))?\}|§([^§]+_rm)§", prompt)} - records.keys()
     if not requested:
         return records
     groups = {}
@@ -99,10 +99,12 @@ def direct_refmod_records(records, prompt, voice_tags=None):
         bundled = [row for row in rows if row["member"] is not None]
         if bundled:
             rows = bundled
-        record = {"id":"refmod:"+matches[0], "tag":tag, "reference_type":"character"}
+        reference_type = rows[0].get("reference_type") or "character"
+        record = {"id":"refmod:"+matches[0], "tag":tag,
+                  "reference_type":reference_type}
         for channel,kinds in (("appearance",("image","video")),("voice",("audio",))):
             choices = [row for row in rows if row["kind"] in kinds]
-            if channel == "voice" and tag not in voice_tags:
+            if channel == "voice" and tag not in voice_tags and reference_type != "music":
                 continue
             if len(choices)>1:
                 raise ValueError(f"AMBIGUOUS_REFMOD: {tag} has multiple {channel} members; select one through a library entry.")
@@ -123,16 +125,17 @@ def project_records(records, prompt):
     """Expose selected RefMod modalities to the existing tag/ownership resolver."""
     voice_tags = set(re.findall(r"§([^§]+)§", prompt)) | inferred_saved_voice_tags(prompt, records)
     records = direct_refmod_records(records, prompt, voice_tags)
+    plain_prompt = re.sub(r"\{([^{}]+?)\s*:\s*(?:fully|partially|weak)\}", r"{\1}", prompt)
     result = dict(records)
     for tag, original in records.items():
-        if "{" + tag + "}" not in prompt and "§" + tag + "§" not in prompt:
+        if "{" + tag + "}" not in plain_prompt and "§" + tag + "§" not in prompt:
             continue
         record = dict(original)
         for channel in ("appearance", "voice"):
             if record.get(channel + "_source", "media") != "refmod":
                 continue
             # Silent characters need no voice file access or validation.
-            if channel == "voice" and tag not in voice_tags:
+            if channel == "voice" and tag not in voice_tags and record.get("reference_type") != "music":
                 record["audio_file"] = None
                 continue
             selection = record.get(channel + "_refmod")

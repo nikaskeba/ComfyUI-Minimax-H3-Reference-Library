@@ -445,6 +445,53 @@ def format_transcript(result: dict) -> str:
     return "\n".join(lines)
 
 
+_SRT_TIME = re.compile(r"(\d{2}):(\d{2}):(\d{2})[,.](\d{3})")
+_SRT_CUE = re.compile(r"^\s*(\S+)\s*-->\s*(\S+)")
+_SRT_SPEAKER = re.compile(r"^\[([^\]]+)\]\s*(.*)$", re.DOTALL)
+
+
+def format_srt_transcript(srt: str, start: float = 0.0,
+                          length: float | None = None) -> str:
+    """Normalize SRT cues to the analysis window, retaining speaker labels."""
+    if not srt or not srt.strip():
+        return ""
+
+    def seconds(value: str) -> float:
+        match = _SRT_TIME.fullmatch(value.strip())
+        if not match:
+            raise ValueError(f"Invalid SRT timestamp: {value!r}")
+        hours, minutes, whole, millis = map(int, match.groups())
+        return hours * 3600 + minutes * 60 + whole + millis / 1000
+
+    lines = []
+    blocks = re.split(r"\n\s*\n", srt.lstrip("\ufeff").replace("\r\n", "\n").strip())
+    for index, block in enumerate(blocks, 1):
+        parts = [line.strip() for line in block.splitlines() if line.strip()]
+        if parts and parts[0].isdigit():
+            parts.pop(0)
+        cue = _SRT_CUE.match(parts[0]) if parts else None
+        if not cue or len(parts) < 2:
+            raise ValueError(f"SRT cue {index} needs a timestamp range and dialogue text.")
+        cue_start, cue_end = seconds(cue.group(1)), seconds(cue.group(2))
+        if cue_end <= cue_start:
+            raise ValueError(f"SRT cue {index} ends before it starts.")
+        if cue_end <= start or (length is not None and cue_start >= start + length):
+            continue
+        text = " ".join(parts[1:]).strip()
+        speaker = _SRT_SPEAKER.match(text)
+        label = f"{speaker.group(1)}: " if speaker else ""
+        if speaker:
+            text = speaker.group(2).strip()
+        if not text:
+            continue
+        offset_start = max(0.0, cue_start - start)
+        offset_end = cue_end - start
+        if length is not None:
+            offset_end = min(offset_end, length)
+        lines.append(f"[{offset_start:.3f}s-{offset_end:.3f}s] {label}{text}")
+    return "\n".join(lines)
+
+
 # ---------------------------------------------------------------------------
 # Audio tags (PANNs / AudioSet)
 # ---------------------------------------------------------------------------
@@ -523,14 +570,17 @@ def extract_frames(video: Path, out_dir: Path, start: float, length: float,
 
 
 def run_analysis(predictor, frames: list, transcript: str | None,
-                 tags: list | None, frame_fps: float, max_new_tokens: int) -> dict:
+                 tags: list | None, frame_fps: float, max_new_tokens: int,
+                 analysis_prompt: str = ANALYSIS_PROMPT) -> dict:
     """Pass 1: all sampled frames in one call through the model's video pathway."""
-    text = ANALYSIS_PROMPT
+    text = analysis_prompt
     if transcript:
         text += (
             "\n\n[Transcript (ground truth for dialogue/lyrics)]\n"
             "A timestamped transcript is provided (speech or sung lyrics).\n"
             "Match dialogue text/language/time to this transcript and set confidence to \"high\".\n"
+            "Speaker labels, when present, identify distinct audio voices. Keep each label stable; "
+            "associate it with an on-screen person only when the frames support that match.\n"
             "Treat sung lyrics as dialogue too.\n"
             + transcript
         )
@@ -733,14 +783,18 @@ def build_rewrite_prompt(mode: str, duration: float, analysis: dict,
                 "\n## Ground-truth transcript (with timestamps)\n"
                 "Use this transcript for the spoken words and sung lyrics. Put each line in double quotation marks "
                 "inside the prompt, preserving its exact words and original language, and place each line at its "
-                "timestamp position in the timeline. For Japanese, write each line in hiragana only (no kanji, no katakana):\n"
+                "timestamp position in the timeline. Keep speaker identities distinct when labels are present; "
+                "do not assign a voice to a visible person without evidence. For Japanese, write each line in hiragana only "
+                "(no kanji, no katakana):\n"
                 + transcript + "\n"
             )
         else:
             extra += (
                 "\n## Ground-truth transcript (with timestamps)\n"
                 "Use this transcript for the spoken words and sung lyrics inside <d>. "
-                "Preserve its exact words and language, and place each line at its timestamp position in the timeline:\n"
+                "Preserve its exact words and language, place each line at its timestamp position in the timeline, "
+                "and keep speaker identities distinct when labels are present. Match a labeled voice to a visible "
+                "person only when the frames support that match:\n"
                 + transcript + "\n"
             )
     if tags:
@@ -1173,6 +1227,165 @@ def resolve_duration(mode: str, requested: float | None, effective_len: float) -
     return float(dur)
 
 
+_ANALYSIS_SHOT_START = re.compile(r"^\s*\[?(\d+(?:\.\d+)?)\s*s?", re.IGNORECASE)
+_TIMED_TRANSCRIPT_LINE = re.compile(
+    r"^\[(\d+(?:\.\d+)?)s-(\d+(?:\.\d+)?)s\]\s+([^:]+):\s*(.+)$")
+
+
+def build_skeba_tagged_prompt(analysis: dict, transcript: str | None,
+                              duration: float, location_reference: str = "") -> str:
+    """Build a five-section prompt from visual subjects, shots, and SRT cues."""
+    location_reference = location_reference.strip()
+    if location_reference and not re.fullmatch(r"\{[^{}|\n]+\}", location_reference):
+        raise ValueError("location_reference must be one saved tag such as {10_forward_bar}.")
+
+    cues = []
+    for line in (transcript or "").splitlines():
+        match = _TIMED_TRANSCRIPT_LINE.match(line.strip())
+        if match:
+            cue_start, cue_end = float(match.group(1)), float(match.group(2))
+            if cue_start < duration:
+                cues.append((cue_start, cue_end, match.group(3).strip(), match.group(4).strip()))
+
+    location_tag = location_reference or "<location:source_scene>"
+    style = str(analysis.get("style") or "The visual style shown in the source video").strip().rstrip(".")
+    raw_shots = analysis.get("shots") or []
+    visual_subjects = [subject for subject in analysis.get("subjects", [])
+                       if isinstance(subject, dict) and subject.get("id")]
+    def subject_order(subject_id: str):
+        match = re.fullmatch(r"C(\d+)", subject_id, re.IGNORECASE)
+        return (0, int(match.group(1))) if match else (1, subject_id)
+    visual_subjects.sort(key=lambda item: subject_order(str(item["id"])))
+    subject_labels = {str(subject["id"]): f"<Subject {i}>"
+                      for i, subject in enumerate(visual_subjects, 1)}
+    discovered_ids = set()
+    for shot in raw_shots:
+        # Some VLM analyses omit the global subjects list. Still replace IDs
+        # found in shot prose instead of leaking C1/C2 into the final prompt.
+        for key in ("composition", "subjects", "actions", "environment"):
+            for subject_id in re.findall(r"\bC\d+\b", str(shot.get(key, ""))):
+                discovered_ids.add(subject_id)
+    for subject_id in sorted(discovered_ids, key=subject_order):
+        subject_labels.setdefault(subject_id, f"<Subject {len(subject_labels) + 1}>")
+
+    def labeled(value) -> str:
+        text = str(value or "")
+        for subject_id, label in subject_labels.items():
+            text = re.sub(rf"\b{re.escape(subject_id)}\b", lambda _: label, text)
+        return text
+
+    # The analysis must explicitly link its speaker and visual subject, and
+    # contain a dialogue event near the SRT cue, before ownership is assigned.
+    speaker_subject = {}
+    for cue_start, _, srt_speaker, _ in cues:
+        srt_id = re.search(r"(\d+)$", srt_speaker)
+        if not srt_id:
+            continue
+        for speaker in analysis.get("speakers", []):
+            if not isinstance(speaker, dict):
+                continue
+            visual_id = str(speaker.get("subject_id") or "")
+            analysis_id = re.search(r"(\d+)$", str(speaker.get("id") or ""))
+            if not analysis_id or int(analysis_id.group(1)) != int(srt_id.group(1)):
+                continue
+            if visual_id not in subject_labels:
+                continue
+            for line in analysis.get("dialogue", []):
+                if not isinstance(line, dict) or str(line.get("speaker")) != str(speaker.get("id")):
+                    continue
+                time_match = re.search(r"\d+(?:\.\d+)?", str(line.get("time", "")))
+                if time_match and abs(float(time_match.group()) - cue_start) <= 0.75:
+                    speaker_subject[srt_speaker] = subject_labels[visual_id]
+                    break
+
+    speaker_tags = {}
+    for _, _, speaker, _ in cues:
+        if speaker not in speaker_tags:
+            key = re.sub(r"[^a-z0-9_]+", "_", speaker.lower()).strip("_")
+            speaker_tags[speaker] = speaker_subject.get(speaker) or f"<character:{key or 'speaker'}>"
+
+    definitions = [location_reference] if location_reference else []
+    for subject_id, label in subject_labels.items():
+        subject = next((item for item in visual_subjects if str(item["id"]) == subject_id), None)
+        description = str((subject or {}).get("description") or "Visible subject in the source video").strip()
+        definitions.append(f"{label} - {labeled(description)}")
+    for speaker, tag in speaker_tags.items():
+        if tag.startswith("<character:"):
+            definitions.append(
+                f"{tag[:-1]} = SRT voice {speaker}; visual subject not yet matched.>")
+    shot_starts = []
+    for shot in raw_shots:
+        try:
+            start = float(shot["start"]) if "start" in shot else None
+        except (TypeError, ValueError):
+            start = None
+        if start is None:
+            match = _ANALYSIS_SHOT_START.match(str(shot.get("time_range", "")))
+            start = float(match.group(1)) if match else None
+        if start is not None and 0 <= start < duration:
+            shot_starts.append((start, shot))
+    shot_starts.sort(key=lambda item: item[0])
+    if not shot_starts or shot_starts[0][0] > 0:
+        shot_starts.insert(0, (0.0, {}))
+
+    # Every SRT line gets its own speaking marker, even when it starts shortly
+    # after a visual cut. Shot 1 at 0s stays a visual establishment.
+    events = {round(start, 3): shot for start, shot in shot_starts}
+    cue_assignments = []
+    for cue_start, _, speaker, words in cues:
+        marker = max(0.1, round(cue_start, 3))
+        events.setdefault(marker, {})
+        cue_assignments.append((marker, speaker, words))
+    ordered = sorted(events.items())
+    speech_action = r"\b(?:says|speaks?|speaking|replies|responds|answers|asks|shouts|greets)\b"
+
+    def shot_text(shot: dict) -> str:
+        details = []
+        for key in ("transition", "composition", "subjects", "actions", "camera_motion", "environment"):
+            value = shot.get(key)
+            if key == "subjects" and isinstance(value, list):
+                value = ", ".join(str(item) for item in value)
+            detail = labeled(value).strip().rstrip(".")
+            if key in ("composition", "subjects", "actions") and re.search(
+                    speech_action, detail, re.I):
+                # Spoken words come only from the timed SRT speaking shot.
+                detail = re.split(speech_action, detail, maxsplit=1,
+                                  flags=re.I)[0].strip().rstrip(".")
+            if detail:
+                details.append(detail)
+        for event in shot.get("timed_events", []):
+            if isinstance(event, dict) and event.get("action") and not re.search(
+                    speech_action, str(event["action"]), re.I):
+                details.append(f"At {event.get('time', 0)}s, {labeled(event['action']).strip().rstrip('.')}")
+        return ". ".join(detail for detail in details if detail) + ("." if any(details) else "")
+
+    timeline = []
+    for number, (start, shot) in enumerate(ordered, 1):
+        visible = shot_text(shot)
+        if not visible and number == 1:
+            visible = f"Establish the visible scene in {location_tag} without dialogue."
+        elif not visible:
+            visible = "Continue the established framing."
+        lines = [f"[Shot {number}: {start:g}s] {visible}".rstrip()]
+        for marker, speaker, words in cue_assignments:
+            if marker == start:
+                tag = speaker_tags[speaker]
+                lines.append(f"{tag} says, <d>[English]{words}</d>")
+        timeline.append(" ".join(lines))
+
+    first = shot_starts[0][1]
+    scene = labeled(first.get("environment") or "the location visible in the source video").strip().rstrip(".")
+    if not location_reference:
+        definitions.insert(0, f"<location:source_scene = {scene}.>")
+    summary = f"{style} inside {location_tag}. The observed action follows the source video shot by shot."
+    sound = str(analysis.get("sounds") or "Source-video ambience and actions").strip().rstrip(".") + "."
+    return (f"[s={duration:g}]\n\nsubject_definitions:\n\n"
+            + "\n\n".join(definitions)
+            + f"\n\nsummary:\n\n{summary}\n\ndetailed_description:\n\n"
+            + "\n\n".join(timeline)
+            + f"\n\noverall_soundscape:\n\n{sound}\n\nnon_diegetic_music:\n\nN/A")
+
+
 # ---------------------------------------------------------------------------
 # main entry used by the ComfyUI node
 # ---------------------------------------------------------------------------
@@ -1187,12 +1400,17 @@ def video_to_prompt(video_path: str, out_dir: Path, vlm: dict,
                     use_audio_tags: bool = True,
                     tags_threshold: float = DEFAULT_TAG_THRESHOLD,
                     tags_max: int = DEFAULT_TAG_MAX,
-                    max_new_tokens: int = 8192) -> str:
+                    max_new_tokens: int = 8192,
+                    analysis_prompt: str = ANALYSIS_PROMPT,
+                    srt_subtitles: str | None = None,
+                    location_reference: str = "") -> str:
     """Analyze a video file and return the final H3/LTX prompt. Writes
     analysis.json / prompt.txt (+ frames/, keyframes/, transcript.txt, audio_tags.txt)
     under out_dir for debugging."""
     require_tool("ffmpeg")
     require_tool("ffprobe")
+    if mode == "SKEBA Tagged" and not (srt_subtitles and srt_subtitles.strip()):
+        die("SKEBA Tagged mode requires the srt_subtitles output from Whisper + Nemotron Transcribe.")
     backend = make_backend(vlm)
     video = Path(video_path)
     if not video.is_file():
@@ -1235,9 +1453,13 @@ def video_to_prompt(video_path: str, out_dir: Path, vlm: dict,
         die(f"prompt guide not found: {guide_path}")
     guide_text = guide_path.read_text(encoding="utf-8")
 
-    transcript = None
+    transcript = format_srt_transcript(srt_subtitles, analysis_start, analysis_len)
+    if srt_subtitles and srt_subtitles.strip():
+        log(f"external SRT: {len(transcript.splitlines())} cue(s) in analysis window")
+        if transcript:
+            (out_dir / "transcript.txt").write_text(transcript + "\n", encoding="utf-8")
     audio_present = has_audio_stream(video)
-    if use_asr and audio_present:
+    if use_asr and audio_present and not (srt_subtitles and srt_subtitles.strip()):
         wav = out_dir / "audio_16k.wav"
         extract_audio(video, wav, analysis_start, analysis_len)
         try:
@@ -1277,7 +1499,7 @@ def video_to_prompt(video_path: str, out_dir: Path, vlm: dict,
                             max_frames=max_frames)
     log(f"frames extracted: {len(frames)} ({frames_dir})")
     analysis = run_analysis(backend, frames, transcript, tag_lines,
-                            frame_fps, max_new_tokens)
+                            frame_fps, max_new_tokens, analysis_prompt)
 
     (out_dir / "analysis.json").write_text(
         json.dumps(analysis, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -1300,9 +1522,13 @@ def video_to_prompt(video_path: str, out_dir: Path, vlm: dict,
             "reference video/audio if the prompt references <Video N>/<Audio N>) "
             "to the H3 API together with the prompt")
 
-    prompt_text = run_rewrite(backend, mode, duration, analysis, guide_text,
-                              transcript, tags=tag_lines, max_new_tokens=max_new_tokens,
-                              out_dir=out_dir)
+    if mode == "SKEBA Tagged":
+        prompt_text = build_skeba_tagged_prompt(
+            analysis, transcript, duration, location_reference)
+    else:
+        prompt_text = run_rewrite(backend, mode, duration, analysis, guide_text,
+                                  transcript, tags=tag_lines, max_new_tokens=max_new_tokens,
+                                  out_dir=out_dir)
     alignment = build_alignment_line(mode, duration)
     if alignment:
         prompt_text = alignment + "\n\n" + prompt_text

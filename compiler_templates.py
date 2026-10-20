@@ -39,6 +39,12 @@ REGISTRY = {
     "retention_subject": ("Retention analysis", "[[subject]][[appearances]]: fully_preserved - the referenced identity, appearance, wardrobe, and defining visual characteristics are retained."),
     "retention_voice_reference": ("Retention analysis", "[[audio]]: reference - its vocal timbre and delivery guide only the dialogue produced by [[identity]], without copying the original audio signal."),
     "retention_voice_reuse": ("Retention analysis", "[[audio]]: reuse - the supplied vocal signal is reused only for [[identity]]."),
+    "retention_music_reference_fully": ("Retention analysis", "[[audio]]: full_reference - preserve the source music's recognizable rhythm, melody, instrumentation, and overall character; the source audio signal is not copied."),
+    "retention_music_reference_partially": ("Retention analysis", "[[audio]]: partial_reference - retain selected musical traits such as rhythm or instrumentation while allowing the remaining arrangement to change; the source audio signal is not copied."),
+    "retention_music_reference_weak": ("Retention analysis", "[[audio]]: weak_reference - keep only broad genre, mood, or atmospheric similarity; the source audio signal is not copied."),
+    "retention_music_reuse_fully": ("Retention analysis", "[[audio]]: fully_preserved - reuse the supplied music audio as the complete soundtrack."),
+    "retention_music_reuse_partially": ("Retention analysis", "[[audio]]: partially_copy - reuse the supplied music audio; any partial copying must be performed by the audio path rather than this text instruction."),
+    "retention_music_reuse_weak": ("Retention analysis", "[[audio]]: weak_reference - the audio path reuses the supplied signal; this text alone cannot reduce its reuse strength."),
 }
 DEFAULTS = {name: value[1] for name, value in REGISTRY.items()}
 PLACEHOLDERS = sorted({token for text in DEFAULTS.values() for token in PLACEHOLDER.findall(text)} |

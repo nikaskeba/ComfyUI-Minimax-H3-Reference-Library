@@ -50,8 +50,7 @@ class MergeTests(unittest.TestCase):
         self.assertEqual(len(parsed.tracks), 6)
         self.assertEqual(parsed.tracks[0][1].tempo, 468750)
         names = [next(message.name for message in track if message.type == "track_name") for track in parsed.tracks[1:]]
-        self.assertEqual(names, ["SheetSage - Vocal", "SheetSage - Chords", "SheetSage - Ins",
-                                 "MuScriptor - drums", "MuScriptor - synth_pad"])
+        self.assertEqual(names, ["Vocal", "Chords", "Ins", "drums", "synth_pad"])
         self.assertTrue(any(message.type == "note_on" and message.channel == 9 for message in parsed.tracks[4]))
         self.assertTrue(any(message.type == "program_change" and message.program == 88 for message in parsed.tracks[5]))
         notes = pretty_midi.PrettyMIDI(BytesIO(data))

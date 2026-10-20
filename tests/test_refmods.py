@@ -103,6 +103,30 @@ class RefModTests(unittest.TestCase):
         with patch.object(builder, "records_by_tag", return_value=records), patch.object(builder, "library_built_in_records", return_value={}):
             return builder.H3TaggedReferencePrompt().build(prompt, compiler_mode=mode)
 
+    def test_audio_only_music_refmod_uses_brace_tag_without_voice_tag(self):
+        self.asset("Boards of Canada", "audio", seconds=3)
+        rows = [dict(row, reference_type="music") for row in library.catalog()]
+        prompt = ("subject_definitions:\n{Boards of Canada_rm}\n"
+                  "detailed_description:\n[Shot 1: 0s] An empty landscape.\n"
+                  "overall_soundscape:\nWind.\n"
+                  "non_diegetic_music:\n{Boards of Canada_rm} plays softly.")
+        with patch.object(library, "catalog", return_value=rows):
+            projected = library.project_records({}, prompt)
+        self.assertEqual(projected["Boards of Canada_rm"]["reference_type"], "music")
+        self.assertIn("_refmod_audio", projected["Boards of Canada_rm"])
+        self.assertNotIn("_refmod_image", projected["Boards of Canada_rm"])
+        compiler = importlib.import_module(PACKAGE + ".reference_compiler")
+        compiled = compiler.compile_prompt(prompt, projected)
+        self.assertEqual(compiled.audios, ["Boards of Canada_rm"])
+        self.assertNotIn("<Subject", compiled.prompt)
+        self.assertIn("<Audio 1>: full_reference", compiled.prompt)
+        partial_prompt = prompt.replace("{Boards of Canada_rm}", "{Boards of Canada_rm: partially}")
+        with patch.object(library, "catalog", return_value=rows):
+            partial_records = library.project_records({}, partial_prompt)
+        partial = compiler.compile_prompt(partial_prompt, partial_records)
+        self.assertIn("<Audio 1>: partial_reference", partial.prompt)
+        self.assertNotIn("<Subject", partial.prompt)
+
     def test_direct_refmod_tags_both_modes(self):
         self.asset("celestial_visual","video")
         self.asset("celestial_audio","audio",seconds=1)

@@ -38,8 +38,9 @@ import node_helpers
 
 try:
     from safetensors.torch import load_file as _st_load, save_file as _st_save
+    from safetensors import safe_open as _st_open
 except ImportError:  # ComfyUI always ships safetensors; belt and braces
-    _st_load = _st_save = None
+    _st_load = _st_save = _st_open = None
 
 from .patch_layout import (
     MC_KEY,
@@ -329,7 +330,12 @@ def _audio_tail_from_latent(latent, a_frames):
                          "got shape %s" % (tuple(audio.shape),))
     total_t = int(audio.shape[-1])
     frames = _pixel_frames(int(video.shape[2]))
-    overhang = total_t - FRAME_RESCALE * frames
+    overhang = (latent.get("skeba_h3_original_audio_overhang_steps")
+                if isinstance(latent, dict) else None)
+    if overhang is None:
+        overhang = total_t - FRAME_RESCALE * frames
+    else:
+        overhang = float(overhang)
     if not (0.0 <= overhang < 1.0):
         _LOG.warning(
             "h3_motion_context: context_latent audio grid is unexpected "
@@ -568,7 +574,19 @@ class MiniMaxH3MotionContext:
                              getattr(audio_vae, "audio_sample_rate", 32000)))
             source_frames = _pixel_frames(int(source_video.shape[-3]))
             end = int(round(source_frames / float(FPS) * sr))
-            context_audio = {"waveform": waveform[..., :end], "sample_rate": sr}
+            original_overhang = context_latent.get(
+                "skeba_h3_original_audio_overhang_steps")
+            if original_overhang is not None:
+                # A tail-only save may contain less video than the original
+                # clip. Remove its original audio-grid overhang, then take
+                # the matching audio tail rather than the waveform's head.
+                extra = int(round(float(original_overhang) / AUDIO_HZ * sr))
+                if extra:
+                    waveform = waveform[..., :-extra]
+                waveform = waveform[..., -end:]
+            else:
+                waveform = waveform[..., :end]
+            context_audio = {"waveform": waveform, "sample_rate": sr}
 
         # Audio-only continuation deliberately has no picture keyframes and
         # therefore no duplicated head to trim. Its tail ends at frame zero,
@@ -1187,6 +1205,16 @@ class MiniMaxH3MotionContextSaveLatent:
                     "tooltip": "Connect current_prompt < prompt_count to skip saving "
                                "the final clip. When false, the upstream refiner "
                                "is not evaluated."}),
+                "video_context_length": (["full", "5", "22", "39", "56"], {
+                    "default": "full",
+                    "tooltip": "Save only this many final picture frames for the next "
+                               "Motion Context. Connect the same context_length "
+                               "setting. Full preserves existing saves."}),
+                "audio_context_length": ("INT", {
+                    "default": 0, "min": 0, "max": 240,
+                    "tooltip": "Save only this many frames' worth of audio "
+                               "latent. Connect Motion Context's audio context "
+                               "length; 0 saves the full audio stream."}),
             },
         }
 
@@ -1195,16 +1223,17 @@ class MiniMaxH3MotionContextSaveLatent:
     FUNCTION = "save"
     OUTPUT_NODE = True
     CATEGORY = "Skeba AI Nodes - Motion Context"
-    DESCRIPTION = ("Save the sampler's AV latent so the next run's Motion "
-                   "Context node can pin audio from it via the matching "
-                   "Load node.")
+    DESCRIPTION = ("Save the sampler's AV latent for the next Motion Context "
+                   "run. Connect the matching picture/audio context lengths "
+                   "to store only the needed tail.")
 
     def check_lazy_status(self, filename_prefix, clip_index=0,
                           save_if_next_prompt=True, latent=None, **kwargs):
         return ["latent"] if save_if_next_prompt and latent is None else []
 
     def save(self, latent, filename_prefix, clip_index=0,
-             save_if_next_prompt=True):
+             save_if_next_prompt=True, video_context_length="full",
+             audio_context_length=0):
         if not save_if_next_prompt:
             return ("",)
         if _st_save is None:
@@ -1215,8 +1244,30 @@ class MiniMaxH3MotionContextSaveLatent:
             raise ValueError(
                 "h3_motion_context: latent has no audio stream; wire the "
                 "sampler output of an H3 AV graph.")
-        video = parts[0].cpu().contiguous()
-        audio = parts[1].cpu().contiguous()
+        video, audio = parts[:2]
+        source_frames = _pixel_frames(int(video.shape[2]))
+        source_audio_steps = int(audio.shape[-1])
+        original_overhang = source_audio_steps - FRAME_RESCALE * source_frames
+        if video_context_length != "full":
+            frames = int(video_context_length)
+            steps = _steps_for_frames(frames)
+            if steps is None:
+                raise ValueError("h3_motion_context: save video context must "
+                                 "be a whole H3 latent run (5, 22, 39, or 56 frames).")
+            steps = min(steps, int(video.shape[2]))
+            if (int(video.shape[2]) - steps) % 5:
+                raise ValueError("h3_motion_context: video tail starts off "
+                                 "the H3 five-step grid; cannot save it safely.")
+            video = video[:, :, -steps:]
+        audio_frames = int(audio_context_length)
+        if audio_frames < 0:
+            raise ValueError("h3_motion_context: audio context length cannot be negative.")
+        if audio_frames:
+            audio_steps = min(source_audio_steps,
+                              int(round(audio_frames / float(FPS) * AUDIO_HZ)))
+            audio = audio[..., -audio_steps:]
+        video = video.cpu().contiguous()
+        audio = audio.cpu().contiguous()
         folder, filename, counter, _, _ = folder_paths.get_save_image_path(
             filename_prefix, folder_paths.get_output_directory())
         if int(clip_index) > 0:
@@ -1230,8 +1281,10 @@ class MiniMaxH3MotionContextSaveLatent:
         else:
             path = os.path.join(folder, "%s_%05d_.safetensors"
                                 % (filename, counter))
-        _st_save({"video": video, "audio": audio}, path,
-                 metadata={"format": "h3_motion_context_av_v1"})
+        metadata = {"format": "h3_motion_context_av_v1"}
+        if video_context_length != "full" or audio_frames:
+            metadata["original_audio_overhang_steps"] = str(original_overhang)
+        _st_save({"video": video, "audio": audio}, path, metadata=metadata)
         _LOG.info("h3_motion_context: saved AV latent to %s (video %s, "
                   "audio %s)", path, tuple(video.shape), tuple(audio.shape))
         return (path,)
@@ -1328,7 +1381,14 @@ class MiniMaxH3MotionContextLoadLatent:
         # a plain list, not a NestedTensor: only this repo's context_latent
         # input accepts it, which is the point -- it cannot be mistaken
         # for a decodable latent without failing loudly downstream
-        return ({"samples": [data["video"], data["audio"]]},)
+        result = {"samples": [data["video"], data["audio"]]}
+        if _st_open is not None:
+            with _st_open(path, framework="pt", device="cpu") as file:
+                metadata = file.metadata() or {}
+            if "original_audio_overhang_steps" in metadata:
+                result["skeba_h3_original_audio_overhang_steps"] = float(
+                    metadata["original_audio_overhang_steps"])
+        return (result,)
 
 
 class H3ContinuationTiming:

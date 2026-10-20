@@ -13,6 +13,7 @@ TEMP_TYPES = {"character", "voice", "location", "object"}
 ENTITY_TYPES = {"character", "location", "object", "clothing"}
 TOKEN_PATTERN = r"\{[^{}\r\n]+\}|§[^§\r\n]+§|<[A-Za-z_]+:[^<>]*>"
 TOKEN = re.compile(TOKEN_PATTERN)
+MUSIC_STRENGTH = re.compile(r"\{(?P<name>[^{}:\r\n]+?)\s*:\s*(?P<strength>fully|partially|weak)\}", re.I)
 TEMP = re.compile(r"<(?P<type>[A-Za-z_]+):(?P<name>[^=<>]*?)(?:\s*=\s*(?P<description>[^<>]*))?>", re.S)
 HEADER = re.compile(r"^([a-z][a-z_]*):[ \t]*(?:\r?\n|$)", re.M)
 DIALOGUE = re.compile(r"<d>.*?</d>", re.S)
@@ -264,6 +265,16 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         fail("INVALID_VIDEO_USAGE", video_usage)
     if audio_usage not in ("reference", "reuse"):
         fail("INVALID_AUDIO_USAGE", audio_usage)
+    music_strength = {}
+    def normalize_music(match):
+        name, strength = match["name"].strip(), match["strength"].lower()
+        if name not in records or (records[name].get("reference_type") or records[name].get("type")) != "music":
+            fail("INVALID_MUSIC_STRENGTH", f"{{{name}: {strength}}} requires a music reference.")
+        if name in music_strength and music_strength[name] != strength:
+            fail("CONFLICTING_MUSIC_STRENGTH", name)
+        music_strength[name] = strength
+        return "{" + name + "}"
+    prompt = MUSIC_STRENGTH.sub(normalize_music, prompt)
     prefix, sections, temporary, warnings = _parse(prompt)
     usages = []
     saved_keys = set()
@@ -377,7 +388,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
                 nonisolated_events.add(position)
     for section, start, end, rid, voice in usages:
         r = resources[rid]
-        if section != "subject_definitions" and (voice or r.type in ("music", "voice")):
+        if (voice and section != "subject_definitions") or r.type == "music" or (r.type == "voice" and section != "subject_definitions"):
             r.audio_used = bool(r.audio or r.embedded_audio)
     # Speaker IDs above come only from first dialogue occurrence, not asset slots.
     # Allocate subjects/media afterward in first-speech order; missing voices and
@@ -682,6 +693,16 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         line = wording("retention_voice_" + r.audio_usage, resource=r, audio=f"<Audio {slot}>", identity=identity)
         generated_voice_retention.append(line)
         retention += "\n\n" + line
+    for r in ordered:
+        if r.type != "music" or not r.audio_used or not r.audio_slot:
+            continue
+        slot = r.audio_slot
+        if re.search(rf"<Audio {slot}>\s*:", retention):
+            continue
+        strength = music_strength.get(r.key, "fully")
+        mode = "reuse" if r.audio_usage == "reuse" else "reference"
+        retention += "\n\n" + wording(f"retention_music_{mode}_{strength}", resource=r,
+                                       audio=f"<Audio {slot}>")
     rendered["retention_analysis"] = _sort_retention_entries(retention.strip())
     output = "\n\n".join(f"{section}:\n\n{rendered.get(section, '')}" for section in SECTIONS)
     if prefix:
@@ -700,6 +721,7 @@ def compile_prompt(prompt, records, *, video_usage="reference", audio_usage="ref
         "audio_used": r.audio_used, "has_image": r.image, "has_audio": r.audio or r.embedded_audio,
         "has_video": r.video, "has_visual_description": bool(r.description),
         "has_voice_description": bool(r.voice_description),
+        "music_strength": music_strength.get(r.key, "fully") if r.type == "music" else None,
     } for r in ordered},
         "pictures": {str(i): r.id for i, r in enumerate(images, 1)},
         "audio": {**{str(r.embedded_slot): r.id for r in embedded}, **{str(r.audio_slot): r.id for r in audios}},
