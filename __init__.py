@@ -10,6 +10,8 @@ from .workflow_guide import SkebaWorkflowGuide
 from .h3_audio_refine import SkebaH3AudioRefine, SkebaH3AudioInpaintRange, SkebaH3AudioEditMask, SkebaH3VideoEditMask, SkebaH3VideoLatentAnchorBlend, SkebaH3FinishInpaintLatent, SkebaH3AVInpaintRange
 from .h3_tail_refiner import SkebaH3TailClipRefiner
 from .h3_video_latent_resize import SkebaH3VideoLatentResize, SkebaH3AVContextResize, SkebaH3VideoLatentAspectMatch
+from .h3_upscale_bypass import SkebaH3UpscaleBypass, SkebaH3UpscaleTrimBypass
+from .h3_seam_color_transition import SkebaH3SeamColorTransition
 from .refmod_studio import SkebaRefModStudio
 from .refmod_create import SkebaCreateH3RefMod
 from .refmod_apply import SkebaH3RefModApply
@@ -77,6 +79,9 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3VideoLatentResize": SkebaH3VideoLatentResize,
     "SkebaH3AVContextResize": SkebaH3AVContextResize,
     "SkebaH3VideoLatentAspectMatch": SkebaH3VideoLatentAspectMatch,
+    "SkebaH3UpscaleBypass": SkebaH3UpscaleBypass,
+    "SkebaH3UpscaleTrimBypass": SkebaH3UpscaleTrimBypass,
+    "SkebaH3SeamColorTransition": SkebaH3SeamColorTransition,
     "SkebaH3AudioInpaintRange": SkebaH3AudioInpaintRange,
     "SkebaH3AudioEditMask": SkebaH3AudioEditMask,
     "SkebaH3VideoEditMask": SkebaH3VideoEditMask,
@@ -145,6 +150,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3VideoLatentResize": "SKEBA H3 Video Latent Resize",
     "SkebaH3AVContextResize": "SKEBA H3 AV Context Resize",
     "SkebaH3VideoLatentAspectMatch": "SKEBA H3 Video Latent Aspect Match",
+    "SkebaH3UpscaleBypass": "SKEBA H3 Upscale Bypass",
+    "SkebaH3UpscaleTrimBypass": "SKEBA H3 Upscale Trim Bypass",
     "SkebaH3AudioInpaintRange": "SKEBA H3 Audio Inpaint Range (Experimental)",
     "SkebaH3AudioEditMask": "SKEBA H3 Audio Edit Mask (Before Sampling)",
     "SkebaH3VideoEditMask": "SKEBA H3 Video Edit Mask (Before Sampling)",
