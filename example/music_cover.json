@@ -1,0 +1,1914 @@
+{
+  "id": "8946c283-b05c-4bea-84dc-f0ea169054c6",
+  "revision": 0,
+  "last_node_id": 46,
+  "last_link_id": 97,
+  "nodes": [
+    {
+      "id": 45,
+      "type": "LoadAudio",
+      "pos": [
+        800,
+        -260
+      ],
+      "size": [
+        590,
+        140
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            97
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.36.0",
+        "Node name for S&R": "LoadAudio",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "Tupac_-_Changes_(mp3.pm).mp3",
+        null
+      ],
+      "widgets_values_named": {
+        "audio": "Tupac_-_Changes_(mp3.pm).mp3",
+        "upload": null
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 46,
+      "type": "MarkdownNote",
+      "pos": [
+        220,
+        -260
+      ],
+      "size": [
+        550,
+        1906.640625
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "# YuE2: Music Cover\n\nCreate a new version of an existing song with YuE2.\n\nThis workflow uses **SheetSage2** to transcribe the melody from the reference audio into an editable ABC score, then uses YuE2 to regenerate the song with a new **Style** and **Lyrics**.\n\n## Input Asset\n\n- [yue2_reference_song.flac](https://raw.githubusercontent.com/Comfy-Org/workflow_templates/refs/heads/main/input/yue2_reference_song.flac)\n\n## Model Links\n\n**checkpoints**\n\n- [yue2_3b_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/YuE2/resolve/main/checkpoints/yue2_3b_int8_convrot.safetensors)\n\n**audio_encoders**\n\n- [sheetsage2_bf16.safetensors](https://huggingface.co/Comfy-Org/YuE2/resolve/main/audio_encoders/sheetsage2_bf16.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 checkpoints/\n│   │   └── yue2_3b_int8_convrot.safetensors\n│   └── 📂 audio_encoders/\n│       └── sheetsage2_bf16.safetensors\n```\n\n## How to Use\n\n[Subgraph](https://docs.comfy.org/interface/features/subgraph)\n\n1. Load a reference song in **Audio**.\n2. Describe the new musical direction in **Style**.\n3. Enter the lyrics you want to sing in **Lyrics**.\n4. Run the workflow to generate a new cover version.\n\nThe reference audio provides the melody, while YuE2 creates a new performance and arrangement based on your Style and Lyrics.\n\n## Writing the Style\n\nDescribe the target musical style clearly.\n\nUseful elements include:\n\n- **Genre:** jazz, pop, rock, folk, electronic\n- **Vocals:** warm male vocal, expressive female vocal, soft vocals\n- **Language:** English, Chinese, Japanese, etc.\n- **Tempo:** 90 BPM, slow, upbeat\n- **Instruments:** piano, guitar, bass, drums, strings, synths\n- **Mood:** intimate, energetic, nostalgic, cinematic\n\nExample:\n\n> English, soulful jazz-pop, expressive male vocal, relaxed 88 BPM, Rhodes piano, upright bass, brushed drums, warm saxophone, intimate late-night atmosphere\n\n## Writing Lyrics\n\nUse section tags such as:\n\n    [Verse]\n    Streetlights shimmer on the pavement\n    Midnight breathing soft and slow\n\n    [Chorus]\n    Stay with me until the morning\n    Let the city fade away\n\nYou can use:\n\n`[Verse]` · `[Chorus]` · `[Bridge]` · `[Outro]`\n\nFor better melody matching, keep the new lyrics reasonably close to the original phrasing and syllable count.\n\n## How the Cover Works\n\nThe workflow does not directly use the reference audio as YuE2 conditioning.\n\nInstead:\n\n    Reference Audio\n        ↓\n    SheetSage2\n        ↓\n    Melody ABC\n        ↓\n    YuE2 + Style + Lyrics\n        ↓\n    New Cover Audio\n\nSheetSage2 converts the source recording into a symbolic melody representation. YuE2 then uses that melody as the musical plan for the new cover.\n\n## Tips\n\n- Keep **Style** focused on the target sound, not the original sound.\n- Use **melody-only** planning for most cover tasks.\n- Changing the Style can create a very different arrangement while preserving the melody.\n- Lyrics can be changed, but similar phrasing and syllable counts usually fit the original melody better.\n- For a simple style-transfer test, keep the original lyrics and only change the Style.\n- For a stronger reinterpretation, change both the Style and Lyrics.\n\n## Learn More\n\n- [YuE2 Cover Guide](https://github.com/multimodal-art-projection/YuE/blob/main/docs/covers.md)\n- [YuE2 Music Skill](https://github.com/multimodal-art-projection/YuE/blob/main/skills/yue2-music/SKILL.md)\n- [Generation & Covers Reference](https://github.com/multimodal-art-projection/YuE/blob/main/skills/yue2-music/references/generation-and-covers.md)\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      ],
+      "widgets_values_named": {
+        "text": "# YuE2: Music Cover\n\nCreate a new version of an existing song with YuE2.\n\nThis workflow uses **SheetSage2** to transcribe the melody from the reference audio into an editable ABC score, then uses YuE2 to regenerate the song with a new **Style** and **Lyrics**.\n\n## Input Asset\n\n- [yue2_reference_song.flac](https://raw.githubusercontent.com/Comfy-Org/workflow_templates/refs/heads/main/input/yue2_reference_song.flac)\n\n## Model Links\n\n**checkpoints**\n\n- [yue2_3b_int8_convrot.safetensors](https://huggingface.co/Comfy-Org/YuE2/resolve/main/checkpoints/yue2_3b_int8_convrot.safetensors)\n\n**audio_encoders**\n\n- [sheetsage2_bf16.safetensors](https://huggingface.co/Comfy-Org/YuE2/resolve/main/audio_encoders/sheetsage2_bf16.safetensors)\n\n\n## Model Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 checkpoints/\n│   │   └── yue2_3b_int8_convrot.safetensors\n│   └── 📂 audio_encoders/\n│       └── sheetsage2_bf16.safetensors\n```\n\n## How to Use\n\n[Subgraph](https://docs.comfy.org/interface/features/subgraph)\n\n1. Load a reference song in **Audio**.\n2. Describe the new musical direction in **Style**.\n3. Enter the lyrics you want to sing in **Lyrics**.\n4. Run the workflow to generate a new cover version.\n\nThe reference audio provides the melody, while YuE2 creates a new performance and arrangement based on your Style and Lyrics.\n\n## Writing the Style\n\nDescribe the target musical style clearly.\n\nUseful elements include:\n\n- **Genre:** jazz, pop, rock, folk, electronic\n- **Vocals:** warm male vocal, expressive female vocal, soft vocals\n- **Language:** English, Chinese, Japanese, etc.\n- **Tempo:** 90 BPM, slow, upbeat\n- **Instruments:** piano, guitar, bass, drums, strings, synths\n- **Mood:** intimate, energetic, nostalgic, cinematic\n\nExample:\n\n> English, soulful jazz-pop, expressive male vocal, relaxed 88 BPM, Rhodes piano, upright bass, brushed drums, warm saxophone, intimate late-night atmosphere\n\n## Writing Lyrics\n\nUse section tags such as:\n\n    [Verse]\n    Streetlights shimmer on the pavement\n    Midnight breathing soft and slow\n\n    [Chorus]\n    Stay with me until the morning\n    Let the city fade away\n\nYou can use:\n\n`[Verse]` · `[Chorus]` · `[Bridge]` · `[Outro]`\n\nFor better melody matching, keep the new lyrics reasonably close to the original phrasing and syllable count.\n\n## How the Cover Works\n\nThe workflow does not directly use the reference audio as YuE2 conditioning.\n\nInstead:\n\n    Reference Audio\n        ↓\n    SheetSage2\n        ↓\n    Melody ABC\n        ↓\n    YuE2 + Style + Lyrics\n        ↓\n    New Cover Audio\n\nSheetSage2 converts the source recording into a symbolic melody representation. YuE2 then uses that melody as the musical plan for the new cover.\n\n## Tips\n\n- Keep **Style** focused on the target sound, not the original sound.\n- Use **melody-only** planning for most cover tasks.\n- Changing the Style can create a very different arrangement while preserving the melody.\n- Lyrics can be changed, but similar phrasing and syllable counts usually fit the original melody better.\n- For a simple style-transfer test, keep the original lyrics and only change the Style.\n- For a stronger reinterpretation, change both the Style and Lyrics.\n\n## Learn More\n\n- [YuE2 Cover Guide](https://github.com/multimodal-art-projection/YuE/blob/main/docs/covers.md)\n- [YuE2 Music Skill](https://github.com/multimodal-art-projection/YuE/blob/main/skills/yue2-music/SKILL.md)\n- [Generation & Covers Reference](https://github.com/multimodal-art-projection/YuE/blob/main/skills/yue2-music/references/generation-and-covers.md)\n\n## Report Issue\n\nNote: Please update ComfyUI first ([guide](https://docs.comfy.org/installation/update_comfyui)) and prepare required models. Desktop/Cloud updates follow stable releases, so some nightly-supported models may not be available yet.\n\n- Cannot run / runtime errors: [ComfyUI/issues](https://github.com/comfyanonymous/ComfyUI/issues)\n- UI / frontend issues: [ComfyUI_frontend/issues](https://github.com/Comfy-Org/ComfyUI_frontend/issues)\n- Workflow issues: [workflow_templates/issues](https://github.com/Comfy-Org/workflow_templates/issues)\n"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 10,
+      "type": "SaveAudioAdvanced",
+      "pos": [
+        1887.7427958906474,
+        -288.16176528280664
+      ],
+      "size": [
+        796.4418476924047,
+        160
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 63
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.36.0",
+        "Node name for S&R": "SaveAudioAdvanced",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": [
+        "audio/YuE2_cover",
+        "mp3",
+        "V0"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "audio/YuE2_cover",
+        "format": "mp3",
+        "format.quality": "V0"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 33,
+      "type": "59dddde1-2d83-4b6e-9c71-1e5cb2d823d6",
+      "pos": [
+        1409.513794344395,
+        -250.09065304824355
+      ],
+      "size": [
+        390,
+        450
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "label": "Style",
+          "name": "value",
+          "type": "STRING",
+          "widget": {
+            "name": "value"
+          },
+          "link": null
+        },
+        {
+          "label": "Lyrics",
+          "name": "value_1",
+          "type": "STRING",
+          "widget": {
+            "name": "value_1"
+          },
+          "link": null
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 97
+        }
+      ],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            63
+          ]
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfy-core",
+        "ver": "0.36.0",
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "8",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ],
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "value": true,
+            "value_1": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Genre: rap\nVocals: deep male\nLanguage: English\nTempo: 150 BPM, fast\n\nInstruments: bass, drums, strings, synths\n\n\n\nMood: energetic",
+        "Come on come on\nI see no changes wake up in the morning and I ask myself\nis life worth living should I blast myself?\nI'm tired of bein' poor & even worse I'm black\nmy stomach hurts so I'm lookin' for a purse to snatch\nCops give a damn about a negro\npull the trigger kill a nigga he's a hero\nGive the crack to the kids who the hell cares\none less ugly mouth on the welfare\nFirst ship 'em dope & let 'em deal the brothers\ngive 'em guns step back watch 'em kill each other\nIt's time to fight back that's what Huey said\n2 shots in the dark now Huey's dead\nI got love for my brother but we can never go nowhere\nunless we share with each other\nWe gotta start makin' changes\nlearn to see me as a brother instead of 2 distant strangers\nand that's how it's supposed to be\nHow can the Devil take a brother if he's close to me\nI'd love to go back to when we played as kids\nbut things changed, and that's the way it is",
+        60,
+        835061645449950,
+        "yue2_3b_int8_convrot.safetensors",
+        "sheetsage2_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "value": "Genre: rap\nVocals: deep male\nLanguage: English\nTempo: 150 BPM, fast\n\nInstruments: bass, drums, strings, synths\n\n\n\nMood: energetic",
+        "value_1": "Come on come on\nI see no changes wake up in the morning and I ask myself\nis life worth living should I blast myself?\nI'm tired of bein' poor & even worse I'm black\nmy stomach hurts so I'm lookin' for a purse to snatch\nCops give a damn about a negro\npull the trigger kill a nigga he's a hero\nGive the crack to the kids who the hell cares\none less ugly mouth on the welfare\nFirst ship 'em dope & let 'em deal the brothers\ngive 'em guns step back watch 'em kill each other\nIt's time to fight back that's what Huey said\n2 shots in the dark now Huey's dead\nI got love for my brother but we can never go nowhere\nunless we share with each other\nWe gotta start makin' changes\nlearn to see me as a brother instead of 2 distant strangers\nand that's how it's supposed to be\nHow can the Devil take a brother if he's close to me\nI'd love to go back to when we played as kids\nbut things changed, and that's the way it is",
+        "max_duration": 60,
+        "seed": 835061645449950,
+        "ckpt_name": "yue2_3b_int8_convrot.safetensors",
+        "audio_encoder_name": "sheetsage2_bf16.safetensors"
+      }
+    }
+  ],
+  "links": [
+    [
+      97,
+      45,
+      0,
+      33,
+      2,
+      "AUDIO"
+    ],
+    [
+      63,
+      33,
+      0,
+      10,
+      0,
+      "AUDIO"
+    ]
+  ],
+  "groups": [],
+  "definitions": {
+    "subgraphs": [
+      {
+        "id": "59dddde1-2d83-4b6e-9c71-1e5cb2d823d6",
+        "version": 1,
+        "state": {
+          "lastGroupId": 7,
+          "lastNodeId": 46,
+          "lastLinkId": 97,
+          "lastRerouteId": 0
+        },
+        "revision": 0,
+        "config": {},
+        "name": "Music Cover (YuE2)",
+        "inputNode": {
+          "id": -10,
+          "bounding": [
+            -840,
+            -550,
+            168.966796875,
+            188
+          ]
+        },
+        "outputNode": {
+          "id": -20,
+          "bounding": [
+            2930,
+            -690,
+            128,
+            68
+          ]
+        },
+        "inputs": [
+          {
+            "id": "6c1f1dc8-09bc-416e-93e6-185bdbb48f42",
+            "name": "value",
+            "type": "STRING",
+            "linkIds": [
+              95
+            ],
+            "label": "Style",
+            "pos": [
+              -695.033203125,
+              -526
+            ]
+          },
+          {
+            "id": "54203a99-fe32-452b-8bc6-fa9add883a70",
+            "name": "value_1",
+            "type": "STRING",
+            "linkIds": [
+              96
+            ],
+            "label": "Lyrics",
+            "pos": [
+              -695.033203125,
+              -506
+            ]
+          },
+          {
+            "id": "d0fcad51-9ad7-4a92-ab62-efffeb4c47a1",
+            "name": "max_duration",
+            "type": "FLOAT",
+            "linkIds": [
+              79
+            ],
+            "pos": [
+              -695.033203125,
+              -486
+            ]
+          },
+          {
+            "id": "42d2b2cb-be16-40f7-a6d2-95a45aefcfca",
+            "name": "seed",
+            "type": "INT",
+            "linkIds": [
+              80
+            ],
+            "pos": [
+              -695.033203125,
+              -466
+            ]
+          },
+          {
+            "id": "99304313-156e-4357-aab8-34fa0944f94a",
+            "name": "ckpt_name",
+            "type": "COMBO",
+            "linkIds": [
+              81
+            ],
+            "pos": [
+              -695.033203125,
+              -446
+            ]
+          },
+          {
+            "id": "340bc841-85e9-488c-9ba4-94906af1c45c",
+            "name": "audio",
+            "type": "AUDIO",
+            "linkIds": [
+              90
+            ],
+            "pos": [
+              -695.033203125,
+              -426
+            ]
+          },
+          {
+            "id": "c9f667dd-dd37-4b13-95f8-636ad9ca91d5",
+            "name": "audio_encoder_name",
+            "type": "COMBO",
+            "linkIds": [
+              91
+            ],
+            "pos": [
+              -695.033203125,
+              -406
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "id": "0732a71d-66d1-4d9b-aae6-02256c00fab7",
+            "name": "AUDIO",
+            "type": "AUDIO",
+            "linkIds": [
+              31
+            ],
+            "localized_name": "AUDIO",
+            "pos": [
+              2954,
+              -666
+            ]
+          }
+        ],
+        "widgets": [],
+        "nodes": [
+          {
+            "id": 15,
+            "type": "CheckpointLoaderSimple",
+            "pos": [
+              -230,
+              -1090
+            ],
+            "size": [
+              420,
+              110
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "ckpt_name",
+                "name": "ckpt_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "ckpt_name"
+                },
+                "link": 81
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "MODEL",
+                "name": "MODEL",
+                "type": "MODEL",
+                "links": [
+                  18
+                ]
+              },
+              {
+                "localized_name": "CLIP",
+                "name": "CLIP",
+                "type": "CLIP",
+                "links": [
+                  43
+                ]
+              },
+              {
+                "localized_name": "VAE",
+                "name": "VAE",
+                "type": "VAE",
+                "links": [
+                  21
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "CheckpointLoaderSimple",
+              "models": [
+                {
+                  "name": "yue2_3b_int8_convrot.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/YuE2/resolve/main/checkpoints/yue2_3b_int8_convrot.safetensors",
+                  "directory": "checkpoints"
+                }
+              ],
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "yue2_3b_int8_convrot.safetensors"
+            ],
+            "widgets_values_named": {
+              "ckpt_name": "yue2_3b_int8_convrot.safetensors"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 25,
+            "type": "YuE2GenerateMusic",
+            "pos": [
+              650,
+              -890
+            ],
+            "size": [
+              400,
+              432
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "clip",
+                "name": "clip",
+                "type": "CLIP",
+                "link": 43
+              },
+              {
+                "localized_name": "style",
+                "name": "style",
+                "type": "STRING",
+                "widget": {
+                  "name": "style"
+                },
+                "link": 95
+              },
+              {
+                "localized_name": "lyrics",
+                "name": "lyrics",
+                "type": "STRING",
+                "widget": {
+                  "name": "lyrics"
+                },
+                "link": 96
+              },
+              {
+                "localized_name": "abc",
+                "name": "abc",
+                "type": "STRING",
+                "widget": {
+                  "name": "abc"
+                },
+                "link": 94
+              },
+              {
+                "localized_name": "seed",
+                "name": "seed",
+                "type": "INT",
+                "widget": {
+                  "name": "seed"
+                },
+                "link": 68
+              },
+              {
+                "localized_name": "max_duration",
+                "name": "max_duration",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "max_duration"
+                },
+                "link": 79
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "CONDITIONING",
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [
+                  49,
+                  50
+                ]
+              },
+              {
+                "localized_name": "seconds",
+                "name": "seconds",
+                "type": "FLOAT",
+                "links": [
+                  48,
+                  51
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "YuE2GenerateMusic",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "",
+              "",
+              "",
+              530976807293994,
+              "randomize",
+              "melody",
+              360,
+              1,
+              0.95,
+              100,
+              1.2,
+              1
+            ],
+            "widgets_values_named": {
+              "style": "",
+              "lyrics": "",
+              "abc": "",
+              "seed": 530976807293994,
+              "control_after_generate": "randomize",
+              "mode": "melody",
+              "max_duration": 360,
+              "temperature": 1,
+              "top_p": 0.95,
+              "top_k": 100,
+              "repetition_penalty": 1.2,
+              "cfg_scale": 1
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 18,
+            "type": "ConditioningZeroOut",
+            "pos": [
+              1166.941814830211,
+              -841.6276524844318
+            ],
+            "size": [
+              230,
+              40
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "conditioning",
+                "name": "conditioning",
+                "type": "CONDITIONING",
+                "link": 50
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "CONDITIONING",
+                "name": "CONDITIONING",
+                "type": "CONDITIONING",
+                "links": [
+                  26
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "ConditioningZeroOut",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 23,
+            "type": "PreviewAny",
+            "pos": [
+              1150,
+              -750
+            ],
+            "size": [
+              270,
+              140
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "source",
+                "name": "source",
+                "type": "*",
+                "link": 51
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": null
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "PreviewAny",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [],
+            "widgets_values_named": {},
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 8,
+            "type": "KSampler",
+            "pos": [
+              1496.8622822147317,
+              -941.1435748893379
+            ],
+            "size": [
+              330,
+              270
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "model",
+                "name": "model",
+                "type": "MODEL",
+                "link": 18
+              },
+              {
+                "localized_name": "positive",
+                "name": "positive",
+                "type": "CONDITIONING",
+                "link": 49
+              },
+              {
+                "localized_name": "negative",
+                "name": "negative",
+                "type": "CONDITIONING",
+                "link": 26
+              },
+              {
+                "localized_name": "latent_image",
+                "name": "latent_image",
+                "type": "LATENT",
+                "link": 8
+              },
+              {
+                "localized_name": "seed",
+                "name": "seed",
+                "type": "INT",
+                "widget": {
+                  "name": "seed"
+                },
+                "link": 69
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "LATENT",
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [
+                  9
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "KSampler",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              42,
+              "fixed",
+              32,
+              1,
+              "dpm_2",
+              "sgm_uniform",
+              1
+            ],
+            "widgets_values_named": {
+              "seed": 42,
+              "control_after_generate": "fixed",
+              "steps": 32,
+              "cfg": 1,
+              "sampler_name": "dpm_2",
+              "scheduler": "sgm_uniform",
+              "denoise": 1
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 5,
+            "type": "EmptyYuE2LatentAudio",
+            "pos": [
+              1219.4037891681564,
+              -528.7948585622155
+            ],
+            "size": [
+              230,
+              90
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "seconds",
+                "name": "seconds",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "seconds"
+                },
+                "link": 48
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "LATENT",
+                "name": "LATENT",
+                "type": "LATENT",
+                "links": [
+                  8
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "EmptyYuE2LatentAudio",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "__skeba_color_base": "#323",
+              "__skeba_bgcolor_base": "#535",
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              120,
+              1
+            ],
+            "widgets_values_named": {
+              "seconds": 120,
+              "batch_size": 1
+            },
+            "color": "#323",
+            "bgcolor": "#535",
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 9,
+            "type": "VAEDecodeAudio",
+            "pos": [
+              2060,
+              -860
+            ],
+            "size": [
+              230,
+              60
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "samples",
+                "name": "samples",
+                "type": "LATENT",
+                "link": 9
+              },
+              {
+                "localized_name": "vae",
+                "name": "vae",
+                "type": "VAE",
+                "link": 21
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "AUDIO",
+                "name": "AUDIO",
+                "type": "AUDIO",
+                "links": [
+                  31
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "VAEDecodeAudio",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 34,
+            "type": "SeedNode",
+            "pos": [
+              713.0375177332222,
+              -380.0374607574966
+            ],
+            "size": [
+              270,
+              90
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "seed",
+                "name": "seed",
+                "type": "INT",
+                "widget": {
+                  "name": "seed"
+                },
+                "link": 80
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "seed",
+                "name": "seed",
+                "type": "INT",
+                "links": [
+                  68,
+                  69
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "SeedNode",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              0,
+              "randomize"
+            ],
+            "widgets_values_named": {
+              "seed": 0,
+              "fixed": "randomize"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 41,
+            "type": "SheetSage2AudioToABC",
+            "pos": [
+              -266.4730303482497,
+              -445.13589513182393
+            ],
+            "size": [
+              230,
+              90
+            ],
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "audio_encoder",
+                "name": "audio_encoder",
+                "type": "AUDIO_ENCODER",
+                "link": 84
+              },
+              {
+                "localized_name": "audio",
+                "name": "audio",
+                "type": "AUDIO",
+                "link": 90
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "abc",
+                "name": "abc",
+                "shape": 6,
+                "type": "STRING",
+                "links": [
+                  93
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "SheetSage2AudioToABC",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "melody"
+            ],
+            "widgets_values_named": {
+              "mode": "melody"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 43,
+            "type": "AudioEncoderLoader",
+            "pos": [
+              -240,
+              -920
+            ],
+            "size": [
+              420,
+              80
+            ],
+            "flags": {},
+            "order": 9,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "audio_encoder_name",
+                "name": "audio_encoder_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "audio_encoder_name"
+                },
+                "link": 91
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "AUDIO_ENCODER",
+                "name": "AUDIO_ENCODER",
+                "type": "AUDIO_ENCODER",
+                "links": [
+                  84
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "AudioEncoderLoader",
+              "models": [
+                {
+                  "name": "sheetsage2_bf16.safetensors",
+                  "url": "https://huggingface.co/Comfy-Org/YuE2/resolve/main/audio_encoders/sheetsage2_bf16.safetensors",
+                  "directory": "audio_encoders"
+                }
+              ],
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [
+              "sheetsage2_bf16.safetensors"
+            ],
+            "widgets_values_named": {
+              "audio_encoder_name": "sheetsage2_bf16.safetensors"
+            },
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          },
+          {
+            "id": 44,
+            "type": "PreviewAny",
+            "pos": [
+              19.41702393682627,
+              -497.14507974634955
+            ],
+            "size": [
+              470,
+              300
+            ],
+            "flags": {},
+            "order": 10,
+            "mode": 0,
+            "inputs": [
+              {
+                "localized_name": "source",
+                "name": "source",
+                "type": "*",
+                "link": 93
+              }
+            ],
+            "outputs": [
+              {
+                "localized_name": "STRING",
+                "name": "STRING",
+                "type": "STRING",
+                "links": [
+                  94
+                ]
+              }
+            ],
+            "properties": {
+              "enableTabs": false,
+              "tabWidth": 65,
+              "tabXOffset": 10,
+              "hasSecondTab": false,
+              "secondTabText": "Send Back",
+              "secondTabOffset": 80,
+              "secondTabWidth": 65,
+              "cnr_id": "comfy-core",
+              "ver": "0.36.0",
+              "Node name for S&R": "PreviewAny",
+              "__skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              },
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            },
+            "widgets_values": [],
+            "widgets_values_named": {},
+            "_meta": {
+              "skeba_tags": {
+                "inputs": [],
+                "outputs": []
+              }
+            },
+            "extensions": {
+              "_meta": {
+                "skeba_tags": {
+                  "inputs": [],
+                  "outputs": []
+                }
+              }
+            }
+          }
+        ],
+        "groups": [
+          {
+            "id": 3,
+            "title": "Model",
+            "bounding": [
+              -330,
+              -1180,
+              620,
+              430
+            ],
+            "color": "#3f789e",
+            "flags": {}
+          },
+          {
+            "id": 2,
+            "title": "ABC",
+            "bounding": [
+              -330,
+              -730,
+              620,
+              560
+            ],
+            "color": "#3f789e",
+            "flags": {}
+          },
+          {
+            "id": 6,
+            "title": "Conditioning",
+            "bounding": [
+              390,
+              -1080,
+              1160,
+              790
+            ],
+            "color": "#3f789e",
+            "flags": {}
+          },
+          {
+            "id": 4,
+            "title": "Duration",
+            "bounding": [
+              1640,
+              -570,
+              720,
+              280
+            ],
+            "color": "#3f789e",
+            "flags": {}
+          },
+          {
+            "id": 5,
+            "title": "Sampling & Decode",
+            "bounding": [
+              1640,
+              -1080,
+              720,
+              480
+            ],
+            "color": "#3f789e",
+            "flags": {}
+          }
+        ],
+        "links": [
+          {
+            "id": 43,
+            "origin_id": 15,
+            "origin_slot": 1,
+            "target_id": 25,
+            "target_slot": 0,
+            "type": "CLIP"
+          },
+          {
+            "id": 50,
+            "origin_id": 25,
+            "origin_slot": 0,
+            "target_id": 18,
+            "target_slot": 0,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 51,
+            "origin_id": 25,
+            "origin_slot": 1,
+            "target_id": 23,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 18,
+            "origin_id": 15,
+            "origin_slot": 0,
+            "target_id": 8,
+            "target_slot": 0,
+            "type": "MODEL"
+          },
+          {
+            "id": 49,
+            "origin_id": 25,
+            "origin_slot": 0,
+            "target_id": 8,
+            "target_slot": 1,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 26,
+            "origin_id": 18,
+            "origin_slot": 0,
+            "target_id": 8,
+            "target_slot": 2,
+            "type": "CONDITIONING"
+          },
+          {
+            "id": 8,
+            "origin_id": 5,
+            "origin_slot": 0,
+            "target_id": 8,
+            "target_slot": 3,
+            "type": "LATENT"
+          },
+          {
+            "id": 48,
+            "origin_id": 25,
+            "origin_slot": 1,
+            "target_id": 5,
+            "target_slot": 0,
+            "type": "FLOAT"
+          },
+          {
+            "id": 9,
+            "origin_id": 8,
+            "origin_slot": 0,
+            "target_id": 9,
+            "target_slot": 0,
+            "type": "LATENT"
+          },
+          {
+            "id": 21,
+            "origin_id": 15,
+            "origin_slot": 2,
+            "target_id": 9,
+            "target_slot": 1,
+            "type": "VAE"
+          },
+          {
+            "id": 31,
+            "origin_id": 9,
+            "origin_slot": 0,
+            "target_id": -20,
+            "target_slot": 0,
+            "type": "AUDIO"
+          },
+          {
+            "id": 68,
+            "origin_id": 34,
+            "origin_slot": 0,
+            "target_id": 25,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 69,
+            "origin_id": 34,
+            "origin_slot": 0,
+            "target_id": 8,
+            "target_slot": 4,
+            "type": "INT"
+          },
+          {
+            "id": 79,
+            "origin_id": -10,
+            "origin_slot": 2,
+            "target_id": 25,
+            "target_slot": 5,
+            "type": "FLOAT"
+          },
+          {
+            "id": 80,
+            "origin_id": -10,
+            "origin_slot": 3,
+            "target_id": 34,
+            "target_slot": 0,
+            "type": "INT"
+          },
+          {
+            "id": 81,
+            "origin_id": -10,
+            "origin_slot": 4,
+            "target_id": 15,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 84,
+            "origin_id": 43,
+            "origin_slot": 0,
+            "target_id": 41,
+            "target_slot": 0,
+            "type": "AUDIO_ENCODER"
+          },
+          {
+            "id": 90,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 41,
+            "target_slot": 1,
+            "type": "AUDIO"
+          },
+          {
+            "id": 91,
+            "origin_id": -10,
+            "origin_slot": 6,
+            "target_id": 43,
+            "target_slot": 0,
+            "type": "COMBO"
+          },
+          {
+            "id": 93,
+            "origin_id": 41,
+            "origin_slot": 0,
+            "target_id": 44,
+            "target_slot": 0,
+            "type": "STRING"
+          },
+          {
+            "id": 94,
+            "origin_id": 44,
+            "origin_slot": 0,
+            "target_id": 25,
+            "target_slot": 3,
+            "type": "STRING"
+          },
+          {
+            "id": 95,
+            "origin_id": -10,
+            "origin_slot": 0,
+            "target_id": 25,
+            "target_slot": 1,
+            "type": "STRING"
+          },
+          {
+            "id": 96,
+            "origin_id": -10,
+            "origin_slot": 1,
+            "target_id": 25,
+            "target_slot": 2,
+            "type": "STRING"
+          }
+        ],
+        "extra": {
+          "ue_links": [],
+          "links_added_by_ue": []
+        }
+      }
+    ]
+  },
+  "config": {},
+  "extra": {
+    "frontendVersion": "1.55.17",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true,
+    "iamccs_annotations_multi": {
+      "version": 2,
+      "graphs": {
+        "00000000-0000-0000-0000-000000000000": {
+          "version": 2,
+          "enabled": false,
+          "color": "#ff4444",
+          "width": 7,
+          "opacity": 1,
+          "eraser": false,
+          "constantScreen": false,
+          "dashed": false,
+          "hidden": false,
+          "penOnly": false,
+          "hiDPIx2": false,
+          "selOverride": false,
+          "pinMode": false,
+          "tool": "draw",
+          "selectMode": "rect",
+          "transformMode": "fixed",
+          "widthDraw": 7,
+          "widthErase": 48,
+          "opacityDraw": 1,
+          "opacityErase": 1,
+          "textFontFamily": "Arial",
+          "textFontSize": 28,
+          "textColor": "#111111",
+          "textFontWeight": "normal",
+          "textFontStyle": "normal",
+          "textUnderline": false,
+          "paths": [],
+          "layers": [
+            {
+              "name": "Layer 1",
+              "kind": "draw",
+              "visible": true,
+              "locked": false,
+              "paths": [],
+              "style": {
+                "color": "#ff4444",
+                "dashed": false,
+                "widthDraw": 7,
+                "widthErase": 48,
+                "opacityDraw": 1,
+                "opacityErase": 1
+              }
+            }
+          ],
+          "currentLayerIdx": 0,
+          "stickers": [],
+          "stickerStyle": {
+            "frameColor": "#ffffff",
+            "paddingPx": 10,
+            "borderWidthPx": 2,
+            "shadow": true,
+            "shadowStrength": 12
+          }
+        },
+        "8946c283-b05c-4bea-84dc-f0ea169054c6": {
+          "version": 2,
+          "enabled": false,
+          "color": "#ff4444",
+          "width": 7,
+          "opacity": 1,
+          "eraser": false,
+          "constantScreen": false,
+          "dashed": false,
+          "hidden": false,
+          "penOnly": false,
+          "hiDPIx2": false,
+          "selOverride": false,
+          "pinMode": false,
+          "tool": "draw",
+          "selectMode": "rect",
+          "transformMode": "fixed",
+          "widthDraw": 7,
+          "widthErase": 48,
+          "opacityDraw": 1,
+          "opacityErase": 1,
+          "textFontFamily": "Arial",
+          "textFontSize": 28,
+          "textColor": "#111111",
+          "textFontWeight": "normal",
+          "textFontStyle": "normal",
+          "textUnderline": false,
+          "paths": [],
+          "layers": [
+            {
+              "name": "Layer 1",
+              "kind": "draw",
+              "visible": true,
+              "locked": false,
+              "paths": [],
+              "style": {
+                "color": "#ff4444",
+                "dashed": false,
+                "widthDraw": 7,
+                "widthErase": 48,
+                "opacityDraw": 1,
+                "opacityErase": 1
+              }
+            }
+          ],
+          "currentLayerIdx": 0,
+          "stickers": [],
+          "stickerStyle": {
+            "frameColor": "#ffffff",
+            "paddingPx": 10,
+            "borderWidthPx": 2,
+            "shadow": true,
+            "shadowStrength": 12
+          }
+        },
+        "59dddde1-2d83-4b6e-9c71-1e5cb2d823d6": {
+          "version": 2,
+          "enabled": false,
+          "color": "#ff4444",
+          "width": 7,
+          "opacity": 1,
+          "eraser": false,
+          "constantScreen": false,
+          "dashed": false,
+          "hidden": false,
+          "penOnly": false,
+          "hiDPIx2": false,
+          "selOverride": false,
+          "pinMode": false,
+          "tool": "draw",
+          "selectMode": "rect",
+          "transformMode": "fixed",
+          "widthDraw": 7,
+          "widthErase": 48,
+          "opacityDraw": 1,
+          "opacityErase": 1,
+          "textFontFamily": "Arial",
+          "textFontSize": 28,
+          "textColor": "#111111",
+          "textFontWeight": "normal",
+          "textFontStyle": "normal",
+          "textUnderline": false,
+          "paths": [],
+          "layers": [
+            {
+              "name": "Layer 1",
+              "kind": "draw",
+              "visible": true,
+              "locked": false,
+              "paths": [],
+              "style": {
+                "color": "#ff4444",
+                "dashed": false,
+                "widthDraw": 7,
+                "widthErase": 48,
+                "opacityDraw": 1,
+                "opacityErase": 1
+              }
+            }
+          ],
+          "currentLayerIdx": 0,
+          "stickers": [],
+          "stickerStyle": {
+            "frameColor": "#ffffff",
+            "paddingPx": 10,
+            "borderWidthPx": 2,
+            "shadow": true,
+            "shadowStrength": 12
+          }
+        }
+      }
+    },
+    "ue_links": [],
+    "anomalous_hashes": {
+      "33_yue2_3b_int8_convrot.safetensors": {
+        "hash": "",
+        "size": 3960938800
+      }
+    },
+    "iamccs_annotations": {
+      "version": 2,
+      "enabled": false,
+      "color": "#ff4444",
+      "width": 7,
+      "opacity": 1,
+      "eraser": false,
+      "constantScreen": false,
+      "dashed": false,
+      "hidden": false,
+      "penOnly": false,
+      "hiDPIx2": false,
+      "selOverride": false,
+      "pinMode": false,
+      "tool": "draw",
+      "selectMode": "rect",
+      "transformMode": "fixed",
+      "widthDraw": 7,
+      "widthErase": 48,
+      "opacityDraw": 1,
+      "opacityErase": 1,
+      "textFontFamily": "Arial",
+      "textFontSize": 28,
+      "textColor": "#111111",
+      "textFontWeight": "normal",
+      "textFontStyle": "normal",
+      "textUnderline": false,
+      "paths": [],
+      "layers": [
+        {
+          "name": "Layer 1",
+          "kind": "draw",
+          "visible": true,
+          "locked": false,
+          "paths": [],
+          "style": {
+            "color": "#ff4444",
+            "dashed": false,
+            "widthDraw": 7,
+            "widthErase": 48,
+            "opacityDraw": 1,
+            "opacityErase": 1
+          }
+        }
+      ],
+      "currentLayerIdx": 0,
+      "stickers": [],
+      "stickerStyle": {
+        "frameColor": "#ffffff",
+        "paddingPx": 10,
+        "borderWidthPx": 2,
+        "shadow": true,
+        "shadowStrength": 12
+      }
+    },
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.8658725183258866,
+      "offset": [
+        -745.2272692042864,
+        539.3988645320491
+      ]
+    }
+  },
+  "version": 0.4
+}

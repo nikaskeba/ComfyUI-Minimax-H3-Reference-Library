@@ -51,6 +51,19 @@ def extract_renderer(graph, registration_id):
             inputs['bypass']=True
             for port in ('start_frames','end_frames','start_audio','end_audio'):
                 inputs.pop(port,None)
+        elif kind=='MiniMaxH3JoinMatch':
+            # The playlist renderer starts a fresh single clip. Its Before/After
+            # guides come from the AV connectors, not the batch loop's saved
+            # latent. Leaving this input attached pulls the latent loaders,
+            # clip-index getter and prompt loop into the exported graph.
+            inputs.pop('context_latent',None)
+            inputs['context_length']=0
+        elif kind=='SkebaH3UpscaleBypass':
+            # Its second output only controls whether the batch loop saves an
+            # upscale latent for another prompt. A playlist render has no next
+            # batch prompt, and resolving this flag otherwise pulls in the
+            # entire prompt-count loop through `prompts_remain`.
+            inputs['prompts_remain']=False
     graph[str(bundle[0])]['inputs']['preserve_upscaled_endpoints']=True
 
     setters={}
@@ -66,6 +79,14 @@ def extract_renderer(graph, registration_id):
             key=str(value[0]);node=graph.get(key)
             if not node:raise ValueError('Unresolved executable connection: '+key)
             kind=node['class_type'];inputs=node['inputs']
+            if kind=='SkebaPromptFromListNode':
+                # The batch selector's outputs are (prompt, one-based clip
+                # number). A playlist job contains exactly one prompt and
+                # must never traverse the source batch loop.
+                if value[1]==0:value=[marker,1]
+                elif value[1]==1:value=1
+                else:raise ValueError('Unknown prompt-list output at '+key)
+                continue
             if kind not in ('Getter','Setter','SKEBAMiniMaxH3MotionContext'):break
             if value[1]!=0:break
             if key in seen:raise ValueError('Cycle in shared workflow connections at '+key)

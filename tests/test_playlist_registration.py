@@ -47,6 +47,49 @@ class RegistrationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'Unresolved batch dependencies'):
             registration.extract_renderer(graph,'register')
 
+    def test_saved_latent_join_match_is_bypassed_for_playlist_only(self):
+        graph=self.main_graph();original=copy.deepcopy(graph)
+        graph['join']={'class_type':'MiniMaxH3JoinMatch','inputs':{
+            'samples':['9',0], 'context_latent':['old',0],
+            'context_length':['loop',0], 'strength':1.0}}
+        graph['decode']['inputs']['samples']=['join',0]
+        extracted=registration.extract_renderer(graph,'register')
+        self.assertNotIn('old',extracted)
+        self.assertNotIn('loop',extracted)
+        self.assertNotIn('context_latent',extracted['join']['inputs'])
+        self.assertEqual(extracted['join']['inputs']['context_length'],0)
+        self.assertEqual(extracted['join']['inputs']['samples'],['9',0])
+        self.assertEqual(original['motion']['inputs']['context_latent'],['old',0])
+
+    def test_batch_prompt_and_index_become_single_playlist_values(self):
+        graph=self.main_graph()
+        graph['from_list']={'class_type':'SkebaPromptFromListNode','inputs':{
+            'prompt_batch':['prompt_loop',3], 'index':['loop',0]}}
+        graph['prompt_loop']={'class_type':'SkebaPromptLoopNode','inputs':{}}
+        graph['9']['inputs']['prompt_label']=['from_list',0]
+        graph['9']['inputs']['clip_index']=['from_list',1]
+        extracted=registration.extract_renderer(graph,'register')
+        self.assertEqual(extracted['9']['inputs']['prompt_label'],
+                         ['playlist_register_input',1])
+        self.assertEqual(extracted['9']['inputs']['clip_index'],1)
+        self.assertNotIn('from_list',extracted)
+        self.assertNotIn('prompt_loop',extracted)
+        self.assertNotIn('loop',extracted)
+        self.assertEqual(graph['9']['inputs']['clip_index'],['from_list',1])
+
+    def test_upscale_choice_does_not_pull_batch_prompt_count(self):
+        graph=self.main_graph()
+        graph['prompt_loop']={'class_type':'SkebaPromptLoopNode','inputs':{}}
+        graph['selector']={'class_type':'SkebaH3UpscaleBypass','inputs':{
+            'mode':'Upscaled', 'prompts_remain':['prompt_loop',1],
+            'base_latent':['9',0], 'upscaled_latent':['9',0]}}
+        graph['decode']['inputs']['samples']=['selector',0]
+        extracted=registration.extract_renderer(graph,'register')
+        self.assertIs(extracted['selector']['inputs']['prompts_remain'],False)
+        self.assertNotIn('prompt_loop',extracted)
+        self.assertEqual(graph['selector']['inputs']['prompts_remain'],
+                         ['prompt_loop',1])
+
     def test_named_getters_resolve_and_ambiguous_names_fail(self):
         graph=self.main_graph()
         graph['setter']={'class_type':'Setter','inputs':{'key':'shared_conditioning','value':['3',0]}}
