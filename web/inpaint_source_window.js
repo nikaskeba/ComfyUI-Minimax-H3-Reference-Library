@@ -176,14 +176,18 @@ app.registerExtension({
                 start.video.style.display = hasVideo ? "block" : "none";
                 start.slider.style.display = hasVideo ? "block" : "none";
                 start.update(start.read());
-                const audioDriven = control(node, "video_generation_mode")?.value === "audio drives video";
-                reference.row.style.display = audioDriven || !hasVideo ? "none" : "block";
+                const videoMode = control(node, "video_generation_mode")?.value;
+                const audioDriven = videoMode === "audio drives video";
+                const tracksSubject = ["source video inpaint", "inpaint only", "controlnet and inpainting"].includes(videoMode);
+                reference.row.style.display = !tracksSubject || !hasVideo ? "none" : "block";
                 intro.textContent = audioDriven && !hasVideo
                     ? "Audio-only source: choose custom audio or generate new audio. The audio start advances with each prompt."
                     : audioDriven
                     ? "Audio drives prompt-generated video. The source start and selected audio still advance with the loop; subject tracking is skipped."
+                    : videoMode === "controlnet only"
+                    ? "ControlNet guides a new video from the source frames. Subject tracking and the final inpaint composite are skipped."
                     : "Select the source start and one fixed frame for SAM3. Use the video playhead or drag either slider.";
-                if (!audioDriven && hasVideo) reference.update(reference.read());
+                if (tracksSubject && hasVideo) reference.update(reference.read());
                 const useCustom = control(node, "audio_source")?.value === "custom audio";
                 audio.row.style.display = useCustom ? "block" : "none";
                 if (useCustom) {

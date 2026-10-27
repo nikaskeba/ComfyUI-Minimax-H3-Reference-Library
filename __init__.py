@@ -30,7 +30,7 @@ from .h3_upscale_context import SkebaH3UpscaleContextGuides
 from .h3_person_reference_mask import SkebaPersonReferenceMask
 from .h3_mask_composite import SkebaH3FinalInpaintComposite
 from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate
-from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode
+from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode, SkebaH3InpaintModelMode
 from .h3_av_connector import (
     SkebaH3AVConnectorAssembleTest,
     SkebaH3AVConnectorFinalizeTest,
@@ -117,6 +117,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3InpaintWindowValidate": SkebaH3InpaintWindowValidate,
     "SkebaH3InpaintLatentMode": SkebaH3InpaintLatentMode,
     "SkebaH3InpaintVideoMode": SkebaH3InpaintVideoMode,
+    "SkebaH3InpaintModelMode": SkebaH3InpaintModelMode,
     "SkebaMiniMaxH3AVConnectorGuideTest": SkebaMiniMaxH3AVConnectorGuideTest,
     "SkebaH3AVConnectorFinalizeTest": SkebaH3AVConnectorFinalizeTest,
     "SkebaH3AVConnectorAssembleTest": SkebaH3AVConnectorAssembleTest,
@@ -187,6 +188,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3InpaintWindowValidate": "SKEBA H3 Inpaint Loop Validate",
     "SkebaH3InpaintLatentMode": "SKEBA H3 Inpaint / Audio-Driven Latent",
     "SkebaH3InpaintVideoMode": "SKEBA H3 Inpaint / Audio-Driven Video",
+    "SkebaH3InpaintModelMode": "SKEBA H3 Inpaint / ControlNet Model Switch",
     "SkebaMiniMaxH3AVConnectorGuideTest": "SKEBA MiniMax H3 AV Connector Guide",
     "SkebaH3AVConnectorFinalizeTest": "SKEBA H3 AV Connector Finalize",
     "SkebaH3AVConnectorAssembleTest": "SKEBA H3 AV Connector Assemble",

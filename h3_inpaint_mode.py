@@ -1,6 +1,12 @@
-"""Choose source-video inpainting or prompt video guided by selected audio."""
+"""Select H3 video generation, inpainting, and ControlNet paths."""
 
 import torch
+
+
+VIDEO_MODES = ("audio drives video", "controlnet only", "inpaint only",
+               "controlnet and inpainting", "source video inpaint")
+INPAINT_MODES = ("inpaint only", "controlnet and inpainting", "source video inpaint")
+CONTROLNET_MODES = ("controlnet only", "controlnet and inpainting", "source video inpaint")
 
 
 class SkebaH3InpaintLatentMode:
@@ -9,14 +15,14 @@ class SkebaH3InpaintLatentMode:
     RETURN_TYPES = ("LATENT", "STRING")
     RETURN_NAMES = ("latent", "status")
     DESCRIPTION = (
-        "Source video inpaint uses the tracked mask. Audio drives video starts from "
-        "a blank H3 video latent, keeps the selected source audio, and skips mask tracking."
+        "Inpaint modes use the tracked source mask. Audio-driven and ControlNet-only "
+        "modes start from a blank H3 video latent and skip subject tracking."
     )
 
     @classmethod
     def INPUT_TYPES(cls):
         return {"required": {
-            "mode": (["source video inpaint", "audio drives video"],),
+            "mode": (list(VIDEO_MODES),),
             "audio_mode": (["generate audio", "preserve source audio"],),
             "width": ("INT", {"default": 1344, "min": 32, "max": 8192}),
             "height": ("INT", {"default": 768, "min": 32, "max": 8192}),
@@ -27,22 +33,22 @@ class SkebaH3InpaintLatentMode:
         }}
 
     def check_lazy_status(self, mode, inpaint_latent=None, source_audio_latent=None, **kwargs):
-        if mode == "source video inpaint" and inpaint_latent is None:
+        if mode in INPAINT_MODES and inpaint_latent is None:
             return ["inpaint_latent"]
-        if mode == "audio drives video" and source_audio_latent is None:
+        if mode in VIDEO_MODES and mode not in INPAINT_MODES and source_audio_latent is None:
             return ["source_audio_latent"]
         return []
 
     def select(self, mode, audio_mode, width, height, length,
                inpaint_latent=None, source_audio_latent=None):
-        if mode == "source video inpaint":
+        if mode in INPAINT_MODES:
             if inpaint_latent is None:
                 raise ValueError("Connect the masked source-video latent for inpaint mode.")
             return (inpaint_latent, "Source-video inpaint and subject tracking enabled.")
-        if mode != "audio drives video":
+        if mode not in VIDEO_MODES:
             raise ValueError(f"Unknown H3 video mode: {mode}")
         if source_audio_latent is None:
-            raise ValueError("Audio-driven video needs the selected audio's VAE latent.")
+            raise ValueError("Prompt-generated video needs the selected audio's VAE latent.")
         audio = source_audio_latent.get("samples")
         if not isinstance(audio, torch.Tensor) or audio.ndim != 4 or audio.shape[1:3] != (32, 2):
             raise ValueError("Audio-driven video needs an H3 audio VAE latent [batch,32,2,time].")
@@ -82,30 +88,60 @@ class SkebaH3InpaintVideoMode:
     FUNCTION = "select"
     RETURN_TYPES = ("IMAGE",)
     RETURN_NAMES = ("video",)
-    DESCRIPTION = "Skip the source-video composite when audio drives prompt-generated video."
+    DESCRIPTION = "Use the source-video composite for inpaint modes and the generated video otherwise."
 
     @classmethod
     def INPUT_TYPES(cls):
-        return {"required": {"mode": (["source video inpaint", "audio drives video"],)},
+        return {"required": {"mode": (list(VIDEO_MODES),)},
                 "optional": {
                     "inpaint_video": ("IMAGE", {"lazy": True}),
                     "generated_video": ("IMAGE", {"lazy": True}),
                 }}
 
     def check_lazy_status(self, mode, inpaint_video=None, generated_video=None, **kwargs):
-        if mode == "source video inpaint" and inpaint_video is None:
+        if mode in INPAINT_MODES and inpaint_video is None:
             return ["inpaint_video"]
-        if mode == "audio drives video" and generated_video is None:
+        if mode in VIDEO_MODES and mode not in INPAINT_MODES and generated_video is None:
             return ["generated_video"]
         return []
 
     def select(self, mode, inpaint_video=None, generated_video=None):
-        if mode == "source video inpaint":
+        if mode in INPAINT_MODES:
             if inpaint_video is None:
                 raise ValueError("Connect the final inpaint composite.")
             return (inpaint_video,)
-        if mode == "audio drives video":
+        if mode in VIDEO_MODES:
             if generated_video is None:
                 raise ValueError("Connect the decoded prompt-generated video.")
             return (generated_video,)
         raise ValueError(f"Unknown H3 video mode: {mode}")
+
+
+class SkebaH3InpaintModelMode:
+    CATEGORY = "Skeba AI Nodes - Reference/Experimental"
+    FUNCTION = "select"
+    RETURN_TYPES = ("MODEL",)
+    RETURN_NAMES = ("model",)
+    DESCRIPTION = "Apply H3 Fun ControlNet only in the selected ControlNet video modes."
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"mode": (list(VIDEO_MODES),)},
+                "optional": {"base_model": ("MODEL", {"lazy": True}),
+                             "controlnet_model": ("MODEL", {"lazy": True})}}
+
+    def check_lazy_status(self, mode, base_model=None, controlnet_model=None, **kwargs):
+        if mode not in VIDEO_MODES:
+            raise ValueError(f"Unknown H3 video mode: {mode}")
+        selected = "controlnet_model" if mode in CONTROLNET_MODES else "base_model"
+        if (controlnet_model if selected == "controlnet_model" else base_model) is None:
+            return [selected]
+        return []
+
+    def select(self, mode, base_model=None, controlnet_model=None):
+        if mode not in VIDEO_MODES:
+            raise ValueError(f"Unknown H3 video mode: {mode}")
+        selected = controlnet_model if mode in CONTROLNET_MODES else base_model
+        if selected is None:
+            raise ValueError("Connect the selected H3 model path for this video mode.")
+        return (selected,)

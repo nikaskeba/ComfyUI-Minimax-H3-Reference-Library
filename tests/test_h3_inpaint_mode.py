@@ -17,6 +17,47 @@ SPEC.loader.exec_module(MODULE)
 
 
 class InpaintModeTests(unittest.TestCase):
+    def test_four_video_modes_route_latents_videos_and_models(self):
+        latent_node = MODULE.SkebaH3InpaintLatentMode()
+        video_node = MODULE.SkebaH3InpaintVideoMode()
+        model_node = MODULE.SkebaH3InpaintModelMode()
+        source_latent = {"samples": "source"}
+        audio_latent = {"samples": torch.ones((1, 32, 2, 37))}
+        source_video, generated_video = object(), object()
+        base_model, control_model = object(), object()
+        for mode in ("audio drives video", "controlnet only", "inpaint only",
+                     "controlnet and inpainting", "source video inpaint"):
+            inpaint = mode in MODULE.INPAINT_MODES
+            control = mode in MODULE.CONTROLNET_MODES
+            self.assertEqual(latent_node.check_lazy_status(mode),
+                             ["inpaint_latent"] if inpaint else ["source_audio_latent"])
+            self.assertEqual(video_node.check_lazy_status(mode),
+                             ["inpaint_video"] if inpaint else ["generated_video"])
+            self.assertEqual(model_node.check_lazy_status(mode),
+                             ["controlnet_model"] if control else ["base_model"])
+            latent = latent_node.select(mode, "preserve source audio", 64, 48, 22,
+                                        inpaint_latent=source_latent,
+                                        source_audio_latent=audio_latent)[0]
+            self.assertIs(latent, source_latent) if inpaint else self.assertIsNot(latent, source_latent)
+            video = video_node.select(mode, inpaint_video=source_video,
+                                      generated_video=generated_video)[0]
+            self.assertIs(video, source_video if inpaint else generated_video)
+            model = model_node.select(mode, base_model=base_model,
+                                      controlnet_model=control_model)[0]
+            self.assertIs(model, control_model if control else base_model)
+
+    def test_oct26_workflow_switches_controlnet_before_both_passes(self):
+        graph = json.loads((ROOT / "example/inpaint_oct26.json").read_text(encoding="utf-8"))
+        nodes = {node["id"]: node for node in graph["nodes"]}
+        links = {link[0]: link for link in graph["links"]}
+        self.assertEqual(nodes[4584]["type"], "SkebaH3InpaintModelMode")
+        self.assertEqual(links[13711][1:5], [1324, 5, 4584, 0])
+        self.assertEqual(links[13712][1:5], [272, 0, 4584, 1])
+        self.assertEqual(links[13706][1:5], [4578, 0, 4584, 2])
+        self.assertEqual(links[13713][1:5], [4584, 0, 356, 0])
+        self.assertEqual(nodes[358]["outputs"][0]["links"], [link[0] for link in graph["links"]
+                         if link[1] == 358 and link[2] == 0])
+
     def test_audio_driven_video_uses_blank_video_and_selected_audio(self):
         source = {"samples": torch.ones((1, 32, 2, 37))}
         node = MODULE.SkebaH3InpaintLatentMode()

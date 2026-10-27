@@ -405,7 +405,7 @@ class SkebaH3InpaintSourceWindow:
             "audio_source": (["video audio", "custom audio", "generate new audio"], {"tooltip": "Video audio follows the source video; custom audio follows its own start position; generate new audio leaves the incoming audio blank for H3."}),
             "custom_audio": (["(none)"] + _source_files(_AUDIO_EXTENSIONS), {"tooltip": "Separate audio file used only when Audio source is custom audio. Missing audio at the end is filled with silence."}),
             "custom_audio_start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "Where custom audio begins, measured in 24 fps frame units. It advances with the video loop, so 24 means one second into the track."}),
-            "video_generation_mode": (["source video inpaint", "audio drives video"], {"tooltip": "Source video inpaint edits the selected video and enables tracking. Audio drives video generates the picture from the prompt and selected audio, without subject tracking."}),
+            "video_generation_mode": (["source video inpaint", "audio drives video", "controlnet only", "inpaint only", "controlnet and inpainting"], {"tooltip": "Audio drives video: prompt and audio only. ControlNet only: prompt plus source-video structural guidance. Inpaint only: edit the tracked source region. ControlNet and inpainting: use both source guidance and tracked-region editing. The legacy source video inpaint choice behaves like both."}),
         }}
 
     @classmethod
@@ -490,7 +490,8 @@ class SkebaH3InpaintSourceWindow:
             audio_mode = "generate audio"
         else:
             raise ValueError(f"Unknown audio source: {audio_source}")
-        if video_generation_mode not in ("source video inpaint", "audio drives video"):
+        if video_generation_mode not in ("source video inpaint", "audio drives video",
+                                         "controlnet only", "inpaint only", "controlnet and inpainting"):
             raise ValueError(f"Unknown video generation mode: {video_generation_mode}")
         audio_detail = (f"; custom audio frames {audio_start}–{audio_start + count - 1}"
                         if audio_source == "custom audio" else "")
