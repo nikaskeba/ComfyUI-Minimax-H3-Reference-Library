@@ -17,6 +17,34 @@ app.registerExtension({
             const choices = this.widgets.find(widget => widget.name === "choices");
             const selected = this.widgets.find(widget => widget.name === "selected");
             const selectedInput = () => this.inputs?.find(input => input.name === "selected" || input.widget?.name === "selected");
+            const exposedSource = () => {
+                const socket = selectedInput();
+                const link = socket?.link != null ? this.graph?.getLink(socket.link) : null;
+                const inputNode = this.graph?.inputNode;
+                if (!link || !inputNode || link.origin_id !== inputNode.id) return null;
+                return inputNode.slots?.[link.origin_slot] ?? null;
+            };
+            const syncExposedChoice = values => {
+                const source = exposedSource();
+                if (!source) return;
+                const config = [values, {default: selected.value}];
+                source.type = "COMBO";
+                source.widget ??= {name: source.name};
+                setWidgetConfig(source, config);
+                const rootGraph = this.graph?.rootGraph;
+                if (!rootGraph || this.graph === rootGraph) return;
+                for (const graph of [rootGraph, ...rootGraph.subgraphs.values()]) {
+                    for (const host of graph.nodes) {
+                        if (host.subgraph !== this.graph) continue;
+                        const input = host.inputs.find(input => input._subgraphSlot === source);
+                        if (!input) continue;
+                        input.type = "COMBO";
+                        input.widget ??= {name: input.name};
+                        setWidgetConfig(input, config);
+                        host.rebuildInputWidgetBindings();
+                    }
+                }
+            };
             const removeUnusedChoicesInput = () => {
                 const index = this.inputs?.findIndex(input => input.name === "choices" || input.widget?.name === "choices");
                 if (index >= 0 && this.inputs[index].link == null) this.removeInput(index);
@@ -45,6 +73,7 @@ app.registerExtension({
                 source.type = "COMBO";
                 source.connect(selectedInput(), this);
                 removeUnusedChoicesInput();
+                syncExposedChoice(parseChoices(choices.value));
                 updateHosts(source);
             };
             this.skebaMigrateChoicesInput = migrateChoicesInput;
@@ -74,6 +103,7 @@ app.registerExtension({
                 socket.type = "COMBO";
                 socket.widget ??= {name: "selected"};
                 setWidgetConfig(socket, [values, {default: selected.value}]);
+                syncExposedChoice(values);
                 const rootGraph = this.graph?.rootGraph;
                 if (rootGraph && this.graph !== rootGraph) {
                     for (const graph of [rootGraph, ...rootGraph.subgraphs.values()]) {

@@ -1,15 +1,15 @@
 {
   "id": "9adffa00-ea86-492b-9a68-43e95f3eed32",
   "revision": 0,
-  "last_node_id": 1266,
-  "last_link_id": 2390,
+  "last_node_id": 4588,
+  "last_link_id": 13719,
   "nodes": [
     {
       "id": 412,
       "type": "KSamplerSelect",
       "pos": [
-        -3219.3193681562548,
-        4072.336651443765
+        -3343.5603042113794,
+        4136.51487020596
       ],
       "size": [
         225,
@@ -236,8 +236,8 @@
       "id": 418,
       "type": "Getter",
       "pos": [
-        -3171.9230725688094,
-        4239.754847184257
+        -3332.363121695622,
+        4384.9995136134585
       ],
       "size": [
         210,
@@ -327,7 +327,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 111,
+      "order": 110,
       "mode": 0,
       "inputs": [
         {
@@ -407,7 +407,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 112,
+      "order": 111,
       "mode": 0,
       "inputs": [
         {
@@ -476,8 +476,8 @@
       "id": 386,
       "type": "Getter",
       "pos": [
-        -3642.3954590482235,
-        4205.480439831168
+        -3609.5558576716394,
+        4259.162381063805
       ],
       "size": [
         210,
@@ -566,7 +566,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 135,
+      "order": 134,
       "mode": 0,
       "inputs": [
         {
@@ -641,7 +641,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 134,
+      "order": 133,
       "mode": 0,
       "inputs": [
         {
@@ -706,8 +706,8 @@
       "id": 369,
       "type": "Setter",
       "pos": [
-        -2682.339755409606,
-        3512.6177214120244
+        -2928.5420792421746,
+        3507.2057113877804
       ],
       "size": [
         225,
@@ -716,7 +716,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 153,
+      "order": 152,
       "mode": 0,
       "inputs": [
         {
@@ -865,8 +865,8 @@
       "id": 653,
       "type": "Getter",
       "pos": [
-        -5377.887474386001,
-        2791.1718632732786
+        -5351.796289394546,
+        2752.469633965551
       ],
       "size": [
         210,
@@ -895,7 +895,7 @@
           ]
         }
       ],
-      "title": "Get_model_after_lora",
+      "title": "Get_model",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -919,11 +919,11 @@
         }
       },
       "widgets_values": [
-        "model_after_lora",
+        "model",
         ""
       ],
       "widgets_values_named": {
-        "key": "model_after_lora",
+        "key": "model",
         "var_name": ""
       },
       "_meta": {
@@ -945,23 +945,23 @@
       "id": 356,
       "type": "Setter",
       "pos": [
-        -4781.20295363712,
-        2727.6265697135123
+        -2683.786217947951,
+        3201.7154599402847
       ],
       "size": [
         225,
-        34
+        50
       ],
       "flags": {
         "collapsed": true
       },
-      "order": 132,
+      "order": 166,
       "mode": 0,
       "inputs": [
         {
           "name": "value",
           "type": "MODEL",
-          "link": 758
+          "link": 13717
         }
       ],
       "outputs": [
@@ -1114,7 +1114,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 133,
+      "order": 132,
       "mode": 0,
       "inputs": [
         {
@@ -1755,8 +1755,8 @@
       "id": 557,
       "type": "Getter",
       "pos": [
-        -1949.301945117804,
-        3531.556291994844
+        -1768.000707036829,
+        3660.14062778712
       ],
       "size": [
         210,
@@ -1839,8 +1839,8 @@
       "id": 840,
       "type": "Setter",
       "pos": [
-        -227.73036091610598,
-        2954.0223247837794
+        -181.55156589116993,
+        3193.2218862609593
       ],
       "size": [
         210,
@@ -1849,7 +1849,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 165,
+      "order": 164,
       "mode": 0,
       "inputs": [
         {
@@ -1911,90 +1911,6 @@
       }
     },
     {
-      "id": 343,
-      "type": "Getter",
-      "pos": [
-        -1653.4037711899562,
-        3039.0388339582955
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 16,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
-            2266
-          ]
-        }
-      ],
-      "title": "Get_clip",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#2a363b",
-        "__skeba_bgcolor_base": "#3f5159"
-      },
-      "widgets_values": [
-        "clip",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "clip",
-        "var_name": ""
-      },
-      "color": "#2a363b",
-      "bgcolor": "#3f5159",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "extensions": {
-        "_meta": {
-          "skeba_tags": {
-            "inputs": [],
-            "outputs": []
-          }
-        }
-      }
-    },
-    {
       "id": 367,
       "type": "Setter",
       "pos": [
@@ -2008,7 +1924,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 136,
+      "order": 135,
       "mode": 0,
       "inputs": [
         {
@@ -2073,8 +1989,8 @@
       "id": 542,
       "type": "Setter",
       "pos": [
-        -3299.678039723729,
-        3579.9830788122467
+        -3567.7130147530597,
+        3559.840981369116
       ],
       "size": [
         225,
@@ -2083,7 +1999,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 137,
+      "order": 136,
       "mode": 0,
       "inputs": [
         {
@@ -2148,8 +2064,8 @@
       "id": 365,
       "type": "Getter",
       "pos": [
-        15.188600754016752,
-        3209.3544283632677
+        1089.796365716408,
+        4389.267198127955
       ],
       "size": [
         210,
@@ -2158,7 +2074,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 17,
+      "order": 16,
       "mode": 0,
       "inputs": [
         {
@@ -2228,8 +2144,8 @@
       "id": 862,
       "type": "Getter",
       "pos": [
-        -1665.9374539633325,
-        3089.32618531957
+        -1658.3880067058785,
+        3176.4987091204775
       ],
       "size": [
         210,
@@ -2238,7 +2154,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 18,
+      "order": 17,
       "mode": 0,
       "inputs": [
         {
@@ -2308,8 +2224,8 @@
       "id": 818,
       "type": "Getter",
       "pos": [
-        -3228.059973394628,
-        3524.7539990750715
+        -3365.7088188400853,
+        3521.2091737597407
       ],
       "size": [
         210,
@@ -2318,7 +2234,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 19,
+      "order": 18,
       "mode": 0,
       "inputs": [
         {
@@ -2388,15 +2304,15 @@
       "id": 833,
       "type": "c2682922-684b-4edc-9903-3d9d45aa9cba",
       "pos": [
-        -3013.7447690176114,
-        3478.054392992285
+        -3162.209941996772,
+        3469.128297454765
       ],
       "size": [
         171.099609375,
         66
       ],
       "flags": {},
-      "order": 138,
+      "order": 137,
       "mode": 0,
       "inputs": [
         {
@@ -2467,8 +2383,8 @@
       "id": 559,
       "type": "Getter",
       "pos": [
-        -2073.551591307011,
-        3646.969313024322
+        -1837.1813856672925,
+        3756.5108331293154
       ],
       "size": [
         210,
@@ -2477,7 +2393,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 20,
+      "order": 19,
       "mode": 0,
       "inputs": [
         {
@@ -2551,8 +2467,8 @@
       "id": 570,
       "type": "Getter",
       "pos": [
-        -2026.867806264149,
-        4263.5553577574
+        -1846.4033322138882,
+        4382.301815152376
       ],
       "size": [
         210,
@@ -2561,7 +2477,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 21,
+      "order": 20,
       "mode": 0,
       "inputs": [
         {
@@ -2635,8 +2551,8 @@
       "id": 569,
       "type": "Getter",
       "pos": [
-        -1887.5913996959932,
-        4232.266144991697
+        -1801.3466666861118,
+        4337.175292184094
       ],
       "size": [
         210,
@@ -2645,7 +2561,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 22,
+      "order": 21,
       "mode": 0,
       "inputs": [
         {
@@ -2719,8 +2635,8 @@
       "id": 568,
       "type": "Getter",
       "pos": [
-        -2150.8184936210723,
-        3917.3301120953806
+        -2029.8083492074145,
+        4063.660592054831
       ],
       "size": [
         210,
@@ -2729,7 +2645,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 23,
+      "order": 22,
       "mode": 0,
       "inputs": [
         {
@@ -2803,8 +2719,8 @@
       "id": 861,
       "type": "Getter",
       "pos": [
-        -2100.681513340081,
-        3858.0022222913094
+        -1979.6713689264243,
+        4004.3327022507597
       ],
       "size": [
         210,
@@ -2813,7 +2729,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 24,
+      "order": 23,
       "mode": 0,
       "inputs": [
         {
@@ -2883,8 +2799,8 @@
       "id": 558,
       "type": "Getter",
       "pos": [
-        -2031.6127992831578,
-        3592.4567607186027
+        -1817.8281029885632,
+        3706.2625656134655
       ],
       "size": [
         210,
@@ -2893,7 +2809,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 25,
+      "order": 24,
       "mode": 0,
       "inputs": [
         {
@@ -2967,8 +2883,8 @@
       "id": 376,
       "type": "Getter",
       "pos": [
-        167.93928121848515,
-        2990.4682798060435
+        1424.587609404031,
+        4154.717546871167
       ],
       "size": [
         210,
@@ -2977,7 +2893,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 26,
+      "order": 25,
       "mode": 0,
       "inputs": [
         {
@@ -3047,8 +2963,8 @@
       "id": 572,
       "type": "Getter",
       "pos": [
-        -2194.28607510633,
-        4075.1196846974876
+        -2073.2759306926737,
+        4221.450164656927
       ],
       "size": [
         213.4302734375,
@@ -3057,7 +2973,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 27,
+      "order": 26,
       "mode": 0,
       "inputs": [
         {
@@ -3131,8 +3047,8 @@
       "id": 903,
       "type": "Setter",
       "pos": [
-        -1020.625615470315,
-        3114.3228856810156
+        -1013.0761682128614,
+        3201.495409481923
       ],
       "size": [
         210,
@@ -3141,7 +3057,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 163,
+      "order": 162,
       "mode": 0,
       "inputs": [
         {
@@ -3206,8 +3122,8 @@
       "id": 382,
       "type": "Getter",
       "pos": [
-        -1678.0180283698314,
-        3140.127891769446
+        -1670.4685811123775,
+        3227.3004155703534
       ],
       "size": [
         210,
@@ -3216,7 +3132,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 28,
+      "order": 27,
       "mode": 0,
       "inputs": [
         {
@@ -3290,8 +3206,8 @@
       "id": 383,
       "type": "Getter",
       "pos": [
-        -1689.4118267112087,
-        3186.7113810897918
+        -1681.8623794537548,
+        3273.8839048906993
       ],
       "size": [
         210,
@@ -3300,7 +3216,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 29,
+      "order": 28,
       "mode": 0,
       "inputs": [
         {
@@ -3374,8 +3290,8 @@
       "id": 676,
       "type": "Getter",
       "pos": [
-        -1658.8965672694465,
-        2921.640891346807
+        -1651.3471200119925,
+        3008.8134151477147
       ],
       "size": [
         210,
@@ -3384,7 +3300,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 30,
+      "order": 29,
       "mode": 0,
       "inputs": [
         {
@@ -3458,8 +3374,8 @@
       "id": 677,
       "type": "Getter",
       "pos": [
-        -1658.5438587964493,
-        2990.3114000922687
+        -1650.9944115389953,
+        3077.4839238931763
       ],
       "size": [
         210,
@@ -3468,7 +3384,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 31,
+      "order": 30,
       "mode": 0,
       "inputs": [
         {
@@ -3542,8 +3458,8 @@
       "id": 417,
       "type": "Setter",
       "pos": [
-        -1045.6287128133033,
-        3009.606272002396
+        -1038.0792655558494,
+        3096.7787958033036
       ],
       "size": [
         225,
@@ -3552,7 +3468,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 161,
+      "order": 160,
       "mode": 0,
       "inputs": [
         {
@@ -3617,8 +3533,8 @@
       "id": 413,
       "type": "Setter",
       "pos": [
-        -1038.7344729761935,
-        2956.6126142395924
+        -1031.1850257187396,
+        3043.7851380405
       ],
       "size": [
         225,
@@ -3627,7 +3543,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 160,
+      "order": 159,
       "mode": 0,
       "inputs": [
         {
@@ -3692,8 +3608,8 @@
       "id": 612,
       "type": "Setter",
       "pos": [
-        -1080.0547022717521,
-        3489.0995129286835
+        -972.7703809644563,
+        3621.468340887228
       ],
       "size": [
         225,
@@ -3702,7 +3618,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 177,
+      "order": 175,
       "mode": 0,
       "inputs": [
         {
@@ -3767,8 +3683,8 @@
       "id": 667,
       "type": "Getter",
       "pos": [
-        -780.5630658219594,
-        3136.913392186999
+        -724.1549742593706,
+        3410.13924533587
       ],
       "size": [
         210,
@@ -3777,7 +3693,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 32,
+      "order": 31,
       "mode": 0,
       "inputs": [
         {
@@ -3847,15 +3763,15 @@
       "id": 294,
       "type": "BasicScheduler",
       "pos": [
-        -3458.1924310722297,
-        4205.434850042261
+        -3438.9456445980754,
+        4179.635860569733
       ],
       "size": [
         260,
         142
       ],
       "flags": {},
-      "order": 106,
+      "order": 105,
       "mode": 0,
       "inputs": [
         {
@@ -3935,8 +3851,8 @@
       "id": 362,
       "type": "Getter",
       "pos": [
-        306.6136787282279,
-        3318.8656704881487
+        1385.407030118885,
+        4537.243655064539
       ],
       "size": [
         210,
@@ -3945,7 +3861,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 33,
+      "order": 32,
       "mode": 0,
       "inputs": [
         {
@@ -4025,7 +3941,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 34,
+      "order": 33,
       "mode": 0,
       "inputs": [
         {
@@ -4105,7 +4021,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 35,
+      "order": 34,
       "mode": 0,
       "inputs": [
         {
@@ -4185,7 +4101,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 36,
+      "order": 35,
       "mode": 0,
       "inputs": [
         {
@@ -4255,8 +4171,8 @@
       "id": 606,
       "type": "Getter",
       "pos": [
-        -3195.810328690792,
-        4043.1583576276826
+        -3351.9433293801044,
+        3945.6639177992856
       ],
       "size": [
         210,
@@ -4265,7 +4181,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 37,
+      "order": 36,
       "mode": 0,
       "inputs": [
         {
@@ -4345,7 +4261,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 38,
+      "order": 37,
       "mode": 0,
       "inputs": [
         {
@@ -4419,8 +4335,8 @@
       "id": 574,
       "type": "Getter",
       "pos": [
-        -2183.545234004344,
-        4190.717580152463
+        -2062.5350895906877,
+        4337.0480601119025
       ],
       "size": [
         210,
@@ -4429,7 +4345,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 39,
+      "order": 38,
       "mode": 0,
       "inputs": [
         {
@@ -4503,8 +4419,8 @@
       "id": 834,
       "type": "Getter",
       "pos": [
-        -776.9723265956478,
-        2967.7561615577324
+        -720.564235033059,
+        3240.9820147066034
       ],
       "size": [
         210,
@@ -4513,7 +4429,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 40,
+      "order": 39,
       "mode": 0,
       "inputs": [
         {
@@ -4594,7 +4510,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 113,
+      "order": 112,
       "mode": 0,
       "inputs": [
         {
@@ -4674,7 +4590,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 114,
+      "order": 113,
       "mode": 0,
       "inputs": [
         {
@@ -4745,8 +4661,8 @@
       "id": 375,
       "type": "Setter",
       "pos": [
-        -2636.750954732626,
-        3955.493804976476
+        -2789.0192359378816,
+        3884.4138284519695
       ],
       "size": [
         225,
@@ -4755,7 +4671,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 169,
+      "order": 167,
       "mode": 0,
       "inputs": [
         {
@@ -4820,15 +4736,15 @@
       "id": 300,
       "type": "SamplerCustomAdvanced",
       "pos": [
-        -3023.2269969583126,
-        3933.808446603346
+        -3107.574939254558,
+        3941.8623548436562
       ],
       "size": [
         260,
-        138
+        326
       ],
       "flags": {},
-      "order": 166,
+      "order": 165,
       "mode": 0,
       "inputs": [
         {
@@ -4914,8 +4830,88 @@
       "id": 358,
       "type": "Getter",
       "pos": [
-        -3623.986093408537,
-        3984.3855938168035
+        -3659.8496119525093,
+        3964.8376005410805
+      ],
+      "size": [
+        210,
+        82
+      ],
+      "flags": {
+        "collapsed": false
+      },
+      "order": 40,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            760
+          ]
+        }
+      ],
+      "title": "Get_model_after_lora",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "model_after_lora",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "model_after_lora",
+        "var_name": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 357,
+      "type": "Getter",
+      "pos": [
+        -3636.3731041118417,
+        4145.008753127716
       ],
       "size": [
         210,
@@ -4940,91 +4936,11 @@
           "name": "OBJ",
           "type": "*",
           "links": [
-            760
-          ]
-        }
-      ],
-      "title": "Get_model",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Getter",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "var_name": "",
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "widgets_values": [
-        "model",
-        ""
-      ],
-      "widgets_values_named": {
-        "key": "model",
-        "var_name": ""
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "extensions": {
-        "_meta": {
-          "skeba_tags": {
-            "inputs": [],
-            "outputs": []
-          }
-        }
-      }
-    },
-    {
-      "id": 357,
-      "type": "Getter",
-      "pos": [
-        -3607.9375407059915,
-        4157.309614998582
-      ],
-      "size": [
-        210,
-        34
-      ],
-      "flags": {
-        "collapsed": true
-      },
-      "order": 42,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "shape": 7,
-          "type": "*",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "label": "OBJ",
-          "name": "OBJ",
-          "type": "*",
-          "links": [
             1539
           ]
         }
       ],
-      "title": "Get_model",
+      "title": "Get_model_after_lora",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -5048,11 +4964,11 @@
         }
       },
       "widgets_values": [
-        "model",
+        "model_after_lora",
         ""
       ],
       "widgets_values_named": {
-        "key": "model",
+        "key": "model_after_lora",
         "var_name": ""
       },
       "_meta": {
@@ -5074,8 +4990,8 @@
       "id": 404,
       "type": "Getter",
       "pos": [
-        -793.2821433862698,
-        2914.4456336316916
+        -721.5091198404522,
+        3177.169140927364
       ],
       "size": [
         210,
@@ -5084,7 +5000,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 43,
+      "order": 42,
       "mode": 0,
       "inputs": [
         {
@@ -5158,8 +5074,8 @@
       "id": 323,
       "type": "VAEDecodeAudio",
       "pos": [
-        -663.0154527362796,
-        3692.54324628205
+        -1049.969364289572,
+        3795.871485566859
       ],
       "size": [
         230,
@@ -5168,7 +5084,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 129,
+      "order": 128,
       "mode": 0,
       "inputs": [
         {
@@ -5187,8 +5103,7 @@
           "name": "AUDIO",
           "type": "AUDIO",
           "links": [
-            2022,
-            2242
+            13719
           ]
         }
       ],
@@ -5232,8 +5147,8 @@
       "id": 835,
       "type": "Getter",
       "pos": [
-        -780.5630658219594,
-        3078.913392186999
+        -724.1549742593706,
+        3352.13924533587
       ],
       "size": [
         210,
@@ -5242,7 +5157,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 44,
+      "order": 43,
       "mode": 0,
       "inputs": [
         {
@@ -5312,8 +5227,8 @@
       "id": 854,
       "type": "Getter",
       "pos": [
-        -761.4260663294903,
-        3198.1440056490646
+        -705.0179747669015,
+        3471.3698587979356
       ],
       "size": [
         210,
@@ -5322,7 +5237,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 45,
+      "order": 44,
       "mode": 0,
       "inputs": [
         {
@@ -5392,15 +5307,15 @@
       "id": 298,
       "type": "VAEDecode",
       "pos": [
-        -747.3534194896553,
-        3528.4165178243325
+        -547.8893397485107,
+        3923.1566898340648
       ],
       "size": [
         260,
         78
       ],
       "flags": {},
-      "order": 128,
+      "order": 127,
       "mode": 0,
       "inputs": [
         {
@@ -5464,8 +5379,8 @@
       "id": 349,
       "type": "Getter",
       "pos": [
-        -1057.7287488015472,
-        3604.915046196067
+        -745.5177395232953,
+        3877.2412264357804
       ],
       "size": [
         210,
@@ -5474,7 +5389,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 46,
+      "order": 45,
       "mode": 0,
       "inputs": [
         {
@@ -5544,8 +5459,8 @@
       "id": 354,
       "type": "Getter",
       "pos": [
-        -958.1878671850396,
-        3764.660005380165
+        -1228.4442405057325,
+        3873.8784301259975
       ],
       "size": [
         210,
@@ -5554,7 +5469,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 47,
+      "order": 46,
       "mode": 0,
       "inputs": [
         {
@@ -5624,8 +5539,8 @@
       "id": 368,
       "type": "Getter",
       "pos": [
-        -1697.6588861254793,
-        3270.478328549145
+        -1690.1094388680253,
+        3357.6508523500524
       ],
       "size": [
         210,
@@ -5634,7 +5549,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 48,
+      "order": 47,
       "mode": 0,
       "inputs": [
         {
@@ -5708,17 +5623,17 @@
       "id": 930,
       "type": "SkebaPlaylistWorkflow",
       "pos": [
-        -349.29709130606744,
-        3643.6743756813867
+        -262.3080134188959,
+        4000.050486341486
       ],
       "size": [
         350,
         150
       ],
       "flags": {
-        "collapsed": true
+        "collapsed": false
       },
-      "order": 174,
+      "order": 172,
       "mode": 0,
       "inputs": [
         {
@@ -5790,8 +5705,8 @@
       "id": 379,
       "type": "Getter",
       "pos": [
-        -2424.1674938382716,
-        3107.9245019219534
+        -2413.7955822233116,
+        3211.365071230994
       ],
       "size": [
         210,
@@ -5800,7 +5715,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 49,
+      "order": 48,
       "mode": 0,
       "inputs": [
         {
@@ -5882,7 +5797,7 @@
         122.1129881883694
       ],
       "flags": {},
-      "order": 50,
+      "order": 49,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -5940,8 +5855,8 @@
       "id": 316,
       "type": "CFGGuider",
       "pos": [
-        -3464.5019456501236,
-        4018.174457099005
+        -3393.6995068141478,
+        4005.581076282572
       ],
       "size": [
         225,
@@ -5950,7 +5865,7 @@
       "flags": {
         "collapsed": false
       },
-      "order": 150,
+      "order": 149,
       "mode": 0,
       "inputs": [
         {
@@ -6034,7 +5949,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 51,
+      "order": 50,
       "mode": 0,
       "inputs": [
         {
@@ -6104,8 +6019,8 @@
       "id": 636,
       "type": "Setter",
       "pos": [
-        -2703.201848848242,
-        3572.3792992148283
+        -2952.4516221021904,
+        3571.3294157251466
       ],
       "size": [
         225,
@@ -6114,7 +6029,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 154,
+      "order": 153,
       "mode": 0,
       "inputs": [
         {
@@ -6179,8 +6094,8 @@
       "id": 778,
       "type": "Getter",
       "pos": [
-        -1667.1566466722795,
-        3374.803712861671
+        -1659.6071994148256,
+        3461.9762366625787
       ],
       "size": [
         210,
@@ -6189,7 +6104,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 52,
+      "order": 51,
       "mode": 0,
       "inputs": [
         {
@@ -6259,8 +6174,8 @@
       "id": 378,
       "type": "Setter",
       "pos": [
-        -2719.9003075711594,
-        3438.206619710259
+        -2968.2302713960935,
+        3453.443866817146
       ],
       "size": [
         225,
@@ -6269,7 +6184,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 152,
+      "order": 151,
       "mode": 0,
       "inputs": [
         {
@@ -6334,8 +6249,8 @@
       "id": 666,
       "type": "Getter",
       "pos": [
-        -1630.9893445633268,
-        3324.8095657021654
+        -1623.4398973058728,
+        3411.982089503073
       ],
       "size": [
         210,
@@ -6344,7 +6259,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 53,
+      "order": 52,
       "mode": 0,
       "inputs": [
         {
@@ -6424,7 +6339,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 140,
+      "order": 139,
       "mode": 0,
       "inputs": [
         {
@@ -6499,7 +6414,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 139,
+      "order": 138,
       "mode": 0,
       "inputs": [
         {
@@ -6580,7 +6495,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 54,
+      "order": 53,
       "mode": 0,
       "inputs": [
         {
@@ -6660,7 +6575,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 122,
+      "order": 121,
       "mode": 0,
       "inputs": [
         {
@@ -6739,7 +6654,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 121,
+      "order": 120,
       "mode": 0,
       "inputs": [
         {
@@ -6818,7 +6733,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 120,
+      "order": 119,
       "mode": 0,
       "inputs": [
         {
@@ -6893,7 +6808,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 119,
+      "order": 118,
       "mode": 0,
       "inputs": [
         {
@@ -6968,7 +6883,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 118,
+      "order": 117,
       "mode": 0,
       "inputs": [
         {
@@ -7043,7 +6958,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 117,
+      "order": 116,
       "mode": 0,
       "inputs": [
         {
@@ -7118,7 +7033,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 116,
+      "order": 115,
       "mode": 0,
       "inputs": [
         {
@@ -7194,7 +7109,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 157,
+      "order": 156,
       "mode": 0,
       "inputs": [
         {
@@ -7270,7 +7185,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 156,
+      "order": 155,
       "mode": 0,
       "inputs": [
         {
@@ -7346,7 +7261,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 155,
+      "order": 154,
       "mode": 0,
       "inputs": [
         {
@@ -7419,7 +7334,7 @@
         414.09079473605834
       ],
       "flags": {},
-      "order": 142,
+      "order": 141,
       "mode": 0,
       "inputs": [
         {
@@ -7535,7 +7450,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 55,
+      "order": 54,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -7577,11 +7492,11 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "allthree.png",
+        "start.png",
         "image"
       ],
       "widgets_values_named": {
-        "image": "allthree.png",
+        "image": "start.png",
         "upload": "image"
       },
       "color": "#232",
@@ -7605,8 +7520,8 @@
       "id": 573,
       "type": "Setter",
       "pos": [
-        -1035.5793850162506,
-        3168.5667157050743
+        -1028.0299377587967,
+        3255.739239505982
       ],
       "size": [
         225,
@@ -7615,7 +7530,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 164,
+      "order": 163,
       "mode": 0,
       "inputs": [
         {
@@ -7680,8 +7595,8 @@
       "id": 919,
       "type": "Setter",
       "pos": [
-        -1885.7361010080435,
-        3285.081183221153
+        -1878.1866537505896,
+        3372.2537070220606
       ],
       "size": [
         210,
@@ -7690,7 +7605,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 146,
+      "order": 145,
       "mode": 0,
       "inputs": [
         {
@@ -7755,8 +7670,8 @@
       "id": 918,
       "type": "Getter",
       "pos": [
-        -2353.0548456248416,
-        3226.1570408722
+        -2318.1115178862306,
+        3302.5679873643357
       ],
       "size": [
         210,
@@ -7765,7 +7680,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 56,
+      "order": 55,
       "mode": 0,
       "inputs": [
         {
@@ -7835,8 +7750,8 @@
       "id": 905,
       "type": "Getter",
       "pos": [
-        -2109.766020649275,
-        3957.9761356186204
+        -1988.755876235618,
+        4104.306615578061
       ],
       "size": [
         210,
@@ -7845,7 +7760,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 57,
+      "order": 56,
       "mode": 0,
       "inputs": [
         {
@@ -7915,8 +7830,8 @@
       "id": 371,
       "type": "Getter",
       "pos": [
-        -2017.9451751255633,
-        4476.446776315622
+        -1823.6357980614907,
+        4565.44280514542
       ],
       "size": [
         210,
@@ -7925,7 +7840,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 58,
+      "order": 57,
       "mode": 0,
       "inputs": [
         {
@@ -7999,8 +7914,8 @@
       "id": 364,
       "type": "Getter",
       "pos": [
-        -2170.8854761005155,
-        4016.2463372960115
+        -2049.8753316868588,
+        4162.576817255452
       ],
       "size": [
         210,
@@ -8009,7 +7924,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 59,
+      "order": 58,
       "mode": 0,
       "inputs": [
         {
@@ -8083,8 +7998,8 @@
       "id": 409,
       "type": "Setter",
       "pos": [
-        802.0235741988748,
-        3010.2787221418293
+        2029.665097374019,
+        4091.3689319517857
       ],
       "size": [
         225,
@@ -8093,7 +8008,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 184,
+      "order": 182,
       "mode": 0,
       "inputs": [
         {
@@ -8168,7 +8083,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 144,
+      "order": 143,
       "mode": 0,
       "inputs": [
         {
@@ -8263,7 +8178,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 159,
+      "order": 158,
       "mode": 0,
       "inputs": [
         {
@@ -8338,7 +8253,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 115,
+      "order": 114,
       "mode": 0,
       "inputs": [
         {
@@ -8434,7 +8349,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 60,
+      "order": 59,
       "mode": 0,
       "inputs": [
         {
@@ -8514,7 +8429,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 61,
+      "order": 60,
       "mode": 0,
       "inputs": [
         {
@@ -8588,15 +8503,15 @@
       "id": 272,
       "type": "ModelPreviewOverrideKJ",
       "pos": [
-        -5370.983997819535,
-        2705.645980110474
+        -5373.566493631322,
+        2721.9630097310837
       ],
       "size": [
         938.9666517323112,
         724.2224366674068
       ],
       "flags": {},
-      "order": 104,
+      "order": 103,
       "mode": 0,
       "inputs": [
         {
@@ -8622,7 +8537,7 @@
           "name": "MODEL",
           "type": "MODEL",
           "links": [
-            758
+            13711
           ]
         }
       ],
@@ -8690,8 +8605,8 @@
       "id": 567,
       "type": "Setter",
       "pos": [
-        -1038.920297971333,
-        3057.354861995697
+        -1031.370850713879,
+        3144.5273857966044
       ],
       "size": [
         225,
@@ -8700,7 +8615,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 162,
+      "order": 161,
       "mode": 0,
       "inputs": [
         {
@@ -8765,24 +8680,23 @@
       "id": 652,
       "type": "Setter",
       "pos": [
-        -2752.764201963131,
-        2777.848081499914
+        -4615.070901458531,
+        2706.2815296427502
       ],
       "size": [
         225,
-        34
+        58
       ],
       "flags": {
-        "collapsed": true,
-        "pinned": true
+        "collapsed": true
       },
-      "order": 167,
+      "order": 131,
       "mode": 0,
       "inputs": [
         {
           "name": "value",
           "type": "MODEL",
-          "link": 2389
+          "link": 13711
         }
       ],
       "outputs": [
@@ -8838,82 +8752,6 @@
       }
     },
     {
-      "id": 639,
-      "type": "Setter",
-      "pos": [
-        -2756.855625839355,
-        2847.1970445931543
-      ],
-      "size": [
-        225,
-        58
-      ],
-      "flags": {
-        "collapsed": true,
-        "pinned": true
-      },
-      "order": 168,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "value",
-          "type": "MODEL",
-          "link": 2390
-        }
-      ],
-      "outputs": [
-        {
-          "name": "*",
-          "type": "*",
-          "links": null
-        }
-      ],
-      "title": "Set_upscale_model_no_lora",
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "komojini-comfyui-nodes",
-        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
-        "Node name for S&R": "Setter",
-        "showOutputText": true,
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "previousName": "upscale_model_no_lora"
-      },
-      "widgets_values": [
-        "upscale_model_no_lora"
-      ],
-      "widgets_values_named": {
-        "key": "upscale_model_no_lora"
-      },
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "extensions": {
-        "_meta": {
-          "skeba_tags": {
-            "inputs": [],
-            "outputs": []
-          }
-        }
-      }
-    },
-    {
       "id": 1018,
       "type": "Setter",
       "pos": [
@@ -8927,7 +8765,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 124,
+      "order": 123,
       "mode": 0,
       "inputs": [
         {
@@ -8992,8 +8830,8 @@
       "id": 1019,
       "type": "Getter",
       "pos": [
-        -2099.702203298788,
-        4327.038378082024
+        -1927.051289687376,
+        4435.5935850411715
       ],
       "size": [
         210,
@@ -9002,7 +8840,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 62,
+      "order": 61,
       "mode": 0,
       "inputs": [
         {
@@ -9082,7 +8920,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 143,
+      "order": 142,
       "mode": 0,
       "inputs": [
         {
@@ -9122,7 +8960,7 @@
           "input_ue_unconnectable": {},
           "version": "7.8"
         },
-        "selection_data": "[]",
+        "selection_data": "[{\"on\":false,\"lora\":\"MiniMax\\\\minimaxlora\\\\nokia_style.safetensors\",\"strength\":1,\"strength_clip\":1,\"use_trigger\":false}]",
         "__skeba_tags": {
           "inputs": [],
           "outputs": []
@@ -9130,12 +8968,12 @@
       },
       "widgets_values": [
         "lora-gallery-w18hmf3pn",
-        "[]",
+        "[{\"on\":false,\"lora\":\"MiniMax\\\\minimaxlora\\\\nokia_style.safetensors\",\"strength\":1,\"strength_clip\":1,\"use_trigger\":false}]",
         ""
       ],
       "widgets_values_named": {
         "lora_gallery_unique_id_widget": "lora-gallery-w18hmf3pn",
-        "selection_data": "[]",
+        "selection_data": "[{\"on\":false,\"lora\":\"MiniMax\\\\minimaxlora\\\\nokia_style.safetensors\",\"strength\":1,\"strength_clip\":1,\"use_trigger\":false}]",
         "gallery": ""
       },
       "_meta": {
@@ -9157,15 +8995,15 @@
       "id": 262,
       "type": "SaveVideo",
       "pos": [
-        -5344.840271634365,
-        4406.485550009214
+        -5304.092654183714,
+        4381.17276741586
       ],
       "size": [
         930.4626970172912,
         843.8470227629684
       ],
       "flags": {},
-      "order": 107,
+      "order": 106,
       "mode": 0,
       "inputs": [
         {
@@ -9252,7 +9090,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 63,
+      "order": 62,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -9288,11 +9126,11 @@
         "__skeba_bgcolor_base": "#353"
       },
       "widgets_values": [
-        "[new_location] [s=12]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom crossover inside {vending_machine_area} aboard Red Dwarf. {William Riker_BC} and {Data_BC} materialize together in a shimmering blue-white transporter beam directly in front of the vending machines. The two Starfleet officers examine their unfamiliar industrial surroundings as the transporter effect fades. The scene uses practical-looking 1990s television effects, studio lighting, and traditional multicamera sitcom photography.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography, 4:3 television framing. A static wide shot establishes {vending_machine_area}, with its industrial metal walls, vending machines, exposed fixtures, and worn spaceship interior. Two vertical columns of sparkling blue-white transporter light appear on the floor, accompanied by a rising electronic hum.\n\n[Shot 2: 2.0s] The transporter light intensifies, revealing {William Riker_BC} and {Data_BC} standing side by side. Their bodies gradually become solid as the shimmering particles disappear. The camera remains wide enough to show both complete Starfleet uniforms and the surrounding Red Dwarf architecture.\n\n[Shot 3: 5.0s] A medium shot shows {William Riker_BC} standing inside {vending_machine_area}. He looks around cautiously, his shoulders squared and his expression alert. He reaches toward his communicator badge but leaves his hand resting against his uniform.\n\n[Shot 4: 8.0s] A medium shot shows {Data_BC} standing inside {vending_machine_area}. His pale android face remains impassive as his eyes scan the vending machines and industrial wall panels. He tilts his head slightly, examining the unfamiliar technology.\n\noverall_soundscape:\n\nA classic Star Trek transporter shimmer, soft electrical crackling, a descending electronic hum, and the low mechanical ventilation of Red Dwarf. No dialogue.\n\nnon_diegetic_music:\n\nA brief orchestral science-fiction arrival sting fades into silence.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {vending_machine_area}. {Data_BC} and {William Riker_BC} stand near the center of the room after materializing. {cat red dwarf_rm}, known as Kat, stands directly in front of a vending machine, repeatedly pressing the fish selection button. {Kryten_rm} stands beside the vending machine, watching the newly arrived visitors with curiosity. Kat's bright pink outfit and unmistakable human-shaped television appearance remain consistent throughout.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening medium shot preserves {Data_BC} standing inside {vending_machine_area}, examining the vending machines. The camera then cuts to a wider composition revealing {William Riker_BC} nearby, {cat red dwarf_rm} pressing the vending machine buttons impatiently, and {Kryten_rm} standing beside the machine. Kat's bright pink clothing stands out against the grey industrial interior.\n\n[Shot 2: 2.0s] A medium shot shows only {cat red dwarf_rm} standing directly in front of the vending machine inside {vending_machine_area}. Kat dramatically presses the fish selection button several times, examines the empty dispensing slot, and raises both hands in exaggerated frustration. His pink jacket and matching trousers remain clearly visible.\n\n[Shot 3: 5.0s] The camera cuts to {Kryten_rm} standing inside {vending_machine_area}, his angular mechanical head tilted inquisitively and his grey artificial hands held politely together. {Kryten_rm} says, <d>[English]Who are you?</d>\n\n[Shot 4: 8.0s] The camera cuts to {Data_BC} standing inside {vending_machine_area}, framed in a steady medium close-up with the industrial wall behind him. He speaks clearly in an American accent, with his familiar precise, measured android delivery. {Data_BC} says, <d>[English]My name is Data. I am an android life form.</d>\n\noverall_soundscape:\n\nQuiet spaceship ventilation, vending machine button clicks, a faint mechanical motor, and restrained 1990s sitcom room ambience. Each character has a distinct voice. Data speaks exclusively in an American accent, while Kryten retains his characteristic British television voice.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {vending_machine_area}. {Kryten_rm} stands beside the vending machine facing the visiting officers. {Data_BC} stands several feet away, upright and attentive, with {William Riker_BC} beside him. {cat red dwarf_rm} remains at the vending machine in his bright pink outfit, glancing toward the conversation while keeping one hand near the selection buttons. The exchange focuses on the two android characters, with their distinct appearances and mannerisms clearly preserved.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening medium close-up preserves {Data_BC} standing inside {vending_machine_area}, with the industrial wall behind him and his gold-and-black Starfleet uniform clearly visible. The camera holds briefly on his calm expression before cutting to the grey mechanical figure beside the vending machine.\n\n[Shot 2: 1.5s] A medium close-up shows only {Kryten_rm} standing inside {vending_machine_area}. His angular mechanical head tilts with sudden enthusiasm, and his artificial hands rise toward his chest. {Kryten_rm} says, <d>[English]Well, I'm an android too! A three thousand series.</d>\n\n[Shot 3: 6.0s] The camera remains in the industrial vending machine area but changes to a tighter view of {Kryten_rm}. He leans forward inquisitively, his mechanical eyebrows and mouth moving with exaggerated politeness. {Kryten_rm} says, <d>[English]What series are you?</d>\n\n[Shot 4: 9.0s] The camera cuts to {Data_BC} standing inside {vending_machine_area}, framed from the chest upward. His expression remains composed and analytical. Speaking in a clear American accent with precise diction, {Data_BC} says, <d>[English]I am unique. I was created by Doctor Noonien Soong.</d>\n\noverall_soundscape:\n\nLow spaceship ventilation, subtle vending machine machinery, and quiet room ambience. Kryten's familiar British vocal mannerisms contrast with Data's unmistakably American accent and calm synthetic delivery. One speaker at a time.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {William Riker_BC} sits in a classroom chair facing {cat red dwarf_rm}, who lounges confidently in another chair while wearing his bright pink outfit. {Data_BC} sits upright nearby with his hands neatly arranged on his knees. {Kryten_rm} stands politely beside the classroom seating. The room retains its recognizable Red Dwarf set architecture, lighting, and furniture arrangement.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A medium-wide establishing shot shows {classroom_red_dwarf}, with its classroom chairs, industrial spaceship walls, and practical overhead lighting. {William Riker_BC} sits facing {cat red dwarf_rm}, who lounges with one leg extended and his pink jacket prominently visible. {Data_BC} sits upright in a nearby chair while {Kryten_rm} stands beside the seating area. Everyone remains silent during the establishing shot.\n\n[Shot 2: 1.5s] The camera cuts to a medium shot of only {cat red dwarf_rm} seated inside {classroom_red_dwarf}. Kat leans forward, his eyes widening with curiosity and his bright pink outfit catching the studio light. {cat red dwarf_rm} says, <d>[English]Whoa! So why are you here?</d>\n\n[Shot 3: 5.5s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He leans forward with his characteristic confident smile, one elbow resting casually against the chair. Speaking in an unmistakable American accent, {William Riker_BC} says, <d>[English]So, are you a lady of your species? You're rather attractive!</d>\n\n[Shot 4: 11.5s] The camera cuts to {cat red dwarf_rm} seated inside {classroom_red_dwarf}. Kat looks genuinely offended for a moment, then lifts his chin with theatrical indignation. {cat red dwarf_rm} says, <d>[English]No! Are you the lady of your species?</d>\n\noverall_soundscape:\n\nSubtle classroom ventilation, chair creaks, and a classic British multicamera sitcom atmosphere. Riker's voice retains a confident American accent. Kat speaks with his familiar expressive Red Dwarf delivery.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=10]\n\nsubject_definitions:\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {cat red dwarf_rm} remains seated in his classroom chair wearing his bright pink outfit, leaning forward with an indignant expression. {William Riker_BC} sits opposite him, smiling confidently. {Data_BC} remains seated upright nearby while {Kryten_rm} stands beside the chairs. The scene emphasizes Kat's flamboyant physical comedy and Riker's amused reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening frames preserve a medium close-up of {cat red dwarf_rm} seated inside {classroom_red_dwarf}, leaning forward with an offended expression. His bright pink jacket and expressive face remain clearly visible. The camera holds his reaction briefly.\n\n[Shot 2: 1.0s] The camera remains on {cat red dwarf_rm} seated in his classroom chair. He points toward the edge of frame with an exaggerated flourish and delivers his familiar dismissive vocal gesture. {cat red dwarf_rm} says, <d>[English]Huh! Buh!</d>\n\n[Shot 3: 3.0s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He raises his eyebrows, looks momentarily surprised, and then breaks into a broad, amused grin. He remains silent.\n\n[Shot 4: 5.0s] A wider classroom shot shows {cat red dwarf_rm} reclining dramatically in his chair, {William Riker_BC} smiling opposite him, {Data_BC} sitting rigidly upright, and {Kryten_rm} standing beside the chairs. Kat folds his arms triumphantly while Riker suppresses a laugh. The camera holds on the awkward tableau.\n\noverall_soundscape:\n\nQuiet spaceship ventilation, slight chair movement, Kat's characteristic vocal delivery, and a short restrained studio audience laugh following the final wide shot.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Holly_rm}\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {William Riker_BC}, {Data_BC}, and {cat red dwarf_rm} remain seated in their classroom chairs while {Kryten_rm} stands nearby. A small wall-mounted monitor displays {Holly_rm}, whose recognizable computer-generated television face fills the screen. The camera moves between the seated visitors and Holly's monitor, maintaining the original Red Dwarf studio set appearance.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A medium-wide shot establishes the classroom seating arrangement. {William Riker_BC} remains seated opposite {cat red dwarf_rm}, while {Data_BC} sits upright and {Kryten_rm} stands nearby. A small wall-mounted monitor suddenly flickers to life, revealing {Holly_rm} on its screen. A brief electronic activation sound accompanies the image.\n\n[Shot 2: 1.0s] The camera cuts to a tight close-up of the small wall-mounted monitor inside {classroom_red_dwarf}. Only {Holly_rm}'s recognizable face fills the monitor, with the screen's black bezel visible around the edges. Holly maintains his familiar dry, expressionless delivery. {Holly_rm} says, <d>[English]Riker's supposed to be one of Starfleet's finest tactical minds.</d>\n\n[Shot 3: 6.0s] The camera remains on the small monitor displaying {Holly_rm}, framed slightly wider so the industrial classroom wall remains visible. Holly raises his eyebrows almost imperceptibly. {Holly_rm} says, <d>[English]Which is impressive, considering his main tactical manoeuvre is getting his leg over the furniture.</d>\n\noverall_soundscape:\n\nLow spaceship ventilation, a brief electronic monitor activation sound, and Holly's familiar dry British voice reproduced through a slightly compressed television monitor speaker. A short studio audience laugh follows the punchline.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=10]\n\nsubject_definitions:\n\n{Holly_rm}\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {Holly_rm} remains visible on the small wall-mounted monitor. {William Riker_BC} sits in his classroom chair with a slightly embarrassed expression, while {Data_BC} sits upright nearby. {cat red dwarf_rm} lounges in his bright pink outfit, visibly amused, and {Kryten_rm} stands beside the seating area. The monitor remains mounted in its fixed position on the industrial classroom wall.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The inherited close-up begins on the small wall-mounted monitor displaying {Holly_rm} inside {classroom_red_dwarf}. Holly's face remains centered on the screen, surrounded by the dark monitor bezel. He holds a blank expression while the brief audience reaction subsides.\n\n[Shot 2: 1.5s] The camera remains focused on {Holly_rm} inside the wall-mounted monitor. His expression stays perfectly matter-of-fact. {Holly_rm} says, <d>[English]Rimmer requests a meeting in his quarters.</d>\n\n[Shot 3: 5.0s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He adjusts his red-and-black Starfleet uniform, raises one eyebrow, and gives a small resigned nod. He remains silent.\n\n[Shot 4: 7.0s] A wide classroom shot shows {William Riker_BC} rising from his chair, followed by {Data_BC}. {cat red dwarf_rm} stands and straightens his bright pink jacket while {Kryten_rm} turns toward the classroom doorway. The group begins walking toward the exit.\n\noverall_soundscape:\n\nQuiet spaceship ventilation, the faint electronic hum of the monitor, chair creaks, footsteps, and a brief rustle of Starfleet uniforms. Holly's voice sounds through the small monitor speaker.\n\nnon_diegetic_music:\n\nA very brief lighthearted 1990s British science-fiction sitcom transition sting accompanies the group's departure.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{Lister_rm} Wardrobe: wearing a faded olive-grey military-style jacket with patches and rolled-up sleeves over a red London Jets T-shirt, matching cargo trousers, and black combat boots. His hair is short and curly on top with three short dreadlocks hanging down the back of his head.\n\n{Rimmer_rm} Wardrobe: wearing his familiar Red Dwarf uniform, matching the supplied {Rimmer_Outfit} reference, with his distinctive holographic H emblem on his forehead.\n\n{Sleeping_Quarters}\n\n{Lister_Outfit}\n\n{Rimmer_Outfit}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {Sleeping_Quarters}. The industrial grey room contains two stacked recessed bunks centered along the back wall, with the room's furnishings and geometry matching the supplied environment references. {Rimmer_rm} stands near the center of the room with his arms folded, while {Lister_rm} lounges casually on the lower bunk wearing his faded olive-grey jacket and red London Jets T-shirt. {William Riker_BC} and {Data_BC} stand facing them near the entrance. {cat red dwarf_rm} stands nearby in his bright pink outfit, and {Kryten_rm} remains beside the doorway.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A wide establishing shot reveals {Sleeping_Quarters}, preserving the two stacked recessed bunks along the back wall and the industrial grey architecture. {Rimmer_rm} stands stiffly near the center, {Lister_rm} lounges on the lower bunk, and {William Riker_BC} and {Data_BC} stand near the entrance. {cat red dwarf_rm} leans casually beside the visitors while {Kryten_rm} stands near the doorway. The group remains silent during the opening.\n\n[Shot 2: 1.5s] The camera cuts to a medium close-up of {Rimmer_rm} standing inside {Sleeping_Quarters}. His holographic H emblem is clearly visible on his forehead, and his posture is rigid with military self-importance. {Rimmer_rm} says, <d>[English]Sorry to interrupt your love fest, but either give us a solid reason for being here...</d>\n\n[Shot 3: 8.5s] A slightly tighter shot remains on {Rimmer_rm} standing inside {Sleeping_Quarters}. He points sharply toward the doorway, his expression turning openly impatient. {Rimmer_rm} says, <d>[English]...or get off our ship!</d>\n\n[Shot 4: 11.5s] The camera cuts to {William Riker_BC} standing inside {Sleeping_Quarters}. He straightens his shoulders, looks toward the edge of frame, and maintains a composed Starfleet commander's expression. He remains silent.\n\noverall_soundscape:\n\nLow industrial spaceship ventilation, faint electrical machinery, subtle clothing movement, and the characteristic acoustics of Red Dwarf's sleeping quarters. Rimmer speaks with his familiar British accent and pompous, irritated delivery.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{Lister_rm} Wardrobe: wearing a faded olive-grey military-style jacket with patches and rolled-up sleeves over a red London Jets T-shirt, matching cargo trousers, and black combat boots. His hair is short and curly on top with three short dreadlocks hanging down the back of his head.\n\n{Rimmer_rm} Wardrobe: wearing his familiar Red Dwarf uniform, matching the supplied {Rimmer_Outfit} reference, with his distinctive holographic H emblem on his forehead.\n\n{Sleeping_Quarters}\n\n{Lister_Outfit}\n\n{Rimmer_Outfit}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {Sleeping_Quarters}. {William Riker_BC} stands near the entrance facing {Rimmer_rm}, who remains near the center of the room with his arms folded. {Data_BC} stands attentively beside Riker. {Lister_rm} remains seated on the lower recessed bunk in his faded olive-grey jacket and red London Jets T-shirt. {cat red dwarf_rm} stands nearby in his bright pink outfit, while {Kryten_rm} remains beside the doorway. The industrial grey sleeping quarters retain their fixed bunk arrangement and recognizable Red Dwarf set design.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The inherited medium close-up begins on {William Riker_BC} standing inside {Sleeping_Quarters}, his red-and-black Starfleet uniform clearly visible against the industrial grey walls. He holds a composed expression and squares his shoulders. The camera remains steady.\n\n[Shot 2: 1.0s] A medium close-up frames only {William Riker_BC} standing inside {Sleeping_Quarters}. He speaks in a clear, confident American accent, with his characteristic measured Starfleet command delivery. {William Riker_BC} says, <d>[English]Well, so far we've detected three life forms aboard, but we've only encountered two physical life species.</d>\n\n[Shot 3: 10.5s] The camera cuts to a medium shot of {Rimmer_rm} standing inside {Sleeping_Quarters}. His holographic H emblem remains visible as he narrows his eyes suspiciously and shifts his weight, clearly unimpressed. He remains silent.\n\n[Shot 4: 12.5s] A wider shot shows {Rimmer_rm} standing rigidly in the center of the room, {Lister_rm} lounging on the lower bunk, {William Riker_BC} and {Data_BC} standing near the entrance, {cat red dwarf_rm} in his bright pink outfit beside them, and {Kryten_rm} standing near the doorway. The group exchanges puzzled looks while the camera holds on the awkward silence.\n\noverall_soundscape:\n\nSteady low spaceship ventilation, faint mechanical humming, subtle uniform movement, and the enclosed acoustics of the sleeping quarters. Riker speaks exclusively in an American accent, maintaining his recognizable Star Trek: The Next Generation vocal delivery. A brief restrained studio audience reaction follows the final group shot.\n\nnon_diegetic_music:\n\nN/A",
+        "[new_location] [s=15]\n\nsubject_definitions:\n\n{BruckBruck} Appearance: Match saved reference sheet exactly. Realistic adult man with long hair and glasses, wearing jeans and a grey long-sleeve sweater. Voice: Strong Minnesota accent, processed through a deep, robotic vocoder. Extremely enthusiastic and comically intense facial expressions.\n\n{eva_snu_snu_witch} Appearance: Match saved reference exactly. Adult woman with red hair, black glasses, and a witch outfit. Voice: Powerful, melodic female techno-pop singing with heavily processed robotic vocoder harmonies. Playful, mischievous delivery with precise pitch and extremely catchy rhythmic phrasing.\n\n<location:witch_techno_rave = A surreal underground hardcore techno club with rotating neon pentagrams, giant chrome speakers, black-and-purple checkerboard floors, flashing red lasers, enormous floating shoes, psychedelic CGI toes, and distorted VHS graphics.>\n\n<object:giant_shoes = Enormous animated black witch shoes and cartoon toes floating through psychedelic tunnels, spinning and pulsing in synchronization with the bass.>\n\nsummary:\n\nAn outrageously bizarre hardcore techno-pop music video. Snu Snu sings an infectious vocoder-driven anthem while Bruck enthusiastically kisses and sucks her sweaty toes in exaggerated close-ups. The visuals become increasingly surreal, with giant animated feet, spinning chrome shoes, rapidly multiplying Brucks, and enormous neon text. Despite the ridiculous subject matter, the music is an exceptionally powerful, polished hardcore techno banger.\n\ndetailed_description:\n\nVISUAL STYLE: Deranged 1990s hardcore techno music video mixed with surreal VHS horror-comedy. Extreme fisheye distortion, violent crash zooms, strobing magenta and green lights, giant spinning metallic text, cheap CGI, and psychedelic kaleidoscopic effects.\n\nIMPORTANT MUSICAL DIRECTION: Every lyric is sung melodically with precise timing. Heavy robotic vocoder harmonies, strong female lead vocals, and a genuinely memorable chorus. No random shouting or spoken dialogue.\n\n[Shot 1: 0s] EXTREME CLOSE-UP of {eva_snu_snu_witch} staring directly into the camera. Her red hair blows dramatically backward. Giant metallic letters spin behind her:\n\n\"OH BRUCKY BRUCK!\"\n\nA gigantic distorted hardcore kick drops immediately.\n\n{eva_snu_snu_witch} sings, <d>[English]Oh, Brucky Bruck, sucking on my toes!</d>\n\n[Shot 2: 2.5s] LOW-ANGLE CLOSE-UP. Snu Snu sits on an enormous chrome throne, her black witch shoes discarded nearby. Bruck kneels in front of her, enthusiastically kissing and sucking her toes in exaggerated theatrical fashion. Giant animated pink hearts and neon lightning bolts explode behind them.\n\n{eva_snu_snu_witch} sings, <d>[English]Gotta let you know, I'm a naughty one!</d>\n\n[Shot 3: 5s] WIDE SHOT. Snu Snu stands and performs a frantic techno dance while Bruck spins around her on the checkerboard floor. Giant animated feet rotate overhead. The camera spins rapidly.\n\n{eva_snu_snu_witch} sings, <d>[English]Now let's have some fun, fun, fun!</d>\n\n[Shot 4: 7.5s] EXTREME FISHEYE CLOSE-UP. Bruck enthusiastically sucks Snu Snu's toes while looking upward through his glasses. His head multiplies into sixteen rotating VHS copies. Enormous neon letters reading \"BRUCKY BRUCK\" bounce to the kick drum.\n\n{eva_snu_snu_witch} sings, <d>[English]Feet in my shoes all day!</d>\n\n[Shot 5: 10s] MASSIVE TECHNO DROP. Snu Snu dances on a rotating chrome platform while Bruck continues his absurd toe-kissing routine. Hundreds of animated toes and giant black witch shoes spin through a psychedelic tunnel.\n\n{eva_snu_snu_witch} sings, <d>[English]Suck those toes good today!</d>\n\n[Shot 6: 12.5s] EXTREME CLOSE-UP. Snu Snu looks into the camera with a mischievous smile. Her face transforms into a giant chrome witch head surrounded by spinning neon shoes.\n\n{eva_snu_snu_witch} sings, <d>[English]Oh, Brucky Bruck! Oh, Brucky Bruck!</d>\n\n[Shot 7: 14s] Bruck and Snu Snu appear together against a gigantic rotating neon pentagram. Giant metallic text explodes across the screen:\n\n\"BRUCKY BRUCK!\"\n\nThe final vocoder note sustains over a massive distorted kick and bass impact.\n\noverall_soundscape:\n\nPowerful, professionally produced female techno-pop vocals with aggressive robotic vocoder harmonies, precise rhythmic phrasing, and strong melodic hooks.\n\nBruck's occasional robotic vocal ad-libs retain his recognizable Minnesota accent.\n\nElectronic laser effects, exaggerated cartoon kissing sounds, and VHS distortion synchronized to the beat.\n\nThe music dominates the mix.\n\nnon_diegetic_music:\n\nMASSIVE HARDCORE TECHNO / HARD EURODANCE / VOCODER TECHNO-POP BANGER.\n\n160 BPM.\n\nKey: F minor.\n\nTime signature: 4/4.\n\nPRODUCTION STYLE:\n\n- Extremely powerful distorted four-on-the-floor hardcore kick.\n\n- Deep, aggressive reverse-bass rhythm.\n\n- Rolling distorted Reese bass underneath the kick.\n\n- Hard electronic claps and snare hits.\n\n- Rapid sixteenth-note hi-hats.\n\n- Aggressive industrial percussion.\n\n- Acidic TB-303 synth flourishes.\n\n- Huge euphoric supersaw chords.\n\n- Bright, memorable Eurodance lead synth.\n\n- Robotic vocoder harmonies.\n\n- Tight sidechain compression.\n\n- Powerful stereo synth risers.\n\nCHORD PROGRESSION:\n\nFm – Db – Ab – Eb.\n\nVOCAL ARRANGEMENT:\n\nSnu Snu sings a strong, catchy female techno-pop melody.\n\nThe central chorus:\n\n\"Oh, Brucky Bruck, sucking on my toes!\n\nGotta let you know, I'm a naughty one!\n\nNow let's have some fun!\n\nFeet in my shoes all day!\n\nSuck those toes good today!\"\n\nThe phrase \"OH BRUCKY BRUCK\" is a huge melodic hook.\n\n\"Sucking on my toes\" follows a descending synth-pop melody.\n\n\"Gotta let you know\" rises into the next phrase.\n\n\"Feet in my shoes all day\" uses a bright, euphoric melodic progression.\n\n\"Suck those toes good today\" resolves into a powerful sustained chorus note.\n\nDeep robotic vocoder backing vocals repeat:\n\n\"BRUCK! BRUCK! BRUCK!\"\n\nPRODUCTION QUALITY:\n\nExtremely polished, loud, bass-heavy, and professionally mastered.\n\nThe kick and bass must be enormous.\n\nVocals are tightly tuned, melodic, rhythmically precise, and layered with aggressive robotic vocoder harmonies.\n\nThe music should sound like a genuinely addictive European hardcore techno-pop anthem.\n\nNO screaming.\n\nNO spoken-word delivery.\n\nNO off-key singing.\n\nNO long instrumental breaks.\n\nRelentless pounding drums, filthy bass, robotic harmonies, and an unforgettable chorus.",
         ""
       ],
       "widgets_values_named": {
-        "text": "[new_location] [s=12]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom crossover inside {vending_machine_area} aboard Red Dwarf. {William Riker_BC} and {Data_BC} materialize together in a shimmering blue-white transporter beam directly in front of the vending machines. The two Starfleet officers examine their unfamiliar industrial surroundings as the transporter effect fades. The scene uses practical-looking 1990s television effects, studio lighting, and traditional multicamera sitcom photography.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography, 4:3 television framing. A static wide shot establishes {vending_machine_area}, with its industrial metal walls, vending machines, exposed fixtures, and worn spaceship interior. Two vertical columns of sparkling blue-white transporter light appear on the floor, accompanied by a rising electronic hum.\n\n[Shot 2: 2.0s] The transporter light intensifies, revealing {William Riker_BC} and {Data_BC} standing side by side. Their bodies gradually become solid as the shimmering particles disappear. The camera remains wide enough to show both complete Starfleet uniforms and the surrounding Red Dwarf architecture.\n\n[Shot 3: 5.0s] A medium shot shows {William Riker_BC} standing inside {vending_machine_area}. He looks around cautiously, his shoulders squared and his expression alert. He reaches toward his communicator badge but leaves his hand resting against his uniform.\n\n[Shot 4: 8.0s] A medium shot shows {Data_BC} standing inside {vending_machine_area}. His pale android face remains impassive as his eyes scan the vending machines and industrial wall panels. He tilts his head slightly, examining the unfamiliar technology.\n\noverall_soundscape:\n\nA classic Star Trek transporter shimmer, soft electrical crackling, a descending electronic hum, and the low mechanical ventilation of Red Dwarf. No dialogue.\n\nnon_diegetic_music:\n\nA brief orchestral science-fiction arrival sting fades into silence.\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {vending_machine_area}. {Data_BC} and {William Riker_BC} stand near the center of the room after materializing. {cat red dwarf_rm}, known as Kat, stands directly in front of a vending machine, repeatedly pressing the fish selection button. {Kryten_rm} stands beside the vending machine, watching the newly arrived visitors with curiosity. Kat's bright pink outfit and unmistakable human-shaped television appearance remain consistent throughout.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening medium shot preserves {Data_BC} standing inside {vending_machine_area}, examining the vending machines. The camera then cuts to a wider composition revealing {William Riker_BC} nearby, {cat red dwarf_rm} pressing the vending machine buttons impatiently, and {Kryten_rm} standing beside the machine. Kat's bright pink clothing stands out against the grey industrial interior.\n\n[Shot 2: 2.0s] A medium shot shows only {cat red dwarf_rm} standing directly in front of the vending machine inside {vending_machine_area}. Kat dramatically presses the fish selection button several times, examines the empty dispensing slot, and raises both hands in exaggerated frustration. His pink jacket and matching trousers remain clearly visible.\n\n[Shot 3: 5.0s] The camera cuts to {Kryten_rm} standing inside {vending_machine_area}, his angular mechanical head tilted inquisitively and his grey artificial hands held politely together. {Kryten_rm} says, <d>[English]Who are you?</d>\n\n[Shot 4: 8.0s] The camera cuts to {Data_BC} standing inside {vending_machine_area}, framed in a steady medium close-up with the industrial wall behind him. He speaks clearly in an American accent, with his familiar precise, measured android delivery. {Data_BC} says, <d>[English]My name is Data. I am an android life form.</d>\n\noverall_soundscape:\n\nQuiet spaceship ventilation, vending machine button clicks, a faint mechanical motor, and restrained 1990s sitcom room ambience. Each character has a distinct voice. Data speaks exclusively in an American accent, while Kryten retains his characteristic British television voice.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{vending_machine_area}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {vending_machine_area}. {Kryten_rm} stands beside the vending machine facing the visiting officers. {Data_BC} stands several feet away, upright and attentive, with {William Riker_BC} beside him. {cat red dwarf_rm} remains at the vending machine in his bright pink outfit, glancing toward the conversation while keeping one hand near the selection buttons. The exchange focuses on the two android characters, with their distinct appearances and mannerisms clearly preserved.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening medium close-up preserves {Data_BC} standing inside {vending_machine_area}, with the industrial wall behind him and his gold-and-black Starfleet uniform clearly visible. The camera holds briefly on his calm expression before cutting to the grey mechanical figure beside the vending machine.\n\n[Shot 2: 1.5s] A medium close-up shows only {Kryten_rm} standing inside {vending_machine_area}. His angular mechanical head tilts with sudden enthusiasm, and his artificial hands rise toward his chest. {Kryten_rm} says, <d>[English]Well, I'm an android too! A three thousand series.</d>\n\n[Shot 3: 6.0s] The camera remains in the industrial vending machine area but changes to a tighter view of {Kryten_rm}. He leans forward inquisitively, his mechanical eyebrows and mouth moving with exaggerated politeness. {Kryten_rm} says, <d>[English]What series are you?</d>\n\n[Shot 4: 9.0s] The camera cuts to {Data_BC} standing inside {vending_machine_area}, framed from the chest upward. His expression remains composed and analytical. Speaking in a clear American accent with precise diction, {Data_BC} says, <d>[English]I am unique. I was created by Doctor Noonien Soong.</d>\n\noverall_soundscape:\n\nLow spaceship ventilation, subtle vending machine machinery, and quiet room ambience. Kryten's familiar British vocal mannerisms contrast with Data's unmistakably American accent and calm synthetic delivery. One speaker at a time.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {William Riker_BC} sits in a classroom chair facing {cat red dwarf_rm}, who lounges confidently in another chair while wearing his bright pink outfit. {Data_BC} sits upright nearby with his hands neatly arranged on his knees. {Kryten_rm} stands politely beside the classroom seating. The room retains its recognizable Red Dwarf set architecture, lighting, and furniture arrangement.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A medium-wide establishing shot shows {classroom_red_dwarf}, with its classroom chairs, industrial spaceship walls, and practical overhead lighting. {William Riker_BC} sits facing {cat red dwarf_rm}, who lounges with one leg extended and his pink jacket prominently visible. {Data_BC} sits upright in a nearby chair while {Kryten_rm} stands beside the seating area. Everyone remains silent during the establishing shot.\n\n[Shot 2: 1.5s] The camera cuts to a medium shot of only {cat red dwarf_rm} seated inside {classroom_red_dwarf}. Kat leans forward, his eyes widening with curiosity and his bright pink outfit catching the studio light. {cat red dwarf_rm} says, <d>[English]Whoa! So why are you here?</d>\n\n[Shot 3: 5.5s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He leans forward with his characteristic confident smile, one elbow resting casually against the chair. Speaking in an unmistakable American accent, {William Riker_BC} says, <d>[English]So, are you a lady of your species? You're rather attractive!</d>\n\n[Shot 4: 11.5s] The camera cuts to {cat red dwarf_rm} seated inside {classroom_red_dwarf}. Kat looks genuinely offended for a moment, then lifts his chin with theatrical indignation. {cat red dwarf_rm} says, <d>[English]No! Are you the lady of your species?</d>\n\noverall_soundscape:\n\nSubtle classroom ventilation, chair creaks, and a classic British multicamera sitcom atmosphere. Riker's voice retains a confident American accent. Kat speaks with his familiar expressive Red Dwarf delivery.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=10]\n\nsubject_definitions:\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {cat red dwarf_rm} remains seated in his classroom chair wearing his bright pink outfit, leaning forward with an indignant expression. {William Riker_BC} sits opposite him, smiling confidently. {Data_BC} remains seated upright nearby while {Kryten_rm} stands beside the chairs. The scene emphasizes Kat's flamboyant physical comedy and Riker's amused reaction.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The opening frames preserve a medium close-up of {cat red dwarf_rm} seated inside {classroom_red_dwarf}, leaning forward with an offended expression. His bright pink jacket and expressive face remain clearly visible. The camera holds his reaction briefly.\n\n[Shot 2: 1.0s] The camera remains on {cat red dwarf_rm} seated in his classroom chair. He points toward the edge of frame with an exaggerated flourish and delivers his familiar dismissive vocal gesture. {cat red dwarf_rm} says, <d>[English]Huh! Buh!</d>\n\n[Shot 3: 3.0s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He raises his eyebrows, looks momentarily surprised, and then breaks into a broad, amused grin. He remains silent.\n\n[Shot 4: 5.0s] A wider classroom shot shows {cat red dwarf_rm} reclining dramatically in his chair, {William Riker_BC} smiling opposite him, {Data_BC} sitting rigidly upright, and {Kryten_rm} standing beside the chairs. Kat folds his arms triumphantly while Riker suppresses a laugh. The camera holds on the awkward tableau.\n\noverall_soundscape:\n\nQuiet spaceship ventilation, slight chair movement, Kat's characteristic vocal delivery, and a short restrained studio audience laugh following the final wide shot.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{Holly_rm}\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {William Riker_BC}, {Data_BC}, and {cat red dwarf_rm} remain seated in their classroom chairs while {Kryten_rm} stands nearby. A small wall-mounted monitor displays {Holly_rm}, whose recognizable computer-generated television face fills the screen. The camera moves between the seated visitors and Holly's monitor, maintaining the original Red Dwarf studio set appearance.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A medium-wide shot establishes the classroom seating arrangement. {William Riker_BC} remains seated opposite {cat red dwarf_rm}, while {Data_BC} sits upright and {Kryten_rm} stands nearby. A small wall-mounted monitor suddenly flickers to life, revealing {Holly_rm} on its screen. A brief electronic activation sound accompanies the image.\n\n[Shot 2: 1.0s] The camera cuts to a tight close-up of the small wall-mounted monitor inside {classroom_red_dwarf}. Only {Holly_rm}'s recognizable face fills the monitor, with the screen's black bezel visible around the edges. Holly maintains his familiar dry, expressionless delivery. {Holly_rm} says, <d>[English]Riker's supposed to be one of Starfleet's finest tactical minds.</d>\n\n[Shot 3: 6.0s] The camera remains on the small monitor displaying {Holly_rm}, framed slightly wider so the industrial classroom wall remains visible. Holly raises his eyebrows almost imperceptibly. {Holly_rm} says, <d>[English]Which is impressive, considering his main tactical manoeuvre is getting his leg over the furniture.</d>\n\noverall_soundscape:\n\nLow spaceship ventilation, a brief electronic monitor activation sound, and Holly's familiar dry British voice reproduced through a slightly compressed television monitor speaker. A short studio audience laugh follows the punchline.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=10]\n\nsubject_definitions:\n\n{Holly_rm}\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{classroom_red_dwarf}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {classroom_red_dwarf}. {Holly_rm} remains visible on the small wall-mounted monitor. {William Riker_BC} sits in his classroom chair with a slightly embarrassed expression, while {Data_BC} sits upright nearby. {cat red dwarf_rm} lounges in his bright pink outfit, visibly amused, and {Kryten_rm} stands beside the seating area. The monitor remains mounted in its fixed position on the industrial classroom wall.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The inherited close-up begins on the small wall-mounted monitor displaying {Holly_rm} inside {classroom_red_dwarf}. Holly's face remains centered on the screen, surrounded by the dark monitor bezel. He holds a blank expression while the brief audience reaction subsides.\n\n[Shot 2: 1.5s] The camera remains focused on {Holly_rm} inside the wall-mounted monitor. His expression stays perfectly matter-of-fact. {Holly_rm} says, <d>[English]Rimmer requests a meeting in his quarters.</d>\n\n[Shot 3: 5.0s] The camera cuts to {William Riker_BC} seated inside {classroom_red_dwarf}. He adjusts his red-and-black Starfleet uniform, raises one eyebrow, and gives a small resigned nod. He remains silent.\n\n[Shot 4: 7.0s] A wide classroom shot shows {William Riker_BC} rising from his chair, followed by {Data_BC}. {cat red dwarf_rm} stands and straightens his bright pink jacket while {Kryten_rm} turns toward the classroom doorway. The group begins walking toward the exit.\n\noverall_soundscape:\n\nQuiet spaceship ventilation, the faint electronic hum of the monitor, chair creaks, footsteps, and a brief rustle of Starfleet uniforms. Holly's voice sounds through the small monitor speaker.\n\nnon_diegetic_music:\n\nA very brief lighthearted 1990s British science-fiction sitcom transition sting accompanies the group's departure.\n\n|\n\n[new_location] [s=15]\n\nsubject_definitions:\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{Lister_rm} Wardrobe: wearing a faded olive-grey military-style jacket with patches and rolled-up sleeves over a red London Jets T-shirt, matching cargo trousers, and black combat boots. His hair is short and curly on top with three short dreadlocks hanging down the back of his head.\n\n{Rimmer_rm} Wardrobe: wearing his familiar Red Dwarf uniform, matching the supplied {Rimmer_Outfit} reference, with his distinctive holographic H emblem on his forehead.\n\n{Sleeping_Quarters}\n\n{Lister_Outfit}\n\n{Rimmer_Outfit}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {Sleeping_Quarters}. The industrial grey room contains two stacked recessed bunks centered along the back wall, with the room's furnishings and geometry matching the supplied environment references. {Rimmer_rm} stands near the center of the room with his arms folded, while {Lister_rm} lounges casually on the lower bunk wearing his faded olive-grey jacket and red London Jets T-shirt. {William Riker_BC} and {Data_BC} stand facing them near the entrance. {cat red dwarf_rm} stands nearby in his bright pink outfit, and {Kryten_rm} remains beside the doorway.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. A wide establishing shot reveals {Sleeping_Quarters}, preserving the two stacked recessed bunks along the back wall and the industrial grey architecture. {Rimmer_rm} stands stiffly near the center, {Lister_rm} lounges on the lower bunk, and {William Riker_BC} and {Data_BC} stand near the entrance. {cat red dwarf_rm} leans casually beside the visitors while {Kryten_rm} stands near the doorway. The group remains silent during the opening.\n\n[Shot 2: 1.5s] The camera cuts to a medium close-up of {Rimmer_rm} standing inside {Sleeping_Quarters}. His holographic H emblem is clearly visible on his forehead, and his posture is rigid with military self-importance. {Rimmer_rm} says, <d>[English]Sorry to interrupt your love fest, but either give us a solid reason for being here...</d>\n\n[Shot 3: 8.5s] A slightly tighter shot remains on {Rimmer_rm} standing inside {Sleeping_Quarters}. He points sharply toward the doorway, his expression turning openly impatient. {Rimmer_rm} says, <d>[English]...or get off our ship!</d>\n\n[Shot 4: 11.5s] The camera cuts to {William Riker_BC} standing inside {Sleeping_Quarters}. He straightens his shoulders, looks toward the edge of frame, and maintains a composed Starfleet commander's expression. He remains silent.\n\noverall_soundscape:\n\nLow industrial spaceship ventilation, faint electrical machinery, subtle clothing movement, and the characteristic acoustics of Red Dwarf's sleeping quarters. Rimmer speaks with his familiar British accent and pompous, irritated delivery.\n\nnon_diegetic_music:\n\nN/A\n\n|\n\n[s=15]\n\nsubject_definitions:\n\n{William Riker_BC} Wardrobe: wearing his Star Trek: The Next Generation red-and-black Starfleet command uniform, black trousers, black boots, and Starfleet communicator badge. His dark hair, beard, and facial features match his reference.\n\n{Data_BC} Wardrobe: wearing his Star Trek: The Next Generation gold-and-black Starfleet operations uniform, black trousers, black boots, and Starfleet communicator badge. His pale android complexion, neatly combed dark hair, and distinctive facial features match his reference.\n\n{cat red dwarf_rm} Wardrobe: wearing his distinctive flamboyant bright pink Red Dwarf outfit, with a fitted pink jacket, matching pink trousers, stylish coordinated accessories, and fashionable shoes. Kat is portrayed as the recognizable human-shaped male television character from Red Dwarf, with his characteristic hairstyle, expressive face, confident mannerisms, and entirely human-shaped silhouette.\n\n{Kryten_rm} Wardrobe: his familiar grey mechanical android body, segmented metallic-grey costume, angular artificial head, and mechanical hands.\n\n{Lister_rm} Wardrobe: wearing a faded olive-grey military-style jacket with patches and rolled-up sleeves over a red London Jets T-shirt, matching cargo trousers, and black combat boots. His hair is short and curly on top with three short dreadlocks hanging down the back of his head.\n\n{Rimmer_rm} Wardrobe: wearing his familiar Red Dwarf uniform, matching the supplied {Rimmer_Outfit} reference, with his distinctive holographic H emblem on his forehead.\n\n{Sleeping_Quarters}\n\n{Lister_Outfit}\n\n{Rimmer_Outfit}\n\nsummary:\n\nThe target video shows a live-action 1990s British science-fiction sitcom scene inside {Sleeping_Quarters}. {William Riker_BC} stands near the entrance facing {Rimmer_rm}, who remains near the center of the room with his arms folded. {Data_BC} stands attentively beside Riker. {Lister_rm} remains seated on the lower recessed bunk in his faded olive-grey jacket and red London Jets T-shirt. {cat red dwarf_rm} stands nearby in his bright pink outfit, while {Kryten_rm} remains beside the doorway. The industrial grey sleeping quarters retain their fixed bunk arrangement and recognizable Red Dwarf set design.\n\ndetailed_description:\n\n[Shot 1: 0s] Live-action 1990s British science-fiction sitcom photography. The inherited medium close-up begins on {William Riker_BC} standing inside {Sleeping_Quarters}, his red-and-black Starfleet uniform clearly visible against the industrial grey walls. He holds a composed expression and squares his shoulders. The camera remains steady.\n\n[Shot 2: 1.0s] A medium close-up frames only {William Riker_BC} standing inside {Sleeping_Quarters}. He speaks in a clear, confident American accent, with his characteristic measured Starfleet command delivery. {William Riker_BC} says, <d>[English]Well, so far we've detected three life forms aboard, but we've only encountered two physical life species.</d>\n\n[Shot 3: 10.5s] The camera cuts to a medium shot of {Rimmer_rm} standing inside {Sleeping_Quarters}. His holographic H emblem remains visible as he narrows his eyes suspiciously and shifts his weight, clearly unimpressed. He remains silent.\n\n[Shot 4: 12.5s] A wider shot shows {Rimmer_rm} standing rigidly in the center of the room, {Lister_rm} lounging on the lower bunk, {William Riker_BC} and {Data_BC} standing near the entrance, {cat red dwarf_rm} in his bright pink outfit beside them, and {Kryten_rm} standing near the doorway. The group exchanges puzzled looks while the camera holds on the awkward silence.\n\noverall_soundscape:\n\nSteady low spaceship ventilation, faint mechanical humming, subtle uniform movement, and the enclosed acoustics of the sleeping quarters. Riker speaks exclusively in an American accent, maintaining his recognizable Star Trek: The Next Generation vocal delivery. A brief restrained studio audience reaction follows the final group shot.\n\nnon_diegetic_music:\n\nN/A",
+        "text": "[new_location] [s=15]\n\nsubject_definitions:\n\n{BruckBruck} Appearance: Match saved reference sheet exactly. Realistic adult man with long hair and glasses, wearing jeans and a grey long-sleeve sweater. Voice: Strong Minnesota accent, processed through a deep, robotic vocoder. Extremely enthusiastic and comically intense facial expressions.\n\n{eva_snu_snu_witch} Appearance: Match saved reference exactly. Adult woman with red hair, black glasses, and a witch outfit. Voice: Powerful, melodic female techno-pop singing with heavily processed robotic vocoder harmonies. Playful, mischievous delivery with precise pitch and extremely catchy rhythmic phrasing.\n\n<location:witch_techno_rave = A surreal underground hardcore techno club with rotating neon pentagrams, giant chrome speakers, black-and-purple checkerboard floors, flashing red lasers, enormous floating shoes, psychedelic CGI toes, and distorted VHS graphics.>\n\n<object:giant_shoes = Enormous animated black witch shoes and cartoon toes floating through psychedelic tunnels, spinning and pulsing in synchronization with the bass.>\n\nsummary:\n\nAn outrageously bizarre hardcore techno-pop music video. Snu Snu sings an infectious vocoder-driven anthem while Bruck enthusiastically kisses and sucks her sweaty toes in exaggerated close-ups. The visuals become increasingly surreal, with giant animated feet, spinning chrome shoes, rapidly multiplying Brucks, and enormous neon text. Despite the ridiculous subject matter, the music is an exceptionally powerful, polished hardcore techno banger.\n\ndetailed_description:\n\nVISUAL STYLE: Deranged 1990s hardcore techno music video mixed with surreal VHS horror-comedy. Extreme fisheye distortion, violent crash zooms, strobing magenta and green lights, giant spinning metallic text, cheap CGI, and psychedelic kaleidoscopic effects.\n\nIMPORTANT MUSICAL DIRECTION: Every lyric is sung melodically with precise timing. Heavy robotic vocoder harmonies, strong female lead vocals, and a genuinely memorable chorus. No random shouting or spoken dialogue.\n\n[Shot 1: 0s] EXTREME CLOSE-UP of {eva_snu_snu_witch} staring directly into the camera. Her red hair blows dramatically backward. Giant metallic letters spin behind her:\n\n\"OH BRUCKY BRUCK!\"\n\nA gigantic distorted hardcore kick drops immediately.\n\n{eva_snu_snu_witch} sings, <d>[English]Oh, Brucky Bruck, sucking on my toes!</d>\n\n[Shot 2: 2.5s] LOW-ANGLE CLOSE-UP. Snu Snu sits on an enormous chrome throne, her black witch shoes discarded nearby. Bruck kneels in front of her, enthusiastically kissing and sucking her toes in exaggerated theatrical fashion. Giant animated pink hearts and neon lightning bolts explode behind them.\n\n{eva_snu_snu_witch} sings, <d>[English]Gotta let you know, I'm a naughty one!</d>\n\n[Shot 3: 5s] WIDE SHOT. Snu Snu stands and performs a frantic techno dance while Bruck spins around her on the checkerboard floor. Giant animated feet rotate overhead. The camera spins rapidly.\n\n{eva_snu_snu_witch} sings, <d>[English]Now let's have some fun, fun, fun!</d>\n\n[Shot 4: 7.5s] EXTREME FISHEYE CLOSE-UP. Bruck enthusiastically sucks Snu Snu's toes while looking upward through his glasses. His head multiplies into sixteen rotating VHS copies. Enormous neon letters reading \"BRUCKY BRUCK\" bounce to the kick drum.\n\n{eva_snu_snu_witch} sings, <d>[English]Feet in my shoes all day!</d>\n\n[Shot 5: 10s] MASSIVE TECHNO DROP. Snu Snu dances on a rotating chrome platform while Bruck continues his absurd toe-kissing routine. Hundreds of animated toes and giant black witch shoes spin through a psychedelic tunnel.\n\n{eva_snu_snu_witch} sings, <d>[English]Suck those toes good today!</d>\n\n[Shot 6: 12.5s] EXTREME CLOSE-UP. Snu Snu looks into the camera with a mischievous smile. Her face transforms into a giant chrome witch head surrounded by spinning neon shoes.\n\n{eva_snu_snu_witch} sings, <d>[English]Oh, Brucky Bruck! Oh, Brucky Bruck!</d>\n\n[Shot 7: 14s] Bruck and Snu Snu appear together against a gigantic rotating neon pentagram. Giant metallic text explodes across the screen:\n\n\"BRUCKY BRUCK!\"\n\nThe final vocoder note sustains over a massive distorted kick and bass impact.\n\noverall_soundscape:\n\nPowerful, professionally produced female techno-pop vocals with aggressive robotic vocoder harmonies, precise rhythmic phrasing, and strong melodic hooks.\n\nBruck's occasional robotic vocal ad-libs retain his recognizable Minnesota accent.\n\nElectronic laser effects, exaggerated cartoon kissing sounds, and VHS distortion synchronized to the beat.\n\nThe music dominates the mix.\n\nnon_diegetic_music:\n\nMASSIVE HARDCORE TECHNO / HARD EURODANCE / VOCODER TECHNO-POP BANGER.\n\n160 BPM.\n\nKey: F minor.\n\nTime signature: 4/4.\n\nPRODUCTION STYLE:\n\n- Extremely powerful distorted four-on-the-floor hardcore kick.\n\n- Deep, aggressive reverse-bass rhythm.\n\n- Rolling distorted Reese bass underneath the kick.\n\n- Hard electronic claps and snare hits.\n\n- Rapid sixteenth-note hi-hats.\n\n- Aggressive industrial percussion.\n\n- Acidic TB-303 synth flourishes.\n\n- Huge euphoric supersaw chords.\n\n- Bright, memorable Eurodance lead synth.\n\n- Robotic vocoder harmonies.\n\n- Tight sidechain compression.\n\n- Powerful stereo synth risers.\n\nCHORD PROGRESSION:\n\nFm – Db – Ab – Eb.\n\nVOCAL ARRANGEMENT:\n\nSnu Snu sings a strong, catchy female techno-pop melody.\n\nThe central chorus:\n\n\"Oh, Brucky Bruck, sucking on my toes!\n\nGotta let you know, I'm a naughty one!\n\nNow let's have some fun!\n\nFeet in my shoes all day!\n\nSuck those toes good today!\"\n\nThe phrase \"OH BRUCKY BRUCK\" is a huge melodic hook.\n\n\"Sucking on my toes\" follows a descending synth-pop melody.\n\n\"Gotta let you know\" rises into the next phrase.\n\n\"Feet in my shoes all day\" uses a bright, euphoric melodic progression.\n\n\"Suck those toes good today\" resolves into a powerful sustained chorus note.\n\nDeep robotic vocoder backing vocals repeat:\n\n\"BRUCK! BRUCK! BRUCK!\"\n\nPRODUCTION QUALITY:\n\nExtremely polished, loud, bass-heavy, and professionally mastered.\n\nThe kick and bass must be enormous.\n\nVocals are tightly tuned, melodic, rhythmically precise, and layered with aggressive robotic vocoder harmonies.\n\nThe music should sound like a genuinely addictive European hardcore techno-pop anthem.\n\nNO screaming.\n\nNO spoken-word delivery.\n\nNO off-key singing.\n\nNO long instrumental breaks.\n\nRelentless pounding drums, filthy bass, robotic harmonies, and an unforgettable chorus.",
         "prompt_list_editor": ""
       },
       "color": "#232",
@@ -9326,7 +9164,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 125,
+      "order": 124,
       "mode": 0,
       "inputs": [
         {
@@ -9401,7 +9239,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 64,
+      "order": 63,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -9476,15 +9314,15 @@
       "id": 851,
       "type": "SkebaSaveClipToFile",
       "pos": [
-        -5371.985197840198,
-        3538.940671036458
+        -5307.987028246883,
+        3522.1569976418327
       ],
       "size": [
-        942.1744921407462,
-        951
+        728.4759625828892,
+        779.2290807052241
       ],
       "flags": {},
-      "order": 105,
+      "order": 104,
       "mode": 0,
       "inputs": [
         {
@@ -9566,7 +9404,7 @@
         },
         "skeba_bypass_lane_count": 1,
         "skeba_bypass_lane_types": {},
-        "skeba_playlist": "86d0e6f3d4364e888d3f7554bbfb4392",
+        "skeba_playlist": "fc5c5b2fffe64b6dad59dac2cfd0c839",
         "skeba_clip_toggles": {
           "preview_clip": true
         },
@@ -9618,7 +9456,7 @@
         417.42158289888766
       ],
       "flags": {},
-      "order": 65,
+      "order": 64,
       "mode": 0,
       "inputs": [
         {
@@ -9791,26 +9629,26 @@
         "previewExposures": []
       },
       "widgets_values": [
-        5,
+        15,
         8,
-        "4:3 (Standard)",
-        0.20000000000000004,
-        2,
+        "9:16 (Portrait Widescreen)",
+        0.30000000000000004,
+        1.5,
         24,
         50280432847566,
         false,
-        "Upscaled"
+        "Base only"
       ],
       "widgets_values_named": {
-        "value": 5,
+        "value": 15,
         "value_1": 8,
-        "aspect_ratio": "4:3 (Standard)",
-        "megapixels": 0.20000000000000004,
-        "value_2": 2,
+        "aspect_ratio": "9:16 (Portrait Widescreen)",
+        "megapixels": 0.30000000000000004,
+        "value_2": 1.5,
         "value_4": 24,
         "noise_seed": 50280432847566,
         "value_5": false,
-        "selected": "Upscaled"
+        "selected": "Base only"
       },
       "color": "#232",
       "bgcolor": "#353"
@@ -9829,7 +9667,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 66,
+      "order": 65,
       "mode": 0,
       "inputs": [
         {
@@ -9899,8 +9737,8 @@
       "id": 1029,
       "type": "Getter",
       "pos": [
-        -2102.5842204360406,
-        4423.390864718928
+        -1905.1598306071494,
+        4525.433093574577
       ],
       "size": [
         210,
@@ -9909,7 +9747,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 67,
+      "order": 66,
       "mode": 0,
       "inputs": [
         {
@@ -9989,7 +9827,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 68,
+      "order": 67,
       "mode": 0,
       "inputs": [
         {
@@ -10067,7 +9905,7 @@
         190
       ],
       "flags": {},
-      "order": 69,
+      "order": 68,
       "mode": 0,
       "inputs": [
         {
@@ -10170,7 +10008,7 @@
         "collapsed": true,
         "pinned": true
       },
-      "order": 109,
+      "order": 108,
       "mode": 0,
       "inputs": [
         {
@@ -10251,8 +10089,8 @@
       "id": 1124,
       "type": "Getter",
       "pos": [
-        -2380.8768010317503,
-        3280.9722513386455
+        -2308.698245391845,
+        3350.0362698541467
       ],
       "size": [
         210,
@@ -10261,7 +10099,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 70,
+      "order": 69,
       "mode": 0,
       "inputs": [
         {
@@ -10331,8 +10169,8 @@
       "id": 1125,
       "type": "Getter",
       "pos": [
-        -2407.5108449485824,
-        3165.4065295765367
+        -2378.3083032050513,
+        3256.406954094756
       ],
       "size": [
         210,
@@ -10341,7 +10179,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 71,
+      "order": 70,
       "mode": 0,
       "inputs": [
         {
@@ -10411,8 +10249,8 @@
       "id": 1127,
       "type": "Setter",
       "pos": [
-        -1887.7173711501873,
-        3333.9770992992885
+        -1880.1679238927334,
+        3421.149623100196
       ],
       "size": [
         211.9673828125,
@@ -10421,7 +10259,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 147,
+      "order": 146,
       "mode": 0,
       "inputs": [
         {
@@ -10486,8 +10324,8 @@
       "id": 1156,
       "type": "Getter",
       "pos": [
-        29.62766233740921,
-        3022.6457336346534
+        1226.5015982944813,
+        4194.377953180542
       ],
       "size": [
         210,
@@ -10496,7 +10334,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 72,
+      "order": 71,
       "mode": 0,
       "inputs": [
         {
@@ -10516,7 +10354,7 @@
           ]
         }
       ],
-      "title": "Get_model",
+      "title": "Get_model_after_lora",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -10540,11 +10378,11 @@
         }
       },
       "widgets_values": [
-        "model",
+        "model_after_lora",
         ""
       ],
       "widgets_values_named": {
-        "key": "model",
+        "key": "model_after_lora",
         "var_name": ""
       },
       "_meta": {
@@ -10576,7 +10414,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 149,
+      "order": 148,
       "mode": 0,
       "inputs": [
         {
@@ -10641,8 +10479,8 @@
       "id": 1158,
       "type": "Getter",
       "pos": [
-        253.09497736438755,
-        2934.074935394034
+        1384.0986524867017,
+        4101.568843101222
       ],
       "size": [
         215.0572265625,
@@ -10651,7 +10489,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 73,
+      "order": 72,
       "mode": 0,
       "inputs": [
         {
@@ -10721,8 +10559,8 @@
       "id": 1160,
       "type": "Getter",
       "pos": [
-        0.368149994896367,
-        3103.853940898878
+        1074.9759149572876,
+        4283.7667106635745
       ],
       "size": [
         210,
@@ -10731,7 +10569,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 74,
+      "order": 73,
       "mode": 0,
       "inputs": [
         {
@@ -10801,8 +10639,8 @@
       "id": 1176,
       "type": "Getter",
       "pos": [
-        -2389.148492989281,
-        4130.13985129681
+        -2217.688685268692,
+        3953.7605311738093
       ],
       "size": [
         210,
@@ -10811,7 +10649,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 75,
+      "order": 74,
       "mode": 0,
       "inputs": [
         {
@@ -10881,8 +10719,8 @@
       "id": 1182,
       "type": "Getter",
       "pos": [
-        -847.3922401838474,
-        3852.549827149754
+        -989.36238675898,
+        3959.1595788841487
       ],
       "size": [
         210,
@@ -10891,7 +10729,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 76,
+      "order": 75,
       "mode": 0,
       "inputs": [
         {
@@ -10961,8 +10799,8 @@
       "id": 1183,
       "type": "KSamplerSelect",
       "pos": [
-        -1059.1408932114605,
-        4117.599192916414
+        -1165.7139249654213,
+        4183.649412905319
       ],
       "size": [
         260,
@@ -10971,7 +10809,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 77,
+      "order": 76,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -11029,15 +10867,15 @@
       "id": 1184,
       "type": "SamplerCustomAdvanced",
       "pos": [
-        -693.3764395019306,
-        3961.4042444935744
+        -751.4513024139073,
+        4161.005555344677
       ],
       "size": [
         230,
-        250
+        326
       ],
       "flags": {},
-      "order": 178,
+      "order": 176,
       "mode": 0,
       "inputs": [
         {
@@ -11071,8 +10909,8 @@
           "name": "output",
           "type": "LATENT",
           "links": [
-            2341,
-            2342
+            2342,
+            2391
           ]
         },
         {
@@ -11121,15 +10959,15 @@
       "id": 1185,
       "type": "CFGGuider",
       "pos": [
-        -1026.1099316141467,
-        3912.1303687689056
+        -1140.385983825954,
+        3996.907056357682
       ],
       "size": [
         290,
         110
       ],
       "flags": {},
-      "order": 176,
+      "order": 174,
       "mode": 0,
       "inputs": [
         {
@@ -11203,8 +11041,8 @@
       "id": 1186,
       "type": "Getter",
       "pos": [
-        -1334.1411356040323,
-        3820.7668485116205
+        -1302.8221774103786,
+        3946.114617646106
       ],
       "size": [
         210,
@@ -11213,7 +11051,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 78,
+      "order": 77,
       "mode": 0,
       "inputs": [
         {
@@ -11233,7 +11071,7 @@
           ]
         }
       ],
-      "title": "Get_model",
+      "title": "Get_model_after_lora",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -11257,11 +11095,11 @@
         }
       },
       "widgets_values": [
-        "model",
+        "model_after_lora",
         ""
       ],
       "widgets_values_named": {
-        "key": "model",
+        "key": "model_after_lora",
         "var_name": ""
       },
       "_meta": {
@@ -11283,8 +11121,8 @@
       "id": 1194,
       "type": "Getter",
       "pos": [
-        -780.5630658219594,
-        3020.9133921870043
+        -724.1549742593706,
+        3294.1392453358753
       ],
       "size": [
         210,
@@ -11293,7 +11131,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 79,
+      "order": 78,
       "mode": 0,
       "inputs": [
         {
@@ -11363,8 +11201,8 @@
       "id": 1197,
       "type": "Getter",
       "pos": [
-        319.0270258605495,
-        3259.7768387836695
+        1399.2399075321102,
+        4484.919899098769
       ],
       "size": [
         210,
@@ -11373,7 +11211,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 80,
+      "order": 79,
       "mode": 0,
       "inputs": [
         {
@@ -11443,15 +11281,15 @@
       "id": 1199,
       "type": "c4ce2f0e-e307-481d-8e41-6192ad43e960",
       "pos": [
-        -2175.6279806974067,
-        3704.9774508560226
+        -2011.6744572242399,
+        3841.14568722658
       ],
       "size": [
         331.8621556882856,
         83.52831372683704
       ],
       "flags": {},
-      "order": 172,
+      "order": 170,
       "mode": 0,
       "inputs": [
         {
@@ -11513,8 +11351,8 @@
       "id": 1200,
       "type": "Setter",
       "pos": [
-        797.6244079279171,
-        3800.443977527094
+        821.8194430941628,
+        4337.9530351373305
       ],
       "size": [
         210,
@@ -11523,7 +11361,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 182,
+      "order": 180,
       "mode": 0,
       "inputs": [
         {
@@ -11588,8 +11426,8 @@
       "id": 1201,
       "type": "Getter",
       "pos": [
-        -1077.7476423073379,
-        3544.4855032885985
+        -806.9264720980767,
+        3829.265560729025
       ],
       "size": [
         210,
@@ -11598,7 +11436,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 81,
+      "order": 80,
       "mode": 0,
       "inputs": [
         {
@@ -11676,7 +11514,7 @@
         258
       ],
       "flags": {},
-      "order": 130,
+      "order": 129,
       "mode": 0,
       "inputs": [
         {
@@ -11846,7 +11684,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 141,
+      "order": 140,
       "mode": 0,
       "inputs": [
         {
@@ -11911,8 +11749,8 @@
       "id": 1213,
       "type": "Getter",
       "pos": [
-        2.4987352139477075,
-        3260.045046856579
+        1077.1065001763388,
+        4439.957816621268
       ],
       "size": [
         212.069921875,
@@ -11921,7 +11759,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 82,
+      "order": 81,
       "mode": 0,
       "inputs": [
         {
@@ -11991,8 +11829,8 @@
       "id": 1214,
       "type": "Getter",
       "pos": [
-        147.62790867410797,
-        4057.310823895188
+        179.4669625862474,
+        4354.3319498052615
       ],
       "size": [
         212.069921875,
@@ -12001,7 +11839,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 83,
+      "order": 82,
       "mode": 0,
       "inputs": [
         {
@@ -12071,8 +11909,8 @@
       "id": 1215,
       "type": "Getter",
       "pos": [
-        145.4054725356144,
-        3153.717284617487
+        1299.6651094599415,
+        4352.229956862829
       ],
       "size": [
         212.069921875,
@@ -12081,7 +11919,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 84,
+      "order": 83,
       "mode": 0,
       "inputs": [
         {
@@ -12161,7 +11999,7 @@
       "flags": {
         "pinned": true
       },
-      "order": 110,
+      "order": 109,
       "mode": 0,
       "inputs": [
         {
@@ -12223,7 +12061,7 @@
         208
       ],
       "flags": {},
-      "order": 108,
+      "order": 107,
       "mode": 0,
       "inputs": [
         {
@@ -12343,15 +12181,15 @@
       "id": 1218,
       "type": "f78af170-4c2f-4a4e-b1e4-a00df2c4dc45",
       "pos": [
-        -1731.6352527923946,
-        3728.0366188014686
+        -1625.4859277610117,
+        3875.8111713157346
       ],
       "size": [
         296.970703125,
         568
       ],
       "flags": {},
-      "order": 173,
+      "order": 171,
       "mode": 0,
       "inputs": [
         {
@@ -12582,8 +12420,8 @@
       "id": 1219,
       "type": "Getter",
       "pos": [
-        -2170.246566047745,
-        4138.719139952987
+        -2049.2364216340884,
+        4285.049619912426
       ],
       "size": [
         210,
@@ -12592,7 +12430,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 85,
+      "order": 84,
       "mode": 0,
       "inputs": [
         {
@@ -12662,15 +12500,15 @@
       "id": 1220,
       "type": "59bc3f93-9909-4e65-985f-103f6a46b27d",
       "pos": [
-        551.3027141707513,
-        2981.569152722136
+        1717.869892736278,
+        4272.218467654722
       ],
       "size": [
         229.443359375,
         286
       ],
       "flags": {},
-      "order": 183,
+      "order": 181,
       "mode": 0,
       "inputs": [
         {
@@ -12793,7 +12631,7 @@
         "full",
         1,
         true,
-        230448138442529
+        416923899339200
       ],
       "widgets_values_named": {
         "context_length": "22",
@@ -12803,22 +12641,22 @@
         "video_context_length": "full",
         "clip_index_1": 1,
         "save_if_next_prompt_1": true,
-        "seed": 230448138442529
+        "seed": 416923899339200
       }
     },
     {
       "id": 1221,
       "type": "8c82aa4f-573f-4693-8f4b-88b6aaa3aa32",
       "pos": [
-        -453.93567913835966,
-        2922.333980693451
+        -408.62324713215503,
+        3274.6476912770822
       ],
       "size": [
         210,
         186
       ],
       "flags": {},
-      "order": 148,
+      "order": 147,
       "mode": 0,
       "inputs": [
         {
@@ -12921,8 +12759,8 @@
       "id": 1222,
       "type": "Getter",
       "pos": [
-        -991.9369148529071,
-        3691.6249130356478
+        -1270.6597184110303,
+        3806.017260369899
       ],
       "size": [
         210,
@@ -12931,7 +12769,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 86,
+      "order": 85,
       "mode": 0,
       "inputs": [
         {
@@ -13001,8 +12839,8 @@
       "id": 1223,
       "type": "Getter",
       "pos": [
-        167.73367644196495,
-        3069.135011622769
+        1242.3414414043561,
+        4249.047781387467
       ],
       "size": [
         210,
@@ -13011,7 +12849,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 87,
+      "order": 86,
       "mode": 0,
       "inputs": [
         {
@@ -13081,15 +12919,15 @@
       "id": 1224,
       "type": "1d0af283-971d-4ce4-a426-ced7d87db182",
       "pos": [
-        -1430.9390041186323,
-        2971.433807698554
+        -1423.3895568611783,
+        3058.6063314994617
       ],
       "size": [
         346.4765625,
         414
       ],
       "flags": {},
-      "order": 145,
+      "order": 144,
       "mode": 0,
       "inputs": [
         {
@@ -13105,7 +12943,7 @@
         {
           "name": "clip",
           "type": "CLIP",
-          "link": 2266
+          "link": 13718
         },
         {
           "name": "first_frame",
@@ -13250,15 +13088,15 @@
       "id": 1225,
       "type": "2470aa5f-c6af-4c31-8181-2a45182400f7",
       "pos": [
-        -2168.5428471802843,
-        3184.269232033681
+        -2160.9933999228306,
+        3271.4417558345885
       ],
       "size": [
         210,
         122
       ],
       "flags": {},
-      "order": 127,
+      "order": 126,
       "mode": 0,
       "inputs": [
         {
@@ -13359,7 +13197,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 126,
+      "order": 125,
       "mode": 0,
       "inputs": [
         {
@@ -13434,7 +13272,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 88,
+      "order": 87,
       "mode": 0,
       "inputs": [
         {
@@ -13504,8 +13342,8 @@
       "id": 1231,
       "type": "Getter",
       "pos": [
-        -2076.737169526115,
-        4374.490412646291
+        -1895.6123378814348,
+        4476.8849664379895
       ],
       "size": [
         210,
@@ -13514,7 +13352,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 89,
+      "order": 88,
       "mode": 0,
       "inputs": [
         {
@@ -13584,15 +13422,15 @@
       "id": 1232,
       "type": "SkebaH3UpscaleBypass",
       "pos": [
-        446.1638174639949,
-        3793.897707109494
+        466.48832852003403,
+        4409.554522078744
       ],
       "size": [
         318.0884765625,
         150
       ],
       "flags": {},
-      "order": 181,
+      "order": 179,
       "mode": 0,
       "inputs": [
         {
@@ -13692,8 +13530,8 @@
       "id": 1233,
       "type": "Getter",
       "pos": [
-        180.5398137679451,
-        3813.0515859110615
+        220.34922670469035,
+        4095.1446274083655
       ],
       "size": [
         210,
@@ -13702,7 +13540,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 90,
+      "order": 89,
       "mode": 0,
       "inputs": [
         {
@@ -13782,7 +13620,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 123,
+      "order": 122,
       "mode": 0,
       "inputs": [
         {
@@ -13847,8 +13685,8 @@
       "id": 1237,
       "type": "Getter",
       "pos": [
-        167.33517842555233,
-        3999.9977796593025
+        207.51792277395595,
+        4297.151078443033
       ],
       "size": [
         210,
@@ -13857,7 +13695,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 91,
+      "order": 90,
       "mode": 0,
       "inputs": [
         {
@@ -13927,15 +13765,15 @@
       "id": 1238,
       "type": "LazySwitchKJ",
       "pos": [
-        91.48751901861132,
-        3877.3191357363467
+        114.68403931061835,
+        4153.896537880613
       ],
       "size": [
         270,
         78
       ],
       "flags": {},
-      "order": 180,
+      "order": 178,
       "mode": 0,
       "inputs": [
         {
@@ -14012,21 +13850,21 @@
       "id": 1240,
       "type": "MiniMaxH3JoinMatch",
       "pos": [
-        -234.7741588648533,
-        3865.9654556231835
+        -349.51661227147207,
+        4242.215055968844
       ],
       "size": [
         250,
         250
       ],
       "flags": {},
-      "order": 179,
+      "order": 177,
       "mode": 0,
       "inputs": [
         {
           "name": "samples",
           "type": "LATENT",
-          "link": 2341
+          "link": 2391
         },
         {
           "name": "context_latent",
@@ -14078,7 +13916,7 @@
         "__skeba_bgcolor_base": "rgba(24,24,27,.9)"
       },
       "widgets_values": [
-        1,
+        0.6,
         "22",
         1.5,
         true,
@@ -14088,7 +13926,7 @@
         "auto"
       ],
       "widgets_values_named": {
-        "strength": 1,
+        "strength": 0.6,
         "context_length": "22",
         "min_excess": 1.5,
         "match_spread": true,
@@ -14118,8 +13956,8 @@
       "id": 1241,
       "type": "Getter",
       "pos": [
-        -429.62836141827404,
-        4050.474082996913
+        -673.6335012568384,
+        4579.586062906551
       ],
       "size": [
         210,
@@ -14128,7 +13966,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 92,
+      "order": 91,
       "mode": 0,
       "inputs": [
         {
@@ -14198,8 +14036,8 @@
       "id": 1242,
       "type": "Getter",
       "pos": [
-        -102.22124168132845,
-        4198.959982092485
+        -217.74222190884717,
+        4542.7319036193985
       ],
       "size": [
         210,
@@ -14208,7 +14046,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 93,
+      "order": 92,
       "mode": 0,
       "inputs": [
         {
@@ -14282,15 +14120,15 @@
       "id": 1243,
       "type": "LazySwitchKJ",
       "pos": [
-        -2484.4967954783274,
-        3990.934689147682
+        -2307.3026547511226,
+        3820.1976249290947
       ],
       "size": [
         270,
         78
       ],
       "flags": {},
-      "order": 171,
+      "order": 169,
       "mode": 0,
       "inputs": [
         {
@@ -14375,7 +14213,7 @@
         250
       ],
       "flags": {},
-      "order": 170,
+      "order": 168,
       "mode": 0,
       "inputs": [
         {
@@ -14433,7 +14271,7 @@
         "__skeba_bgcolor_base": "rgba(24,24,27,.9)"
       },
       "widgets_values": [
-        1,
+        0.6,
         "22",
         1.5,
         true,
@@ -14443,7 +14281,7 @@
         "auto"
       ],
       "widgets_values_named": {
-        "strength": 1,
+        "strength": 0.6,
         "context_length": "22",
         "min_excess": 1.5,
         "match_spread": true,
@@ -14473,8 +14311,8 @@
       "id": 1245,
       "type": "Getter",
       "pos": [
-        -2985.794675377961,
-        4410.422093158188
+        -3054.2562267218564,
+        4465.022406153037
       ],
       "size": [
         210,
@@ -14483,7 +14321,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 94,
+      "order": 93,
       "mode": 0,
       "inputs": [
         {
@@ -14553,8 +14391,8 @@
       "id": 1246,
       "type": "Getter",
       "pos": [
-        -2621.9543367051465,
-        4506.3840722744635
+        -2398.710132907136,
+        4121.125586617833
       ],
       "size": [
         210,
@@ -14563,7 +14401,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 95,
+      "order": 94,
       "mode": 0,
       "inputs": [
         {
@@ -14637,15 +14475,15 @@
       "id": 1248,
       "type": "SkebaH3UpscaleTrimBypass",
       "pos": [
-        -1403.1268688076989,
-        3486.273714091593
+        -1287.1912011985228,
+        3612.048565795578
       ],
       "size": [
         285,
         120
       ],
       "flags": {},
-      "order": 175,
+      "order": 173,
       "mode": 0,
       "inputs": [
         {
@@ -14734,77 +14572,11 @@
       }
     },
     {
-      "id": 1249,
-      "type": "SkebaQuickLauncher",
-      "pos": [
-        -5035.260919897071,
-        2919.538758888984
-      ],
-      "size": [
-        389.0345227693806,
-        122.1129881883694
-      ],
-      "flags": {},
-      "order": 96,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [],
-      "properties": {
-        "enableTabs": false,
-        "tabWidth": 65,
-        "tabXOffset": 10,
-        "hasSecondTab": false,
-        "secondTabText": "Send Back",
-        "secondTabOffset": 80,
-        "secondTabWidth": 65,
-        "cnr_id": "h3-reference-library",
-        "ver": "9277c40d558643f5110aea6e814ff147d0c4ffbd",
-        "Node name for S&R": "SkebaQuickLauncher",
-        "ue_properties": {
-          "widget_ue_connectable": {},
-          "input_ue_unconnectable": {},
-          "version": "7.8"
-        },
-        "__skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        },
-        "__skeba_color_base": "#223",
-        "__skeba_bgcolor_base": "#335"
-      },
-      "widgets_values": [
-        null,
-        null,
-        null
-      ],
-      "widgets_values_named": {
-        "Open Live Playlist": null,
-        "Open Reference Library": null,
-        "Register / Update playlist workflow": null
-      },
-      "color": "#223",
-      "bgcolor": "#335",
-      "_meta": {
-        "skeba_tags": {
-          "inputs": [],
-          "outputs": []
-        }
-      },
-      "extensions": {
-        "_meta": {
-          "skeba_tags": {
-            "inputs": [],
-            "outputs": []
-          }
-        }
-      }
-    },
-    {
       "id": 1253,
       "type": "Getter",
       "pos": [
-        -1685.444339052298,
-        3539.312078183832
+        -1592.9643002374444,
+        3713.9246970773875
       ],
       "size": [
         210,
@@ -14813,7 +14585,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 97,
+      "order": 95,
       "mode": 0,
       "inputs": [
         {
@@ -14893,7 +14665,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 151,
+      "order": 150,
       "mode": 0,
       "inputs": [
         {
@@ -14958,8 +14730,8 @@
       "id": 1255,
       "type": "Getter",
       "pos": [
-        -1675.876356824698,
-        3585.6718534432534
+        -1563.9603753081265,
+        3806.574943796663
       ],
       "size": [
         210,
@@ -14968,7 +14740,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 98,
+      "order": 96,
       "mode": 0,
       "inputs": [
         {
@@ -15046,7 +14818,7 @@
         834.3991549148955
       ],
       "flags": {},
-      "order": 99,
+      "order": 97,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -15083,7 +14855,7 @@
         1227.7540608977106
       ],
       "flags": {},
-      "order": 100,
+      "order": 98,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -15143,7 +14915,7 @@
         1227.7540608977106
       ],
       "flags": {},
-      "order": 101,
+      "order": 99,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -15203,7 +14975,7 @@
         853.085193474034
       ],
       "flags": {},
-      "order": 102,
+      "order": 100,
       "mode": 0,
       "inputs": [],
       "outputs": [],
@@ -15255,8 +15027,8 @@
       "id": 1263,
       "type": "BasicScheduler",
       "pos": [
-        -1053.804874301495,
-        4157.776748448564
+        -998.4650709773101,
+        4333.759038874074
       ],
       "size": [
         290,
@@ -15265,7 +15037,7 @@
       "flags": {
         "collapsed": true
       },
-      "order": 131,
+      "order": 130,
       "mode": 0,
       "inputs": [
         {
@@ -15333,17 +15105,17 @@
       "id": 1264,
       "type": "Getter",
       "pos": [
-        -1324.698690274029,
-        4160.551594313964
+        -1223.407041537459,
+        4295.793809215388
       ],
       "size": [
-        224.196875,
+        210,
         34
       ],
       "flags": {
         "collapsed": true
       },
-      "order": 103,
+      "order": 101,
       "mode": 0,
       "inputs": [
         {
@@ -15363,7 +15135,7 @@
           ]
         }
       ],
-      "title": "Get_upscale_model_no_lora",
+      "title": "Get_model_after_lora",
       "properties": {
         "enableTabs": false,
         "tabWidth": 65,
@@ -15389,11 +15161,11 @@
         "__skeba_bgcolor_base": "#335"
       },
       "widgets_values": [
-        "upscale_model_no_lora",
+        "model_after_lora",
         ""
       ],
       "widgets_values_named": {
-        "key": "upscale_model_no_lora",
+        "key": "model_after_lora",
         "var_name": ""
       },
       "color": "#223",
@@ -15417,16 +15189,16 @@
       "id": 1266,
       "type": "SpectrumApplyMiniMaxH3",
       "pos": [
-        -2833.0195945568653,
-        2733.455070202413
+        -2834.0980866607288,
+        2719.518608675753
       ],
       "size": [
         328.7890625,
         442
       ],
       "flags": {},
-      "order": 158,
-      "mode": 4,
+      "order": 157,
+      "mode": 0,
       "inputs": [
         {
           "name": "model",
@@ -15439,8 +15211,7 @@
           "name": "model",
           "type": "MODEL",
           "links": [
-            2389,
-            2390
+            13717
           ]
         }
       ],
@@ -15469,7 +15240,7 @@
         true,
         0.5,
         4,
-        0.1,
+        1.1,
         2,
         0.75,
         5,
@@ -15488,7 +15259,7 @@
         "enabled": true,
         "blend_weight": 0.5,
         "degree": 4,
-        "ridge_lambda": 0.1,
+        "ridge_lambda": 1.1,
         "window_size": 2,
         "flex_window": 0.75,
         "warmup_steps": 5,
@@ -15516,6 +15287,153 @@
             "outputs": []
           }
         }
+      }
+    },
+    {
+      "id": 4587,
+      "type": "Getter",
+      "pos": [
+        -1642.2456590930244,
+        3120.1438266164896
+      ],
+      "size": [
+        210,
+        34
+      ],
+      "flags": {
+        "collapsed": true
+      },
+      "order": 102,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "value",
+          "shape": 7,
+          "type": "*",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "label": "OBJ",
+          "name": "OBJ",
+          "type": "*",
+          "links": [
+            13718
+          ]
+        }
+      ],
+      "title": "Get_clip",
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "komojini-comfyui-nodes",
+        "ver": "0f5b4eb08f5c3823ba32228d0b58155feffc0986",
+        "Node name for S&R": "Getter",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "var_name": "",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#2a363b",
+        "__skeba_bgcolor_base": "#3f5159"
+      },
+      "widgets_values": [
+        "clip",
+        ""
+      ],
+      "widgets_values_named": {
+        "key": "clip",
+        "var_name": ""
+      },
+      "color": "#2a363b",
+      "bgcolor": "#3f5159",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 4588,
+      "type": "SkebaH3AudioLevel",
+      "title": "Level decoded voices before saving",
+      "pos": [
+        -740,
+        3770
+      ],
+      "size": [
+        340,
+        440
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 13719
+        }
+      ],
+      "outputs": [
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            2022,
+            2242
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaH3AudioLevel"
+      },
+      "widgets_values": [
+        true,
+        -22.0,
+        0.7,
+        6.0,
+        12.0,
+        -38.0,
+        75.0,
+        1.0,
+        -1.0
+      ],
+      "widgets_values_named": {
+        "enabled": true,
+        "target_voice_dbfs": -22.0,
+        "level_strength": 0.7,
+        "max_boost_db": 6.0,
+        "max_cut_db": 12.0,
+        "quiet_gate_dbfs": -38.0,
+        "low_cut_hz": 75.0,
+        "presence_db": 1.0,
+        "peak_ceiling_dbfs": -1.0
       }
     }
   ],
@@ -15583,14 +15501,6 @@
       323,
       1,
       "VAE"
-    ],
-    [
-      758,
-      272,
-      0,
-      356,
-      0,
-      "MODEL"
     ],
     [
       760,
@@ -15802,7 +15712,7 @@
     ],
     [
       2022,
-      323,
+      4588,
       0,
       930,
       1,
@@ -16314,7 +16224,7 @@
     ],
     [
       2242,
-      323,
+      4588,
       0,
       1221,
       3,
@@ -16521,14 +16431,6 @@
       "VAE"
     ],
     [
-      2266,
-      343,
-      0,
-      1224,
-      2,
-      "CLIP"
-    ],
-    [
       2269,
       862,
       0,
@@ -16729,14 +16631,6 @@
       "LATENT"
     ],
     [
-      2341,
-      1184,
-      0,
-      1240,
-      0,
-      "LATENT"
-    ],
-    [
       2342,
       1184,
       0,
@@ -16841,6 +16735,38 @@
       "INT"
     ],
     [
+      2380,
+      1186,
+      0,
+      1185,
+      0,
+      "MODEL"
+    ],
+    [
+      2384,
+      1264,
+      0,
+      1263,
+      0,
+      "MODEL"
+    ],
+    [
+      2385,
+      1263,
+      0,
+      1184,
+      3,
+      "SIGMAS"
+    ],
+    [
+      2386,
+      1011,
+      0,
+      1266,
+      0,
+      "MODEL"
+    ],
+    [
       789,
       386,
       0,
@@ -16881,52 +16807,36 @@
       "INT"
     ],
     [
-      2380,
-      1186,
-      0,
-      1185,
-      0,
-      "MODEL"
-    ],
-    [
-      2384,
-      1264,
-      0,
-      1263,
-      0,
-      "MODEL"
-    ],
-    [
-      2385,
-      1263,
-      0,
+      2391,
       1184,
-      3,
-      "SIGMAS"
+      0,
+      1240,
+      0,
+      "LATENT"
     ],
     [
-      2386,
-      1011,
-      0,
-      1266,
-      0,
-      "MODEL"
-    ],
-    [
-      2389,
-      1266,
+      13711,
+      272,
       0,
       652,
       0,
       "MODEL"
     ],
     [
-      2390,
+      13717,
       1266,
       0,
-      639,
+      356,
       0,
       "MODEL"
+    ],
+    [
+      13718,
+      4587,
+      0,
+      1224,
+      2,
+      "CLIP"
     ],
     [
       1745,
@@ -16951,18 +16861,15 @@
       262,
       0,
       "VIDEO"
+    ],
+    [
+      13719,
+      323,
+      0,
+      4588,
+      0,
+      "AUDIO"
     ]
-  ],
-  "floatingLinks": [
-    {
-      "id": 2382,
-      "origin_id": 294,
-      "origin_slot": 0,
-      "target_id": -1,
-      "target_slot": -1,
-      "type": "SIGMAS",
-      "parentId": 35
-    }
   ],
   "groups": [
     {
@@ -16990,13 +16897,25 @@
       "flags": {}
     },
     {
+      "id": 22,
+      "title": "Second Pass Upscale",
+      "bounding": [
+        -2409.51563806551,
+        3537.5960211090264,
+        3440.4709200774837,
+        1051.497406820578
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
       "id": 17,
       "title": "Process Video For Save",
       "bounding": [
-        -821.6423591806383,
-        2831.5706802253853,
-        786.1642332486183,
-        579.4250963204222
+        -792.2147941149152,
+        3100.6060973788312,
+        800.3467279742297,
+        400.0428019205606
       ],
       "color": "#8A8",
       "flags": {}
@@ -17005,8 +16924,8 @@
       "id": 19,
       "title": "Set Referemces",
       "bounding": [
-        -2425.7757033521975,
-        2826.4829313680193,
+        -2418.226256094744,
+        2913.655455168927,
         1590.1291493492145,
         584.502349002973
       ],
@@ -17026,23 +16945,11 @@
       "flags": {}
     },
     {
-      "id": 22,
-      "title": "Second Pass Upscale",
-      "bounding": [
-        -2439.10035697156,
-        3427.6745660614592,
-        3567.879782056664,
-        1158.6701514342117
-      ],
-      "color": "#3f789e",
-      "flags": {}
-    },
-    {
       "id": 23,
       "title": "Save Latents For Next Prompt Context",
       "bounding": [
-        -12.836749711800778,
-        2837.5985590011237,
+        1061.7710152505904,
+        4017.5113287658232,
         1137.4288891180727,
         569.2763932103353
       ],
@@ -17092,10 +16999,10 @@
         "id": "c57e31c1-b7b3-42b6-9bbf-d4e33f292a4c",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -17719,10 +17626,10 @@
         "id": "c2682922-684b-4edc-9903-3d9d45aa9cba",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -18706,10 +18613,10 @@
         "id": "10fd9234-789b-405b-825d-9b4b06d207e4",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -19814,10 +19721,10 @@
         "id": "9075161c-8c64-410b-a193-9c701e041c64",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -20304,10 +20211,10 @@
         "id": "c4ce2f0e-e307-481d-8e41-6192ad43e960",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -20714,10 +20621,10 @@
         "id": "3dca91ae-fa35-4f2b-93cf-f8720d7339a6",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -21596,10 +21503,10 @@
         "id": "34cca29b-7ac3-400a-ac63-1c2f590df866",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -22120,10 +22027,10 @@
         "id": "698295bf-babe-4959-907e-1cde1ac24f1e",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -23418,10 +23325,10 @@
         "id": "f78af170-4c2f-4a4e-b1e4-a00df2c4dc45",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -25214,10 +25121,10 @@
         "id": "59bc3f93-9909-4e65-985f-103f6a46b27d",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -26175,10 +26082,10 @@
         "id": "8c82aa4f-573f-4693-8f4b-88b6aaa3aa32",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -26978,22 +26885,6 @@
             "type": "IMAGE"
           },
           {
-            "id": 1592,
-            "origin_id": -10,
-            "origin_slot": 5,
-            "target_id": 265,
-            "target_slot": 4,
-            "type": "BOOLEAN"
-          },
-          {
-            "id": 2374,
-            "origin_id": -10,
-            "origin_slot": 5,
-            "target_id": 1256,
-            "target_slot": 4,
-            "type": "BOOLEAN"
-          },
-          {
             "id": 2375,
             "origin_id": -10,
             "origin_slot": 0,
@@ -27032,6 +26923,22 @@
             "target_id": 265,
             "target_slot": 0,
             "type": "IMAGE"
+          },
+          {
+            "id": 1592,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 265,
+            "target_slot": 4,
+            "type": "BOOLEAN"
+          },
+          {
+            "id": 2374,
+            "origin_id": -10,
+            "origin_slot": 5,
+            "target_id": 1256,
+            "target_slot": 4,
+            "type": "BOOLEAN"
           }
         ],
         "extra": {
@@ -27043,10 +26950,10 @@
         "id": "1d0af283-971d-4ce4-a426-ced7d87db182",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -28868,10 +28775,10 @@
         "id": "2470aa5f-c6af-4c31-8181-2a45182400f7",
         "version": 1,
         "state": {
-          "lastGroupId": 34,
-          "lastNodeId": 1266,
-          "lastLinkId": 2390,
-          "lastRerouteId": 38
+          "lastGroupId": 52,
+          "lastNodeId": 4587,
+          "lastLinkId": 13718,
+          "lastRerouteId": 47
         },
         "revision": 0,
         "config": {},
@@ -31033,8 +30940,8 @@
       {
         "id": 12,
         "pos": [
-          -1200.3617588960758,
-          3630.6860141219795
+          -798.4862164206346,
+          3887.7263770861655
         ],
         "linkIds": [
           2210
@@ -31043,8 +30950,8 @@
       {
         "id": 13,
         "pos": [
-          -1273.334590783136,
-          4383.933574863732
+          -1227.8051587957912,
+          4472.268802108854
         ],
         "linkIds": [
           2259
@@ -31054,32 +30961,11 @@
         "id": 14,
         "parentId": 13,
         "pos": [
-          -789.3961917486315,
-          4370.385671936285
+          -898.2670109151678,
+          4474.062394416376
         ],
         "linkIds": [
           2259
-        ]
-      },
-      {
-        "id": 22,
-        "pos": [
-          18.528272077569905,
-          3375.738962496675
-        ],
-        "linkIds": [
-          2332
-        ]
-      },
-      {
-        "id": 23,
-        "parentId": 22,
-        "pos": [
-          501.37856359704745,
-          3331.196881661547
-        ],
-        "linkIds": [
-          2332
         ]
       },
       {
@@ -31096,8 +30982,8 @@
         "id": 28,
         "parentId": 27,
         "pos": [
-          -3066.383489522762,
-          4388.264823773933
+          -2880.8462021345235,
+          4401.250356761546
         ],
         "linkIds": [
           2355
@@ -31106,126 +30992,131 @@
       {
         "id": 29,
         "pos": [
-          -1283.0126393261671,
-          4430.234245112746
+          -1249.9778292436379,
+          4509.149374682685
         ],
         "linkIds": [
           2344
-        ]
-      },
-      {
-        "id": 30,
-        "parentId": 29,
-        "pos": [
-          -646.9307449257659,
-          4421.552013843344
-        ],
-        "linkIds": [
-          2344
-        ]
-      },
-      {
-        "id": 31,
-        "pos": [
-          -420.62346564835644,
-          4140.479271884316
-        ],
-        "linkIds": [
-          2342
-        ]
-      },
-      {
-        "id": 32,
-        "parentId": 31,
-        "pos": [
-          10.059148291247471,
-          4135.449803762668
-        ],
-        "linkIds": [
-          2342
         ]
       },
       {
         "id": 33,
-        "parentId": 30,
+        "parentId": 29,
         "pos": [
-          -548.3456268255549,
-          4045.3103973590933
+          -492.1854298669162,
+          4518.164954199448
         ],
         "linkIds": [
           2344
-        ]
-      },
-      {
-        "id": 34,
-        "pos": [
-          -2972.9451194869807,
-          4555.287179772722
-        ],
-        "linkIds": []
-      },
-      {
-        "id": 35,
-        "parentId": 34,
-        "pos": [
-          -1761.3912494239696,
-          4559.521086742996
-        ],
-        "linkIds": [],
-        "floating": {
-          "slotType": "output"
-        }
-      },
-      {
-        "id": 36,
-        "pos": [
-          -3054.459755607096,
-          4119.967786859205
-        ],
-        "linkIds": [
-          602
-        ]
-      },
-      {
-        "id": 37,
-        "pos": [
-          -3034.2059990975663,
-          4136.921903647585
-        ],
-        "linkIds": [
-          1161
         ]
       },
       {
         "id": 38,
         "pos": [
-          -1517.0694914396433,
-          3200.249762391654
+          -1509.5200441821894,
+          3287.4222861925614
         ],
         "linkIds": [
           2285
         ]
+      },
+      {
+        "id": 40,
+        "parentId": 12,
+        "pos": [
+          -709.5731338004728,
+          4050.7827536029395
+        ],
+        "linkIds": [
+          2210
+        ]
+      },
+      {
+        "id": 42,
+        "pos": [
+          -746.8057844114225,
+          3184.4217405296727
+        ],
+        "linkIds": [
+          2242
+        ]
+      },
+      {
+        "id": 43,
+        "pos": [
+          -702.4546713159601,
+          4033.4136233226263
+        ],
+        "linkIds": [
+          2022
+        ]
+      },
+      {
+        "id": 44,
+        "pos": [
+          1503.6957042633508,
+          4566.626978928771
+        ],
+        "linkIds": [
+          2332
+        ]
+      },
+      {
+        "id": 45,
+        "parentId": 42,
+        "pos": [
+          -543.9428004723792,
+          3188.5916789846556
+        ],
+        "linkIds": [
+          2242
+        ]
+      },
+      {
+        "id": 46,
+        "pos": [
+          -247.37354361682478,
+          3857.537852509065
+        ],
+        "linkIds": [
+          2241
+        ]
+      },
+      {
+        "id": 47,
+        "parentId": 46,
+        "pos": [
+          -516.8034571127671,
+          3404.2944675472386
+        ],
+        "linkIds": [
+          2241
+        ]
       }
     ],
     "ds": {
-      "scale": 0.2242804720483258,
+      "scale": 0.3739935654464195,
       "offset": [
-        8288.65266191956,
-        -2538.5020690348174
+        6739.122358867178,
+        -1711.8323424718233
       ]
     },
     "linkExtensions": [
       {
-        "id": 602,
-        "parentId": 36
-      },
-      {
-        "id": 1161,
-        "parentId": 37
+        "id": 2022,
+        "parentId": 43
       },
       {
         "id": 2210,
-        "parentId": 12
+        "parentId": 40
+      },
+      {
+        "id": 2241,
+        "parentId": 47
+      },
+      {
+        "id": 2242,
+        "parentId": 45
       },
       {
         "id": 2259,
@@ -31237,11 +31128,7 @@
       },
       {
         "id": 2332,
-        "parentId": 23
-      },
-      {
-        "id": 2342,
-        "parentId": 32
+        "parentId": 44
       },
       {
         "id": 2344,

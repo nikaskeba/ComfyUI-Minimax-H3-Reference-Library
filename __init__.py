@@ -8,6 +8,7 @@ from .compiler_templates import SkebaH3CompilerTemplates
 from .last_rendered_context import SkebaH3LastRenderedContext
 from .workflow_guide import SkebaWorkflowGuide
 from .h3_audio_refine import SkebaH3AudioRefine, SkebaH3AudioInpaintRange, SkebaH3AudioEditMask, SkebaH3VideoEditMask, SkebaH3VideoLatentAnchorBlend, SkebaH3FinishInpaintLatent, SkebaH3AVInpaintRange
+from .h3_audio_level import SkebaH3AudioLevel
 from .h3_tail_refiner import SkebaH3TailClipRefiner
 from .h3_video_latent_resize import SkebaH3VideoLatentResize, SkebaH3AVContextResize, SkebaH3VideoLatentAspectMatch
 from .h3_upscale_bypass import SkebaH3UpscaleBypass, SkebaH3UpscaleTrimBypass
@@ -29,7 +30,7 @@ from .h3_multi_guide import SkebaMiniMaxH3MultiFrameGuideTest
 from .h3_upscale_context import SkebaH3UpscaleContextGuides
 from .h3_person_reference_mask import SkebaPersonReferenceMask
 from .h3_mask_composite import SkebaH3FinalInpaintComposite
-from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate
+from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate, SkebaH3InpaintVideoChoice
 from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode, SkebaH3InpaintModelMode
 from .h3_av_connector import (
     SkebaH3AVConnectorAssembleTest,
@@ -65,6 +66,7 @@ VIDEO_PROMPT_NODE_CLASS_MAPPINGS = {
 }
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaH3AudioLevel": SkebaH3AudioLevel,
     "SkebaRefModVoiceDescription": SkebaRefModVoiceDescription,
     "SkebaH3ReferenceAudioPreview": SkebaH3ReferenceAudioPreview,
     "SkebaH3LastRenderedContext": SkebaH3LastRenderedContext,
@@ -114,6 +116,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3InpaintBatchFit": SkebaH3InpaintBatchFit,
     "SkebaH3InpaintWindowPlan": SkebaH3InpaintWindowPlan,
     "SkebaH3InpaintSourceWindow": SkebaH3InpaintSourceWindow,
+    "SkebaH3InpaintVideoChoice": SkebaH3InpaintVideoChoice,
     "SkebaH3InpaintWindowValidate": SkebaH3InpaintWindowValidate,
     "SkebaH3InpaintLatentMode": SkebaH3InpaintLatentMode,
     "SkebaH3InpaintVideoMode": SkebaH3InpaintVideoMode,
@@ -137,6 +140,7 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaH3AudioLevel": "SKEBA H3 Audio Level + Voice EQ",
     "SkebaRefModVoiceDescription": "SKEBA RefMod Voice Description",
     "SkebaH3ReferenceAudioPreview": "SKEBA H3 Reference Audio Preview",
     "SkebaH3LastRenderedContext": "SKEBA H3 Last Rendered Context",
@@ -185,6 +189,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3InpaintBatchFit": "SKEBA H3 Inpaint Batch Fit",
     "SkebaH3InpaintWindowPlan": "SKEBA H3 Inpaint Loop Window Plan",
     "SkebaH3InpaintSourceWindow": "SKEBA H3 Inpaint Source Window",
+    "SkebaH3InpaintVideoChoice": "SKEBA H3 Inpaint Video Selection",
     "SkebaH3InpaintWindowValidate": "SKEBA H3 Inpaint Loop Validate",
     "SkebaH3InpaintLatentMode": "SKEBA H3 Inpaint / Audio-Driven Latent",
     "SkebaH3InpaintVideoMode": "SKEBA H3 Inpaint / Audio-Driven Video",

@@ -2,6 +2,7 @@ import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 
 const FPS = 24;
+const VIDEO_MODES = ["audio drives video", "controlnet only", "inpaint only", "controlnet and inpainting"];
 
 function control(node, name) {
     return node?.widgets?.find((widget) => widget.name === name);
@@ -22,7 +23,15 @@ function batchFitFor(node) {
 }
 
 function sourceControl(node, name) {
-    if (name === "video") return control(batchFitFor(node), "video") || control(node, "video");
+    if (name === "video") {
+        const choices = (app.graph?._nodes || []).filter((other) => other.type === "SkebaH3InpaintVideoChoice");
+        const connected = choices.find((other) => (other.outputs?.[0]?.links || []).some((id) => {
+            const link = app.graph.links[id];
+            const target = link && app.graph.getNodeById(link.target_id);
+            return target?.inputs?.[link.target_slot]?.name === "source_video";
+        }));
+        return control(connected, "video") || control(batchFitFor(node), "video") || control(node, "video");
+    }
     if (name === "start_frame") return control(batchFitFor(node), "start_frame") || control(plannerFor(node), "start_frame");
     return control(node, name);
 }
@@ -95,6 +104,7 @@ app.registerExtension({
         nodeType.prototype.onNodeCreated = function () {
             original?.apply(this, arguments);
             const node = this;
+            let previewVersion = 0;
             const root = document.createElement("div");
             root.style.cssText = "width:100%;box-sizing:border-box;padding:4px 8px;color:#e8edf4;font:12px sans-serif;overflow:auto";
             const intro = document.createElement("div");
@@ -116,6 +126,40 @@ app.registerExtension({
             status.style.cssText = "color:#b8c5d8;margin:4px 0";
             const uploadRow = document.createElement("div");
             uploadRow.style.cssText = "display:flex;gap:8px;margin:6px 0";
+            const videoSelectRow = document.createElement("div");
+            videoSelectRow.style.cssText = "margin:8px 0;color:#d9e4f3";
+            const videoSelectLabel = document.createElement("label");
+            videoSelectLabel.textContent = "Source video ";
+            const videoSelect = document.createElement("select");
+            videoSelect.style.cssText = "width:100%;margin-top:4px;padding:5px;background:#111923;color:white;border:1px solid #56606d;border-radius:4px";
+            videoSelect.onchange = () => {
+                const widget = sourceControl(node, "video");
+                if (!widget) return;
+                widget.value = videoSelect.value;
+                widget.callback?.(widget.value);
+                previewVersion += 1;
+                refresh();
+                app.graph.setDirtyCanvas(true, true);
+            };
+            videoSelectLabel.append(videoSelect);
+            videoSelectRow.append(videoSelectLabel);
+            const audioSelectRow = document.createElement("div");
+            audioSelectRow.style.cssText = "margin:8px 0;color:#d9e4f3";
+            const audioSelectLabel = document.createElement("label");
+            audioSelectLabel.textContent = "Custom audio file ";
+            const audioSelect = document.createElement("select");
+            audioSelect.style.cssText = videoSelect.style.cssText;
+            audioSelect.onchange = () => {
+                const widget = control(node, "custom_audio");
+                if (!widget) return;
+                widget.value = audioSelect.value;
+                widget.callback?.(widget.value);
+                previewVersion += 1;
+                refresh();
+                app.graph.setDirtyCanvas(true, true);
+            };
+            audioSelectLabel.append(audioSelect);
+            audioSelectRow.append(audioSelectLabel);
             const makeUpload = (label, accept, widgetName) => {
                 const button = document.createElement("button");
                 button.textContent = label;
@@ -143,6 +187,7 @@ app.registerExtension({
                         if (Array.isArray(values) && !values.includes(result.name)) values.push(result.name);
                         widget.value = result.name;
                         widget.callback?.(result.name);
+                        previewVersion += 1;
                         if (widgetName === "custom_audio") {
                             const mode = control(node, "audio_source");
                             if (mode) { mode.value = "custom audio"; mode.callback?.(mode.value); }
@@ -160,12 +205,19 @@ app.registerExtension({
             makeUpload("Upload audio", "audio/*,.wav,.mp3,.flac,.m4a,.ogg,.opus,.aac", "custom_audio");
             uploadRow.children[0].title = "Add a source video to ComfyUI's input folder and select it for this window.";
             uploadRow.children[2].title = "Add a separate audio track; this also selects Custom audio as the audio source.";
-            root.append(intro, uploadRow, status, start.row, reference.row, audio.row);
+            root.append(intro, videoSelectRow, audioSelectRow, uploadRow, status, start.row, reference.row, audio.row);
             const refresh = () => {
-                const filename = String(sourceControl(node, "video")?.value ?? "");
+                const videoWidget = sourceControl(node, "video");
+                const filename = String(videoWidget?.value ?? "");
+                const values = videoWidget?.options?.values || [];
+                if (videoSelect.options.length !== values.length ||
+                    values.some((value, index) => videoSelect.options[index]?.value !== value)) {
+                    videoSelect.replaceChildren(...values.map((value) => new Option(value, value)));
+                }
+                videoSelect.value = filename;
                 const hasVideo = !!filename && !filename.startsWith("(");
                 if (hasVideo) {
-                    const url = api.apiURL(`/view?${new URLSearchParams({ filename, type: "input" })}`);
+                    const url = api.apiURL(`/view?${new URLSearchParams({ filename, type: "input", v: String(previewVersion) })}`);
                     for (const item of [start, reference]) {
                         if (item.video.src !== new URL(url, location.href).href) {
                             item.video.src = url;
@@ -189,11 +241,19 @@ app.registerExtension({
                     : "Select the source start and one fixed frame for SAM3. Use the video playhead or drag either slider.";
                 if (tracksSubject && hasVideo) reference.update(reference.read());
                 const useCustom = control(node, "audio_source")?.value === "custom audio";
+                audioSelectRow.style.display = useCustom ? "block" : "none";
                 audio.row.style.display = useCustom ? "block" : "none";
                 if (useCustom) {
-                    const audioName = String(control(node, "custom_audio")?.value ?? "");
+                    const audioWidget = control(node, "custom_audio");
+                    const audioName = String(audioWidget?.value ?? "");
+                    const audioValues = audioWidget?.options?.values || [];
+                    if (audioSelect.options.length !== audioValues.length ||
+                        audioValues.some((value, index) => audioSelect.options[index]?.value !== value)) {
+                        audioSelect.replaceChildren(...audioValues.map((value) => new Option(value, value)));
+                    }
+                    audioSelect.value = audioName;
                     if (audioName && audioName !== "(none)") {
-                        const audioUrl = api.apiURL(`/view?${new URLSearchParams({ filename: audioName, type: "input" })}`);
+                        const audioUrl = api.apiURL(`/view?${new URLSearchParams({ filename: audioName, type: "input", v: String(previewVersion) })}`);
                         if (audio.video.src !== new URL(audioUrl, location.href).href) {
                             audio.video.src = audioUrl;
                             audio.video.load();
@@ -203,11 +263,21 @@ app.registerExtension({
                 }
             };
             const bindSourceCallbacks = () => {
+                const mode = control(node, "video_generation_mode");
+                if (mode) {
+                    if (mode.value === "source video inpaint") mode.value = "controlnet and inpainting";
+                    mode.options ||= {};
+                    mode.options.values = VIDEO_MODES;
+                }
                 for (const widgetName of ["video", "audio_source", "custom_audio", "video_generation_mode"]) {
                     const widget = sourceControl(node, widgetName);
                     if (!widget || widget.__skebaSourceRefreshFor === node.id) continue;
                     const oldCallback = widget.callback;
-                    widget.callback = function () { oldCallback?.apply(this, arguments); refresh(); };
+                    widget.callback = function () {
+                        oldCallback?.apply(this, arguments);
+                        if (widgetName === "video" || widgetName === "custom_audio") previewVersion += 1;
+                        refresh();
+                    };
                     widget.__skebaSourceRefreshFor = node.id;
                 }
             };

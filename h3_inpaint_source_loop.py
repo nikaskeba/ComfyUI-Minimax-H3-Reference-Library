@@ -297,6 +297,38 @@ class SkebaH3InpaintBatchFit:
         return (fitted, len(fitted), video, int(start_frame), status)
 
 
+class SkebaH3InpaintVideoChoice:
+    """One uploaded-video selection shared by Batch Fit and Source Window."""
+
+    CATEGORY = "Skeba AI Nodes - Reference/Experimental"
+    FUNCTION = "choose"
+    RETURN_TYPES = ("*",)
+    RETURN_NAMES = ("video",)
+    DESCRIPTION = "Select one uploaded video for both source-window loading and loop fitting."
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"video": (["(no source video)"] + _source_files(),)}}
+
+    @classmethod
+    def IS_CHANGED(cls, video):
+        if video == "(no source video)":
+            return video
+        import folder_paths
+        stat = Path(folder_paths.get_annotated_filepath(video)).stat()
+        return video, stat.st_size, stat.st_mtime_ns
+
+    def choose(self, video):
+        if video != "(no source video)":
+            import folder_paths
+            if Path(video).name != video or Path(video).suffix.lower() not in _VIDEO_EXTENSIONS:
+                raise ValueError("Choose an uploaded source video from ComfyUI's input folder.")
+            path = Path(folder_paths.get_annotated_filepath(video)).resolve()
+            if not path.is_file() or not path.is_relative_to(Path(folder_paths.get_input_directory()).resolve()):
+                raise ValueError("Source video must be inside ComfyUI's input folder.")
+        return (video,)
+
+
 def _video_size(path: str) -> tuple[int, int]:
     import cv2
 
