@@ -23,6 +23,15 @@ function batchFitFor(node) {
 }
 
 function sourceControl(node, name) {
+    if (name === "start_frame") {
+        const selectors = (app.graph?._nodes || []).filter((other) => other.type === "SkebaH3InpaintStartFrame");
+        const connected = selectors.find((other) => (other.outputs?.[0]?.links || []).some((id) => {
+            const link = app.graph.links[id];
+            const target = link && app.graph.getNodeById(link.target_id);
+            return target?.inputs?.[link.target_slot]?.name === "source_start_frame";
+        }));
+        return control(connected, "start_frame") || control(batchFitFor(node), "start_frame") || control(plannerFor(node), "start_frame");
+    }
     if (name === "video") {
         const choices = (app.graph?._nodes || []).filter((other) => other.type === "SkebaH3InpaintVideoChoice");
         const connected = choices.find((other) => (other.outputs?.[0]?.links || []).some((id) => {
@@ -32,7 +41,6 @@ function sourceControl(node, name) {
         }));
         return control(connected, "video") || control(batchFitFor(node), "video") || control(node, "video");
     }
-    if (name === "start_frame") return control(batchFitFor(node), "start_frame") || control(plannerFor(node), "start_frame");
     return control(node, name);
 }
 

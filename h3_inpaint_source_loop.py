@@ -329,6 +329,25 @@ class SkebaH3InpaintVideoChoice:
         return (video,)
 
 
+class SkebaH3InpaintStartFrame:
+    """Expose the loop's initial source frame outside nested subgraphs."""
+
+    CATEGORY = "Skeba AI Nodes - Reference/Experimental"
+    FUNCTION = "select"
+    RETURN_TYPES = ("INT",)
+    RETURN_NAMES = ("start_frame",)
+    DESCRIPTION = "First source-video frame on the normalized 24 fps timeline."
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {"start_frame": ("INT", {
+            "default": 0, "min": 0, "max": 100000000,
+        })}}
+
+    def select(self, start_frame):
+        return (int(start_frame),)
+
+
 def _video_size(path: str) -> tuple[int, int]:
     import cv2
 

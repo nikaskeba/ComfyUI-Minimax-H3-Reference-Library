@@ -30,7 +30,7 @@ from .h3_multi_guide import SkebaMiniMaxH3MultiFrameGuideTest
 from .h3_upscale_context import SkebaH3UpscaleContextGuides
 from .h3_person_reference_mask import SkebaPersonReferenceMask
 from .h3_mask_composite import SkebaH3FinalInpaintComposite
-from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate, SkebaH3InpaintVideoChoice
+from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate, SkebaH3InpaintVideoChoice, SkebaH3InpaintStartFrame
 from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode, SkebaH3InpaintModelMode
 from .h3_av_connector import (
     SkebaH3AVConnectorAssembleTest,
@@ -117,6 +117,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3InpaintWindowPlan": SkebaH3InpaintWindowPlan,
     "SkebaH3InpaintSourceWindow": SkebaH3InpaintSourceWindow,
     "SkebaH3InpaintVideoChoice": SkebaH3InpaintVideoChoice,
+    "SkebaH3InpaintStartFrame": SkebaH3InpaintStartFrame,
     "SkebaH3InpaintWindowValidate": SkebaH3InpaintWindowValidate,
     "SkebaH3InpaintLatentMode": SkebaH3InpaintLatentMode,
     "SkebaH3InpaintVideoMode": SkebaH3InpaintVideoMode,
@@ -190,6 +191,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3InpaintWindowPlan": "SKEBA H3 Inpaint Loop Window Plan",
     "SkebaH3InpaintSourceWindow": "SKEBA H3 Inpaint Source Window",
     "SkebaH3InpaintVideoChoice": "SKEBA H3 Inpaint Video Selection",
+    "SkebaH3InpaintStartFrame": "SKEBA H3 Inpaint Start Frame",
     "SkebaH3InpaintWindowValidate": "SKEBA H3 Inpaint Loop Validate",
     "SkebaH3InpaintLatentMode": "SKEBA H3 Inpaint / Audio-Driven Latent",
     "SkebaH3InpaintVideoMode": "SKEBA H3 Inpaint / Audio-Driven Video",

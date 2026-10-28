@@ -1,8 +1,8 @@
 {
   "id": "01f61305-5b83-481a-a2dd-f5db58a7979e",
   "revision": 0,
-  "last_node_id": 4590,
-  "last_link_id": 13719,
+  "last_node_id": 4591,
+  "last_link_id": 13720,
   "nodes": [
     {
       "id": 334,
@@ -18088,6 +18088,11 @@
           "name": "source_video",
           "type": "*",
           "link": 13719
+        },
+        {
+          "name": "source_start_frame",
+          "type": "INT",
+          "link": 13720
         }
       ],
       "outputs": [
@@ -21229,6 +21234,41 @@
       "widgets_values_named": {
         "video": "hairssss.mp4"
       }
+    },
+    {
+      "id": 4591,
+      "type": "SkebaH3InpaintStartFrame",
+      "title": "Source start frame - select here or in Source Window",
+      "pos": [
+        -7145.35049640778,
+        3165.7573746159587
+      ],
+      "size": [
+        345,
+        90
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "start_frame",
+          "type": "INT",
+          "links": [
+            13720
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaH3InpaintStartFrame"
+      },
+      "widgets_values": [
+        0
+      ],
+      "widgets_values_named": {
+        "start_frame": 0
+      }
     }
   ],
   "links": [
@@ -23127,6 +23167,14 @@
       1427,
       13,
       "*"
+    ],
+    [
+      13720,
+      4591,
+      0,
+      1427,
+      14,
+      "INT"
     ]
   ],
   "groups": [
@@ -30930,6 +30978,19 @@
               -5432.830329015573,
               2157.4591968198847
             ]
+          },
+          {
+            "id": "2cbae42a-3d3c-446b-9e2c-1b83187eff59",
+            "name": "source_start_frame",
+            "type": "INT",
+            "linkIds": [
+              2502
+            ],
+            "localized_name": "source_start_frame",
+            "pos": [
+              -5432.8,
+              2177.46
+            ]
           }
         ],
         "outputs": [
@@ -32143,6 +32204,15 @@
                   "name": "video"
                 },
                 "link": 2501
+              },
+              {
+                "localized_name": "start_frame",
+                "name": "start_frame",
+                "type": "INT",
+                "widget": {
+                  "name": "start_frame"
+                },
+                "link": 2502
               }
             ],
             "outputs": [
@@ -32716,6 +32786,14 @@
             "target_id": 1367,
             "target_slot": 4,
             "type": "*"
+          },
+          {
+            "id": 2502,
+            "origin_id": -10,
+            "origin_slot": 14,
+            "target_id": 1367,
+            "target_slot": 5,
+            "type": "INT"
           }
         ],
         "extra": {

@@ -19,6 +19,7 @@ class Oct27SourceTests(unittest.TestCase):
         node = MODULE.SkebaH3InpaintVideoChoice()
         self.assertEqual(node.choose("(no source video)"), ("(no source video)",))
         self.assertIn("video", node.INPUT_TYPES()["required"])
+        self.assertEqual(MODULE.SkebaH3InpaintStartFrame().select(120), (120,))
 
     def test_batch_fit_and_source_window_share_selected_video(self):
         workflow = json.loads((ROOT / "example/inpaint_oct27.json").read_text(encoding="utf-8"))
@@ -40,6 +41,14 @@ class Oct27SourceTests(unittest.TestCase):
         self.assertEqual(batch_fit["widgets_values_named"]["video"], selected_video)
         self.assertEqual(batch_fit["widgets_values"][0], selected_video)
         self.assertEqual(nodes[1324]["widgets_values"][0], selected_video)
+        start = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintStartFrame")
+        start_link = links[start["outputs"][0]["links"][0]]
+        self.assertEqual(start_link[3], instance["id"])
+        self.assertEqual(instance["inputs"][start_link[4]]["name"], "source_start_frame")
+        inner_start_link = next(link for link in subgraph["links"]
+                                if link["origin_id"] == -10 and link["origin_slot"] == start_link[4])
+        self.assertEqual(inner_start_link["target_id"], batch_fit["id"])
+        self.assertEqual(batch_fit["inputs"][inner_start_link["target_slot"]]["name"], "start_frame")
         batch_video_link = next(link for link in workflow["links"]
                                 if link[1] == instance["id"] and link[2] == 13)
         self.assertEqual(nodes[batch_video_link[3]]["type"], "Setter")
