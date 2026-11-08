@@ -11,7 +11,6 @@ from unittest.mock import patch
 
 import mido
 import torch
-import huggingface_hub
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
@@ -73,16 +72,21 @@ class GridTests(unittest.TestCase):
         field = next(item for item in schema.inputs if item.id == "instruments")
         self.assertEqual(field.extra_dict["instrumentOptions"], list(grid.INSTRUMENT_OPTIONS))
 
-    def test_cached_model_uses_local_path(self):
-        with tempfile.TemporaryDirectory() as directory:
-            checkpoint = Path(directory) / "model.safetensors"
-            checkpoint.write_bytes(b"checkpoint")
-            (checkpoint.parent / "config.json").write_text("{}")
-            with patch.object(huggingface_hub, "try_to_load_from_cache", return_value=str(checkpoint)) as lookup:
-                self.assertEqual(grid.local_model_source("large"), checkpoint)
-                self.assertEqual(lookup.call_count, 1)
-            with patch.object(huggingface_hub, "try_to_load_from_cache", return_value=None):
-                self.assertEqual(grid.local_model_source("medium"), "medium")
+    def test_model_uses_comfy_folder_and_requires_both_files(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(folder_paths, "models_dir", directory):
+            for size in ("small", "medium", "large"):
+                model_dir = Path(directory) / "MuScriptor" / f"muscriptor-{size}"
+                model_dir.mkdir(parents=True)
+                with self.assertRaisesRegex(FileNotFoundError, "model.safetensors, config.json"):
+                    grid.local_model_source(size)
+                checkpoint = model_dir / "model.safetensors"
+                checkpoint.write_bytes(b"checkpoint")
+                with self.assertRaisesRegex(FileNotFoundError, "config.json"):
+                    grid.local_model_source(size)
+                (model_dir / "config.json").write_text("{}")
+                self.assertEqual(grid.local_model_source(size), checkpoint)
+            with self.assertRaisesRegex(ValueError, "Unknown MuScriptor"):
+                grid.local_model_source("../../outside")
 
     def test_abc_tempo_meter_and_grid(self):
         for bpm, meter in ((120, "4/4"), (128, "3/4"), (120, "6/8")):
@@ -102,11 +106,21 @@ class GridTests(unittest.TestCase):
         qpm, top, bottom, _ = grid.parse_abc_grid(score)
         self.assertEqual((qpm, top, bottom), (120, 4, 4))
 
-    def test_actual_abc_tempo_or_meter_changes_remain_unsupported(self):
+    def test_actual_abc_tempo_changes_remain_unsupported(self):
         with self.assertRaisesRegex(ValueError, "changes tempo"):
             grid.parse_abc_grid(abc(120, bars="CDEF GABc|\nQ:1/4=140\nCDEF GABc|"))
-        with self.assertRaisesRegex(ValueError, "changes meter"):
-            grid.parse_abc_grid(abc(120, bars="CDEF GABc|\nM:3/4\nCDEF GA|"))
+
+    def test_meter_changes_export_first_meter_without_moving_notes(self):
+        for meter, bars in (("4/4", "CDEF GABc|\nM:3/4\nCDEF GA|"),
+                            ("3/4", "CDEF GA|[M:4/4]CDEF GABc|")):
+            qpm, top, bottom, seconds = grid.parse_abc_grid(abc(120, meter, bars))
+            self.assertEqual(f"{top}/{bottom}", meter)
+            self.assertAlmostEqual(seconds, 3.5, delta=0.01)
+            notes, _ = grid.quantize_events(pair(1, 2.0, 3.0), qpm, lambda _: 0, "Skip malformed")
+            midi = mido.MidiFile(file=io.BytesIO(grid.encode_midi(notes, qpm, top, bottom)))
+            signatures = [msg for track in midi.tracks for msg in track if msg.type == "time_signature"]
+            self.assertEqual([(msg.numerator, msg.denominator) for msg in signatures], [(top, bottom)])
+            self.assertEqual((notes[0]["start_tick"], notes[0]["end_tick"]), (1920, 2880))
 
     def test_short_sustain_retrigger_and_drum_tracks(self):
         events = pair(1, 0.01, 0.02) + pair(2, 1.0, 3.0) + pair(3, 2.0, 2.4)
@@ -154,7 +168,7 @@ class GridTests(unittest.TestCase):
         faux = types.ModuleType("muscriptor.comfy_node")
         faux.get_model = lambda *args: model
         faux.resolve_instrument_names = lambda tokens: tokens
-        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {"muscriptor.comfy_node": faux}), patch.object(folder_paths, "get_output_directory", return_value=directory):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {"muscriptor.comfy_node": faux}), patch.object(folder_paths, "get_output_directory", return_value=directory), patch.object(grid, "local_model_source", return_value=Path(directory) / "model.safetensors"):
             audio = {"waveform": torch.zeros(1, 1, 16000 * 12), "sample_rate": 16000}
             result = grid.SkebaMuScriptorGrid.execute(abc=abc(), model_size="small", device="cpu", dtype="float32",
                 use_sampling=False, temperature=1, cfg_coef=1, beam_size=1, prelude_forcing=True,
@@ -177,7 +191,7 @@ class GridTests(unittest.TestCase):
         faux = types.ModuleType("muscriptor.comfy_node")
         faux.get_model = lambda *args: Model()
         faux.resolve_instrument_names = lambda tokens: tokens
-        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {"muscriptor.comfy_node": faux}), patch.object(folder_paths, "get_output_directory", return_value=directory):
+        with tempfile.TemporaryDirectory() as directory, patch.dict(sys.modules, {"muscriptor.comfy_node": faux}), patch.object(folder_paths, "get_output_directory", return_value=directory), patch.object(grid, "local_model_source", return_value=Path(directory) / "model.safetensors"):
             audio = {"waveform": torch.zeros(1, 1, 16000 * 12), "sample_rate": 16000}
             kwargs = dict(abc=abc(159), model_size="small", device="cpu", dtype="float32",
                           use_sampling=False, temperature=1, cfg_coef=1, beam_size=1,

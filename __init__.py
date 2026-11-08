@@ -3,6 +3,7 @@ from .refmod_preview import SkebaRefModPreview
 from .reference_audio_preview import SkebaH3ReferenceAudioPreview
 from .quick_launcher import SkebaQuickLauncher
 from .custom_choice import SkebaCustomChoice
+from .video_chunk_plan import SkebaVideoChunkPlan, SkebaRTXChunkTiming
 from .midi_for_ableton import SkebaMidiForAbleton
 from .compiler_templates import SkebaH3CompilerTemplates
 from .last_rendered_context import SkebaH3LastRenderedContext
@@ -66,6 +67,8 @@ VIDEO_PROMPT_NODE_CLASS_MAPPINGS = {
 }
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaVideoChunkPlan": SkebaVideoChunkPlan,
+    "SkebaRTXChunkTiming": SkebaRTXChunkTiming,
     "SkebaH3AudioLevel": SkebaH3AudioLevel,
     "SkebaRefModVoiceDescription": SkebaRefModVoiceDescription,
     "SkebaH3ReferenceAudioPreview": SkebaH3ReferenceAudioPreview,
@@ -141,6 +144,8 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaVideoChunkPlan": "SKEBA Video Chunk Plan (Seconds)",
+    "SkebaRTXChunkTiming": "SKEBA RTX Chunk Timing",
     "SkebaH3AudioLevel": "SKEBA H3 Audio Level + Voice EQ",
     "SkebaRefModVoiceDescription": "SKEBA RefMod Voice Description",
     "SkebaH3ReferenceAudioPreview": "SKEBA H3 Reference Audio Preview",

@@ -74,6 +74,28 @@ class MergeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "meters differ"):
             merge.merge_transcriptions(self.sheet, other)
 
+    def test_meter_changes_use_first_meter_and_preserve_note_timing(self):
+        original = mido.MidiFile(file=BytesIO(self.sheet))
+        original.tracks[0].insert(2, mido.MetaMessage("time_signature", numerator=3, denominator=4, time=960))
+        stream = BytesIO()
+        original.save(file=stream)
+        for alignment in merge.ALIGNMENTS:
+            expected, _ = merge.merge_transcriptions(self.sheet, self.muscriptor, alignment)
+            actual, report = merge.merge_transcriptions(stream.getvalue(), self.muscriptor, alignment)
+            self.assertEqual(actual, expected)
+            signatures = [msg for track in mido.MidiFile(file=BytesIO(actual)).tracks
+                          for msg in track if msg.type == "time_signature"]
+            self.assertEqual([(msg.numerator, msg.denominator) for msg in signatures], [(4, 4)])
+            self.assertIn("first meter", report)
+
+    def test_tempo_changes_still_report_tempo_error(self):
+        original = mido.MidiFile(file=BytesIO(self.sheet))
+        original.tracks[0].insert(2, mido.MetaMessage("set_tempo", tempo=500000, time=960))
+        stream = BytesIO()
+        original.save(file=stream)
+        with self.assertRaisesRegex(ValueError, "one constant tempo"):
+            merge.merge_transcriptions(stream.getvalue(), self.muscriptor)
+
 
 if __name__ == "__main__":
     unittest.main()

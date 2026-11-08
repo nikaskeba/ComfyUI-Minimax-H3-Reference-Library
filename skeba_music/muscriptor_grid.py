@@ -11,7 +11,6 @@ from pathlib import Path
 import folder_paths
 import mido
 from comfy_api.latest import io
-from huggingface_hub.errors import LocalEntryNotFoundError
 from symusic import Score
 
 
@@ -31,18 +30,18 @@ NO_INSTRUMENTS = "__none__"
 
 
 def local_model_source(model_size):
-    """Use a complete cached MuScriptor checkpoint without a Hub request."""
-    from huggingface_hub import try_to_load_from_cache
-
-    repo = f"MuScriptor/muscriptor-{model_size}"
-    cache_roots = [None, Path.home() / ".cache" / "huggingface" / "hub"]
-    for cache_root in cache_roots:
-        candidate = try_to_load_from_cache(repo, "model.safetensors", cache_dir=cache_root)
-        if isinstance(candidate, str):
-            path = Path(candidate)
-            if path.is_file() and (path.parent / "config.json").is_file():
-                return path
-    return model_size
+    """Load only from ComfyUI's models/MuScriptor directory."""
+    if model_size not in ("small", "medium", "large"):
+        raise ValueError(f"Unknown MuScriptor model size: {model_size}")
+    directory = Path(folder_paths.models_dir) / "MuScriptor" / f"muscriptor-{model_size}"
+    checkpoint = directory / "model.safetensors"
+    missing = [name for name in ("model.safetensors", "config.json") if not (directory / name).is_file()]
+    if missing:
+        raise FileNotFoundError(
+            f"MuScriptor {model_size}: place {', '.join(missing)} in {directory}. "
+            "This node loads local files only; it does not download or use the Hugging Face cache."
+        )
+    return checkpoint
 
 
 def parse_abc_grid(abc):
@@ -56,8 +55,7 @@ def parse_abc_grid(abc):
         meters = list(score.time_signatures)
         if not tempos or not meters:
             raise ValueError("ABC must decode to a tempo and meter for grid alignment.")
-        # ABC files can repeat an unchanged Q: or M: later in the score. Those
-        # produce extra events, but do not change the constant MIDI grid.
+        # Repeated tempo declarations do not change the constant MIDI grid.
         if any(not math.isclose(float(event.qpm), float(tempos[0].qpm), rel_tol=1e-5)
                for event in tempos[1:]):
             raise ValueError(
@@ -67,10 +65,7 @@ def parse_abc_grid(abc):
         if any((int(event.numerator), int(event.denominator)) !=
                (int(meters[0].numerator), int(meters[0].denominator))
                for event in meters[1:]):
-            raise ValueError(
-                "ABC changes meter within the song. This node exports one constant MIDI meter; "
-                "use a constant-meter ABC score for grid alignment."
-            )
+            print(f"[SKEBA MuScriptor] ABC changes meter; exporting one {meters[0].numerator}/{meters[0].denominator} meter. Note positions are unchanged.")
         qpm = float(tempos[0].qpm)
         numerator = int(meters[0].numerator)
         denominator = int(meters[0].denominator)
@@ -245,10 +240,11 @@ class SkebaMuScriptorGrid(io.ComfyNode):
             node_id="SkebaMuScriptorGrid",
             display_name="SKEBA MuScriptor Transcribe Audio to MIDI",
             category="Skeba Music",
-            description="Transcribe with MuScriptor; snap notes to the connected SheetSage ABC tempo and 16th-note grid.",
+            description="Transcribe with MuScriptor; snap notes to the connected SheetSage ABC tempo and 16th-note grid. MIDI uses the ABC's first meter throughout, even when the score changes meter.",
             inputs=[
                 io.String.Input("abc", multiline=True, force_input=True, tooltip="Connect the ABC made from the same full-length song."),
-                io.Combo.Input("model_size", options=["small", "medium", "large"], default="medium"),
+                io.Combo.Input("model_size", options=["small", "medium", "large"], default="medium",
+                               tooltip="Loads model.safetensors and config.json from models/MuScriptor/muscriptor-<size>/. No automatic download."),
                 io.Combo.Input("device", options=["auto", "cpu", "cuda", "mps"], default="auto"),
                 io.Combo.Input("dtype", options=["auto", "float32", "float16", "bfloat16"], default="auto"),
                 io.Boolean.Input("use_sampling", default=False),
@@ -318,14 +314,7 @@ class SkebaMuScriptorGrid(io.ComfyNode):
             raise ValueError("Select at least one instrument or use Check all.")
         tokens = [item.strip() for item in re.split(r"[,\n]", instruments) if item.strip()]
         instrument_list = resolve_instrument_names(tokens) if tokens else None
-        try:
-            model = get_model(local_model_source(model_size), device, dtype)
-        except LocalEntryNotFoundError as error:
-            raise RuntimeError(
-                f"MuScriptor {model_size} weights are not cached and Hugging Face could not be reached. "
-                f"Download MuScriptor/muscriptor-{model_size} model.safetensors and config.json "
-                "or choose a model size already cached on this machine."
-            ) from error
+        model = get_model(local_model_source(model_size), device, dtype)
         events = []
         for event in model.transcribe(audio=source, use_sampling=use_sampling, temperature=temperature,
                                       cfg_coef=cfg_coef, instruments=instrument_list, batch_size=1,

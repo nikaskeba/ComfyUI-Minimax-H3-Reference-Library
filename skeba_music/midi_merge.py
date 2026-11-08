@@ -16,12 +16,12 @@ ALIGNMENTS = ("Nearest 16th", "Preserve original timing")
 def _single_tempo_and_meter(data, label):
     midi = mido.MidiFile(file=BytesIO(data))
     tempos = {message.tempo for track in midi.tracks for message in track if message.type == "set_tempo"}
-    meters = {(message.numerator, message.denominator) for track in midi.tracks for message in track
-              if message.type == "time_signature"}
-    if len(tempos) != 1 or len(meters) != 1:
-        raise ValueError(f"{label} MIDI must have one constant tempo and time signature.")
+    meters = [(message.numerator, message.denominator) for message in mido.merge_tracks(midi.tracks)
+              if message.type == "time_signature"]
+    if len(tempos) != 1 or not meters:
+        raise ValueError(f"{label} MIDI must have one constant tempo and an explicit time signature.")
     tempo = tempos.pop()
-    numerator, denominator = meters.pop()
+    numerator, denominator = meters[0]
     if tempo <= 0 or numerator <= 0 or denominator <= 0:
         raise ValueError(f"{label} MIDI has invalid tempo or meter.")
     return tempo, numerator, denominator
@@ -116,7 +116,7 @@ def merge_transcriptions(sheetsage_midi, muscriptor_midi, alignment="Nearest 16t
         warning = f" MuScriptor tempo differed; absolute note times were mapped to SheetSage's {bpm:.3f} BPM."
     report = (f"{len(output.tracks) - 1} separate music tracks; SheetSage {counts['SheetSage']} notes; "
               f"MuScriptor {counts['MuScriptor']} notes; {bpm:.3f} BPM, {numerator}/{denominator}; "
-              f"alignment: {alignment}.{warning} Both models remain on separate instrument-named tracks; this does not correct differing transcription choices.")
+              f"alignment: {alignment}.{warning} SheetSage's first meter is used throughout. Both models remain on separate instrument-named tracks; this does not correct differing transcription choices.")
     return stream.getvalue(), report
 
 
@@ -127,7 +127,7 @@ class SkebaCombineTranscriptionMIDIs(io.ComfyNode):
             node_id="SkebaCombineTranscriptionMIDIs",
             display_name="SKEBA Combine Transcription MIDIs",
             category="Skeba Music",
-            description="Combine SheetSage score MIDI and MuScriptor MIDI as separate instrument-named tracks on the SheetSage tempo grid.",
+            description="Combine SheetSage score MIDI and MuScriptor MIDI as separate instrument-named tracks on the SheetSage tempo grid. Uses SheetSage's first meter throughout, ignoring later meter changes.",
             inputs=[
                 io.Custom("YUE2_MIDI").Input("sheetsage_midi"),
                 io.Custom("YUE2_MIDI").Input("muscriptor_midi"),
