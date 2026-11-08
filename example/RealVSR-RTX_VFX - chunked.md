@@ -2,7 +2,7 @@
 
 Restart ComfyUI and reload `RealVSR-RTX_VFX - upscale.json` from the saved workflows, or open `RealVSR-RTX_VFX - upscale - chunked.json` from these examples.
 
-1. Put the source video in `ComfyUI/input` and select it on **Choose Video + Chunk Seconds**. Refresh node definitions if a newly added file is missing.
+1. Click **Upload video…** on **Choose Video + Chunk Seconds** to upload and automatically select a video. Alternatively, choose an existing video from `ComfyUI/input`. Refresh node definitions if a file added outside the browser is missing.
 2. Set `chunk_seconds` (default 30). Boundaries round to whole source frames; at 24 fps, 30 seconds is 720 frames. A two-minute input runs in four batches. Lower this value if one batch still exceeds memory.
 3. Queue once. VHS Meta Batch Manager automatically requeues subsequent chunks and streams them into one encoder. Leave the loader's frame cap and skipped frames at zero, force rate at zero, and select-every-nth at one.
 4. The final video is saved under `output/RelayVSR_Chunked/`. Audio is read from the source and muxed once at completion, preserving synchronization without separately saved audio/video chunks. VHS removes its temporary silent encode; metadata preview PNGs are disabled.
