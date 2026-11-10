@@ -27,6 +27,20 @@ package.__path__ = [str(ROOT / "custom_nodes/comfyui-videohelpersuite")]
 sys.modules["vhs_test"] = package
 vhs = importlib.import_module("vhs_test.videohelpersuite.nodes")
 load = importlib.import_module("vhs_test.videohelpersuite.load_video_nodes")
+utils = importlib.import_module("vhs_test.videohelpersuite.utils")
+
+workflow = json.loads((Path(__file__).parents[1] / "example/RealVSR-RTX_VFX - upscale - chunked - nov8 - fixed.json").read_text(encoding="utf-8"))
+links = {link[0]: link for link in workflow["links"]}
+prompt = {str(node["id"]): {"class_type": node["type"], "inputs": {
+    item["name"]: [str(links[item["link"]][1]), links[item["link"]][2]]
+    for item in node.get("inputs", []) if item.get("link") is not None
+}} for node in workflow["nodes"]}
+queue = types.SimpleNamespace(currently_running={"test": (123, "test", prompt, {}, ["13"], {})})
+with patch.object(utils, "prompt_queue", queue), patch.object(utils, "requeue_guard", [None, 0, 0, {}]), patch.object(utils, "requeue_workflow_unchecked") as requeue:
+    utils.requeue_workflow(("74", True))
+    requeue.assert_called_once()
+assert prompt["13"]["inputs"]["audio"] == ["31", 2]
+print("PASS saved workflow triggers VHS automatic requeue and connects source audio directly.")
 
 with tempfile.TemporaryDirectory() as temp:
     source = Path(temp) / "source.mp4"

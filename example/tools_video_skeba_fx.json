@@ -1,0 +1,1169 @@
+{
+  "id": "7f4f68db-84ad-418a-9617-6f81a278ca98",
+  "revision": 0,
+  "last_node_id": 13,
+  "last_link_id": 9,
+  "nodes": [
+    {
+      "id": 12,
+      "type": "SkebaVideoChunkPlan",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        360,
+        166
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "COMBO",
+          "widget": {
+            "name": "video"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "chunk_seconds",
+          "name": "chunk_seconds",
+          "type": "FLOAT",
+          "widget": {
+            "name": "chunk_seconds"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": "#f2c94c",
+          "color_on": "#f2c94c",
+          "localized_name": "video_path",
+          "name": "video_path",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        },
+        {
+          "localized_name": "frames_per_batch",
+          "name": "frames_per_batch",
+          "type": "INT",
+          "links": [
+            2
+          ]
+        },
+        {
+          "localized_name": "fps",
+          "name": "fps",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "color_off": "#f2c94c",
+          "color_on": "#f2c94c",
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Choose Video + Seconds per Batch",
+      "properties": {
+        "cnr_id": "h3-reference-library",
+        "ver": "a96c2d9a6886971598df425dea444da521a20be9",
+        "Node name for S&R": "SkebaVideoChunkPlan",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "video": true,
+            "chunk_seconds": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": [
+        "lotion.mp4",
+        30
+      ],
+      "widgets_values_named": {
+        "video": "lotion.mp4",
+        "chunk_seconds": 30
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "VHS_BatchManager",
+      "pos": [
+        400,
+        0
+      ],
+      "size": [
+        261.53125,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "frames_per_batch",
+          "name": "frames_per_batch",
+          "type": "INT",
+          "widget": {
+            "name": "frames_per_batch"
+          },
+          "link": 2
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "meta_batch",
+          "name": "meta_batch",
+          "type": "VHS_BatchManager",
+          "links": [
+            3,
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "VHS_BatchManager",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": {
+        "frames_per_batch": 16
+      },
+      "widgets_values_named": {
+        "frames_per_batch": 16
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "title": "Automatic Batch Loop"
+    },
+    {
+      "id": 4,
+      "type": "VHS_LoadVideoPath",
+      "pos": [
+        400,
+        150
+      ],
+      "size": [
+        331.974609375,
+        286
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "meta_batch",
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": 3
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        },
+        {
+          "color_off": "#f2c94c",
+          "color_on": "#f2c94c",
+          "localized_name": "video",
+          "name": "video",
+          "type": "STRING",
+          "widget": {
+            "name": "video"
+          },
+          "link": 1
+        },
+        {
+          "localized_name": "force_rate",
+          "name": "force_rate",
+          "type": "FLOAT",
+          "widget": {
+            "name": "force_rate"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "custom_width",
+          "name": "custom_width",
+          "type": "INT",
+          "widget": {
+            "name": "custom_width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "custom_height",
+          "name": "custom_height",
+          "type": "INT",
+          "widget": {
+            "name": "custom_height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "frame_load_cap",
+          "name": "frame_load_cap",
+          "type": "INT",
+          "widget": {
+            "name": "frame_load_cap"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "skip_first_frames",
+          "name": "skip_first_frames",
+          "type": "INT",
+          "widget": {
+            "name": "skip_first_frames"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "select_every_nth",
+          "name": "select_every_nth",
+          "type": "INT",
+          "widget": {
+            "name": "select_every_nth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "localized_name": "frame_count",
+          "name": "frame_count",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "localized_name": "audio",
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            8
+          ]
+        },
+        {
+          "localized_name": "video_info",
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "title": "Stream Next Chunk (Do Not Cap Frames)",
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "VHS_LoadVideoPath",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "__skeba_color_base": "#232",
+        "__skeba_bgcolor_base": "#353"
+      },
+      "widgets_values": {
+        "video": "",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "None",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "",
+            "type": "path",
+            "format": "video/",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1
+          }
+        }
+      },
+      "widgets_values_named": {
+        "video": "",
+        "force_rate": 0,
+        "custom_width": 0,
+        "custom_height": 0,
+        "frame_load_cap": 0,
+        "skip_first_frames": 0,
+        "select_every_nth": 1,
+        "format": "None",
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "filename": "",
+            "type": "path",
+            "format": "video/",
+            "force_rate": 0,
+            "custom_width": 0,
+            "custom_height": 0,
+            "frame_load_cap": 0,
+            "skip_first_frames": 0,
+            "select_every_nth": 1
+          }
+        }
+      },
+      "color": "#232",
+      "bgcolor": "#353",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "VHS_VideoInfo",
+      "pos": [
+        800,
+        0
+      ],
+      "size": [
+        233.455078125,
+        206
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_info",
+          "type": "VHS_VIDEOINFO",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "source_fps🟨",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "source_frame_count🟨",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "source_duration🟨",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "source_width🟨",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "source_height🟨",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "loaded_fps🟦",
+          "type": "FLOAT",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "loaded_frame_count🟦",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "loaded_duration🟦",
+          "type": "FLOAT",
+          "links": []
+        },
+        {
+          "name": "loaded_width🟦",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "name": "loaded_height🟦",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "properties": {
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "Node name for S&R": "VHS_VideoInfo",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {},
+          "version": "7.8"
+        },
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "widgets_values": {}
+    },
+    {
+      "id": 2,
+      "type": "SkebaVideoEffects",
+      "pos": [
+        800,
+        150
+      ],
+      "size": [
+        350,
+        950
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 5
+        },
+        {
+          "name": "effect",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "effect"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.preset",
+          "type": "COMBO",
+          "widget": {
+            "name": "effect.preset"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.tracking",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.tracking"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.dropout",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.dropout"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.creases",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.creases"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.ghosting",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.ghosting"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.head_switch",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.head_switch"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.vertical_roll",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.vertical_roll"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.tape_noise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.tape_noise"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.flicker",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.flicker"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.luma_softness",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.luma_softness"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.color_bleed",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.color_bleed"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.scanlines",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.scanlines"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.wear_start",
+          "type": "INT",
+          "widget": {
+            "name": "effect.wear_start"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.wear_end",
+          "type": "INT",
+          "widget": {
+            "name": "effect.wear_end"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.wear_boost",
+          "type": "FLOAT",
+          "widget": {
+            "name": "effect.wear_boost"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_enabled",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "effect.osd_enabled"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "effect.osd_mode"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_color",
+          "type": "COMBO",
+          "widget": {
+            "name": "effect.osd_color"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_counter",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "effect.osd_counter"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_counter_start",
+          "type": "INT",
+          "widget": {
+            "name": "effect.osd_counter_start"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_custom_text",
+          "type": "STRING",
+          "widget": {
+            "name": "effect.osd_custom_text"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_scale",
+          "type": "INT",
+          "widget": {
+            "name": "effect.osd_scale"
+          },
+          "link": null
+        },
+        {
+          "name": "effect.osd_fps",
+          "type": "INT",
+          "widget": {
+            "name": "effect.osd_fps"
+          },
+          "link": null
+        },
+        {
+          "name": "speed",
+          "type": "COMBO",
+          "widget": {
+            "name": "speed"
+          },
+          "link": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "name": "frame_offset",
+          "type": "INT",
+          "widget": {
+            "name": "frame_offset"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "slot_index": 0,
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaVideoEffects"
+      },
+      "widgets_values": [
+        "VHS",
+        "lightly_worn",
+        0.35,
+        0.3,
+        0.25,
+        0.3,
+        0.45,
+        0.15,
+        0.35,
+        0.25,
+        0.5,
+        0.5,
+        0.35,
+        0,
+        0,
+        0.6,
+        false,
+        "play",
+        "white",
+        false,
+        0,
+        "DEC 24 1996",
+        2,
+        24,
+        "Fast",
+        3770888054,
+        0
+      ],
+      "widgets_values_named": {
+        "effect": "VHS",
+        "effect.preset": "lightly_worn",
+        "effect.tracking": 0.35,
+        "effect.dropout": 0.3,
+        "effect.creases": 0.25,
+        "effect.ghosting": 0.3,
+        "effect.head_switch": 0.45,
+        "effect.vertical_roll": 0.15,
+        "effect.tape_noise": 0.35,
+        "effect.flicker": 0.25,
+        "effect.luma_softness": 0.5,
+        "effect.color_bleed": 0.5,
+        "effect.scanlines": 0.35,
+        "effect.wear_start": 0,
+        "effect.wear_end": 0,
+        "effect.wear_boost": 0.6,
+        "effect.osd_enabled": false,
+        "effect.osd_mode": "play",
+        "effect.osd_color": "white",
+        "effect.osd_counter": false,
+        "effect.osd_counter_start": 0,
+        "effect.osd_custom_text": "DEC 24 1996",
+        "effect.osd_scale": 2,
+        "effect.osd_fps": 24,
+        "speed": "Fast",
+        "seed": 3770888054,
+        "frame_offset": 0
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "title": "SKEBA Video Effects — Select a Look"
+    },
+    {
+      "id": 11,
+      "type": "VHS_VideoCombine",
+      "pos": [
+        1200,
+        150
+      ],
+      "size": [
+        420,
+        400
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 8
+        },
+        {
+          "localized_name": "meta_batch",
+          "name": "meta_batch",
+          "shape": 7,
+          "type": "VHS_BatchManager",
+          "link": 4
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        },
+        {
+          "localized_name": "frame_rate",
+          "name": "frame_rate",
+          "type": "FLOAT",
+          "widget": {
+            "name": "frame_rate"
+          },
+          "link": 9
+        },
+        {
+          "localized_name": "loop_count",
+          "name": "loop_count",
+          "type": "INT",
+          "widget": {
+            "name": "loop_count"
+          },
+          "link": null
+        },
+        {
+          "color_off": "#f2c94c",
+          "color_on": "#f2c94c",
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pingpong",
+          "name": "pingpong",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "pingpong"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "save_output",
+          "name": "save_output",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "save_output"
+          },
+          "link": null
+        },
+        {
+          "name": "pix_fmt",
+          "type": [
+            "yuv420p",
+            "yuv420p10le"
+          ],
+          "widget": {
+            "name": "pix_fmt"
+          },
+          "link": null
+        },
+        {
+          "name": "crf",
+          "type": "INT",
+          "widget": {
+            "name": "crf"
+          },
+          "link": null
+        },
+        {
+          "name": "save_metadata",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "save_metadata"
+          },
+          "link": null
+        },
+        {
+          "name": "trim_to_audio",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "trim_to_audio"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "Filenames",
+          "name": "Filenames",
+          "type": "VHS_FILENAMES",
+          "links": []
+        }
+      ],
+      "title": "One Final Video + Audio",
+      "properties": {
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "449839959f0153fb8a57211a9364c55163935ca9",
+        "Node name for S&R": "VHS_VideoCombine",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "aux_id": "kosinkadink/ComfyUI-VideoHelperSuite",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        },
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "frame_rate": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
+      "widgets_values": {
+        "frame_rate": 1,
+        "loop_count": 0,
+        "filename_prefix": "video/ComfyUI_VHS",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": false,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "widgets_values_named": {
+        "frame_rate": 1,
+        "loop_count": 0,
+        "filename_prefix": "video/ComfyUI_VHS",
+        "format": "video/h264-mp4",
+        "pix_fmt": "yuv420p",
+        "crf": 19,
+        "save_metadata": false,
+        "trim_to_audio": false,
+        "pingpong": false,
+        "save_output": true
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      12,
+      0,
+      4,
+      2,
+      "STRING"
+    ],
+    [
+      2,
+      12,
+      1,
+      13,
+      0,
+      "INT"
+    ],
+    [
+      3,
+      13,
+      0,
+      4,
+      0,
+      "VHS_BatchManager"
+    ],
+    [
+      4,
+      13,
+      0,
+      11,
+      2,
+      "VHS_BatchManager"
+    ],
+    [
+      5,
+      4,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ],
+    [
+      6,
+      4,
+      3,
+      6,
+      0,
+      "VHS_VIDEOINFO"
+    ],
+    [
+      7,
+      2,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      4,
+      2,
+      11,
+      1,
+      "AUDIO"
+    ],
+    [
+      9,
+      6,
+      5,
+      11,
+      4,
+      "FLOAT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        50,
+        100
+      ]
+    },
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "frontendVersion": "1.58.5",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": false,
+    "VHS_KeepIntermediate": false,
+    "reroutes": [],
+    "linkExtensions": []
+  },
+  "version": 0.4
+}

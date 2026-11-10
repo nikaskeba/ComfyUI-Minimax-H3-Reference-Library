@@ -6,6 +6,7 @@ MIT attribution: LICENSES/ComfyUI-H3-AudioRefine.txt.
 import torch
 import json
 import math
+import re
 import comfy.nested_tensor
 import comfy.sample
 import comfy.samplers
@@ -175,6 +176,24 @@ class SkebaH3AudioInpaintRange(SkebaH3AudioRefine):
         return base
 
 
+def edit_intervals(text, start, end, duration):
+    if not text.strip():
+        return [(start, end)]
+    intervals = []
+    for item in re.split(r"[;\n]+", text.strip()):
+        if not item.strip():
+            continue
+        match = re.fullmatch(r"\s*(\d+(?:\.\d+)?)\s*[-,:]\s*(\d+(?:\.\d+)?)\s*", item)
+        if match is None:
+            raise ValueError("Use edit ranges such as 0-2; 4.5-6, one pair per line or separated by semicolons.")
+        first, last = map(float, match.groups())
+        if first >= last:
+            raise ValueError("Each edit range must end after it starts.")
+        if first < duration:
+            intervals.append((first, min(last, duration)))
+    return intervals
+
+
 class SkebaH3AudioEditMask:
     CATEGORY = "Skeba AI Nodes - Reference/Experimental"
     FUNCTION = "apply"
@@ -193,21 +212,23 @@ class SkebaH3AudioEditMask:
             "edit_end_seconds": ("FLOAT", {"default": 3.0, "min": 0.0, "max": 1000.0, "step": 0.025}),
             "audio_mask_strength": ("FLOAT", {"default": 0.5, "min": 0.0, "max": 1.0, "step": 0.01,
                                       "tooltip": "0 locks the source audio; 1 fully regenerates the selected interval."}),
-        }}
+        }, "optional": {"edit_ranges": ("STRING", {"default": "", "multiline": True,
+            "tooltip": "Multiple ranges in seconds, e.g. 0-2; 4.5-6. Replaces the single range when filled. Times are relative to each delivered clip; out-of-window portions are ignored."}),
+            "time_offset_seconds": ("FLOAT", {"default": 0.0, "min": 0.0, "tooltip": "Continuation head duration before the delivered clip."})}}
 
     def apply(self, latent, enabled=True, edit_start_seconds=1.0, edit_end_seconds=3.0,
-              audio_mask_strength=0.5):
+              audio_mask_strength=0.5, edit_ranges="", time_offset_seconds=0.0):
         if not enabled:
             return (latent, "Audio edit mask disabled; input latent unchanged.")
         video, audio = av_streams(latent)
         start, end, strength = float(edit_start_seconds), float(edit_end_seconds), float(audio_mask_strength)
         duration = audio.shape[-1] / 40.0
-        if not 0 <= start < end <= duration:
+        if not edit_ranges.strip() and not 0 <= start < end <= duration:
             raise ValueError(f"SKEBA Audio Edit Mask: range must satisfy 0 <= start < end <= {duration:g} seconds.")
         if not 0 <= strength <= 1:
             raise ValueError("SKEBA Audio Edit Mask: strength must be between zero and one.")
         first, last = round(start * 40), round(end * 40)
-        if last <= first:
+        if not edit_ranges.strip() and last <= first:
             raise ValueError("SKEBA Audio Edit Mask: range is shorter than one 40 Hz audio-latent frame.")
         existing = latent.get("noise_mask")
         if existing is None:
@@ -219,18 +240,21 @@ class SkebaH3AudioEditMask:
             raise ValueError("SKEBA Audio Edit Mask: expected a packed H3 video/audio noise mask.")
         audio_mask = torch.zeros((audio.shape[0], 1, audio.shape[2], audio.shape[3]),
                                  device=audio.device, dtype=torch.float32)
-        audio_mask[..., first:last] = strength
+        ranges = [(a + time_offset_seconds, b + time_offset_seconds)
+                  for a, b in edit_intervals(edit_ranges, start, end, max(0, duration - time_offset_seconds))]
+        for range_start, range_end in ranges:
+            audio_mask[..., round(range_start * 40):round(range_end * 40)] = strength
         output = latent.copy()
         output["noise_mask"] = comfy.nested_tensor.NestedTensor((video_mask, audio_mask))
-        status = json.dumps({"edit_start_seconds": first / 40, "edit_end_seconds": last / 40,
+        status = json.dumps({"edit_ranges": ranges, "edit_start_seconds": first / 40, "edit_end_seconds": last / 40,
                              "audio_mask_strength": strength,
                              "outside_audio": "locked", "video_mask": "preserved"})
         return (output, status)
 
 
 def _h3_video_token_frames(count):
-    """H3 temporal VAE coverage: first token is one frame, then four per token."""
-    return 0 if count <= 0 else 1 + 4 * (count - 1)
+    """H3 temporal VAE coverage: repeating 1/4/4/4/4-frame token groups."""
+    return (count // 5) * 17 + sum((1, 4, 4, 4, 4)[:count % 5])
 
 
 class SkebaH3VideoEditMask:
@@ -252,17 +276,19 @@ class SkebaH3VideoEditMask:
             "video_mask_strength": ("FLOAT", {"default": 0.25, "min": 0.0, "max": 1.0, "step": 0.01}),
             "extend_to_last_frame": ("BOOLEAN", {"default": False,
                 "tooltip": "Include every remaining video-latent token, including H3's padded tail beyond the prompt's nominal seconds."}),
-        }}
+        }, "optional": {"edit_ranges": ("STRING", {"default": "", "multiline": True,
+            "tooltip": "Multiple ranges in seconds, e.g. 0-2; 4.5-6. Replaces the single range when filled. Times are relative to each delivered clip; out-of-window portions are ignored."}),
+            "time_offset_seconds": ("FLOAT", {"default": 0.0, "min": 0.0, "tooltip": "Continuation head duration before the delivered clip."})}}
 
     def apply(self, latent, enabled=True, edit_start_seconds=3.0, edit_end_seconds=10.0,
-              video_mask_strength=0.25, extend_to_last_frame=False):
+              video_mask_strength=0.25, extend_to_last_frame=False, edit_ranges="", time_offset_seconds=0.0):
         if not enabled:
             return (latent, "Video edit mask disabled; input latent unchanged.")
         video, audio = av_streams(latent)
         start, requested_end, strength = (float(edit_start_seconds), float(edit_end_seconds),
                                           float(video_mask_strength))
         duration = _h3_video_token_frames(video.shape[2]) / 24.0
-        if not (math.isfinite(start) and math.isfinite(requested_end)
+        if not edit_ranges.strip() and not (math.isfinite(start) and math.isfinite(requested_end)
                 and 0 <= start < requested_end and start < duration
                 and (extend_to_last_frame or requested_end <= duration)):
             raise ValueError(f"SKEBA Video Edit Mask: use 0 <= start < end and start < {duration:g} seconds; end must fit unless Extend to last frame is enabled.")
@@ -275,7 +301,7 @@ class SkebaH3VideoEditMask:
         last = (video.shape[2] if extend_to_last_frame else
                 next((i for i in range(first, video.shape[2])
                       if _h3_video_token_frames(i) >= end_frame), video.shape[2]))
-        if last <= first:
+        if not edit_ranges.strip() and last <= first:
             raise ValueError("SKEBA Video Edit Mask: range is shorter than one video-latent token.")
         existing = latent.get("noise_mask")
         if existing is None:
@@ -287,10 +313,16 @@ class SkebaH3VideoEditMask:
             raise ValueError("SKEBA Video Edit Mask: expected a packed H3 video/audio noise mask.")
         video_mask = torch.zeros((video.shape[0], 1, *video.shape[2:]),
                                  device=video.device, dtype=torch.float32)
-        video_mask[:, :, first:last] = strength
+        ranges = [(a + time_offset_seconds, b + time_offset_seconds)
+                  for a, b in edit_intervals(edit_ranges, start, end, max(0, duration - time_offset_seconds))]
+        for range_start, range_end in ranges:
+            for token in range(video.shape[2]):
+                if (_h3_video_token_frames(token + 1) > range_start * 24
+                        and _h3_video_token_frames(token) < range_end * 24):
+                    video_mask[:, :, token] = strength
         output = latent.copy()
         output["noise_mask"] = comfy.nested_tensor.NestedTensor((video_mask, audio_mask))
-        status = json.dumps({"video_requested_seconds": [start, requested_end],
+        status = json.dumps({"edit_ranges": ranges, "video_requested_seconds": [start, requested_end],
                              "video_effective_seconds": [_h3_video_token_frames(first) / 24.0,
                                                          _h3_video_token_frames(last) / 24.0],
                              "video_mask_strength": strength,

@@ -234,6 +234,20 @@ class FrameWindowLoaderTests(unittest.TestCase):
 
 
 class WorkflowWiringTests(unittest.TestCase):
+    def test_oct27_source_slider_controls_batch_start(self):
+        workflow = json.loads((ROOT / "example/inpaint_oct27.json").read_text(encoding="utf-8"))
+        nodes = {node["id"]: node for node in workflow["nodes"]}
+        links = {link[0]: link for link in workflow["links"]}
+        selector = next(node for node in nodes.values() if node["type"] == "SkebaH3InpaintStartFrame")
+        link = links[selector["outputs"][0]["links"][0]]
+        loop = nodes[link[3]]
+        self.assertEqual(loop["inputs"][link[4]]["name"], "source_start_frame")
+        subgraph = next(graph for graph in workflow["definitions"]["subgraphs"] if graph["id"] == loop["type"])
+        inner = next(edge for edge in subgraph["links"] if edge["origin_id"] == -10 and edge["origin_slot"] == link[4])
+        fitter = next(node for node in subgraph["nodes"] if node["id"] == inner["target_id"])
+        self.assertEqual(fitter["type"], "SkebaH3InpaintBatchFit")
+        self.assertEqual(fitter["inputs"][inner["target_slot"]]["name"], "start_frame")
+
     def test_loop_uses_planned_window_and_validates_append(self):
         graph = json.loads((ROOT / "example/current/Video-Audio-Inpaint-Oct16.json")
                            .read_text(encoding="utf-8"))

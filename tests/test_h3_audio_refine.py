@@ -197,19 +197,19 @@ class AudioRefineTests(unittest.TestCase):
                 node.apply(latent(), True, start, end, strength)
 
     def test_pre_sampler_video_edit_mask_preserves_audio_and_audio_edit_preserves_video(self):
-        video = torch.randn(1, 24, 65, 2, 2)
+        video = torch.randn(1, 24, 77, 2, 2)
         audio = torch.randn(1, 32, 2, 440)
         value = {"samples": Nested((video, audio))}
         original_audio_mask = torch.zeros(1, 1, 2, 440)
         original_audio_mask[..., 20:30] = 0.75
-        value["noise_mask"] = Nested((torch.ones(1, 1, 65, 2, 2), original_audio_mask))
+        value["noise_mask"] = Nested((torch.ones(1, 1, 77, 2, 2), original_audio_mask))
         video_out, status = MODULE.SkebaH3VideoEditMask().apply(value, True, 3, 10, 0.25)
         self.assertIs(video_out["samples"], value["samples"])
         self.assertIs(video_out["noise_mask"].tensors[1], original_audio_mask)
         video_mask = video_out["noise_mask"].tensors[0]
-        self.assertFalse(torch.any(video_mask[:, :, :18]))
-        self.assertTrue(torch.all(video_mask[:, :, 18:61] == 0.25))
-        self.assertFalse(torch.any(video_mask[:, :, 61:]))
+        self.assertFalse(torch.any(video_mask[:, :, :21]))
+        self.assertTrue(torch.all(video_mask[:, :, 21:72] == 0.25))
+        self.assertFalse(torch.any(video_mask[:, :, 72:]))
         self.assertIn('"audio_mask": "preserved"', status)
         both, _ = MODULE.SkebaH3AudioEditMask().apply(video_out, True, 3, 10, 1)
         self.assertIs(both["noise_mask"].tensors[0], video_mask)
@@ -230,7 +230,7 @@ class AudioRefineTests(unittest.TestCase):
                 node.apply(latent(), True, start, end, strength)
 
     def test_video_edit_can_include_h3_tail_after_nominal_ten_seconds(self):
-        video = torch.randn(1, 24, 62, 2, 2)  # 245-frame latent envelope
+        video = torch.randn(1, 24, 77, 2, 2)  # 260-frame latent envelope
         audio = torch.randn(1, 32, 2, 440)
         value = {"samples": Nested((video, audio))}
         node = MODULE.SkebaH3VideoEditMask()
@@ -240,8 +240,8 @@ class AudioRefineTests(unittest.TestCase):
         self.assertEqual(through_end["noise_mask"].tensors[0][0, 0, -1, 0, 0], 0.25)
         self.assertIn('"extend_to_last_frame": true', status)
         self.assertIn('"masked_video_tokens": [', status)
-        self.assertIn('"video_token_count": 62', status)
-        self.assertEqual(tuple(through_end["noise_mask"].tensors[0].shape), (1, 1, 62, 2, 2))
+        self.assertIn('"video_token_count": 77', status)
+        self.assertEqual(tuple(through_end["noise_mask"].tensors[0].shape), (1, 1, 77, 2, 2))
 
     def test_video_latent_anchor_blend_preserves_base_and_learned_inputs(self):
         base = {"samples": torch.full((1, 24, 3, 2, 2), 2.0)}
@@ -257,7 +257,7 @@ class AudioRefineTests(unittest.TestCase):
             MODULE.SkebaH3VideoLatentAnchorBlend().blend(learned, {"samples": torch.zeros(1, 24, 4, 2, 2)}, 0.3)
 
     def test_av_inpaint_uses_independent_ranges_and_preserves_other_latents(self):
-        video = torch.randn(1, 24, 65, 2, 2)  # 257 decoded frames
+        video = torch.randn(1, 24, 77, 2, 2)  # 260 decoded frames
         audio = torch.randn(1, 32, 2, 400)    # 10 seconds
         value = {"samples": Nested((video, audio)), "metadata": "kept"}
 
@@ -272,15 +272,15 @@ class AudioRefineTests(unittest.TestCase):
                 video_start_seconds=4, video_end_seconds=8, video_mask_strength=0.25,
                 audio_start_seconds=3, audio_end_seconds=7, audio_mask_strength=1.0)
         passed_v, passed_a = sampler.call_args.kwargs["noise_mask"].tensors
-        self.assertTrue(torch.all(passed_v[:, :, 24:49] == 0.25))
-        self.assertFalse(torch.any(passed_v[:, :, :24]))
-        self.assertFalse(torch.any(passed_v[:, :, 49:]))
+        self.assertTrue(torch.all(passed_v[:, :, 28:57] == 0.25))
+        self.assertFalse(torch.any(passed_v[:, :, :28]))
+        self.assertFalse(torch.any(passed_v[:, :, 57:]))
         self.assertTrue(torch.all(passed_a[..., 120:280] == 1))
         self.assertFalse(torch.any(passed_a[..., :120]))
         self.assertFalse(torch.any(passed_a[..., 280:]))
         out_v, out_a = out["samples"].tensors
-        torch.testing.assert_close(out_v[:, :, :24], video[:, :, :24], rtol=0, atol=0)
-        torch.testing.assert_close(out_v[:, :, 49:], video[:, :, 49:], rtol=0, atol=0)
+        torch.testing.assert_close(out_v[:, :, :28], video[:, :, :28], rtol=0, atol=0)
+        torch.testing.assert_close(out_v[:, :, 57:], video[:, :, 57:], rtol=0, atol=0)
         torch.testing.assert_close(out_a[..., :120], audio[..., :120], rtol=0, atol=0)
         torch.testing.assert_close(out_a[..., 280:], audio[..., 280:], rtol=0, atol=0)
         self.assertEqual(out["metadata"], "kept")

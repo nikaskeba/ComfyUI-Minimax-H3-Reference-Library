@@ -63,7 +63,7 @@ class SkebaRTXChunkTiming:
     def complete(self, images, source_frame_count, multiplier):
         expected = (source_frame_count - 1) * multiplier + 1
         if source_frame_count < 1 or multiplier < 1 or images.shape[0] != expected:
-            raise ValueError("Connect RTX multiplier-mode output and the matching source frame count/multiplier to Chunk Timing.")
+            raise ValueError(f"Chunk Timing received {images.shape[0]} frames; expected {expected} from {source_frame_count} source frames at {multiplier}x. Connect the same multiplier to RTX Frame Generation and Chunk Timing (not the output FPS).")
         if multiplier == 1:
             return (images,)
         return (torch.cat((images, images[-1:].expand(multiplier - 1, -1, -1, -1)), dim=0),)
