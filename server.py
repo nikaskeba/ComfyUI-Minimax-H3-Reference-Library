@@ -1,3 +1,4 @@
+from .image_tagged_reference_prompt import builder_choices
 from .voice_description import describe_file
 from .voice_description_refmod import describe_refmod
 from .built_in_references import set_built_in_voice_description
@@ -422,6 +423,10 @@ def register_routes():
             return web.json_response({"collection": value})
         except (KeyError, ValueError, OSError) as error:
             return web.json_response({"error": str(error)}, status=400)
+
+    @routes.get("/api/h3-image-prompt/choices")
+    async def get_image_prompt_choices(request):
+        return web.json_response(await asyncio.to_thread(builder_choices))
 
     @routes.get("/api/h3-references/records")
     async def get_records(request):

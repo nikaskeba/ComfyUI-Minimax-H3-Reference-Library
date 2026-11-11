@@ -1,3 +1,4 @@
+from .image_tagged_reference_prompt import H3ImageTaggedReferencePrompt, H3ImagePromptBuilder
 from .voice_description_refmod import SkebaRefModVoiceDescription
 from .refmod_preview import SkebaRefModPreview
 from .reference_audio_preview import SkebaH3ReferenceAudioPreview
@@ -69,6 +70,8 @@ VIDEO_PROMPT_NODE_CLASS_MAPPINGS = {
 }
 
 NODE_CLASS_MAPPINGS = {
+    "H3ImagePromptBuilder": H3ImagePromptBuilder,
+    "H3ImageTaggedReferencePrompt": H3ImageTaggedReferencePrompt,
     "SkebaH3MixingSource": SkebaH3MixingSource,
     "SkebaH3MixingTrim": SkebaH3MixingTrim,
     "SkebaVideoEffects": SkebaVideoEffects,

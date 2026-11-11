@@ -1,0 +1,177 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "H3ImagePromptBuilder",
+      "pos": [
+        0,
+        0
+      ],
+      "size": [
+        650,
+        800
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "H3ImagePromptBuilder"
+      },
+      "widgets_values": [
+        ""
+      ]
+    },
+    {
+      "id": 2,
+      "type": "H3ImageTaggedReferencePrompt",
+      "pos": [
+        740,
+        0
+      ],
+      "size": [
+        350,
+        440
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "name": "image_1",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_2",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_3",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_4",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_5",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_6",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_7",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_8",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_9",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_10",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_11",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_12",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_13",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_14",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_15",
+          "type": "IMAGE",
+          "links": []
+        },
+        {
+          "name": "image_16",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "H3ImageTaggedReferencePrompt"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8,
+      "offset": [
+        50,
+        50
+      ]
+    }
+  },
+  "version": 0.4
+}
