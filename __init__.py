@@ -1,3 +1,4 @@
+from .musetalk_direct import MuseTalkRunDirect
 from .image_tagged_reference_prompt import H3ImageTaggedReferencePrompt, H3ImagePromptBuilder
 from .voice_description_refmod import SkebaRefModVoiceDescription
 from .refmod_preview import SkebaRefModPreview
@@ -34,6 +35,10 @@ from .h3_multi_guide import SkebaMiniMaxH3MultiFrameGuideTest
 from .h3_upscale_context import SkebaH3UpscaleContextGuides
 from .h3_person_reference_mask import SkebaPersonReferenceMask
 from .h3_mask_composite import SkebaH3FinalInpaintComposite
+from .h3_talking_avatar import SkebaTalkingAvatarComposite
+from .flashhead_frames import SkebaFlashHeadFrames
+from .h3_square_avatar import SkebaAvatarSquareCrop, SkebaAvatarSquareComposite
+from .h3_inpaint_source_scrub import SkebaH3InpaintSourceScrub
 from .h3_inpaint_source_loop import SkebaH3InpaintBatchFit, SkebaH3InpaintWindowPlan, SkebaH3InpaintSourceWindow, SkebaH3InpaintWindowValidate, SkebaH3InpaintVideoChoice, SkebaH3InpaintStartFrame
 from .h3_inpaint_mode import SkebaH3InpaintLatentMode, SkebaH3InpaintVideoMode, SkebaH3InpaintModelMode
 from .h3_av_connector import (
@@ -70,6 +75,11 @@ VIDEO_PROMPT_NODE_CLASS_MAPPINGS = {
 }
 
 NODE_CLASS_MAPPINGS = {
+    "SkebaH3InpaintSourceScrub": SkebaH3InpaintSourceScrub,
+    "SkebaAvatarSquareCrop": SkebaAvatarSquareCrop,
+    "SkebaAvatarSquareComposite": SkebaAvatarSquareComposite,
+    "SkebaFlashHeadFrames": SkebaFlashHeadFrames,
+    "MuseTalkRunDirect": MuseTalkRunDirect,
     "H3ImagePromptBuilder": H3ImagePromptBuilder,
     "H3ImageTaggedReferencePrompt": H3ImageTaggedReferencePrompt,
     "SkebaH3MixingSource": SkebaH3MixingSource,
@@ -124,6 +134,7 @@ NODE_CLASS_MAPPINGS = {
     "SkebaH3UpscaleContextGuides": SkebaH3UpscaleContextGuides,
     "SkebaPersonReferenceMask": SkebaPersonReferenceMask,
     "SkebaH3FinalInpaintComposite": SkebaH3FinalInpaintComposite,
+    "SkebaTalkingAvatarComposite": SkebaTalkingAvatarComposite,
     "SkebaH3InpaintBatchFit": SkebaH3InpaintBatchFit,
     "SkebaH3InpaintWindowPlan": SkebaH3InpaintWindowPlan,
     "SkebaH3InpaintSourceWindow": SkebaH3InpaintSourceWindow,
@@ -152,6 +163,10 @@ NODE_CLASS_MAPPINGS = {
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
+    "SkebaH3InpaintSourceScrub": "SKEBA H3 Inpaint Source Scrub (Experimental)",
+    "SkebaAvatarSquareCrop": "SKEBA Avatar Square Crop (512)",
+    "SkebaAvatarSquareComposite": "SKEBA Avatar Square Composite",
+    "SkebaFlashHeadFrames": "SKEBA SoulX-FlashHead Sampler (Frames)",
     "SkebaVideoEffects": "SKEBA Video Effects — Tape / Film / MiniDV",
     "SkebaVideoChunkPlan": "SKEBA Video Chunk Plan (Seconds)",
     "SkebaRTXChunkTiming": "SKEBA RTX Chunk Timing",
@@ -201,6 +216,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "SkebaH3UpscaleContextGuides": "SKEBA H3 Upscale Context Guides",
     "SkebaPersonReferenceMask": "SKEBA Reference Subject Mask (2 Tracks)",
     "SkebaH3FinalInpaintComposite": "SKEBA H3 Final Inpaint Composite",
+    "SkebaTalkingAvatarComposite": "SKEBA Talking Avatar Face-to-Body Composite",
     "SkebaH3InpaintBatchFit": "SKEBA H3 Inpaint Batch Fit",
     "SkebaH3InpaintWindowPlan": "SKEBA H3 Inpaint Loop Window Plan",
     "SkebaH3InpaintSourceWindow": "SKEBA H3 Inpaint Source Window",

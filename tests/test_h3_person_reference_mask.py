@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
@@ -37,6 +38,18 @@ def result(boxes, masks=None, classes=None):
 
 
 class PersonReferenceMaskTests(unittest.TestCase):
+    def test_generic_yolo_segmentation_weights_appear_in_person_selector(self):
+        with tempfile.TemporaryDirectory() as root:
+            folder = Path(root) / "ultralytics" / "segm"
+            folder.mkdir(parents=True)
+            for name in ("person_yolov8m-seg.pt", "yolo26x-seg.pt", "unrelated.pt"):
+                (folder / name).touch()
+            with mock.patch("folder_paths.models_dir", root):
+                names = MODULE._model_names("segm", "fallback.pt")
+        self.assertIn("yolo26x-seg.pt", names)
+        self.assertIn("person_yolov8m-seg.pt", names)
+        self.assertNotIn("unrelated.pt", names)
+
     def test_fill_holes_preserves_outer_boundary(self):
         mask = torch.zeros((9, 9))
         mask[1:8, 1:8] = 1
@@ -59,6 +72,161 @@ class PersonReferenceMaskTests(unittest.TestCase):
         _, kinds = MODULE._bridge_short_gaps(
             [left, torch.zeros_like(left), distant], ["face", "none", "face"], 1)
         self.assertEqual(kinds[1], "none")
+
+    def test_optical_flow_fills_bounded_miss_and_reports_kind(self):
+        frame = torch.zeros((1, 64, 64, 3))
+        frame[:, 15:45, 16:46] = 0.75
+        frames = frame.expand(3, -1, -1, -1).clone()
+        mask = torch.zeros((64, 64))
+        mask[18:42, 20:44] = 1
+        output, kinds = MODULE._stabilize_mask_sequence(
+            [mask, torch.zeros_like(mask), mask.clone()],
+            ["face", "none", "face"], frames, flow_gap_frames=1)
+        self.assertEqual(kinds, ["face", "flow", "face"])
+        self.assertGreater(float(output[1].sum()), 100)
+
+    def test_persistence_is_short_and_never_invents_an_initial_mask(self):
+        frames = torch.zeros((5, 32, 32, 3))
+        mask = torch.zeros((32, 32))
+        mask[8:24, 8:24] = 1
+        zero = torch.zeros_like(mask)
+        output, kinds = MODULE._stabilize_mask_sequence(
+            [zero, mask, zero, zero, zero],
+            ["none", "face", "none", "none", "none"], frames,
+            persist_frames=2)
+        self.assertEqual(kinds, ["none", "face", "persisted", "persisted", "none"])
+        self.assertFalse(bool(output[0].any()))
+        self.assertFalse(bool(output[4].any()))
+
+    def test_detection_stride_two_keeps_full_rate_masks_and_halves_detection(self):
+        frames = torch.zeros((4, 32, 32, 3))
+        frames[:, 8:24, 8:24] = .8
+        ref = frames[:1].clone()
+        person_mask = torch.zeros((1, 32, 32))
+        person_mask[:, 8:24, 8:24] = 1
+        pred = result([[8, 8, 24, 24]], person_mask)
+        segmenter = mock.Mock()
+        segmenter.predict.return_value = [pred]
+        face = [(np.array([10, 10, 20, 20]), np.array([1.0, 0.0]))]
+        with mock.patch.object(MODULE, "_face_recogniser", return_value=object()), \
+             mock.patch.object(MODULE, "_faces", side_effect=[face, face, face]), \
+             mock.patch.object(MODULE, "_yolo", return_value=segmenter):
+            masks, _, status, _, details = MODULE.SkebaPersonReferenceMask().create_mask(
+                frames, ref, detection_stride=2)
+        self.assertEqual(segmenter.predict.call_count, 2)
+        self.assertEqual(tuple(masks.shape), (4, 32, 32))
+        self.assertTrue(all(bool(frame.any()) for frame in masks))
+        self.assertIn("propagated 2", status)
+        self.assertEqual(json.loads(details)["track_1"][1]["source"], "propagated")
+
+    def test_whole_person_survives_long_turn_without_face_detection(self):
+        frames = torch.zeros((6, 32, 32, 3))
+        frames[:, 4:29, 8:25] = .8
+        ref = frames[:1].clone()
+        body = torch.zeros((1, 32, 32))
+        body[:, 4:29, 8:25] = 1
+        prediction = result([[8, 4, 25, 29]], body)
+        segmenter = SimpleNamespace(predict=lambda *args, **kwargs: [prediction])
+        face = [(np.array([11, 5, 21, 15]), np.array([1.0, 0.0]))]
+        with mock.patch.object(MODULE, "_face_recogniser", return_value=object()), \
+             mock.patch.object(MODULE, "_faces", side_effect=[face, face] + [[]] * 5), \
+             mock.patch.object(MODULE, "_yolo", return_value=segmenter):
+            masks, _, status, _, details = MODULE.SkebaPersonReferenceMask().create_mask(
+                frames, ref, max_track_gap=2)
+        self.assertTrue(all(bool(mask.any()) for mask in masks))
+        self.assertEqual(json.loads(details)["track_1"][5]["source"], "track")
+
+    def test_head_region_survives_turn_and_reacquires_face(self):
+        frames = torch.zeros((5, 32, 32, 3))
+        frames[:, 4:29, 8:25] = .8
+        ref = frames[:1].clone()
+        body = torch.zeros((1, 32, 32))
+        body[:, 4:29, 8:25] = 1
+        head = torch.zeros((32, 32))
+        head[5:16, 10:23] = 1
+        prediction = result([[8, 4, 25, 29]], body)
+        segmenter = SimpleNamespace(predict=lambda *args, **kwargs: [prediction])
+        face = [(np.array([11, 5, 21, 15]), np.array([1.0, 0.0]))]
+        with mock.patch.object(MODULE, "_face_recogniser", return_value=object()), \
+             mock.patch.object(MODULE, "_faces", side_effect=[face, face, [], [], [], face]), \
+             mock.patch.object(MODULE, "_yolo", return_value=segmenter), \
+             mock.patch.object(MODULE, "_face_region", return_value=head):
+            masks, _, status, _, details = MODULE.SkebaPersonReferenceMask().create_mask(
+                frames, ref, subject_1_region="head", max_track_gap=2)
+        sources = [item["source"] for item in json.loads(details)["track_1"]]
+        self.assertEqual(sources, ["face", "head_track", "head_track", "head_track", "face"])
+        self.assertIn("head tracked 3", status)
+        self.assertTrue(all(bool(mask.any()) for mask in masks))
+
+    def test_clothing_match_recovers_short_pan_without_flow_box_prediction(self):
+        frames = torch.zeros((2, 32, 32, 3))
+        frames[:, 10:28, 2:16, 0] = .8
+        ref = frames[:1].clone()
+        old = torch.zeros((1, 32, 32))
+        old[:, 2:28, 2:10] = 1
+        new = torch.zeros_like(old)
+        new[:, 2:28, 7:15] = 1
+        predictions = [result([[2, 2, 10, 28]], old),
+                       result([[7, 2, 15, 28]], new)]
+        segmenter = mock.Mock()
+        segmenter.predict.side_effect = [[item] for item in predictions]
+        face = [(np.array([3, 3, 9, 12]), np.array([1.0, 0.0]))]
+        with mock.patch.object(MODULE, "_face_recogniser", return_value=object()), \
+             mock.patch.object(MODULE, "_faces", side_effect=[face, face, []]), \
+             mock.patch.object(MODULE, "_yolo", return_value=segmenter):
+            masks, _, _, _, details = MODULE.SkebaPersonReferenceMask().create_mask(
+                frames, ref, max_track_gap=2, clothing_match=True)
+        self.assertTrue(bool(masks[1].any()))
+        self.assertEqual(json.loads(details)["track_1"][1]["source"], "clothing")
+
+    def test_clothing_match_rejects_ambiguous_identical_suits(self):
+        frame = torch.zeros((32, 32, 3))
+        frame[..., 0] = .8
+        masks = []
+        for left in (5, 11):
+            mask = torch.zeros((32, 32))
+            mask[2:28, left:left + 8] = 1
+            masks.append(mask)
+        boxes = [[5, 2, 13, 28], [11, 2, 19, 28]]
+        anchor = MODULE._clothing_signature(frame, masks[0], boxes[0])
+        self.assertIsNone(MODULE._clothing_choice(
+            frame, boxes, masks, anchor, [8, 2, 16, 28], .75))
+
+    def test_clothing_signature_distinguishes_different_outfits(self):
+        red = torch.zeros((32, 32, 3))
+        blue = torch.zeros_like(red)
+        red[..., 0] = .9
+        blue[..., 2] = .9
+        mask = torch.ones((32, 32))
+        box = [2, 2, 30, 30]
+        first = MODULE._clothing_signature(red, mask, box)
+        second = MODULE._clothing_signature(blue, mask, box)
+        self.assertLess(MODULE._clothing_similarity(first, second), .7)
+
+    def test_head_sliver_leaving_frame_is_not_carried_to_suit(self):
+        import cv2
+        frame = torch.zeros((32, 32, 3))
+        head = torch.zeros((32, 32))
+        head[:10, 10:22] = 1
+        flow = np.zeros((32, 32, 2), dtype=np.float32)
+        flow[..., 1] = 8  # head moves upward, leaving only two rows visible
+        with mock.patch.object(cv2, "calcOpticalFlowFarneback", return_value=flow):
+            carried = MODULE._propagate_mask_one_frame(
+                head, frame, frame, min_retained_fraction=.35)
+        self.assertIsNone(carried)
+
+    def test_boundary_hysteresis_stays_near_current_detection(self):
+        frames = torch.zeros((2, 32, 32, 3))
+        first = torch.zeros((32, 32))
+        second = torch.zeros((32, 32))
+        first[8:24, 8:24] = 1
+        second[8:24, 9:25] = 1
+        output, kinds = MODULE._stabilize_mask_sequence(
+            [first, second], ["face", "face"], frames,
+            boundary_hysteresis=0.25)
+        self.assertEqual(kinds, ["face", "face"])
+        self.assertEqual(float(output[1][0, 0]), 0)
+        self.assertGreater(float(output[1][12, 10]), 0.8)
 
     def test_lips_option_is_available(self):
         inputs = MODULE.SkebaPersonReferenceMask.INPUT_TYPES()

@@ -1,8 +1,8 @@
 {
   "id": "1dcd1078-ea8c-4e0f-8d94-a297a2511618",
   "revision": 0,
-  "last_node_id": 1359,
-  "last_link_id": 2391,
+  "last_node_id": 1360,
+  "last_link_id": 2392,
   "nodes": [
     {
       "id": 334,
@@ -20627,7 +20627,8 @@
           "name": "frames",
           "type": "IMAGE",
           "links": [
-            2317
+            2317,
+            2392
           ]
         },
         {
@@ -20641,13 +20642,6 @@
           "name": "status",
           "type": "STRING",
           "links": []
-        },
-        {
-          "name": "fixed_reference_frame",
-          "type": "IMAGE",
-          "links": [
-            2328
-          ]
         },
         {
           "name": "audio_mask_mode",
@@ -20703,7 +20697,6 @@
         0,
         "video audio",
         "(none)",
-        0,
         "source video inpaint",
         ""
       ],
@@ -22508,6 +22501,44 @@
         "Node name for S&R": "SkebaH3InpaintVideoMode"
       },
       "widgets_values": []
+    },
+    {
+      "id": 1360,
+      "type": "ImageFromBatch",
+      "pos": [
+        -6822.965137513677,
+        3266.0870336967796
+      ],
+      "size": [
+        210,
+        100
+      ],
+      "flags": {},
+      "order": 207,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2392
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2328
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
     }
   ],
   "links": [
@@ -24394,15 +24425,15 @@
     [
       2329,
       1324,
-      4,
+      3,
       1170,
       2,
       "*"
     ],
     [
       2328,
-      1324,
-      3,
+      1360,
+      0,
       1312,
       0,
       "IMAGE"
@@ -24906,7 +24937,7 @@
     [
       2380,
       1324,
-      5,
+      4,
       1358,
       0,
       "*"
@@ -24914,7 +24945,7 @@
     [
       2381,
       1324,
-      4,
+      3,
       1358,
       1,
       "*"
@@ -24962,7 +24993,7 @@
     [
       2387,
       1324,
-      5,
+      4,
       1359,
       0,
       "*"
@@ -24997,6 +25028,14 @@
       0,
       1164,
       1,
+      "IMAGE"
+    ],
+    [
+      2392,
+      1324,
+      0,
+      1360,
+      0,
       "IMAGE"
     ]
   ],

@@ -1,0 +1,1106 @@
+{
+  "id": "4afc9f7d-cc27-4257-8d4b-73111edeb05e",
+  "revision": 0,
+  "last_node_id": 17,
+  "last_link_id": 24,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "RunningHub SoulX-FlashHead Loader",
+      "pos": [
+        -4295.809289203409,
+        5182.978935405712
+      ],
+      "size": [
+        350.300390625,
+        58
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "FlashHead Pipeline",
+          "type": "RH_FlashHead_Pipeline",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "aux_id": "HM-RunningHub/ComfyUI_RH_FlashHead",
+        "ver": "111bf7d997467decd763d6168bcaa2a71941cf2b",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "RunningHub SoulX-FlashHead Loader",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "lite"
+      ],
+      "widgets_values_named": {
+        "model_type": "lite"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "RunningHub SoulX-FlashHead Sampler",
+      "pos": [
+        -3732.1917151840107,
+        5234.968146353932
+      ],
+      "size": [
+        358.48984375,
+        170
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "pipeline",
+          "type": "RH_FlashHead_Pipeline",
+          "link": 1
+        },
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "name": "ref_audio",
+          "type": "AUDIO",
+          "link": 5
+        },
+        {
+          "name": "avatar_image",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": [
+            10
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "aux_id": "HM-RunningHub/ComfyUI_RH_FlashHead",
+        "ver": "111bf7d997467decd763d6168bcaa2a71941cf2b",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "RunningHub SoulX-FlashHead Sampler",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        415367586192826,
+        "randomize",
+        512,
+        512
+      ],
+      "widgets_values_named": {
+        "seed": 415367586192826,
+        "control_after_generate": "randomize",
+        "width": 512,
+        "height": 512
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "LoadAudio",
+      "pos": [
+        -4508.508427705755,
+        5295.660719065093
+      ],
+      "size": [
+        282.798828125,
+        136
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.45.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "LoadAudio",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "digitalsin.mp3",
+        ""
+      ],
+      "widgets_values_named": {
+        "audio": "digitalsin.mp3",
+        "upload": ""
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "LoadImage",
+      "pos": [
+        -4553.970163532225,
+        5603.177573608413
+      ],
+      "size": [
+        282.798828125,
+        314
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.45.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "LoadImage",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "Screenshot 2026-09-28 at 7.34.10 PM.png",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "Screenshot 2026-09-28 at 7.34.10 PM.png",
+        "upload": "image"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "title": "Face portrait for FlashHead"
+    },
+    {
+      "id": 5,
+      "type": "TrimAudioDuration",
+      "pos": [
+        -4201.019087934696,
+        5289.666914439113
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "color_off": "#22c55e",
+          "color_on": "#22c55e",
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.45.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "TrimAudioDuration",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        15,
+        21
+      ],
+      "widgets_values_named": {
+        "start_index": 15,
+        "duration": 21
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "SaveVideo",
+      "pos": [
+        -3295.0885231828925,
+        5264.440622888472
+      ],
+      "size": [
+        270,
+        392
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 16
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.45.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "SaveVideo",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        "video/ComfyUI",
+        "mp4",
+        "h264",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "video/ComfyUI",
+        "format": "mp4",
+        "format.codec": "h264",
+        "format.codec.encoding": "auto",
+        "codec": "auto"
+      },
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      },
+      "title": "Save final talking avatar composite"
+    },
+    {
+      "id": 7,
+      "type": "FaceSegment",
+      "pos": [
+        -4240.603252944403,
+        5601.690331863621
+      ],
+      "size": [
+        340,
+        580
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            8
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        },
+        {
+          "name": "MASK_IMAGE",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfyui_fearnworksnodes",
+        "ver": "0.1.2",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "FaceSegment",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        512,
+        3,
+        -14,
+        false,
+        "Color",
+        "#222222"
+      ],
+      "widgets_values_named": {
+        "Skin": true,
+        "Nose": true,
+        "Eyeglasses": true,
+        "Left-eye": true,
+        "Right-eye": true,
+        "Left-eyebrow": true,
+        "Right-eyebrow": true,
+        "Left-ear": true,
+        "Right-ear": true,
+        "Mouth": true,
+        "Upper-lip": true,
+        "Lower-lip": true,
+        "Hair": true,
+        "Earring": true,
+        "Neck": true,
+        "process_res": 512,
+        "mask_blur": 3,
+        "mask_offset": -14,
+        "invert_output": false,
+        "background": "Color",
+        "background_color": "#222222"
+      },
+      "color": "#222e40",
+      "bgcolor": "#364254",
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "PreviewImage",
+      "pos": [
+        -3879.5094169215777,
+        5602.11415412348
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        }
+      ],
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "input_ue_unconnectable": {}
+        },
+        "cnr_id": "comfy-core",
+        "ver": "0.45.0",
+        "enableTabs": false,
+        "tabWidth": 65,
+        "tabXOffset": 10,
+        "hasSecondTab": false,
+        "secondTabText": "Send Back",
+        "secondTabOffset": 80,
+        "secondTabWidth": 65,
+        "Node name for S&R": "PreviewImage",
+        "__skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "widgets_values": [],
+      "widgets_values_named": {},
+      "_meta": {
+        "skeba_tags": {
+          "inputs": [],
+          "outputs": []
+        }
+      },
+      "extensions": {
+        "_meta": {
+          "skeba_tags": {
+            "inputs": [],
+            "outputs": []
+          }
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "LoadImage",
+      "title": "Background image - replace this",
+      "pos": [
+        -4560,
+        6020
+      ],
+      "size": [
+        285,
+        310
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            11
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "Screenshot 2026-09-28 at 7.34.10 PM.png"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "GetVideoComponents",
+      "title": "FlashHead video to frames and audio",
+      "pos": [
+        -3340,
+        5220
+      ],
+      "size": [
+        280,
+        130
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            12
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": [
+            15
+          ]
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": [
+            17,
+            24
+          ]
+        },
+        {
+          "name": "bit_depth",
+          "type": "COMBO",
+          "links": []
+        },
+        {
+          "name": "color_space",
+          "type": "COMBO",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GetVideoComponents"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 11,
+      "type": "SkebaTalkingAvatarComposite",
+      "title": "Track face onto body + background",
+      "pos": [
+        -2980,
+        5560
+      ],
+      "size": [
+        410,
+        270
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "person_frames",
+          "type": "IMAGE",
+          "link": 18
+        },
+        {
+          "name": "background",
+          "type": "IMAGE",
+          "link": 11
+        },
+        {
+          "name": "talking_head_frames",
+          "type": "IMAGE",
+          "link": 12
+        },
+        {
+          "name": "output_fps",
+          "type": "FLOAT",
+          "link": 24,
+          "widget": {
+            "name": "output_fps"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "frames",
+          "type": "IMAGE",
+          "links": [
+            14,
+            20
+          ]
+        },
+        {
+          "name": "status",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "SkebaTalkingAvatarComposite"
+      },
+      "widgets_values": [
+        "face",
+        0,
+        25.0,
+        25.0,
+        20,
+        0.3
+      ]
+    },
+    {
+      "id": 12,
+      "type": "CreateVideo",
+      "title": "Final composite with original speech",
+      "pos": [
+        -2490,
+        5520
+      ],
+      "size": [
+        280,
+        190
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "link": 15
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "link": 17,
+          "widget": {
+            "name": "fps"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            16
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CreateVideo"
+      },
+      "widgets_values": [
+        25,
+        8,
+        "sRGB",
+        "none"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "PreviewImage",
+      "title": "Preview composited frames",
+      "pos": [
+        -2490,
+        5780
+      ],
+      "size": [
+        200,
+        250
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 17,
+      "type": "MarkdownNote",
+      "title": "How to use this workflow",
+      "pos": [
+        -4550,
+        4890
+      ],
+      "size": [
+        600,
+        255
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "MarkdownNote"
+      },
+      "widgets_values": [
+        "# Talking avatar on a body and background\n1. Set **Face portrait for FlashHead** to a clear image of the same person.\n2. Set the body source and **Background image**. The body source sets the final canvas size.\n3. FlashHead creates the voice-driven face; **Track face onto body + background** aligns it per frame.\n4. Set `region=face` for safer blending; try `head` when hair/head movement matters.\n5. Optional: connect a full-person MASK to avoid automatic person segmentation.\n6. For a moving person video, use the separate talkingavatar3_video.json workflow."
+      ]
+    },
+    {
+      "id": 14,
+      "type": "LoadImage",
+      "title": "Person body image - replace this",
+      "pos": [
+        -4550,
+        6380
+      ],
+      "size": [
+        285,
+        310
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            18
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "Screenshot 2026-09-28 at 7.34.10 PM.png"
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "RH_FlashHead_Pipeline"
+    ],
+    [
+      4,
+      3,
+      0,
+      5,
+      0,
+      "AUDIO"
+    ],
+    [
+      5,
+      5,
+      0,
+      2,
+      1,
+      "AUDIO"
+    ],
+    [
+      7,
+      4,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      7,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      8,
+      0,
+      2,
+      2,
+      "IMAGE"
+    ],
+    [
+      10,
+      2,
+      0,
+      10,
+      0,
+      "VIDEO"
+    ],
+    [
+      11,
+      9,
+      0,
+      11,
+      1,
+      "IMAGE"
+    ],
+    [
+      12,
+      10,
+      0,
+      11,
+      2,
+      "IMAGE"
+    ],
+    [
+      14,
+      11,
+      0,
+      12,
+      0,
+      "IMAGE"
+    ],
+    [
+      15,
+      10,
+      1,
+      12,
+      1,
+      "AUDIO"
+    ],
+    [
+      16,
+      12,
+      0,
+      6,
+      0,
+      "VIDEO"
+    ],
+    [
+      17,
+      10,
+      2,
+      12,
+      2,
+      "FLOAT"
+    ],
+    [
+      20,
+      11,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      18,
+      14,
+      0,
+      11,
+      0,
+      "IMAGE"
+    ],
+    [
+      24,
+      10,
+      2,
+      11,
+      3,
+      "FLOAT"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ue_links": [],
+    "links_added_by_ue": [],
+    "ds": {
+      "scale": 0.6188059412790302,
+      "offset": [
+        5574.480155942477,
+        -4904.280200961637
+      ]
+    },
+    "frontendVersion": "1.58.5",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

@@ -116,16 +116,12 @@ app.registerExtension({
             const root = document.createElement("div");
             root.style.cssText = "width:100%;box-sizing:border-box;padding:4px 8px;color:#e8edf4;font:12px sans-serif;overflow:auto";
             const intro = document.createElement("div");
-            intro.textContent = "Select the source start and one fixed frame for SAM3. Use the video playhead or drag either slider.";
+            intro.textContent = "Select the source start with the video playhead or slider.";
             intro.style.cssText = "color:#b8c5d8;line-height:1.4";
             const start = frameField("Video start frame", () => sourceControl(node, "start_frame")?.value ?? 0, (frame) => {
                 const widget = sourceControl(node, "start_frame");
                 if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
             }, "video", "Choose where the first prompt starts in the source video. Later prompts advance automatically. Drag, type a frame number, or use the preview playhead. Positions use normalized 24 fps.");
-            const reference = frameField("Fixed SAM3 reference frame", () => control(node, "reference_frame")?.value ?? 0, (frame) => {
-                const widget = control(node, "reference_frame");
-                if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
-            }, "video", "Pick a clear frame of the subject for tracking. This image stays fixed as the reference across the loop; it does not change the video start.");
             const audio = frameField("Custom audio start frame", () => control(node, "custom_audio_start_frame")?.value ?? 0, (frame) => {
                 const widget = control(node, "custom_audio_start_frame");
                 if (widget) { widget.value = frame; widget.callback?.(frame); app.graph.setDirtyCanvas(true, true); }
@@ -213,7 +209,7 @@ app.registerExtension({
             makeUpload("Upload audio", "audio/*,.wav,.mp3,.flac,.m4a,.ogg,.opus,.aac", "custom_audio");
             uploadRow.children[0].title = "Add a source video to ComfyUI's input folder and select it for this window.";
             uploadRow.children[2].title = "Add a separate audio track; this also selects Custom audio as the audio source.";
-            root.append(intro, videoSelectRow, audioSelectRow, uploadRow, status, start.row, reference.row, audio.row);
+            root.append(intro, videoSelectRow, audioSelectRow, uploadRow, status, start.row, audio.row);
             const refresh = () => {
                 const videoWidget = sourceControl(node, "video");
                 const filename = String(videoWidget?.value ?? "");
@@ -226,11 +222,9 @@ app.registerExtension({
                 const hasVideo = !!filename && !filename.startsWith("(");
                 if (hasVideo) {
                     const url = api.apiURL(`/view?${new URLSearchParams({ filename, type: "input", v: String(previewVersion) })}`);
-                    for (const item of [start, reference]) {
-                        if (item.video.src !== new URL(url, location.href).href) {
-                            item.video.src = url;
-                            item.video.load();
-                        }
+                    if (start.video.src !== new URL(url, location.href).href) {
+                        start.video.src = url;
+                        start.video.load();
                     }
                 }
                 start.video.style.display = hasVideo ? "block" : "none";
@@ -238,16 +232,13 @@ app.registerExtension({
                 start.update(start.read());
                 const videoMode = control(node, "video_generation_mode")?.value;
                 const audioDriven = videoMode === "audio drives video";
-                const tracksSubject = ["source video inpaint", "inpaint only", "controlnet and inpainting"].includes(videoMode);
-                reference.row.style.display = !tracksSubject || !hasVideo ? "none" : "block";
                 intro.textContent = audioDriven && !hasVideo
                     ? "Audio-only source: choose custom audio or generate new audio. The audio start advances with each prompt."
                     : audioDriven
                     ? "Audio drives prompt-generated video. The source start and selected audio still advance with the loop; subject tracking is skipped."
                     : videoMode === "controlnet only"
                     ? "ControlNet guides a new video from the source frames. Subject tracking and the final inpaint composite are skipped."
-                    : "Select the source start and one fixed frame for SAM3. Use the video playhead or drag either slider.";
-                if (tracksSubject && hasVideo) reference.update(reference.read());
+                    : "Select the source start with the video playhead or slider.";
                 const useCustom = control(node, "audio_source")?.value === "custom audio";
                 audioSelectRow.style.display = useCustom ? "block" : "none";
                 audio.row.style.display = useCustom ? "block" : "none";
@@ -291,8 +282,8 @@ app.registerExtension({
             };
             bindSourceCallbacks();
             this.addDOMWidget("source_frame_picker", "custom", root,
-                { serialize: false, getMinHeight: () => 515 });
-            this.setSize([Math.max(this.size[0], 410), Math.max(this.size[1], 760)]);
+                { serialize: false, getMinHeight: () => 350 });
+            this.setSize([Math.max(this.size[0], 410), Math.max(this.size[1], 610)]);
             setTimeout(refresh, 0);
             const oldConfigure = this.onConfigure;
             this.onConfigure = function () {

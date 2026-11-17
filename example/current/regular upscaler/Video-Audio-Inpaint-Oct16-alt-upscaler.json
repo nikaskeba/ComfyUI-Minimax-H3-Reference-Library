@@ -1,8 +1,8 @@
 {
   "id": "1dcd1078-ea8c-4e0f-8d94-a297a2511618",
   "revision": 0,
-  "last_node_id": 1386,
-  "last_link_id": 2434,
+  "last_node_id": 1387,
+  "last_link_id": 2435,
   "nodes": [
     {
       "id": 334,
@@ -20345,7 +20345,8 @@
           "name": "frames",
           "type": "IMAGE",
           "links": [
-            2317
+            2317,
+            2435
           ]
         },
         {
@@ -20359,13 +20360,6 @@
           "name": "status",
           "type": "STRING",
           "links": []
-        },
-        {
-          "name": "fixed_reference_frame",
-          "type": "IMAGE",
-          "links": [
-            2328
-          ]
         },
         {
           "name": "audio_mask_mode",
@@ -20421,7 +20415,6 @@
         0,
         "video audio",
         "(none)",
-        0,
         "custom audio",
         "forgetabou5me.mp3",
         4619,
@@ -24160,6 +24153,44 @@
           }
         }
       }
+    },
+    {
+      "id": 1387,
+      "type": "ImageFromBatch",
+      "pos": [
+        -6823.789052778,
+        3269.239391758213
+      ],
+      "size": [
+        210,
+        100
+      ],
+      "flags": {},
+      "order": 223,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2435
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2328
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
     }
   ],
   "links": [
@@ -25725,8 +25756,8 @@
     ],
     [
       2328,
-      1324,
-      3,
+      1387,
+      0,
       1312,
       0,
       "IMAGE"
@@ -25902,7 +25933,7 @@
     [
       2380,
       1324,
-      5,
+      4,
       1358,
       2,
       "*"
@@ -25910,7 +25941,7 @@
     [
       2381,
       1324,
-      4,
+      3,
       1358,
       3,
       "*"
@@ -25958,7 +25989,7 @@
     [
       2387,
       1324,
-      5,
+      4,
       1359,
       2,
       "*"
@@ -26454,7 +26485,7 @@
     [
       2329,
       1324,
-      4,
+      3,
       1170,
       2,
       "*"
@@ -26810,6 +26841,14 @@
       546,
       28,
       "INT"
+    ],
+    [
+      2435,
+      1324,
+      0,
+      1387,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [

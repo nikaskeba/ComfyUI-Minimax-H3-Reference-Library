@@ -181,7 +181,7 @@ class FrameWindowLoaderTests(unittest.TestCase):
         self.assertIn("1 prompt(s) beyond the source end omitted", status)
         self.assertIn("[s=5.875]", prompts[0])
 
-    def test_fixed_reference_and_audio_source_modes(self):
+    def test_source_audio_modes_without_fixed_reference(self):
         path = self._make_video(30)
         custom = self.root / "custom.wav"
         with wave.open(str(custom), "wb") as wav:
@@ -195,15 +195,16 @@ class FrameWindowLoaderTests(unittest.TestCase):
         )
         node = MODULE.SkebaH3InpaintSourceWindow()
         with patch.dict(sys.modules, {"folder_paths": fake_paths}):
-            frames, audio, _, reference, mode, video_mode = node.load(
-                path.name, 24, 22, reference_frame=50)
+            frames, audio, _, mode, video_mode = node.load(path.name, 24, 22)
             self.assertEqual(frames.shape[0], 22)
-            self.assertTrue(torch.equal(reference, MODULE._decode_window(str(path), 50, 1, 24, 16)))
+            self.assertEqual(len(node.RETURN_TYPES), 5)
+            self.assertNotIn("fixed_reference_frame", node.RETURN_NAMES)
+            self.assertNotIn("reference_frame", node.INPUT_TYPES()["required"])
             self.assertEqual(mode, "preserve source audio")
             self.assertEqual(video_mode, "source video inpaint")
             self.assertGreater(float(audio["waveform"].abs().max()), 0)
-            _, custom_audio, status, _, mode, _ = node.load(
-                path.name, 46, 22, video_origin_frame=24, reference_frame=50,
+            _, custom_audio, status, mode, _ = node.load(
+                path.name, 46, 22, video_origin_frame=24,
                 audio_source="custom audio", custom_audio=custom.name,
                 custom_audio_start_frame=48)
             self.assertEqual(mode, "preserve source audio")
@@ -213,15 +214,15 @@ class FrameWindowLoaderTests(unittest.TestCase):
                 custom_audio["waveform"],
                 MODULE._decode_audio_window(str(custom), 70, 22)["waveform"],
             ))
-            _, generated_audio, _, _, mode, _ = node.load(
-                path.name, 24, 22, reference_frame=50,
+            _, generated_audio, _, mode, _ = node.load(
+                path.name, 24, 22,
                 audio_source="generate new audio")
             self.assertEqual(mode, "generate audio")
             self.assertEqual(float(generated_audio["waveform"].abs().max()), 0)
             with self.assertRaisesRegex(ValueError, "before frame zero"):
                 node.load(path.name, 12, 22, video_origin_frame=24,
                           audio_source="custom audio", custom_audio=custom.name)
-            blank, audio_only, _, _, _, video_mode = node.load(
+            blank, audio_only, _, _, video_mode = node.load(
                 "(no source video)", 24, 22, video_origin_frame=24,
                 audio_source="custom audio", custom_audio=custom.name,
                 video_generation_mode="audio drives video")

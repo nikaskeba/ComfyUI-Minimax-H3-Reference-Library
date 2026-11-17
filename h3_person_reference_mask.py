@@ -22,7 +22,10 @@ def _model_names(subfolder: str, fallback: str) -> list[str]:
     directory = Path(folder_paths.models_dir) / "ultralytics" / subfolder
     names = sorted(path.name for path in directory.glob("*.pt"))
     if subfolder == "segm":
-        names = [name for name in names if "person" in name.lower()]
+        # Generic COCO segmentation weights include the person class even when
+        # their filename does not say "person" (for example yolo26x-seg.pt).
+        names = [name for name in names if "person" in name.lower()
+                 or name.lower().endswith("-seg.pt")]
     elif subfolder == "bbox":
         names = [name for name in names if "face" in name.lower()]
     return names or [fallback]
@@ -126,6 +129,63 @@ def _select_person(person_boxes, face_matches, reference, threshold,
     return overlaps[0][1], "track"
 
 
+def _clothing_signature(frame: torch.Tensor, mask: torch.Tensor, box):
+    """Compact torso-color descriptor; only a verified face initializes it."""
+    import cv2
+
+    height, width = frame.shape[:2]
+    x0, y0, x1, y1 = [float(value) for value in box]
+    bw, bh = x1 - x0, y1 - y0
+    left = max(0, int(x0 + .15 * bw))
+    right = min(width, int(x1 - .15 * bw))
+    top = max(0, int(y0 + .30 * bh))
+    bottom = min(height, int(y0 + .82 * bh))
+    if right <= left or bottom <= top:
+        return None
+    selected = mask[top:bottom, left:right].detach().cpu().numpy() >= .5
+    if selected.sum() < 25:
+        return None
+    rgb = (frame[top:bottom, left:right, :3].detach().cpu().float()
+           .clamp(0, 1).numpy() * 255).astype(np.uint8)
+    lab = cv2.cvtColor(rgb, cv2.COLOR_RGB2LAB)[selected]
+    signatures = []
+    for channel, bins in enumerate((16, 12, 12)):
+        histogram = np.histogram(lab[:, channel], bins=bins, range=(0, 256))[0].astype(np.float32)
+        signatures.append(histogram / max(1, histogram.sum()))
+    return np.concatenate(signatures)
+
+
+def _clothing_similarity(first, second):
+    if first is None or second is None:
+        return 0.0
+    return float(sum(np.minimum(a, b).sum() for a, b in zip(
+        np.split(first, (16, 28)), np.split(second, (16, 28)))) / 3)
+
+
+def _clothing_choice(frame, boxes, masks, anchor, previous_box, minimum):
+    if anchor is None or previous_box is None:
+        return None
+    pw = max(1.0, float(previous_box[2] - previous_box[0]))
+    ph = max(1.0, float(previous_box[3] - previous_box[1]))
+    pcx = (previous_box[0] + previous_box[2]) / 2
+    pcy = (previous_box[1] + previous_box[3]) / 2
+    scores = []
+    for index, (box, mask) in enumerate(zip(boxes, masks)):
+        cx, cy = (box[0] + box[2]) / 2, (box[1] + box[3]) / 2
+        # A distinctive garment helps through a camera pan, but a distant
+        # matching suit is not enough evidence to transfer identity.
+        if abs(cx - pcx) > .75 * pw or abs(cy - pcy) > .75 * ph:
+            continue
+        score = _clothing_similarity(anchor, _clothing_signature(frame, mask, box))
+        scores.append((score, index))
+    scores.sort(reverse=True)
+    if not scores or scores[0][0] < minimum:
+        return None
+    if len(scores) > 1 and scores[0][0] - scores[1][0] < .15:
+        return None
+    return scores[0][1]
+
+
 def _person_instances(result, height: int, width: int, class_filter=0):
     if len(result.boxes) == 0:
         return [], []
@@ -201,6 +261,163 @@ def _bridge_short_gaps(masks: list[torch.Tensor], kinds: list[str], limit: int):
             masks[position] = (left if position - first < index - 1 - position else right).clone()
             kinds[position] = "bridged"
     return masks, kinds
+
+
+def _stabilize_mask_sequence(masks, kinds, frames, flow_gap_frames=0,
+                             persist_frames=0, boundary_hysteresis=0.0):
+    """Repair brief misses with bidirectional flow, then stabilize valid edges."""
+    import cv2
+
+    if not (flow_gap_frames or persist_frames or boundary_hysteresis):
+        return masks, kinds
+    masks, kinds = list(masks), list(kinds)
+    count = len(masks)
+    height, width = masks[0].shape
+    scale = min(1.0, 512.0 / max(height, width))
+    small_size = (max(1, round(width * scale)), max(1, round(height * scale)))
+    from collections import OrderedDict
+    gray_cache = OrderedDict()
+    flow_cache = OrderedDict()
+
+    def gray(index):
+        if index not in gray_cache:
+            image = _bgr(frames[index])
+            image = cv2.resize(image, small_size, interpolation=cv2.INTER_AREA)
+            gray_cache[index] = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            if len(gray_cache) > 10:
+                gray_cache.popitem(last=False)
+        return gray_cache[index]
+
+    def warp(mask, start, end):
+        if (start, end) not in flow_cache:
+            target, previous = gray(end), gray(start)
+            if np.mean(cv2.absdiff(target, previous)) > 65:
+                flow_cache[start, end] = None  # likely a cut
+            else:
+                flow_cache[start, end] = cv2.calcOpticalFlowFarneback(
+                    target, previous, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+            if len(flow_cache) > 8:
+                flow_cache.popitem(last=False)
+        flow = flow_cache[start, end]
+        if flow is None:
+            return None
+        small = cv2.resize(mask.detach().cpu().numpy().astype(np.float32),
+                           small_size, interpolation=cv2.INTER_LINEAR)
+        grid_x, grid_y = np.meshgrid(np.arange(small_size[0], dtype=np.float32),
+                                     np.arange(small_size[1], dtype=np.float32))
+        moved = cv2.remap(small, grid_x + flow[..., 0], grid_y + flow[..., 1],
+                          cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+        return torch.from_numpy(cv2.resize(moved, (width, height),
+                                           interpolation=cv2.INTER_LINEAR)).clamp(0, 1)
+
+    if flow_gap_frames:
+        index = 0
+        while index < count:
+            if bool(masks[index].any()):
+                index += 1
+                continue
+            first = index
+            while index < count and not bool(masks[index].any()):
+                index += 1
+            if first == 0 or index == count or index - first > flow_gap_frames:
+                continue
+            forward, backward = [], []
+            current = masks[first - 1]
+            for position in range(first, index):
+                current = warp(current, position - 1, position)
+                if current is None:
+                    break
+                forward.append(current)
+            current = masks[index]
+            for position in range(index - 1, first - 1, -1):
+                current = warp(current, position + 1, position)
+                if current is None:
+                    break
+                backward.append(current)
+            if len(forward) != index - first or len(backward) != index - first:
+                continue
+            backward.reverse()
+            if _mask_box(forward[-1]) is None or _iou(_mask_box(forward[-1]), _mask_box(masks[index])) < 0.25:
+                continue
+            if _mask_box(backward[0]) is None or _iou(_mask_box(backward[0]), _mask_box(masks[first - 1])) < 0.25:
+                continue
+            for offset, position in enumerate(range(first, index)):
+                a, b = forward[offset], backward[offset]
+                if _mask_box(a) is None or _mask_box(b) is None or _iou(_mask_box(a), _mask_box(b)) < 0.25:
+                    break
+            else:
+                for offset, position in enumerate(range(first, index)):
+                    weight = (offset + 1) / (index - first + 1)
+                    masks[position] = ((1 - weight) * forward[offset] +
+                                       weight * backward[offset]).clamp(0, 1)
+                    kinds[position] = "flow"
+
+    if persist_frames:
+        last_mask = None
+        missed = 0
+        for index in range(count):
+            if bool(masks[index].any()):
+                last_mask, missed = masks[index], 0
+                continue
+            missed += 1
+            if last_mask is None or missed > persist_frames or index == 0:
+                continue
+            moved = warp(last_mask, index - 1, index)
+            if moved is not None and bool((moved >= 0.5).any()):
+                masks[index] = moved
+                kinds[index] = "persisted"
+                last_mask = moved
+
+    if boundary_hysteresis:
+        original = list(masks)
+        for index in range(1, count):
+            if not bool(original[index].any()) or not bool(original[index - 1].any()):
+                continue
+            previous = warp(original[index - 1], index - 1, index)
+            if previous is None:
+                continue
+            current = original[index]
+            if _mask_box(previous) is None or _iou(_mask_box(previous), _mask_box(current)) < 0.5:
+                continue
+            # Constrain temporal influence to a narrow band around the current
+            # detection so another person or a scene cut cannot grow the mask.
+            near = torch.nn.functional.max_pool2d(current[None, None], 7, stride=1,
+                                                   padding=3)[0, 0]
+            masks[index] = (current * (1 - boundary_hysteresis) +
+                            previous * near * boundary_hysteresis).clamp(0, 1)
+    return masks, kinds
+
+
+def _propagate_mask_one_frame(mask, previous_frame, current_frame,
+                              min_retained_fraction=0.0):
+    """Carry one detected mask to an adjacent frame without skipping output frames."""
+    import cv2
+
+    if mask is None or not bool(mask.any()):
+        return None
+    height, width = mask.shape
+    scale = min(1.0, 512.0 / max(height, width))
+    size = (max(1, round(width * scale)), max(1, round(height * scale)))
+    previous = cv2.cvtColor(cv2.resize(_bgr(previous_frame), size,
+                                          interpolation=cv2.INTER_AREA), cv2.COLOR_BGR2GRAY)
+    current = cv2.cvtColor(cv2.resize(_bgr(current_frame), size,
+                                         interpolation=cv2.INTER_AREA), cv2.COLOR_BGR2GRAY)
+    if np.mean(cv2.absdiff(current, previous)) > 65:
+        return None
+    flow = cv2.calcOpticalFlowFarneback(current, previous, None, 0.5, 3, 15, 3, 5, 1.2, 0)
+    source = cv2.resize(mask.detach().cpu().numpy().astype(np.float32), size,
+                        interpolation=cv2.INTER_LINEAR)
+    grid_x, grid_y = np.meshgrid(np.arange(size[0], dtype=np.float32),
+                                 np.arange(size[1], dtype=np.float32))
+    moved = cv2.remap(source, grid_x + flow[..., 0], grid_y + flow[..., 1],
+                      cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    output = torch.from_numpy(cv2.resize(moved, (width, height),
+                                         interpolation=cv2.INTER_LINEAR)).clamp(0, 1)
+    retained = int((output >= 0.5).sum())
+    source_area = int((mask >= 0.5).sum())
+    if retained == 0 or retained < source_area * min_retained_fraction:
+        return None
+    return output
 
 
 def _finish_mask(mask: torch.Tensor, expand: int, feather: int,
@@ -554,7 +771,8 @@ class SkebaPersonReferenceMask:
                                              "max": 1.0, "step": 0.01}),
             "person_confidence": ("FLOAT", {"default": 0.35, "min": 0.05,
                                             "max": 0.95, "step": 0.05}),
-            "max_track_gap": ("INT", {"default": 6, "min": 0, "max": 48}),
+            "max_track_gap": ("INT", {"default": 6, "min": 0, "max": 48,
+                                      "tooltip": "How many missing or ambiguous body frames to tolerate. A continuously matched body remains tracked while its face is turned away."}),
             "mask_expand": ("INT", {"default": 0, "min": 0, "max": 64}),
             "mask_feather": ("INT", {"default": 0, "min": 0, "max": 64}),
             "subject_1_kind": (["human", "object"],),
@@ -576,6 +794,18 @@ class SkebaPersonReferenceMask:
             "sam3_model": ("MODEL",),
             "fill_mask_holes": ("BOOLEAN", {"default": False}),
             "bridge_gap_frames": ("INT", {"default": 0, "min": 0, "max": 24}),
+            "optical_flow_gap_frames": ("INT", {"default": 0, "min": 0, "max": 12,
+                                                "tooltip": "Fill short gaps only when motion from both neighboring masks agrees; 0 disables."}),
+            "mask_persistence_frames": ("INT", {"default": 0, "min": 0, "max": 6,
+                                                 "tooltip": "Carry a motion-tracked mask briefly through an unresolved miss; 0 disables."}),
+            "boundary_hysteresis": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 0.5, "step": 0.05,
+                                             "tooltip": "Smooth mask edges against the previous motion-aligned frame; 0 disables."}),
+            "detection_stride": ([1, 2], {"default": 1,
+                                          "tooltip": "Run person/face detectors on every frame or every second frame. All frames still receive a mask; skipped frames use optical flow."}),
+            "clothing_match": ("BOOLEAN", {"default": False,
+                                            "tooltip": "Use the outfit seen with the first verified face as a second check for body-only tracking. Rejects ambiguous or different clothing."}),
+            "clothing_similarity": ("FLOAT", {"default": 0.65, "min": 0.3, "max": 0.95, "step": 0.05,
+                                           "tooltip": "Minimum torso-color similarity for clothing matching. Higher is safer but may leave more gaps."}),
         }}
 
     # Keep the original three socket positions for existing workflows.
@@ -595,7 +825,10 @@ class SkebaPersonReferenceMask:
                     object_tracking="local", sam3_model=None,
                     seed_frame_1=0, seed_frame_2=0, seed_box_1="", seed_box_2="",
                     reference_2=None, seed_mask_1=None, seed_mask_2=None,
-                    fill_mask_holes=False, bridge_gap_frames=0):
+                    fill_mask_holes=False, bridge_gap_frames=0,
+                    optical_flow_gap_frames=0, mask_persistence_frames=0,
+                    boundary_hysteresis=0.0, detection_stride=1,
+                    clothing_match=False, clothing_similarity=0.65):
         if video_frames.ndim != 4 or video_frames.shape[0] < 1 \
                 or video_frames.shape[-1] < 3:
             raise ValueError("video_frames must be a nonempty IMAGE batch.")
@@ -636,11 +869,28 @@ class SkebaPersonReferenceMask:
                 _, track["embedding"] = max(candidates,
                     key=lambda item: (item[0][2] - item[0][0]) *
                                      (item[0][3] - item[0][1]))
-                track.update(output=[], kinds=[], previous=None, gap=0)
+                track.update(output=[], kinds=[], previous=None, gap=0,
+                             clothing_signature=None)
             import comfy.utils
             progress = comfy.utils.ProgressBar(count)
             for frame_index, frame in enumerate(video_frames):
                 mm.throw_exception_if_processing_interrupted()
+                if detection_stride == 2 and frame_index % 2:
+                    for track in human_tracks:
+                        previous_mask = track["output"][-1]
+                        propagated = _propagate_mask_one_frame(
+                            previous_mask, video_frames[frame_index - 1], frame,
+                            min_retained_fraction=.35 if track["region"] == "head" else 0.0)
+                        if propagated is None:
+                            track["output"].append(torch.zeros((height, width)))
+                            track["kinds"].append("none")
+                            track["gap"] += 1
+                        else:
+                            track["output"].append(propagated)
+                            track["kinds"].append("propagated")
+                            track["gap"] += 1
+                    progress.update(1)
+                    continue
                 prediction = segmenter.predict(
                     _bgr(frame), conf=person_confidence, classes=[0],
                     retina_masks=True, verbose=False)[0]
@@ -666,6 +916,20 @@ class SkebaPersonReferenceMask:
                             subset, [], track["embedding"], identity_threshold,
                             previous_box=track["previous"], gap=track["gap"],
                             max_gap=max_track_gap)
+                        if clothing_match and track["clothing_signature"] is not None:
+                            if local_choice is not None:
+                                score = _clothing_similarity(
+                                    track["clothing_signature"],
+                                    _clothing_signature(frame, masks[remaining[local_choice]],
+                                                        subset[local_choice]))
+                                if score < clothing_similarity:
+                                    local_choice, kind = None, "none"
+                            if local_choice is None and track["gap"] < max_track_gap:
+                                local_choice = _clothing_choice(
+                                    frame, subset, [masks[i] for i in remaining],
+                                    track["clothing_signature"], track["previous"],
+                                    max(clothing_similarity, .75))
+                                kind = "clothing" if local_choice is not None else "none"
                         choice = remaining[local_choice] if local_choice is not None else None
                         if choice is not None:
                             assigned.add(choice)
@@ -689,8 +953,20 @@ class SkebaPersonReferenceMask:
                                 matched_face = box
                                 break
                         if matched_face is None:
-                            selected = torch.zeros_like(selected)
-                            kind = "none"
+                            # A turned-away face is not a lost person. Follow
+                            # the last known head/face only while the same
+                            # unambiguous body remains selected.
+                            previous_region = track["output"][-1] if track["output"] else None
+                            if track["region"] in ("face", "head") and frame_index > 0:
+                                carried = _propagate_mask_one_frame(
+                                    previous_region, video_frames[frame_index - 1], frame,
+                                    min_retained_fraction=.35 if track["region"] == "head" else 0.0)
+                                selected = (selected * carried if carried is not None
+                                            else torch.zeros_like(selected))
+                                kind = "head_track" if bool(selected.any()) else "none"
+                            else:
+                                selected = torch.zeros_like(selected)
+                                kind = "none"
                         else:
                             selected = selected * _face_region(frame, matched_face,
                                                                track["region"])
@@ -699,7 +975,12 @@ class SkebaPersonReferenceMask:
                     track["output"].append(selected)
                     track["kinds"].append(kind if bool(selected.any()) else "none")
                     track["previous"] = boxes[choice]
-                    track["gap"] = 0 if kind == "face" else track["gap"] + 1
+                    if kind == "face" and track["clothing_signature"] is None:
+                        track["clothing_signature"] = _clothing_signature(
+                            frame, masks[choice], boxes[choice])
+                    # max_track_gap measures missing/ambiguous body frames,
+                    # not time since a front-facing face was last visible.
+                    track["gap"] = 0 if kind in ("face", "track", "head_track", "clothing") else track["gap"] + 1
                 progress.update(1)
                 if frame_index == 0 or (frame_index + 1) % 24 == 0:
                     print(f"[SKEBA Reference Subject Mask] processed "
@@ -754,6 +1035,10 @@ class SkebaPersonReferenceMask:
                 track["kinds"] = ["none"] * count
         for track in tracks:
             if track["kind"] != "off":
+                track["output"], track["kinds"] = _stabilize_mask_sequence(
+                    track["output"], track["kinds"], video_frames,
+                    int(optical_flow_gap_frames), int(mask_persistence_frames),
+                    float(boundary_hysteresis))
                 track["output"], track["kinds"] = _bridge_short_gaps(
                     track["output"], track["kinds"], int(bridge_gap_frames))
         first, second = (track["output"] if torch.is_tensor(track["output"])
@@ -779,7 +1064,13 @@ class SkebaPersonReferenceMask:
             status_parts.append(
                 f"track {index}: identity/photo matched {kinds.count('face') + kinds.count('photo')}, "
                 f"seeded {kinds.count('seed')}, tracked {kinds.count('track') + kinds.count('sam3')}, "
+                f"head tracked {kinds.count('head_track')}, "
+                f"clothing matched {kinds.count('clothing')}, "
+                f"propagated {kinds.count('propagated')}, "
+                f"flow filled {kinds.count('flow')}, persisted {kinds.count('persisted')}, "
                 f"bridged {kinds.count('bridged')}, "
-                f"unmasked {kinds.count('none')}")
+                f"unmasked {kinds.count('none')}"
+                + (f", clothing anchor {'ready' if track.get('clothing_signature') is not None else 'unavailable'}"
+                   if clothing_match and track["kind"] == "human" else ""))
         status = f"{count} frames: " + "; ".join(status_parts)
         return first, preview, status, second, json.dumps(data, separators=(",", ":"))

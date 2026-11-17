@@ -1,8 +1,8 @@
 {
   "id": "1dcd1078-ea8c-4e0f-8d94-a297a2511618",
   "revision": 0,
-  "last_node_id": 1326,
-  "last_link_id": 2331,
+  "last_node_id": 1327,
+  "last_link_id": 2332,
   "nodes": [
     {
       "id": 334,
@@ -21633,7 +21633,8 @@
           "name": "frames",
           "type": "IMAGE",
           "links": [
-            2317
+            2317,
+            2332
           ]
         },
         {
@@ -21647,13 +21648,6 @@
           "name": "status",
           "type": "STRING",
           "links": []
-        },
-        {
-          "name": "fixed_reference_frame",
-          "type": "IMAGE",
-          "links": [
-            2328
-          ]
         },
         {
           "name": "audio_mask_mode",
@@ -21670,8 +21664,7 @@
         "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4",
         0,
         "video audio",
-        "(none)",
-        0
+        "(none)"
       ],
       "widgets_values_named": {
         "video": "SHOCK- Trump Goes Viral For 'Let Them Take Out Los Angeles, Let Them To Take Out San Diego' Comment.mp4"
@@ -21823,6 +21816,44 @@
           }
         }
       }
+    },
+    {
+      "id": 1327,
+      "type": "ImageFromBatch",
+      "pos": [
+        -6635,
+        3035
+      ],
+      "size": [
+        210,
+        100
+      ],
+      "flags": {},
+      "order": 245,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2332
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2328
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
     }
   ],
   "links": [
@@ -24108,8 +24139,8 @@
     ],
     [
       2328,
-      1324,
-      3,
+      1327,
+      0,
       1312,
       0,
       "IMAGE"
@@ -24117,7 +24148,7 @@
     [
       2329,
       1324,
-      4,
+      3,
       1170,
       2,
       "*"
@@ -24137,6 +24168,14 @@
       1292,
       4,
       "MASK"
+    ],
+    [
+      2332,
+      1324,
+      0,
+      1327,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [

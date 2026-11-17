@@ -435,12 +435,11 @@ def _decode_audio_window(path: str, start: int, count: int, sample_rate: int = 4
 class SkebaH3InpaintSourceWindow:
     CATEGORY = "Skeba AI Nodes - Reference/Experimental"
     FUNCTION = "load"
-    RETURN_TYPES = ("IMAGE", "AUDIO", "STRING", "IMAGE", "*", "*")
-    RETURN_NAMES = ("frames", "audio", "status", "fixed_reference_frame", "audio_mask_mode", "video_generation_mode")
+    RETURN_TYPES = ("IMAGE", "AUDIO", "STRING", "*", "*")
+    RETURN_NAMES = ("frames", "audio", "status", "audio_mask_mode", "video_generation_mode")
     DESCRIPTION = (
         "Loads the current prompt's source-video window on a normalized 24 fps timeline. "
-        "Use Video start to choose where the loop begins, and Reference frame to choose "
-        "one fixed image for subject tracking. Audio may come from the video, a separate "
+        "Use Video start to choose where the loop begins. Audio may come from the video, a separate "
         "track, or generation. Short source audio is padded with silence. The window "
         "planner normally supplies start_frame and frame_count for each prompt."
     )
@@ -452,7 +451,6 @@ class SkebaH3InpaintSourceWindow:
             "start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "First source frame on the normalized 24 fps timeline. In a loop, connect the window planner; change the initial position on Batch Fit."}),
             "frame_count": ("INT", {"default": 124, "min": 5, "max": 100000, "tooltip": "Number of source frames to load for this prompt, including continuation overlap. Connect the window planner for automatic H3 lengths."}),
             "video_origin_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "Original loop start frame. Keeps separately selected audio aligned as subsequent video windows advance."}),
-            "reference_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "One fixed frame from the source video used as the subject-tracking reference throughout the loop. It does not set the clip start."}),
             "audio_source": (["video audio", "custom audio", "generate new audio"], {"tooltip": "Video audio follows the source video; custom audio follows its own start position; generate new audio leaves the incoming audio blank for H3."}),
             "custom_audio": (["(none)"] + _source_files(_AUDIO_EXTENSIONS), {"tooltip": "Separate audio file used only when Audio source is custom audio. Missing audio at the end is filled with silence."}),
             "custom_audio_start_frame": ("INT", {"default": 0, "min": 0, "max": 100000000, "tooltip": "Where custom audio begins, measured in 24 fps frame units. It advances with the video loop, so 24 means one second into the track."}),
@@ -461,7 +459,7 @@ class SkebaH3InpaintSourceWindow:
 
     @classmethod
     def IS_CHANGED(cls, video, start_frame, frame_count, video_origin_frame=0,
-                   reference_frame=0, audio_source="video audio", custom_audio="(none)",
+                   audio_source="video audio", custom_audio="(none)",
                    custom_audio_start_frame=0, video_generation_mode="source video inpaint"):
         import folder_paths
 
@@ -476,12 +474,12 @@ class SkebaH3InpaintSourceWindow:
             audio_stat = Path(folder_paths.get_annotated_filepath(custom_audio)).stat()
             audio_stamp = (custom_audio, audio_stat.st_size, audio_stat.st_mtime_ns)
         return (*video_stamp, int(start_frame),
-                int(frame_count), int(video_origin_frame), int(reference_frame),
+                int(frame_count), int(video_origin_frame),
                 audio_source, audio_stamp, int(custom_audio_start_frame),
                 video_generation_mode)
 
     def load(self, video, start_frame, frame_count, video_origin_frame=0,
-             reference_frame=0, audio_source="video audio", custom_audio="(none)",
+             audio_source="video audio", custom_audio="(none)",
              custom_audio_start_frame=0, video_generation_mode="source video inpaint"):
         import folder_paths
 
@@ -511,11 +509,6 @@ class SkebaH3InpaintSourceWindow:
         else:
             width, height = _video_size(str(path))
             frames = _decode_window(str(path), start, count, width, height)
-        ref_index = int(reference_frame)
-        if ref_index < 0:
-            raise ValueError("Reference frame must be zero or greater.")
-        reference = (torch.zeros((1, height, width, 3), dtype=torch.float32)
-                     if no_video else _decode_window(str(path), ref_index, 1, width, height))
         if audio_source == "video audio":
             audio = _decode_audio_window(str(path), start, count)
             audio_mode = "preserve source audio"
@@ -550,12 +543,11 @@ class SkebaH3InpaintSourceWindow:
             audio_detail += (f"; padded {audio['padded_silence_seconds']:.3f}s "
                              "of missing source audio with silence")
         video_detail = ("no source video; text generates the picture"
-                        if no_video else
-                        f"{width}x{height}; fixed SAM3 reference frame {ref_index}")
+                        if no_video else f"{width}x{height}")
         return (frames, audio,
                 f"Loaded {video}: normalized 24 fps frames {start}–{start + count - 1} "
                 f"({count / FPS:.3f}s); {video_detail}; {audio_source}{audio_detail}.",
-                reference, audio_mode, video_generation_mode)
+                audio_mode, video_generation_mode)
 
 
 class SkebaH3InpaintWindowValidate:

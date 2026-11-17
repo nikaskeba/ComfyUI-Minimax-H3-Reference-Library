@@ -1,8 +1,8 @@
 {
   "id": "01f61305-5b83-481a-a2dd-f5db58a7979e",
   "revision": 0,
-  "last_node_id": 4584,
-  "last_link_id": 13713,
+  "last_node_id": 4585,
+  "last_link_id": 13714,
   "nodes": [
     {
       "id": 334,
@@ -12698,7 +12698,8 @@
           "name": "frames",
           "type": "IMAGE",
           "links": [
-            2317
+            2317,
+            13714
           ]
         },
         {
@@ -12712,13 +12713,6 @@
           "name": "status",
           "type": "STRING",
           "links": []
-        },
-        {
-          "name": "fixed_reference_frame",
-          "type": "IMAGE",
-          "links": [
-            2705
-          ]
         },
         {
           "name": "audio_mask_mode",
@@ -12773,7 +12767,6 @@
         0,
         "video audio",
         "(none)",
-        0,
         "video audio",
         "nippples.mp3",
         0,
@@ -20809,6 +20802,44 @@
       "widgets_values_named": {
         "mode": "source video inpaint"
       }
+    },
+    {
+      "id": 4585,
+      "type": "ImageFromBatch",
+      "pos": [
+        -6372.011973854888,
+        3175.2669857151923
+      ],
+      "size": [
+        210,
+        100
+      ],
+      "flags": {},
+      "order": 168,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 13714
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2705
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
     }
   ],
   "links": [
@@ -21543,7 +21574,7 @@
     [
       2488,
       1324,
-      4,
+      3,
       1414,
       0,
       "*"
@@ -21551,7 +21582,7 @@
     [
       2489,
       1324,
-      5,
+      4,
       1415,
       0,
       "*"
@@ -22574,8 +22605,8 @@
     ],
     [
       2705,
-      1324,
-      3,
+      4585,
+      0,
       1312,
       1,
       "IMAGE"
@@ -22671,7 +22702,7 @@
     [
       13711,
       1324,
-      5,
+      4,
       4584,
       0,
       "*"
@@ -22691,6 +22722,14 @@
       356,
       0,
       "MODEL"
+    ],
+    [
+      13714,
+      1324,
+      0,
+      4585,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [

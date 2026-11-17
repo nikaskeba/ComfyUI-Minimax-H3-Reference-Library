@@ -1,8 +1,8 @@
 {
   "id": "f3fc8581-fda1-4abd-bf62-1e9419d04dfc",
   "revision": 0,
-  "last_node_id": 1461,
-  "last_link_id": 2743,
+  "last_node_id": 1462,
+  "last_link_id": 2744,
   "nodes": [
     {
       "id": 334,
@@ -12791,7 +12791,8 @@
           "name": "frames",
           "type": "IMAGE",
           "links": [
-            2317
+            2317,
+            2744
           ]
         },
         {
@@ -12805,13 +12806,6 @@
           "name": "status",
           "type": "STRING",
           "links": []
-        },
-        {
-          "name": "fixed_reference_frame",
-          "type": "IMAGE",
-          "links": [
-            2705
-          ]
         },
         {
           "name": "audio_mask_mode",
@@ -12865,7 +12859,6 @@
         0,
         "video audio",
         "(none)",
-        0,
         "custom audio",
         "nippples.mp3",
         0,
@@ -20410,6 +20403,44 @@
           }
         }
       }
+    },
+    {
+      "id": 1462,
+      "type": "ImageFromBatch",
+      "pos": [
+        -7314.622536333864,
+        3186.2754221935297
+      ],
+      "size": [
+        210,
+        100
+      ],
+      "flags": {},
+      "order": 165,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 2744
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            2705
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ImageFromBatch"
+      },
+      "widgets_values": [
+        0,
+        1
+      ]
     }
   ],
   "links": [
@@ -21152,7 +21183,7 @@
     [
       2488,
       1324,
-      4,
+      3,
       1414,
       0,
       "*"
@@ -21160,7 +21191,7 @@
     [
       2489,
       1324,
-      5,
+      4,
       1415,
       0,
       "*"
@@ -22199,8 +22230,8 @@
     ],
     [
       2705,
-      1324,
-      3,
+      1462,
+      0,
       1312,
       1,
       "IMAGE"
@@ -22236,6 +22267,14 @@
       262,
       0,
       "VIDEO"
+    ],
+    [
+      2744,
+      1324,
+      0,
+      1462,
+      0,
+      "IMAGE"
     ]
   ],
   "groups": [
