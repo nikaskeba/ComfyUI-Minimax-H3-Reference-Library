@@ -475,9 +475,19 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                 continue
             tag = (entry or {}).get("tag") or f"Video {video_index + 1}"
             soundtrack = ref_video_audios.get("ref_video_audio_" + name.rsplit("_", 1)[-1])
-            has_soundtrack = bool((entry or {}).get("has_audio") or soundtrack is not None)
+            # The uncached loader only reads embedded sound when it also loads
+            # the frames. Connected frames without a connected track are silent.
+            reads_embedded = bool(video_frames is None and entry and entry.get("source_path")
+                                  and entry.get("has_audio"))
+            has_soundtrack = soundtrack is not None or reads_embedded
             source_hash = (_entry_source_hash(entry)
                            if cache_mode != "disabled" else None)
+            audio_identity = None
+            if has_soundtrack and audio_vae_id is not None:
+                if soundtrack is not None:
+                    audio_identity = {"waveform_sha256": hash_audio(soundtrack)}
+                elif source_hash is not None:
+                    audio_identity = {"embedded_file_sha256": source_hash}
             compiled_key = None
             if (source_hash and video_vae_id and qwen_id
                     and (not has_soundtrack or audio_vae_id)):
@@ -492,6 +502,7 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                     video_processing=_VIDEO_PROCESSING_VERSION,
                     audio_processing=_VIDEO_AUDIO_PROCESSING_VERSION,
                     qwen_processing=_QWEN_PROCESSING_VERSION,
+                    **({"soundtrack_identity_v2": audio_identity} if has_soundtrack else {}),
                 )
                 if cache_mode != "rebuild":
                     compiled = _CACHE.load_compiled(entry, compiled_key, "video")
@@ -598,8 +609,13 @@ class SkebaCachedMiniMaxH3ReferenceToVideo(io.ComfyNode):
                     reason = "DISABLED" if cache_mode == "disabled" else "DISABLED (VAE identity unavailable)"
                     report(tag, "Soundtrack", reason)
                 else:
+                    # A source without a trustworthy file digest may still
+                    # supply decoded sound. Bind it to the waveform itself.
+                    if audio_identity is None:
+                        audio_identity = {"waveform_sha256": hash_audio(soundtrack)}
                     soundtrack_metadata = {
                         "source_sha256": source_hash,
+                        "soundtrack_identity_v2": audio_identity,
                         "model": audio_vae_id,
                         "source_sample_rate": int(soundtrack["sample_rate"]),
                         "audio_sample_rate": int(getattr(audio_vae, "audio_sample_rate", 32000)),

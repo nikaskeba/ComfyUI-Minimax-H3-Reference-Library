@@ -321,9 +321,9 @@ class CachedNodeTests(unittest.TestCase):
 
         first = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(**arguments)
         supplied_videos = arguments["ref_videos"]
-        supplied_video_audio = arguments["ref_video_audios"]
         arguments["ref_videos"] = {"ref_video_0": None}
-        arguments["ref_video_audios"] = {"ref_video_audio_0": None}
+        # Keep the same explicitly linked waveform. Omitting it here requests
+        # embedded file audio, which is a separate cache identity.
         original_video_loader = NODE_MODULE._load_video_source
         try:
             NODE_MODULE._load_video_source = lambda *args: self.fail(
@@ -333,7 +333,6 @@ class CachedNodeTests(unittest.TestCase):
         finally:
             NODE_MODULE._load_video_source = original_video_loader
             arguments["ref_videos"] = supplied_videos
-            arguments["ref_video_audios"] = supplied_video_audio
 
         self.assertEqual(video_vae.calls, 1)
         self.assertEqual(audio_vae.calls, 1)
@@ -362,6 +361,38 @@ class CachedNodeTests(unittest.TestCase):
         self.assertIn("Video: MISS -> CREATED", third[2])
         self.assertIn("Soundtrack: MISS -> CREATED", third[2])
         self.assertIn("Qwen Video: MISS -> CREATED 1 (1 blocks)", third[2])
+
+    def test_changing_linked_sound_does_not_reuse_the_previous_track(self):
+        waveform = torch.zeros(1, 2, 3200)
+        rgb = torch.zeros(5, 32, 32, 3)
+        for file_backed in (False, True):
+            with self.subTest(file_backed=file_backed):
+                clip = _Clip(self.qwen_model)
+                video, audio = _VAE(self.video_model), _VAE(self.audio_model, audio=True)
+                encode_audio = audio.encode
+                audio.encode = lambda value: encode_audio(value) + value.mean()
+                args = dict(clip=clip, vae=video, audio_vae=audio, prompt="test",
+                            width=32, height=32, length=5, ref_videos={"ref_video_0": rgb})
+                if file_backed:
+                    path = self.root / "source.mp4"
+                    path.write_bytes(b"fixed video source")
+                    args["reference_bundle"] = {"videos": [
+                        {"tag": "v", "record_id": "soundtest", "source_path": str(path), "has_audio": True}]}
+
+                def run(samples, mode):
+                    args["ref_video_audios"] = {
+                        "ref_video_audio_0": {"waveform": samples, "sample_rate": 32000}}
+                    cond, _, _ = NODE_MODULE.SkebaCachedMiniMaxH3ReferenceToVideo.execute(
+                        **args, cache_mode=mode)
+                    return cond[0][1]["minimax_refs"][0]["audio_latent"]
+
+                first = run(waveform, "auto")
+                expected = run(waveform + 0.5, "disabled")
+                self.assertFalse(torch.equal(first, expected))
+                self.assertTrue(torch.equal(run(waveform + 0.5, "auto"), expected))
+                count = audio.calls
+                self.assertTrue(torch.equal(run(waveform + 0.5, "auto"), expected))
+                self.assertEqual(audio.calls, count)
 
     def test_combined_node_keeps_references_and_first_last_keyframes(self):
         video_vae = _VAE(self.video_model)
